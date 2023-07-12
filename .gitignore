@@ -1,0 +1,10 @@
+pom.xml.versionsBackup
+dependency-reduced-pom.xml
+
+.*
+!.gitignore
+!.mvn
+.idea
+target
+allure-results
+siva-test.iml
