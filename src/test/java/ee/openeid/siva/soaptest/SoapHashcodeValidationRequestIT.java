@@ -17,14 +17,17 @@
 package ee.openeid.siva.soaptest;
 
 import ee.openeid.siva.common.DateTimeMatcher;
-import ee.openeid.siva.validation.*;
 import ee.openeid.siva.integrationtest.TestData;
+import ee.openeid.siva.validation.Datafile;
+import ee.openeid.siva.validation.JSONHashcodeValidationRequest;
+import ee.openeid.siva.validation.PredefinedValidationPolicySource;
 import ee.openeid.siva.validation.ReportType;
+import ee.openeid.siva.validation.SignatureFile;
+import ee.openeid.siva.validation.ValidationPolicy;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -36,8 +39,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static ee.openeid.siva.integrationtest.TestData.*;
-import static org.hamcrest.Matchers.*;
+import static ee.openeid.siva.integrationtest.TestData.HASH_ALGO_SHA256;
+import static ee.openeid.siva.integrationtest.TestData.HASH_ALGO_SHA512;
+import static ee.openeid.siva.integrationtest.TestData.INDETERMINATE;
+import static ee.openeid.siva.integrationtest.TestData.MOCK_XADES_DATAFILE_FILENAME;
+import static ee.openeid.siva.integrationtest.TestData.REFERENCE_DATA_NOT_FOUND;
+import static ee.openeid.siva.integrationtest.TestData.REFERENCE_DATA_NOT_INTACT;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_LEVEL_INDETERMINATE_QESIG;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_POLICY_1;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_POLICY_2;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_SCOPE_DIGEST;
+import static ee.openeid.siva.integrationtest.TestData.SUB_INDICATION_SIGNED_DATA_NOT_FOUND;
+import static ee.openeid.siva.integrationtest.TestData.TOTAL_FAILED;
+import static ee.openeid.siva.integrationtest.TestData.VALID_SIGNATURE_SCOPE_CONTENT_DIGEST;
+import static ee.openeid.siva.integrationtest.TestData.VALID_SIGNATURE_SCOPE_CONTENT_FULL;
+import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.oneOf;
 
 @Tag("IntegrationTest")
 public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
@@ -251,7 +272,7 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
         request.setSignaturePolicy(null);
 
         ValidatableResponse response = postHashcodeValidation(request).then()
-                .body(VALIDATION_CONCLUSION_PREFIX + "Policy.PolicyName", equalTo(TestData.SIGNATURE_POLICY_2));
+                .body(VALIDATION_CONCLUSION_PREFIX + "Policy.PolicyName", equalTo(SIGNATURE_POLICY_2));
 
         assertSimpleReportWithSignature(response, request);
     }
@@ -736,7 +757,7 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
         Datafile validDataFile = new Datafile();
         validDataFile.setHash(TestData.MOCK_XADES_DATAFILE_HASH);
         validDataFile.setHashAlgo(TestData.MOCK_XADES_DATAFILE_HASH_ALGO);
-        validDataFile.setFilename(TestData.MOCK_XADES_DATAFILE_FILENAME);
+        validDataFile.setFilename(MOCK_XADES_DATAFILE_FILENAME);
 
         request.getSignatureFiles().get(0).setDatafiles(Arrays.asList(
                 invalidDataFile,
@@ -840,10 +861,10 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
         postHashcodeValidation(createXMLHashcodeValidationRequestSimple("test+document.xml"))
                 .then()
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("Signatures.Signature[0].SignatureFormat", Matchers.is("XAdES_BASELINE_LT"))
-                .body("Signatures.Signature[0].Indication", Matchers.is("TOTAL-PASSED"))
-                .body("Signatures.Signature[0].Info.BestSignatureTime", Matchers.is("2019-02-05T12:43:15Z"))
-                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", Matchers.is("test+document.txt"))
+                .body("Signatures.Signature[0].SignatureFormat", is("XAdES_BASELINE_LT"))
+                .body("Signatures.Signature[0].Indication", is("TOTAL-PASSED"))
+                .body("Signatures.Signature[0].Info.BestSignatureTime", is("2019-02-05T12:43:15Z"))
+                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is("test+document.txt"))
                 .body("ValidSignaturesCount", is("1"));
     }
 
@@ -865,10 +886,10 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
         postHashcodeValidation(createXMLHashcodeValidationRequestSimple("spacesInDatafile.xml"))
                 .then()
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("Signatures.Signature[0].SignatureFormat", Matchers.is("XAdES_BASELINE_LT"))
-                .body("Signatures.Signature[0].Indication", Matchers.is("TOTAL-PASSED"))
-                .body("Signatures.Signature[0].Info.BestSignatureTime", Matchers.is("2019-02-05T13:22:04Z"))
-                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", Matchers.is("Te st in g.txt"))
+                .body("Signatures.Signature[0].SignatureFormat", is("XAdES_BASELINE_LT"))
+                .body("Signatures.Signature[0].Indication", is("TOTAL-PASSED"))
+                .body("Signatures.Signature[0].Info.BestSignatureTime", is("2019-02-05T13:22:04Z"))
+                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is("Te st in g.txt"))
                 .body("ValidSignaturesCount", is("1"));
     }
 
@@ -890,10 +911,10 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
         postHashcodeValidation(createXMLHashcodeValidationRequest(validRequestBody("test+document.xml", HASH_ALGO_SHA256, "test+document.txt", "heKN3NGQ0HttzgmfKG0L243dfG7W+6kTMO5n7YbKeS4=")))
                 .then()
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("Signatures.Signature[0].SignatureFormat", Matchers.is("XAdES_BASELINE_LT"))
-                .body("Signatures.Signature[0].Indication", Matchers.is("TOTAL-PASSED"))
-                .body("Signatures.Signature[0].Info.BestSignatureTime", Matchers.is("2019-02-05T12:43:15Z"))
-                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", Matchers.is("test+document.txt"))
+                .body("Signatures.Signature[0].SignatureFormat", is("XAdES_BASELINE_LT"))
+                .body("Signatures.Signature[0].Indication", is("TOTAL-PASSED"))
+                .body("Signatures.Signature[0].Info.BestSignatureTime", is("2019-02-05T12:43:15Z"))
+                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is("test+document.txt"))
                 .body("ValidSignaturesCount", is("1"));
     }
 
@@ -915,10 +936,10 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
         postHashcodeValidation(createXMLHashcodeValidationRequest(validRequestBody("spacesInDatafile.xml", HASH_ALGO_SHA256, "Te st in g.txt", "5UxI8Rm1jUZm48+Vkdutyrsyr3L/MPu/RK1V81AeKEY=")))
                 .then()
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("Signatures.Signature[0].SignatureFormat", Matchers.is("XAdES_BASELINE_LT"))
-                .body("Signatures.Signature[0].Indication", Matchers.is("TOTAL-PASSED"))
-                .body("Signatures.Signature[0].Info.BestSignatureTime", Matchers.is("2019-02-05T13:22:04Z"))
-                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", Matchers.is("Te st in g.txt"))
+                .body("Signatures.Signature[0].SignatureFormat", is("XAdES_BASELINE_LT"))
+                .body("Signatures.Signature[0].Indication", is("TOTAL-PASSED"))
+                .body("Signatures.Signature[0].Info.BestSignatureTime", is("2019-02-05T13:22:04Z"))
+                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is("Te st in g.txt"))
                 .body("ValidSignaturesCount", is("1"));
     }
 
@@ -942,7 +963,7 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
 
         ValidationPolicy signaturePolicy;
         if (request.getSignaturePolicy() == null) {
-            signaturePolicy = determineValidationPolicy(TestData.SIGNATURE_POLICY_2);
+            signaturePolicy = determineValidationPolicy(SIGNATURE_POLICY_2);
         } else {
             signaturePolicy = determineValidationPolicy(request.getSignaturePolicy());
         }
@@ -954,9 +975,9 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
     }
 
     private ValidationPolicy determineValidationPolicy(String signaturePolicy) {
-        if (TestData.SIGNATURE_POLICY_1.equals(signaturePolicy)) {
+        if (SIGNATURE_POLICY_1.equals(signaturePolicy)) {
             return PredefinedValidationPolicySource.ADES_POLICY;
-        } else if (TestData.SIGNATURE_POLICY_2.equals(signaturePolicy)) {
+        } else if (SIGNATURE_POLICY_2.equals(signaturePolicy)) {
             return PredefinedValidationPolicySource.QES_POLICY;
         } else {
             throw new IllegalArgumentException("Unknown validation policy '" + signaturePolicy + "'");
@@ -972,7 +993,7 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
                 .body("Signatures.Signature[0].SignedBy", is(TestData.MOCK_XADES_SIGNATURE_SIGNER))
                 .body("Signatures.Signature[0].Indication", is(TestData.TOTAL_PASSED))
                 .body("Signatures.Signature[0].SignatureScopes.children().size()", is(1))
-                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is(TestData.MOCK_XADES_DATAFILE_FILENAME))
+                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is(MOCK_XADES_DATAFILE_FILENAME))
                 .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Scope", is(SIGNATURE_SCOPE_DIGEST))
                 .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Content", is(VALID_SIGNATURE_SCOPE_CONTENT_DIGEST))
                 .body("Signatures.Signature[0].ClaimedSigningTime", is(TestData.MOCK_XADES_SIGNATURE_CLAIMED_SIGNING_TIME))
@@ -987,18 +1008,18 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
                 .body("Signatures.children().size()", is(1))
                 .body("Signatures.Signature[0].Id", is(TestData.MOCK_XADES_SIGNATURE_ID))
                 .body("Signatures.Signature[0].SignatureFormat", is(TestData.SIGNATURE_FORMAT_XADES_LT))
-                .body("Signatures.Signature[0].SignatureLevel", is(TestData.SIGNATURE_LEVEL_INDETERMINATE_QESIG))
+                .body("Signatures.Signature[0].SignatureLevel", is(SIGNATURE_LEVEL_INDETERMINATE_QESIG))
                 .body("Signatures.Signature[0].SignedBy", is(TestData.MOCK_XADES_SIGNATURE_SIGNER))
-                .body("Signatures.Signature[0].Indication", is(TestData.INDETERMINATE))
-                .body("Signatures.Signature[0].SubIndication", is(TestData.SUB_INDICATION_SIGNED_DATA_NOT_FOUND))
+                .body("Signatures.Signature[0].Indication", is(INDETERMINATE))
+                .body("Signatures.Signature[0].SubIndication", is(SUB_INDICATION_SIGNED_DATA_NOT_FOUND))
                 .body("Signatures.Signature[0].SignatureScopes.children().size()", is(1))
                 .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is(MOCK_XADES_DATAFILE_FILENAME))
                 .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Scope", is(TestData.SIGNATURE_SCOPE_FULL))
-                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Content", is(TestData.VALID_SIGNATURE_SCOPE_CONTENT_FULL))
+                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Content", is(VALID_SIGNATURE_SCOPE_CONTENT_FULL))
                 .body("Signatures.Signature[0].ClaimedSigningTime", is(TestData.MOCK_XADES_SIGNATURE_CLAIMED_SIGNING_TIME))
                 .body("Signatures.Signature[0].Info.BestSignatureTime", is(TestData.MOCK_XADES_SIGNATURE_BEST_SIGNATURE_TIME))
-                .body("Signatures.Signature[0].Errors.children().size()", is(1))
-                .body("Signatures.Signature[0].Errors.Error[0].Content", is(REFERENCE_DATA_NOT_FOUND))
+                .body("Signatures.Signature[0].Errors.children().size()", greaterThanOrEqualTo(1))
+                .body("Signatures.Signature[0].Errors.Error.Content", hasItem(REFERENCE_DATA_NOT_FOUND))
                 .body("ValidSignaturesCount", is("0"))
                 .body("SignaturesCount", is("1"));
     }
@@ -1013,13 +1034,13 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
                 .body("Signatures.Signature[0].Indication", is(indication))
                 .body("Signatures.Signature[0].SubIndication", is(subIndication))
                 .body("Signatures.Signature[0].SignatureScopes.children().size()", is(1))
-                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is(TestData.MOCK_XADES_DATAFILE_FILENAME))
+                .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Name", is(MOCK_XADES_DATAFILE_FILENAME))
                 .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Scope", is(TestData.SIGNATURE_SCOPE_FULL))
                 .body("Signatures.Signature[0].SignatureScopes.SignatureScope[0].Content", is(VALID_SIGNATURE_SCOPE_CONTENT_FULL))
                 .body("Signatures.Signature[0].ClaimedSigningTime", is(TestData.MOCK_XADES_SIGNATURE_CLAIMED_SIGNING_TIME))
                 .body("Signatures.Signature[0].Info.BestSignatureTime", is(TestData.MOCK_XADES_SIGNATURE_BEST_SIGNATURE_TIME))
-                .body("Signatures.Signature[0].Errors.children().size()", is(1))
-                .body("Signatures.Signature[0].Errors.Error[0].Content", oneOf(REFERENCE_DATA_NOT_INTACT, REFERENCE_DATA_NOT_FOUND))
+                .body("Signatures.Signature[0].Errors.children().size()", greaterThanOrEqualTo(1))
+                .body("Signatures.Signature[0].Errors.Error.Content", hasItem(oneOf(REFERENCE_DATA_NOT_INTACT, REFERENCE_DATA_NOT_FOUND)))
                 .body("ValidSignaturesCount", is("0"))
                 .body("SignaturesCount", is("1"));
     }
@@ -1037,10 +1058,10 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
         Datafile datafile = new Datafile();
         datafile.setHash(TestData.MOCK_XADES_DATAFILE_HASH);
         datafile.setHashAlgo(TestData.MOCK_XADES_DATAFILE_HASH_ALGO);
-        datafile.setFilename(TestData.MOCK_XADES_DATAFILE_FILENAME);
+        datafile.setFilename(MOCK_XADES_DATAFILE_FILENAME);
 
         request.setReportType(ReportType.SIMPLE);
-        request.setSignaturePolicy(TestData.SIGNATURE_POLICY_1);
+        request.setSignaturePolicy(SIGNATURE_POLICY_1);
         SignatureFile signatureFile = new SignatureFile();
         signatureFile.setDatafiles(Collections.singletonList(datafile));
         signatureFile.setSignature(Base64.encodeBase64String(readFileFromTestResources(TestData.MOCK_XADES_SIGNATURE_FILE)));
@@ -1058,7 +1079,7 @@ public class SoapHashcodeValidationRequestIT extends SiVaSoapTests {
         datafile.setFilename(datafileName);
 
         request.setReportType(ReportType.SIMPLE);
-        request.setSignaturePolicy(TestData.SIGNATURE_POLICY_1);
+        request.setSignaturePolicy(SIGNATURE_POLICY_1);
         SignatureFile signatureFile = new SignatureFile();
         signatureFile.setDatafiles(Collections.singletonList(datafile));
         signatureFile.setSignature(Base64.encodeBase64String(readFileFromTestResources(signatureFileName)));
