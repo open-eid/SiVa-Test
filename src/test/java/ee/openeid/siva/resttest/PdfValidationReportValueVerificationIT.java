@@ -205,7 +205,10 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
      * File: hellopades-lt-rsa1024-sha1-expired.pdf
      */
     @Test
-    @Disabled("SIVA-616 - extra warning of 'The certificate is related to a trust service entry with status 'withdrawn'!'")
+    @Disabled(
+            "Fails after SIVA-419 changes. Expected: is 'NOT_ADES', Actual: INDETERMINATE_QESIG" +
+            "SIVA-616 - extra warning of 'The certificate is related to a trust service entry with status 'withdrawn'!'"
+    )
     public void pdfAllElementsArePresentIndeterminateSignature() {
         setTestFilesDirectory("pdf/signing_certifacte_test_files/");
         post(validationRequestFor("hellopades-lt-rsa1024-sha1-expired.pdf"))
