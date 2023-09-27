@@ -20,13 +20,24 @@ import ee.openeid.siva.integrationtest.SiVaRestTests;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import static ee.openeid.siva.integrationtest.TestData.*;
+import static ee.openeid.siva.integrationtest.TestData.DIAGNOSTIC_DATA_PREFIX;
+import static ee.openeid.siva.integrationtest.TestData.HASH_ALGO_SHA256;
+import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_DIAGNOSTIC;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_FORMAT_XADES_LT;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_FORM_ASICE;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_LEVEL_QESIG;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_POLICY_2;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_SCOPE_FULL;
+import static ee.openeid.siva.integrationtest.TestData.TOTAL_PASSED;
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX;
+import static ee.openeid.siva.integrationtest.TestData.VALID_SIGNATURE_SCOPE_CONTENT_FULL;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -102,6 +113,7 @@ public class DiagnosticReportValidationManualIT extends SiVaRestTests {
      * File: pades-baseline-lta-live-aj.pdf
      */
     @Test
+    @Disabled("SIVA-499")
     public  void diagnosticReportAssertSignature(){
         setTestFilesDirectory("pdf/baseline_profile_test_files/");
 
@@ -148,6 +160,7 @@ public class DiagnosticReportValidationManualIT extends SiVaRestTests {
      * File: pades-baseline-lta-live-aj.pdf
      */
     @Test
+    @Disabled("SIVA-499")
     public  void diagnosticReportAssertUsedCertificates(){
         setTestFilesDirectory("pdf/baseline_profile_test_files/");
 

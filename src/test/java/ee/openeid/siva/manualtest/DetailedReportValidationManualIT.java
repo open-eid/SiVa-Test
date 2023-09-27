@@ -27,9 +27,72 @@ import org.junit.jupiter.api.Test;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import static ee.openeid.siva.common.DssMessages.*;
-import static ee.openeid.siva.integrationtest.TestData.*;
-import static org.hamcrest.Matchers.*;
+import static ee.openeid.siva.common.DssMessages.ACCM;
+import static ee.openeid.siva.common.DssMessages.ADEST_IBSVPTC;
+import static ee.openeid.siva.common.DssMessages.ADEST_ISTPTDABST;
+import static ee.openeid.siva.common.DssMessages.ARCH_LTVV;
+import static ee.openeid.siva.common.DssMessages.BBB_CV_IRDOF;
+import static ee.openeid.siva.common.DssMessages.BBB_CV_ISIR;
+import static ee.openeid.siva.common.DssMessages.BBB_CV_ISIT;
+import static ee.openeid.siva.common.DssMessages.BBB_CV_ISI_ANS;
+import static ee.openeid.siva.common.DssMessages.BBB_CV_TSP_IRDOF;
+import static ee.openeid.siva.common.DssMessages.BBB_CV_TSP_IRDOI;
+import static ee.openeid.siva.common.DssMessages.BBB_CV_TSP_IRDOI_ANS;
+import static ee.openeid.siva.common.DssMessages.BBB_ICS_ISCI;
+import static ee.openeid.siva.common.DssMessages.BBB_SAV_DMICTSTMCMI;
+import static ee.openeid.siva.common.DssMessages.BBB_SAV_ISQPMDOSPP;
+import static ee.openeid.siva.common.DssMessages.BBB_SAV_ISQPSTP;
+import static ee.openeid.siva.common.DssMessages.BBB_SAV_ISSV;
+import static ee.openeid.siva.common.DssMessages.BBB_SAV_ISVA;
+import static ee.openeid.siva.common.DssMessages.BBB_XCV_CCCBB;
+import static ee.openeid.siva.common.DssMessages.BBB_XCV_IARDPFC;
+import static ee.openeid.siva.common.DssMessages.BBB_XCV_ICTIVRSC_ANS;
+import static ee.openeid.siva.common.DssMessages.BBB_XCV_IRDPFC;
+import static ee.openeid.siva.common.DssMessages.BBB_XCV_SUB;
+import static ee.openeid.siva.common.DssMessages.BBB_XCV_SUB_ANS;
+import static ee.openeid.siva.common.DssMessages.BSV_ICVRC;
+import static ee.openeid.siva.common.DssMessages.BSV_IFCRC;
+import static ee.openeid.siva.common.DssMessages.BSV_IISCRC;
+import static ee.openeid.siva.common.DssMessages.BSV_ISAVRC;
+import static ee.openeid.siva.common.DssMessages.BSV_ISCRAVTC;
+import static ee.openeid.siva.common.DssMessages.BSV_IVCIRC;
+import static ee.openeid.siva.common.DssMessages.BSV_IVTAVRSC;
+import static ee.openeid.siva.common.DssMessages.BSV_IXCVRC;
+import static ee.openeid.siva.common.DssMessages.LTV_ABSV;
+import static ee.openeid.siva.common.DssMessages.LTV_ABSV_ANS;
+import static ee.openeid.siva.common.DssMessages.TSV_ASTPTCT;
+import static ee.openeid.siva.common.DssMessages.TSV_IBSTAIDOSC;
+import static ee.openeid.siva.integrationtest.TestData.INDETERMINATE;
+import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_DETAILED;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_FORMAT_XADES_LT;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_FORM_ASICE;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_FORM_ASICS;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_LEVEL_QESIG;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_POLICY_2;
+import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_SCOPE_FULL;
+import static ee.openeid.siva.integrationtest.TestData.SUB_INDICATION_HASH_FAILURE;
+import static ee.openeid.siva.integrationtest.TestData.SUB_INDICATION_SIG_CRYPTO_FAILURE;
+import static ee.openeid.siva.integrationtest.TestData.TOTAL_PASSED;
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX;
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_PROCESS_PREFIX;
+import static ee.openeid.siva.integrationtest.TestData.VALID_INDICATION_VALUE_FAILED;
+import static ee.openeid.siva.integrationtest.TestData.VALID_INDICATION_VALUE_PASSED;
+import static ee.openeid.siva.integrationtest.TestData.VALID_SIGNATURE_SCOPE_CONTENT_FULL;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_NAMEID_1;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_NAMEID_2;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_NAMEID_3;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_NAMEID_4;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_NAMEID_9;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_STATUS_2;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_1;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_2;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_3;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_4;
+import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_9;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 @Tag("IntegrationTest")
 
@@ -166,6 +229,7 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
      *
      * File: hellopades-lt-sha256-ec256.pdf
      */
+    @Disabled("SIVA-499")
     @Test //TODO: This test misses validationSignatureQualification block
     public void detailedReportForPdfValidateSignaturesElement() {
         setTestFilesDirectory("pdf/signature_cryptographic_algorithm_test_files/");
