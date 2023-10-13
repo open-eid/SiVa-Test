@@ -258,11 +258,13 @@ public class AsiceValidationFailIT extends SiVaRestTests {
                 .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_FORMAT_FAILURE))
                 .body("signatures[0].errors.content", Matchers.hasItems(VALID_VALIDATION_PROCESS_ERROR_VALUE_5, REVOCATION_NOT_TRUSTED))
                 .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].certificates.size()", Matchers.is(1))
+                .body("signatures[0].certificates.size()", Matchers.is(2))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName",  Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content",  Matchers.startsWith("MIIEPzCCAyegAwIBAgIQH0FobucEcidPGVN0HUUgATANBgkqhk"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName",  Matchers.startsWith("ESTEID-SK 2011"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.content",  Matchers.startsWith("MIIFBTCCA+2gAwIBAgIQKVKTqv2MxtRNgzCjwmRRDTANBgkqhk"))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName",  Matchers.is("DemoCA"))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content",  Matchers.startsWith("MIIDmjCCAoKgAwIBAgICEAAwDQYJKoZIhvcNAQEFBQAwgZkxCz"))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(0));
     }
