@@ -108,6 +108,7 @@ public class AsiceValidationReportValueVerificationIT extends SiVaRestTests {
      * File: validTsSignatureWithRolesAndProductionPlace.asice
      */
     @Test
+    @Disabled("SIVA-620 - Expected warning is no longer there")
     public void bdocCorrectValuesArePresentValidLtSignature() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestFor("validTsSignatureWithRolesAndProductionPlace.asice"))

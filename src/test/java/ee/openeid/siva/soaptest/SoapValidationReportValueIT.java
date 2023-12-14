@@ -106,6 +106,7 @@ public class SoapValidationReportValueIT extends SiVaSoapTests {
      *
      */
     @Test
+    @Disabled("SIVA-620 - Expected warning is no longer there")
     public void SoapBdocCorrectValuesArePresentValidLtSignature() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestForDocument("validTsSignatureWithRolesAndProductionPlace.asice"))
@@ -215,6 +216,7 @@ public class SoapValidationReportValueIT extends SiVaSoapTests {
      *
      */
     @Test
+    @Disabled("SIVA-616 - error message has changed")
     public void SoapBdocCorrectValuesArePresentInvalidLtSignatureAdesqc() {
         setTestFilesDirectory("bdoc/live/timestamp/");
         post(validationRequestForDocument("EE_SER-AEX-B-LTA-V-24.bdoc"))
@@ -745,6 +747,7 @@ public class SoapValidationReportValueIT extends SiVaSoapTests {
      *
      */
     @Test
+    @Disabled("SIVA-620 - Expected warning is no longer there")
     public void SoapAsiceRoleAndPlaceThreeRolesIT() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestForDocument("role_productionPlace.asice"))

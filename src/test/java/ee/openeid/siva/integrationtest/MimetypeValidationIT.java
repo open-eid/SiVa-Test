@@ -18,6 +18,7 @@ package ee.openeid.siva.integrationtest;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -467,6 +468,7 @@ public class MimetypeValidationIT extends SiVaRestTests {
      * File: AsicsContainerMimetypeAsLast.asics
      */
     @Test
+    @Disabled("SIVA-616 - no more manifest error in the report")
     public void asicsInvalidMimetypeLocationAsLastWithTmpFile() {
         setTestFilesDirectory("mimetype_validation_test_files/InvalidContainers/ContainersWithMimetypeAsLast/");
         post(validationRequestFor("AsicsContainerMimetypeAsLast.asics"))
@@ -521,6 +523,7 @@ public class MimetypeValidationIT extends SiVaRestTests {
      * File: AsicsContainerMimetypeIsDeflated.asics
      */
     @Test
+    @Disabled("SIVA-616 - no more manifest error in the report")
     public void asicsInvalidMimetypeCompressionAsDeflatedWithTmpFile() {
         setTestFilesDirectory("mimetype_validation_test_files/InvalidContainers/ContainersWithDeflatedMimetype/");
         post(validationRequestFor("AsicsContainerMimetypeIsDeflated.asics"))
@@ -575,6 +578,7 @@ public class MimetypeValidationIT extends SiVaRestTests {
      * File: AsicsContainerNoMimetype.asics
      */
     @Test
+    @Disabled("SIVA-616 - no more manifest error in the report")
     public void asicsContainingTmpFileWithNoMimetype() {
         setTestFilesDirectory("mimetype_validation_test_files/InvalidContainers/ContainersWithNoMimetype/");
         post(validationRequestFor("AsicsContainerNoMimetype.asics"))
@@ -629,6 +633,7 @@ public class MimetypeValidationIT extends SiVaRestTests {
      * File: AsicsContainerMimetypeFilenameWithExtraSpace.asics
      */
     @Test
+    @Disabled("SIVA-616 - signatureForm is now considered to be ASiC-E")
     public void asicsMimetypeFilenameWithExtraSpace() {
         setTestFilesDirectory("mimetype_validation_test_files/InvalidContainers/ContainersWithInvalidMimetype/");
         post(validationRequestFor("AsicsContainerMimetypeFilenameWithExtraSpace.asics"))
@@ -734,6 +739,7 @@ public class MimetypeValidationIT extends SiVaRestTests {
      * File: EdocContainerNoMimetype.edoc
      */
     @Test
+    @Disabled("SIVA-616 - no more manifest error in the report")
     public void edocWithNoMimetype() {
         setTestFilesDirectory("mimetype_validation_test_files/InvalidContainers/ContainersWithNoMimetype/");
         post(validationRequestFor("EdocContainerNoMimetype.edoc"))

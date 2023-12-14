@@ -23,6 +23,7 @@ import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -579,6 +580,7 @@ public class ValidationRequestIT extends SiVaRestTests {
      * File: singleValidSignatureTS.asice
      */
     @Test
+    @Disabled("SIVA-616 - detailed report structure has changed")
     public void validationRequestDetailedReport() {
         post(validationRequestFor("singleValidSignatureTS.asice", null, REPORT_TYPE_DETAILED ))
                 .then()

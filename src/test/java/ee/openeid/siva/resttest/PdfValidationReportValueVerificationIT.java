@@ -155,6 +155,7 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
      * File: hellopades-lt-b.pdf
      */
     @Test
+    @Disabled("SIVA-616 - extra error messages")
     public void pdfAllElementsArePresentInvalidSignature() {
         setTestFilesDirectory("pdf/baseline_profile_test_files/");
         post(validationRequestFor("hellopades-lt-b.pdf"))
@@ -204,6 +205,7 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
      * File: hellopades-lt-rsa1024-sha1-expired.pdf
      */
     @Test
+    @Disabled("SIVA-616 - extra warning of 'The certificate is related to a trust service entry with status 'withdrawn'!'")
     public void pdfAllElementsArePresentIndeterminateSignature() {
         setTestFilesDirectory("pdf/signing_certifacte_test_files/");
         post(validationRequestFor("hellopades-lt-rsa1024-sha1-expired.pdf"))

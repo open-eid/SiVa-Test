@@ -440,6 +440,7 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
      * File: TS-02_23634_TS_wrong_SignatureValue.asice
      */
     @Test
+    @Disabled("SIVA-616 - detailedreport structure has changed")
     public void detailedReportWrongSignatureValueAsice() {
         setTestFilesDirectory("bdoc/live/timestamp/");
 

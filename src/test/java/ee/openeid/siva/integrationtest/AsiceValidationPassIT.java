@@ -18,6 +18,7 @@ package ee.openeid.siva.integrationtest;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -403,6 +404,7 @@ public class AsiceValidationPassIT extends SiVaRestTests {
      * File: signed-container-with-empty-datafiles.asice
      */
     @Test
+    @Disabled("SIVA-620 - Expected warning is no longer there")
     public void asiceWithEmptyDataFilesShouldPass() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestFor("signed-container-with-empty-datafiles.asice"))

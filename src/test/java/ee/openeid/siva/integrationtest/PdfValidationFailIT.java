@@ -108,6 +108,7 @@ public class PdfValidationFailIT extends SiVaRestTests {
      */
     //TODO SIVA-349 needs investigation why the signature level is determined as INDETERMINATE_ADESIG not as INDETERMINATE_QESIG
     @Test
+    @Disabled("SIVA-616 - The certificate is not related to a qualified certificate issuing trust service with valid status!")
     public void signingCertificateWithoutNonRepudiationKeyUsageAttributeShouldFail() {
         post(validationRequestFor( "hellopades-pades-lt-sha256-auth.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)

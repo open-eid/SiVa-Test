@@ -25,8 +25,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static ee.openeid.siva.integrationtest.TestData.*;
-import static org.hamcrest.Matchers.*;
+import static ee.openeid.siva.integrationtest.TestData.INDETERMINATE;
+import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_DETAILED;
+import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_DIAGNOSTIC;
+import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_SIMPLE;
+import static ee.openeid.siva.integrationtest.TestData.SOAP_DETAILED_DATA_PREFIX;
+import static ee.openeid.siva.integrationtest.TestData.SOAP_DIAGNOSTIC_DATA_PREFIX;
+import static ee.openeid.siva.integrationtest.TestData.SOAP_ERROR_RESPONSE_PREFIX;
+import static ee.openeid.siva.integrationtest.TestData.SOAP_VALIDATION_CONCLUSION_PREFIX;
+import static org.hamcrest.Matchers.is;
 
 @Tag("IntegrationTest")
 public class SoapValidationRequestIT extends SiVaSoapTests {

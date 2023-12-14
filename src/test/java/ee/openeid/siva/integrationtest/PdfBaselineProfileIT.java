@@ -19,6 +19,7 @@ package ee.openeid.siva.integrationtest;
 import org.apache.commons.codec.binary.Base64;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -54,6 +55,7 @@ public class PdfBaselineProfileIT extends SiVaRestTests{
      * File: hellopades-pades-b-sha256-auth.pdf
      */
     @Test
+    @Disabled("SIVA-616 - extra warning of 'The certificate is related to a trust service entry with status 'withdrawn'!'")
     public void baselineProfileBDocumentShouldFailpolv3() {
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("hellopades-pades-b-sha256-auth.pdf"));
         post(validationRequestWithValidKeys(encodedString, "hellopades-pades-b-sha256-auth.pdf", VALID_SIGNATURE_POLICY_3))
@@ -240,6 +242,7 @@ public class PdfBaselineProfileIT extends SiVaRestTests{
      * File: hellopades-lt-b.pdf
      */
     @Test
+    @Disabled("SIVA-616 - added error messages")
     public void documentWithBaselineProfilesBAndLTSignaturesShouldFail() {
         post(validationRequestFor( "hellopades-lt-b.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)

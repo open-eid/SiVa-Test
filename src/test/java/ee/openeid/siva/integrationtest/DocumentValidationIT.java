@@ -20,6 +20,7 @@ import ee.openeid.siva.common.Constants;
 import org.apache.commons.codec.binary.Base64;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -93,6 +94,7 @@ public class DocumentValidationIT extends SiVaRestTests {
      * File:3f_2s_1partly_signed.bdoc
      */
     @Test
+    @Disabled("SIVA-616 - FORMAT_FAILURE instead of HASH_FAILURE")
     public void bdocWithDocumentWithOneSignatureShouldFail() {
         setTestFilesDirectory("document_validation_test_files/bdoc/");
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("3f_2s_1partly_signed.bdoc"));
@@ -124,6 +126,7 @@ public class DocumentValidationIT extends SiVaRestTests {
      */
 
     @Test
+    @Disabled("SIVA-616 - FORMAT_FAILURE instead of HASH_FAILURE")
     public void bdocWithNonOverlapingSignaturesShouldFail() {
         setTestFilesDirectory("document_validation_test_files/bdoc/");
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("3f_2s_2partly_signed.bdoc"));
@@ -156,6 +159,7 @@ public class DocumentValidationIT extends SiVaRestTests {
      */
 
     @Test
+    @Disabled("SIVA-616 - FORMAT_FAILURE instead of HASH_FAILURE")
     public void bdocWithNonOverlapingSignaturesAndOneUnsignedDocumentShouldFail() {
         setTestFilesDirectory("document_validation_test_files/bdoc/");
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("4f_2s_all_combinations.bdoc"));

@@ -25,7 +25,11 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-import static ee.openeid.siva.integrationtest.TestData.*;
+import static ee.openeid.siva.integrationtest.TestData.HASH_ALGO_SHA224;
+import static ee.openeid.siva.integrationtest.TestData.HASH_ALGO_SHA256;
+import static ee.openeid.siva.integrationtest.TestData.HASH_ALGO_SHA384;
+import static ee.openeid.siva.integrationtest.TestData.HASH_ALGO_SHA512;
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX;
 
 @Tag("IntegrationTest")
 public class XadesHashcodeValidationPassIT extends SiVaRestTests {
