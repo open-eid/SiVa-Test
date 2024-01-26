@@ -5,6 +5,7 @@ dependency-reduced-pom.xml
 !.gitignore
 !.mvn
 .idea
+.mvn/wrapper/maven-wrapper.jar
 target
 allure-results
 siva-test.iml
