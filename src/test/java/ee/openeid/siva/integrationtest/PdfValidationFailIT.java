@@ -120,7 +120,10 @@ public class PdfValidationFailIT extends SiVaRestTests {
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
                 .body("signatures[0].subIndication", Matchers.is("CHAIN_CONSTRAINTS_FAILURE"))
-                .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, NOT_EXPECTED_KEY_USAGE))
+                .body("signatures[0].errors.content", Matchers.contains(
+                        CERT_VALIDATION_NOT_CONCLUSIVE,
+                        NOT_EXPECTED_KEY_USAGE,
+                        CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1));
     }

@@ -230,7 +230,10 @@ public class AsiceValidationFailIT extends SiVaRestTests {
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_CHAIN_CONSTRAINTS_FAILURE))
-                .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, NOT_EXPECTED_KEY_USAGE))
+                .body("signatures[0].errors.content", Matchers.contains(
+                        CERT_VALIDATION_NOT_CONCLUSIVE,
+                        NOT_EXPECTED_KEY_USAGE,
+                        CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
                 .body("validSignaturesCount", Matchers.is(0));
     }
 

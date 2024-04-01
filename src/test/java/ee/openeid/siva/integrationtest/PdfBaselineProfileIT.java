@@ -55,7 +55,6 @@ public class PdfBaselineProfileIT extends SiVaRestTests{
      * File: hellopades-pades-b-sha256-auth.pdf
      */
     @Test
-    @Disabled("SIVA-616 - extra warning of 'The certificate is related to a trust service entry with status 'withdrawn'!'")
     public void baselineProfileBDocumentShouldFailpolv3() {
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("hellopades-pades-b-sha256-auth.pdf"));
         post(validationRequestWithValidKeys(encodedString, "hellopades-pades-b-sha256-auth.pdf", VALID_SIGNATURE_POLICY_3))
@@ -63,8 +62,12 @@ public class PdfBaselineProfileIT extends SiVaRestTests{
                 .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_B"))
                 .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE))
-                .body("signatures[0].warnings", Matchers.hasSize(3))
+                .body("signatures[0].errors.content", Matchers.contains(
+                        SIG_UNEXPECTED_FORMAT,
+                        CERT_VALIDATION_NOT_CONCLUSIVE,
+                        NOT_EXPECTED_KEY_USAGE,
+                        CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
+                .body("signatures[0].warnings", Matchers.hasSize(4))
                 .body("signatures[0].certificates.size()", Matchers.is(1))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName",  Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName",  Matchers.is("ESTEID-SK 2011"))
@@ -243,7 +246,6 @@ public class PdfBaselineProfileIT extends SiVaRestTests{
      * File: hellopades-lt-b.pdf
      */
     @Test
-    @Disabled("SIVA-616 - added error messages")
     public void documentWithBaselineProfilesBAndLTSignaturesShouldFail() {
         post(validationRequestFor( "hellopades-lt-b.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
@@ -253,7 +255,7 @@ public class PdfBaselineProfileIT extends SiVaRestTests{
                 .body("signatures[1].signatureFormat", Matchers.is("PAdES_BASELINE_B"))
                 .body("signatures[1].signatureLevel", Matchers.is("NOT_ADES"))
                 .body("signatures[1].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[1].errors.content", Matchers.hasItem(CERT_NOT_GRANTED))
+                .body("signatures[1].errors.content", Matchers.hasItem(CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
                 .body("signatures[1].warnings.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_VALUE_35))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(2));

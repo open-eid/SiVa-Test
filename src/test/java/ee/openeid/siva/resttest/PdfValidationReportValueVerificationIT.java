@@ -155,7 +155,6 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
      * File: hellopades-lt-b.pdf
      */
     @Test
-    @Disabled("SIVA-616 - extra error messages")
     public void pdfAllElementsArePresentInvalidSignature() {
         setTestFilesDirectory("pdf/baseline_profile_test_files/");
         post(validationRequestFor("hellopades-lt-b.pdf"))
@@ -167,7 +166,7 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
                 .body("signatures[1].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[1].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[1].subIndication", Matchers.is("FORMAT_FAILURE"))
-                .body("signatures[1].errors.content", Matchers.hasItem(CERT_NOT_GRANTED))
+                .body("signatures[1].errors.content", Matchers.hasItem(CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
                 .body("signatures[1].signatureScopes[0].name", Matchers.is("Full PDF"))
                 .body("signatures[1].signatureScopes[0].scope", Matchers.is("FULL"))
                 .body("signatures[1].signatureScopes[0].content", Matchers.is("The document ByteRange : [0, 94483, 132377, 492]"))
@@ -205,10 +204,7 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
      * File: hellopades-lt-rsa1024-sha1-expired.pdf
      */
     @Test
-    @Disabled(
-            "Fails after SIVA-419 changes. Expected: is 'NOT_ADES', Actual: INDETERMINATE_QESIG" +
-            "SIVA-616 - extra warning of 'The certificate is related to a trust service entry with status 'withdrawn'!'"
-    )
+    @Disabled("Fails after SIVA-419 changes. Expected: is 'NOT_ADES', Actual: INDETERMINATE_QESIG")
     public void pdfAllElementsArePresentIndeterminateSignature() {
         setTestFilesDirectory("pdf/signing_certifacte_test_files/");
         post(validationRequestFor("hellopades-lt-rsa1024-sha1-expired.pdf"))
@@ -224,7 +220,7 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is("PARTIAL"))
                 .body("signatures[0].signatureScopes[0].content", Matchers.is("The document ByteRange : [0, 14153, 52047, 491]"))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2012-01-24T11:08:15Z"))
-                .body("signatures[0].warnings", Matchers.hasSize(4))
+                .body("signatures[0].warnings", Matchers.hasSize(7))
                 .body("signatures[0].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIFx5F/YSDew7evstDVhsdXKaN1B3k/wDBgLOOs1YFdJr"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2015-08-24T10:08:25Z"))
                 .body("signatures[0].info.timestampCreationTime", Matchers.is("2015-08-24T10:08:25Z"))

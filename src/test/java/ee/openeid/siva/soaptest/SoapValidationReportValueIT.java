@@ -216,7 +216,6 @@ public class SoapValidationReportValueIT extends SiVaSoapTests {
      *
      */
     @Test
-    @Disabled("SIVA-616 - error message has changed")
     public void SoapBdocCorrectValuesArePresentInvalidLtSignatureAdesqc() {
         setTestFilesDirectory("bdoc/live/timestamp/");
         post(validationRequestForDocument("EE_SER-AEX-B-LTA-V-24.bdoc"))

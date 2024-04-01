@@ -234,7 +234,10 @@ public class BdocValidationFailIT extends SiVaRestTests {
                 .body("signatureForm", Matchers.is("ASiC-E"))
                 .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
                 .body("signatures[0].subIndication", Matchers.is("CHAIN_CONSTRAINTS_FAILURE"))
-                .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, NOT_EXPECTED_KEY_USAGE))
+                .body("signatures[0].errors.content", Matchers.contains(
+                        CERT_VALIDATION_NOT_CONCLUSIVE,
+                        NOT_EXPECTED_KEY_USAGE,
+                        CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
                 .body("validSignaturesCount", Matchers.is(0));
     }
 
@@ -706,14 +709,17 @@ public class BdocValidationFailIT extends SiVaRestTests {
      * File: 23154_test1-old-sig-sigat-OK-prodat-NOK-1.bdoc
      */
     @Test
-    @Disabled("SIVA-616 - extra error messages")
     public void bdocCertificateValidityOutOfOcspRange() {
         setTestFilesDirectory("bdoc/live/timemark/");
         post(validationRequestFor("23154_test1-old-sig-sigat-OK-prodat-NOK-1.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is("ASiC-E"))
                 .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
-                .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, CERT_NOT_GRANTED))
+                .body("signatures[0].errors.content", Matchers.contains(
+                        CERT_VALIDATION_NOT_CONCLUSIVE,
+                        VALID_VALIDATION_PROCESS_ERROR_VALUE_5,
+                        REVOCATION_NOT_CONSISTENT,
+                        CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
                 .body("validSignaturesCount", Matchers.is(0));
     }
 

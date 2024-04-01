@@ -232,7 +232,7 @@ public class TestData {
     public static final String VALID_VALIDATION_PROCESS_ERROR_VALUE_8 = "No revocation data for the certificate";
     public static final String VALID_VALIDATION_PROCESS_ERROR_VALUE_9 = "The signature is not intact!";
     public static final String VALID_VALIDATION_PROCESS_ERROR_VALUE_10 = "The current time is not in the validity range of the signer's certificate!";
-    public static final String VALID_VALIDATION_PROCESS_ERROR_VALUE_11 = "The certificate is not related to a granted status at the timestamp production time!";
+    public static final String VALID_VALIDATION_PROCESS_ERROR_VALUE_11 = "The certificate is not related to a granted status at time-stamp generation time!";
     public static final String CERT_VALIDATION_NOT_CONCLUSIVE = "The certificate validation is not conclusive!";
     public static final String CERT_NOT_GRANTED = "The certificate is not related to a granted status!";
     public static final String TS_PROCESS_NOT_CONCLUSIVE = "The result of the timestamps validation process is not conclusive!";
@@ -241,6 +241,7 @@ public class TestData {
     public static final String REFERENCE_DATA_NOT_INTACT = "The reference data object is not intact!";
     public static final String REFERENCE_DATA_NOT_FOUND = "The reference data object has not been found!";
     public static final String CERTIFICATE_DO_NOT_MATCH_TRUST_SERVICE = "The trusted certificate doesn't match the trust service";
+    public static final String CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE = "The certificate is not related to a qualified certificate issuing trust service with valid status!";
     public static final String PAST_SIG_VALIDATION_NOT_CONCLUSIVE = "The past signature validation is not conclusive!";
     public static final String SIG_CREATED_WITH_EXP_CERT = "Signature has been created with expired certificate";
     public static final String SIG_UNEXPECTED_FORMAT = "The signature does not correspond to the expected format(s)!";
@@ -252,6 +253,7 @@ public class TestData {
     public static final String REVOCATION_NOT_TRUSTED = "The certificate chain for revocation data is not trusted, it does not contain a trust anchor.";
     public static final String REVOCATION_UNKNOWN = "The revocation status is unknown (Unknown response from OCSP)!";
     public static final String REVOCATION_NOT_FOUND = "No revocation data found for the certificate!";
+    public static final String REVOCATION_NOT_CONSISTENT = "The revocation data is not consistent!";
     public static final String ALL_FILES_NOT_SIGNED = "Not all files are signed!";
     public static final String NOT_EXPECTED_KEY_USAGE = "The signing-certificate of signature does not have an expected key-usage!";
     public static final String SIG_QUALIFYING_PROPERTY_MISSING = "The signed qualifying property: neither 'message-digest' nor 'SignedProperties' is present!";
