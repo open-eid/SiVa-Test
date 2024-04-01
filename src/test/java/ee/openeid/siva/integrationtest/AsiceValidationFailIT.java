@@ -197,7 +197,6 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: EE_SER-AEX-B-LT-I-43.asice
      */
     @Test
-    @Disabled("SIVA-616 - changed error message: The signing-certificate of signature does not have an expected key-usage!")
     public void asiceInvalidNonRepudiationKey() {
         post(validationRequestFor("EE_SER-AEX-B-LT-I-43.asice", VALID_SIGNATURE_POLICY_3,"Simple"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
@@ -224,7 +223,6 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: EE_SER-AEX-B-LT-I-26.asice
      */
     @Test
-    @Disabled("SIVA-616 - changed and new error messages")
     public void asiceInvalidNonRepudiationKeyNoComplianceInfo() {
         post(validationRequestFor("EE_SER-AEX-B-LT-I-26.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
@@ -233,7 +231,6 @@ public class AsiceValidationFailIT extends SiVaRestTests {
                 .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_CHAIN_CONSTRAINTS_FAILURE))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, NOT_EXPECTED_KEY_USAGE))
-                .body("signatures[0].errors.content", Matchers.hasItems(NOT_EXPECTED_KEY_USAGE))
                 .body("validSignaturesCount", Matchers.is(0));
     }
 

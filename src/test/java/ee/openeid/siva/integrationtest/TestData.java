@@ -253,7 +253,7 @@ public class TestData {
     public static final String REVOCATION_UNKNOWN = "The revocation status is unknown (Unknown response from OCSP)!";
     public static final String REVOCATION_NOT_FOUND = "No revocation data found for the certificate!";
     public static final String ALL_FILES_NOT_SIGNED = "Not all files are signed!";
-    public static final String NOT_EXPECTED_KEY_USAGE = "The signer's certificate does not have an expected key-usage!";
+    public static final String NOT_EXPECTED_KEY_USAGE = "The signing-certificate of signature does not have an expected key-usage!";
     public static final String SIG_QUALIFYING_PROPERTY_MISSING = "The signed qualifying property: neither 'message-digest' nor 'SignedProperties' is present!";
 
 

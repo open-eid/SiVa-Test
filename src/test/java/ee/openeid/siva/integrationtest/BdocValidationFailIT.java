@@ -201,7 +201,6 @@ public class BdocValidationFailIT extends SiVaRestTests {
      * File: EE_SER-AEX-B-LT-I-43.asice
      */
     @Test
-    @Disabled("SIVA-616 - changed error message: The signing-certificate of signature does not have an expected key-usage!")
     public void bdocInvalidNonRepudiationKey() {
         setTestFilesDirectory("bdoc/live/timestamp/");
         post(validationRequestForDD4j("EE_SER-AEX-B-LT-I-43.asice", null, null))
@@ -228,7 +227,6 @@ public class BdocValidationFailIT extends SiVaRestTests {
      * File: EE_SER-AEX-B-LT-I-26.asice
      */
     @Test
-    @Disabled("SIVA-616 - extra error message")
     public void bdocInvalidNonRepudiationKeyNoComplianceInfo() {
         setTestFilesDirectory("bdoc/live/timestamp/");
         post(validationRequestForDD4j("EE_SER-AEX-B-LT-I-26.asice", null, null))
