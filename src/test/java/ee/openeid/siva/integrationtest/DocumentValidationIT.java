@@ -94,7 +94,6 @@ public class DocumentValidationIT extends SiVaRestTests {
      * File:3f_2s_1partly_signed.bdoc
      */
     @Test
-    @Disabled("SIVA-616 - FORMAT_FAILURE instead of HASH_FAILURE")
     public void bdocWithDocumentWithOneSignatureShouldFail() {
         setTestFilesDirectory("document_validation_test_files/bdoc/");
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("3f_2s_1partly_signed.bdoc"));
@@ -103,7 +102,7 @@ public class DocumentValidationIT extends SiVaRestTests {
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].subIndication", Matchers.is("HASH_FAILURE"))
+                .body("signatures[0].subIndication", Matchers.is("FORMAT_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE))
                 .body("signatures[0].errors.content", Matchers.hasItems("Manifest file has an entry for file <document_3.xml> with mimetype <application/octet-stream> but the signature file for signature S0 does not have an entry for this file"))
                 .body("signatures[0].warnings.content", Matchers.hasItems("The signature/seal is not a valid AdES digital signature!"))
@@ -126,7 +125,6 @@ public class DocumentValidationIT extends SiVaRestTests {
      */
 
     @Test
-    @Disabled("SIVA-616 - FORMAT_FAILURE instead of HASH_FAILURE")
     public void bdocWithNonOverlapingSignaturesShouldFail() {
         setTestFilesDirectory("document_validation_test_files/bdoc/");
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("3f_2s_2partly_signed.bdoc"));
@@ -135,7 +133,7 @@ public class DocumentValidationIT extends SiVaRestTests {
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].subIndication", Matchers.is("HASH_FAILURE"))
+                .body("signatures[0].subIndication", Matchers.is("FORMAT_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE))
                 .body("signatures[0].warnings.content", Matchers.hasItem("The signature/seal is not a valid AdES digital signature!"))
                 .body("signatures[1].indication", Matchers.is("TOTAL-FAILED"))
@@ -159,7 +157,6 @@ public class DocumentValidationIT extends SiVaRestTests {
      */
 
     @Test
-    @Disabled("SIVA-616 - FORMAT_FAILURE instead of HASH_FAILURE")
     public void bdocWithNonOverlapingSignaturesAndOneUnsignedDocumentShouldFail() {
         setTestFilesDirectory("document_validation_test_files/bdoc/");
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("4f_2s_all_combinations.bdoc"));
@@ -168,7 +165,7 @@ public class DocumentValidationIT extends SiVaRestTests {
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].subIndication", Matchers.is("HASH_FAILURE"))
+                .body("signatures[0].subIndication", Matchers.is("FORMAT_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE))
                 .body("signatures[0].errors.content", Matchers.hasItems("Manifest file has an entry for file <unsigned.txt> with mimetype <application/octet-stream> but the signature file for signature S0 does not have an entry for this file"))
                 .body("signatures[0].errors.content", Matchers.hasItems("Manifest file has an entry for file <document_3.xml> with mimetype <application/octet-stream> but the signature file for signature S0 does not have an entry for this file"))
@@ -178,8 +175,7 @@ public class DocumentValidationIT extends SiVaRestTests {
                 .body("signatures[0].errors.content", Matchers.hasItems("Container contains a file named <unsigned.txt> which is not found in the signature file"))
                 .body("signatures[0].warnings.content", Matchers.hasItem("The signature/seal is not a valid AdES digital signature!"))
                 .body("signatures[1].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[1].subIndication", Matchers.is("HASH_FAILURE"));
-
+                .body("signatures[1].subIndication", Matchers.is("FORMAT_FAILURE"));
     }
 
     /**
