@@ -440,12 +440,11 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
      * File: TS-02_23634_TS_wrong_SignatureValue.asice
      */
     @Test
-    @Disabled("SIVA-616 - detailedreport structure has changed")
     public void detailedReportWrongSignatureValueAsice() {
         setTestFilesDirectory("bdoc/live/timestamp/");
 
         post(validationRequestFor("TS-02_23634_TS_wrong_SignatureValue.asice", null, REPORT_TYPE_DETAILED))
-                .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrCertificate[0]")
+                .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord[0]")
                 .body("validationProcessBasicSignature.constraint.name.key", Matchers.hasItem(BSV_IFCRC.getKey()))
                 .body("validationProcessBasicSignature.constraint.find { it.name.key == 'BSV_IFCRC' }.status", equalTo("OK"))
                 .body("validationProcessBasicSignature.constraint.find { it.name.key == 'BSV_IFCRC' }.id", notNullValue())
@@ -470,19 +469,26 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
                 .body("validationProcessBasicSignature.conclusion.errors.key", Matchers.hasItem(BBB_CV_ISI_ANS.getKey()))
                 .body("validationProcessBasicSignature.conclusion.errors.find { it.key == 'BBB_CV_ISI_ANS' }.value", equalTo(BBB_CV_ISI_ANS.getValue()))
 
-                .body("timestamps[0].validationProcessTimestamp.constraint.name.key", hasItem(BSV_IISCRC.getKey()))
-                .body("timestamps[0].validationProcessTimestamp.constraint.find { it.name.key == 'BSV_IISCRC' }.status", equalTo("OK"))
-                .body("timestamps[0].validationProcessTimestamp.constraint.find { it.name.key == 'BSV_IISCRC' }.id", notNullValue())
-                .body("timestamps[0].validationProcessTimestamp.constraint.name.key", hasItem(BSV_IXCVRC.getKey()))
-                .body("timestamps[0].validationProcessTimestamp.constraint.find { it.name.key == 'BSV_IXCVRC' }.status", equalTo("OK"))
-                .body("timestamps[0].validationProcessTimestamp.constraint.name.key", hasItem(BSV_IXCVRC.getKey()))
-                .body("timestamps[0].validationProcessTimestamp.constraint.find { it.name.key == 'BSV_ICVRC' }.status", equalTo("NOT_OK"))
-                .body("timestamps[0].validationProcessTimestamp.conclusion.indication", equalTo("FAILED"))
-                .body("timestamps[0].validationProcessTimestamp.conclusion.subIndication", equalTo(SUB_INDICATION_HASH_FAILURE))
-                .body("timestamps[0].validationProcessTimestamp.conclusion.errors.key", hasItem(BBB_CV_TSP_IRDOI_ANS.getKey()))
-                .body("timestamps[0].validationProcessTimestamp.conclusion.errors.value", hasItem(BBB_CV_TSP_IRDOI_ANS.getValue()))
+                .body("timestamps[0].validationProcessBasicTimestamp.constraint.name.key", hasItem(BSV_IISCRC.getKey()))
+                .body("timestamps[0].validationProcessBasicTimestamp.constraint.find { it.name.key == 'BSV_IISCRC' }.status", equalTo("OK"))
+                .body("timestamps[0].validationProcessBasicTimestamp.constraint.find { it.name.key == 'BSV_IISCRC' }.id", notNullValue())
+                .body("timestamps[0].validationProcessBasicTimestamp.constraint.name.key", hasItem(BSV_IXCVRC.getKey()))
+                .body("timestamps[0].validationProcessBasicTimestamp.constraint.find { it.name.key == 'BSV_IXCVRC' }.status", equalTo("OK"))
+                .body("timestamps[0].validationProcessBasicTimestamp.constraint.name.key", hasItem(BSV_IXCVRC.getKey()))
+                .body("timestamps[0].validationProcessBasicTimestamp.constraint.find { it.name.key == 'BSV_ICVRC' }.status", equalTo("NOT_OK"))
+                .body("timestamps[0].validationProcessBasicTimestamp.conclusion.indication", equalTo("FAILED"))
+                .body("timestamps[0].validationProcessBasicTimestamp.conclusion.subIndication", equalTo(SUB_INDICATION_HASH_FAILURE))
+                .body("timestamps[0].validationProcessBasicTimestamp.conclusion.errors.key", hasItem(BBB_CV_TSP_IRDOI_ANS.getKey()))
+                .body("timestamps[0].validationProcessBasicTimestamp.conclusion.errors.value", hasItem(BBB_CV_TSP_IRDOI_ANS.getValue()))
                 .body("timestamps[0].id", notNullValue())
-                .body("timestamps[0].validationProcessTimestamp.type", equalTo("SIGNATURE_TIMESTAMP"))
+                .body("timestamps[0].validationProcessBasicTimestamp.type", equalTo("SIGNATURE_TIMESTAMP"))
+
+                .body("timestamps[0].validationProcessArchivalDataTimestamp.conclusion.indication", equalTo("FAILED"))
+                .body("timestamps[0].validationProcessArchivalDataTimestamp.conclusion.subIndication", equalTo(SUB_INDICATION_HASH_FAILURE))
+                .body("timestamps[0].validationProcessArchivalDataTimestamp.conclusion.errors.key", hasItem(BBB_CV_TSP_IRDOI_ANS.getKey()))
+                .body("timestamps[0].validationProcessArchivalDataTimestamp.conclusion.errors.value", hasItem(BBB_CV_TSP_IRDOI_ANS.getValue()))
+                .body("timestamps[0].validationProcessArchivalDataTimestamp.constraint.name.key", hasItem("ARCH_IRTVBBA"))
+                .body("timestamps[0].validationProcessArchivalDataTimestamp.constraint.find { it.name.key == 'ARCH_IRTVBBA' }.status", equalTo("NOT_OK"))
 
                 .body("validationProcessLongTermData.constraint.name.key", hasItem(LTV_ABSV.getKey()))
                 .body("validationProcessLongTermData.constraint.find { it.name.key == 'LTV_ABSV' }.status", equalTo("NOT_OK"))

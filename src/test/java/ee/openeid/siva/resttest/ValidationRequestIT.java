@@ -580,12 +580,11 @@ public class ValidationRequestIT extends SiVaRestTests {
      * File: singleValidSignatureTS.asice
      */
     @Test
-    @Disabled("SIVA-616 - detailed report structure has changed")
     public void validationRequestDetailedReport() {
         post(validationRequestFor("singleValidSignatureTS.asice", null, REPORT_TYPE_DETAILED ))
                 .then()
                 .body("validationReport.diagnosticData", emptyOrNullString())
-                .body("validationReport.validationProcess.signatureOrTimestampOrCertificate[0].validationSignatureQualification.signatureQualification", equalTo("QESIG"))
+                .body("validationReport.validationProcess.signatureOrTimestampOrEvidenceRecord[0].validationSignatureQualification.signatureQualification", equalTo("QESIG"))
                 .body(VALIDATION_CONCLUSION_PREFIX + "validSignaturesCount", equalTo(1));
     }
 
