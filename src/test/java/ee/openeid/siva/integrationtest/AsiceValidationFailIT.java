@@ -842,7 +842,6 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: xroad-simple.asice
      */
     @Test
-    @Disabled("SIVA-616 - signatureFormat is now considered to be XML_NOT_ETSI")
     public void asiceSimpleXroadDocumentShouldFail() {
         setTestFilesDirectory("xroad/");
 
@@ -851,7 +850,7 @@ public class AsiceValidationFailIT extends SiVaRestTests {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_B"))
+                .body("signatures[0].signatureFormat", Matchers.is("XML_NOT_ETSI"))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_FORMAT_FAILURE))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("70006317"))
@@ -875,7 +874,6 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: xroad-batchsignature.asice
      */
     @Test
-    @Disabled("SIVA-616 - signatureFormat is now considered to be XML_NOT_ETSI")
     public void asiceBatchXroadDocumentShouldFail() {
         setTestFilesDirectory("xroad/");
 
@@ -884,7 +882,7 @@ public class AsiceValidationFailIT extends SiVaRestTests {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_B"))
+                .body("signatures[0].signatureFormat", Matchers.is("XML_NOT_ETSI"))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_FORMAT_FAILURE))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("70006317"))
@@ -908,7 +906,6 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: xroad-attachment.asice
      */
     @Test
-    @Disabled("SIVA-616 - signatureFormat is now considered to be XML_NOT_ETSI")
     public void validatingAttachXroadDocumentShouldFail() {
         setTestFilesDirectory("xroad/");
 
@@ -917,7 +914,7 @@ public class AsiceValidationFailIT extends SiVaRestTests {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_B"))
+                .body("signatures[0].signatureFormat", Matchers.is("XML_NOT_ETSI"))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_FORMAT_FAILURE))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("70006317"))
