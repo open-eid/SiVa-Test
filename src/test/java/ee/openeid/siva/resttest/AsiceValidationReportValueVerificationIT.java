@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import static ee.openeid.siva.common.DssMessages.QUAL_HAS_GRANTED_AT_ANS;
+import static ee.openeid.siva.common.DssMessages.QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2;
 import static ee.openeid.siva.integrationtest.TestData.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
@@ -108,7 +110,6 @@ public class AsiceValidationReportValueVerificationIT extends SiVaRestTests {
      * File: validTsSignatureWithRolesAndProductionPlace.asice
      */
     @Test
-    @Disabled("SIVA-620 - Expected warning is no longer there")
     public void bdocCorrectValuesArePresentValidLtSignature() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestFor("validTsSignatureWithRolesAndProductionPlace.asice"))
@@ -129,7 +130,7 @@ public class AsiceValidationReportValueVerificationIT extends SiVaRestTests {
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is("FULL"))
                 .body("signatures[0].signatureScopes[0].content", Matchers.is("Full document"))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2020-05-29T09:34:56Z"))
-                .body("signatures[0].warnings[0].content", Matchers.is("The trusted certificate does not match the trust service!"))
+                .body("signatures[0].warnings.content", Matchers.emptyOrNullString())
                 .body("signatures[0].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIB00XgQZ74rCQz13RlPDKtFVtGiUX01R5rTbhkZZKv0M"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2020-05-29T09:34:58Z"))
                 .body("signatures[0].info.signerRole[0].claimedRole", Matchers.is("First role"))
@@ -523,6 +524,48 @@ public class AsiceValidationReportValueVerificationIT extends SiVaRestTests {
                 .body("signatures[0].info", Matchers.not(Matchers.hasKey("ocspResponseCreationTime")))
                 .body("signatures[1].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
                 .body("signatures[1].info.ocspResponseCreationTime", Matchers.is("2022-08-25T12:22:37Z"));
+    }
+
+    /**
+     * TestCaseID: Bdoc-ValidationReportVerification-15
+     *
+     * TestType: Automated
+     *
+     * Title: Filtering out warning "The trusted certificate does not match the trust service!" in Simple Report
+     *
+     * Expected Result: Warning "The trusted certificate does not match the trust service!" is not displayed in Simple Report
+     *
+     * File: validTsSignatureWithRolesAndProductionPlace.asice
+     */
+    @Test
+    public void bdocFilterTrustServiceWarningSimpleReport() {
+        setTestFilesDirectory("bdoc/test/timestamp/");
+        post(validationRequestFor("validTsSignatureWithRolesAndProductionPlace.asice"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].warnings.content", Matchers.not(Matchers.hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue())))
+                .body("signatures[0].warnings.content", Matchers.emptyOrNullString());
+    }
+
+    /**
+     * TestCaseID: Bdoc-ValidationReportVerification-16
+     *
+     * TestType: Automated
+     *
+     * Title: Filtering out warning "The certificate is not related to a granted status at time-stamp lowest POE time!" in Simple Report
+     *
+     * Expected Result: Error "The certificate is not related to a granted status at time-stamp lowest POE time!" is not displayed in Simple Report
+     *
+     * File: TS-02_23634_TS_wrong_SignatureValue.asice
+     */
+    @Test
+    public void bdocFilterLowestPoeTimeErrorLtSignature() {
+        setTestFilesDirectory("/bdoc/live/timestamp/");
+        post(validationRequestFor("TS-02_23634_TS_wrong_SignatureValue.asice"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].errors.content", Matchers.not(Matchers.hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue())))
+                .body("signatures[0].errors.content", Matchers.hasSize(5));
     }
 
     @Override

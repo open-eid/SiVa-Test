@@ -60,6 +60,8 @@ import static ee.openeid.siva.common.DssMessages.BSV_IVTAVRSC;
 import static ee.openeid.siva.common.DssMessages.BSV_IXCVRC;
 import static ee.openeid.siva.common.DssMessages.LTV_ABSV;
 import static ee.openeid.siva.common.DssMessages.LTV_ABSV_ANS;
+import static ee.openeid.siva.common.DssMessages.QUAL_HAS_GRANTED_AT_ANS;
+import static ee.openeid.siva.common.DssMessages.QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2;
 import static ee.openeid.siva.common.DssMessages.TSV_ASTPTCT;
 import static ee.openeid.siva.common.DssMessages.TSV_IBSTAIDOSC;
 import static ee.openeid.siva.integrationtest.TestData.INDETERMINATE;
@@ -89,8 +91,10 @@ import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_
 import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_3;
 import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_4;
 import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_9;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -574,6 +578,54 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
                 .body("validationReport.validationConclusion.validatedDocument.fileHash", nullValue())
                 .body("validationReport.validationConclusion.validatedDocument.hashAlgo", nullValue())
                 .body("validationReportSignature", nullValue());
+    }
+
+    /**
+     * TestCaseID: Detailed-Report-Validation-11
+     *
+     * TestType: Automatic
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface
+     *
+     * Title: Filtering out warning "The trusted certificate does not match the trust service!" in Simple Report
+     *
+     * Expected Result: Warning "The trusted certificate does not match the trust service!" is not displayed in Simple Report
+     *
+     * File: validTsSignatureWithRolesAndProductionPlace.asice
+     */
+    @Test
+    @Disabled("SIVA-620 - filtering is not yet implemented for detailed report")
+    public void detailedReportFilterTrustServiceWarning() {
+        setTestFilesDirectory("bdoc/test/timestamp/");
+        post(validationRequestFor("validTsSignatureWithRolesAndProductionPlace.asice", null, REPORT_TYPE_DETAILED))
+                .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord.validationSignatureQualification.")
+                .body("conclusion.warnings.key[0]", not(hasItem("QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2")))
+                .body("conclusion.warnings.value[0]", not(hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue())))
+                .body("conclusion.warnings", emptyOrNullString());
+    }
+
+    /**
+     * TestCaseID: Detailed-Report-Validation-12
+     *
+     * TestType: Automatic
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface
+     *
+     * Title: Filtering out warning "The certificate is not related to a granted status at time-stamp lowest POE time!" in Simple Report
+     *
+     * Expected Result: Error "The certificate is not related to a granted status at time-stamp lowest POE time!" is not displayed in Simple Report
+     *
+     * File: TS-02_23634_TS_wrong_SignatureValue.asice
+     */
+    @Test
+    @Disabled("SIVA-620 - filtering is not yet implemented for detailed report")
+    public void detailedReportFilterLowestPoeTimeError() {
+        setTestFilesDirectory("bdoc/live/timestamp/");
+        post(validationRequestFor("TS-02_23634_TS_wrong_SignatureValue.asice", null, REPORT_TYPE_DETAILED))
+                .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord.timestamps.validationTimestampQualification.")
+                .body("conclusion.errors.key[0][0]", not(hasItem("QUAL_HAS_GRANTED_AT_ANS")))
+                .body("conclusion.errors.value[0][0]", not(hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue())))
+                .body("conclusion.errors", emptyOrNullString());
     }
 
     @Override

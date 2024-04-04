@@ -60,5 +60,7 @@ public class DssMessages {
 
     public static final DssMessage TSV_ASTPTCT = new DssMessage("TSV_ASTPTCT", "Are the time-stamps in the right order?");
     public static final DssMessage TSV_IBSTAIDOSC = new DssMessage("TSV_IBSTAIDOSC", "Is the best-signature-time not before the issuance date of the signing certificate?");
+    public static final DssMessage QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2 = new DssMessage("QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2", "The trusted certificate does not match the trust service!");
+    public static final DssMessage QUAL_HAS_GRANTED_AT_ANS = new DssMessage("QUAL_HAS_GRANTED_AT_ANS", "The certificate is not related to a granted status at time-stamp lowest POE time!");
 
 }
