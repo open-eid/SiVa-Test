@@ -404,7 +404,6 @@ public class AsiceValidationPassIT extends SiVaRestTests {
      * File: signed-container-with-empty-datafiles.asice
      */
     @Test
-    @Disabled("SIVA-620 - Expected warning is no longer there")
     public void asiceWithEmptyDataFilesShouldPass() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestFor("signed-container-with-empty-datafiles.asice"))
@@ -416,9 +415,8 @@ public class AsiceValidationPassIT extends SiVaRestTests {
                 .body("signatures[0].signatureScopes.name", Matchers.containsInRelativeOrder(
                         "data-file-1.txt", "empty-file-2.txt", "data-file-3.txt", "empty-file-4.txt", "data-file-5.txt"
                 ))
-                .body("signatures[0].warnings.size()", Matchers.is(3))
+                .body("signatures[0].warnings.size()", Matchers.is(2))
                 .body("signatures[0].warnings.content", Matchers.containsInAnyOrder(
-                        "The trusted certificate does not match the trust service!",
                         "Data file 'empty-file-2.txt' is empty",
                         "Data file 'empty-file-4.txt' is empty"
                 ))

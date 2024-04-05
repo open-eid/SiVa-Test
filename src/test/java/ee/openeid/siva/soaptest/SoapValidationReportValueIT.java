@@ -106,7 +106,6 @@ public class SoapValidationReportValueIT extends SiVaSoapTests {
      *
      */
     @Test
-    @Disabled("SIVA-620 - Expected warning is no longer there")
     public void SoapBdocCorrectValuesArePresentValidLtSignature() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestForDocument("validTsSignatureWithRolesAndProductionPlace.asice"))
@@ -133,7 +132,7 @@ public class SoapValidationReportValueIT extends SiVaSoapTests {
                 .body("Signatures.Signature[0].Info.SignatureProductionPlace.City", Matchers.is("City with spaces"))
                 .body("Signatures.Signature[0].Info.SignatureProductionPlace.PostalCode", Matchers.is("123456789"))
                 .body("Signatures.Signature[0].Errors", Matchers.emptyOrNullString())
-                .body("Signatures.Signature[0].Warnings.Warning[0].Content", Matchers.is("The trusted certificate does not match the trust service!"))
+                .body("Signatures.Signature[0].Warnings", Matchers.emptyOrNullString())
                 .body("SignatureForm", Matchers.is("ASiC-E"));
     }
 
@@ -746,7 +745,6 @@ public class SoapValidationReportValueIT extends SiVaSoapTests {
      *
      */
     @Test
-    @Disabled("SIVA-620 - Expected warning is no longer there")
     public void SoapAsiceRoleAndPlaceThreeRolesIT() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestForDocument("role_productionPlace.asice"))
@@ -755,7 +753,7 @@ public class SoapValidationReportValueIT extends SiVaSoapTests {
                 .body("Signatures.Signature[8].Info.SignerRole.ClaimedRole[1]", Matchers.is("Second role"))
                 .body("Signatures.Signature[8].Info.SignerRole.ClaimedRole[2]", Matchers.is("Third role"))
                 .body("Signatures.Signature[8].Errors", Matchers.emptyOrNullString())
-                .body("Signatures.Signature[8].Warnings.Warning[0].Content", Matchers.is("The trusted certificate does not match the trust service!"));
+                .body("Signatures.Signature[8].Warnings", Matchers.emptyOrNullString());
     }
 
     @Override
