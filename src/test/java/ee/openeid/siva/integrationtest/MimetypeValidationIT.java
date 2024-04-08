@@ -630,18 +630,18 @@ public class MimetypeValidationIT extends SiVaRestTests {
      * File: AsicsContainerMimetypeFilenameWithExtraSpace.asics
      */
     @Test
-    @Disabled("SIVA-616 - signatureForm is now considered to be ASiC-E")
     public void asicsMimetypeFilenameWithExtraSpace() {
         setTestFilesDirectory("mimetype_validation_test_files/InvalidContainers/ContainersWithInvalidMimetype/");
         post(validationRequestFor("AsicsContainerMimetypeFilenameWithExtraSpace.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is("ASiC-E"))
                 .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING));
+                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatures[0].errors.content", Matchers.hasItem("The manifest file is absent!"));
     }
 
     /**
