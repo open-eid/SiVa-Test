@@ -938,7 +938,6 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: EE_SER-AEX-B-LTA-V-24.asice
      */
     @Test
-    @Disabled("SIVA-616 - double error")
     public void asiceBaselineLtaProfileInvalidSignature() {
         post(validationRequestFor("EE_SER-AEX-B-LTA-V-24.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
@@ -947,7 +946,7 @@ public class AsiceValidationFailIT extends SiVaRestTests {
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2014-10-30T18:50:35Z"))
                 .body("signatures[0].signedBy", Matchers.is("METSMA,RAUL,38207162766"))
-                .body("signatures[0].errors.content", Matchers.hasItems(VALID_VALIDATION_PROCESS_ERROR_VALUE_11))
+                .body("signatures[0].errors.content", Matchers.contains(VALID_VALIDATION_PROCESS_ERROR_VALUE_11, VALID_VALIDATION_PROCESS_ERROR_VALUE_11))
                 .body("signatures[0].certificates.size()", Matchers.is(4))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName",  Matchers.is("METSMA,RAUL,38207162766"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content",  Matchers.startsWith("MIIEmzCCA4OgAwIBAgIQFQe7NKtE06tRSY1vHfPijjANBgkqhk"))
