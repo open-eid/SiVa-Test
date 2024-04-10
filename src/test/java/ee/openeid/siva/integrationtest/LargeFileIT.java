@@ -252,7 +252,7 @@ public class LargeFileIT extends SiVaRestTests{
      *
      * TestType: Automated
      *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/overview/#main-features-of-siva-validation-service
+     * Requirement: http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters
      *
      * Title: Validation request with request body of limit length
      *
@@ -274,7 +274,7 @@ public class LargeFileIT extends SiVaRestTests{
      *
      * TestType: Automated
      *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/overview/#main-features-of-siva-validation-service
+     * Requirement: http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters
      *
      * Title: Validation request with request body length over limit
      *
