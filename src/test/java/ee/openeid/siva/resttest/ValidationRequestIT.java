@@ -33,6 +33,7 @@ import java.util.Map;
 import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_DETAILED;
 import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_DIAGNOSTIC;
 import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_SIMPLE;
+import static ee.openeid.siva.integrationtest.TestData.SIVA_FILE_SIZE_LIMIT;
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX;
 import static io.restassured.path.json.JsonPath.from;
 import static org.hamcrest.Matchers.equalTo;
@@ -883,6 +884,53 @@ public class ValidationRequestIT extends SiVaRestTests {
                 .body("requestErrors[0].message", Matchers.containsString(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE));
     }
 
+    /**
+     * TestCaseID: Request-Size-Limit-Pass-Validate
+     *
+     * TestType: Automated
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters
+     *
+     * Title: Validation request with request body of limit length
+     *
+     * Expected Result: Validation report is returned
+     *
+     * File: singleValidSignatureTS.asice
+     */
+    @Test
+    public void requestSizeLimitPassValidate() {
+        setTestFilesDirectory("bdoc/test/timestamp/");
+        post(requestWithFixedBodyLength(validationRequestFor("singleValidSignatureTS.asice"), SIVA_FILE_SIZE_LIMIT))
+                .then()
+                .statusCode(200)
+                .rootPath(VALIDATION_CONCLUSION_PREFIX);
+    }
+
+    /**
+     * TestCaseID: Request-Size-Limit-Fail-Validate
+     *
+     * TestType: Automated
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters
+     *
+     * Title: Validation request with request body length over limit
+     *
+     * Expected Result: The document should fail the validation
+     *
+     * File: singleValidSignatureTS.asice
+     */
+    @Test
+    @Disabled("SIVA-641")
+    public void requestSizeLimitFailValidate() {
+        setTestFilesDirectory("bdoc/test/timestamp/");
+        String errorMessageTemplate = "Request content-length (%s bytes) exceeds request size limit (%s bytes)";
+        String errorMessage = String.format(errorMessageTemplate,SIVA_FILE_SIZE_LIMIT+1, SIVA_FILE_SIZE_LIMIT);
+        post(requestWithFixedBodyLength(validationRequestFor("singleValidSignatureTS.asice"),SIVA_FILE_SIZE_LIMIT+1))
+                .then()
+                .statusCode(400)
+                .body("requestErrors[0].key", Matchers.is("request"))
+                .body("requestErrors[0].message", Matchers.is(errorMessage));
+    }
 
     @Override
     protected String getTestFilesDirectory() {

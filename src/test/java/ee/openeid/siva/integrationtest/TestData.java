@@ -305,4 +305,6 @@ public class TestData {
     public static final String SOAP_DIAGNOSTIC_DATA_PREFIX = "Envelope.Body.ValidateDocumentResponse.ValidationReport.DiagnosticData";
     public static final String SOAP_ERROR_RESPONSE_PREFIX = "Envelope.Body.Fault";
 
+    public static final Integer SIVA_FILE_SIZE_LIMIT = 28311552; // 27MB
+
 }

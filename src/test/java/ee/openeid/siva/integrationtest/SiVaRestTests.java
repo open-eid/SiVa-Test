@@ -325,15 +325,12 @@ public abstract class SiVaRestTests extends SiVaIntegrationTestsBase {
                 SIGNATURE_POLICY, signaturePolicy);
     }
 
-    protected String validationRequestWithFixedBodyLength(String file, int expectedBodyLength) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("document", Base64.encodeBase64String(readFileFromTestResources(file)));
-        jsonObject.put("filename", file);
-
+    protected String requestWithFixedBodyLength(String request, int expectedBodyLength) {
         // Structure for extra body adds 10 additional characters
-        if (jsonObject.toString().length() > expectedBodyLength-10) {
-            throw new IllegalArgumentException("Provided file is too big to extend request with extra body.");
+        if (request.length() > expectedBodyLength-10) {
+            throw new IllegalArgumentException("Provided request is too big to extend request with extra body.");
         }
+        JSONObject jsonObject = new JSONObject(request);
         jsonObject.put("load", "t".repeat(expectedBodyLength-10-jsonObject.toString().length()));
         return jsonObject.toString();
     }

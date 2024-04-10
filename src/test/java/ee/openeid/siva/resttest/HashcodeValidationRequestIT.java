@@ -53,6 +53,7 @@ import static ee.openeid.siva.integrationtest.TestData.MOCK_XADES_DATAFILE_HASH;
 import static ee.openeid.siva.integrationtest.TestData.MOCK_XADES_DATAFILE_HASH_ALGO;
 import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_POLICY_1;
 import static ee.openeid.siva.integrationtest.TestData.SIGNATURE_POLICY_2;
+import static ee.openeid.siva.integrationtest.TestData.SIVA_FILE_SIZE_LIMIT;
 import static ee.openeid.siva.integrationtest.TestData.TOTAL_PASSED;
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX;
 import static org.hamcrest.Matchers.equalTo;
@@ -952,6 +953,28 @@ public class HashcodeValidationRequestIT extends SiVaRestTests {
                 .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
                 .body("signatures.find {signatures -> signatures.signedBy == 'VÄRNICK,KRÕÕT,48812040138'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
                 .body("signatures.find {signatures -> signatures.signedBy == 'ÅLT-DELETÈ,CØNTROLINA,48908209998'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA512));
+    }
+
+    /**
+     * TestCaseID: Request-Size-Limit-Pass-ValidateHashcode
+     *
+     * TestType: Automated
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters
+     *
+     * Title: Hashcode validation request with request body of limit length
+     *
+     * Expected Result: Validation report is returned
+     *
+     * File: Valid_XAdES_LT_TS.xml
+     */
+    @Test
+    public void requestSizeLimitPassValidateHashcode() {
+        setTestFilesDirectory("xades/");
+        postHashcodeValidation(requestWithFixedBodyLength(validationRequestHashcodeSimple("Valid_XAdES_LT_TS.xml", null, null), SIVA_FILE_SIZE_LIMIT))
+                .then()
+                .statusCode(200)
+                .rootPath(VALIDATION_CONCLUSION_PREFIX);
     }
 
     List<String> returnFiles(String filesLocation) {

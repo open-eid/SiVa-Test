@@ -15,6 +15,7 @@
  */
 package ee.openeid.siva.resttest;
 
+import static ee.openeid.siva.integrationtest.TestData.SIVA_FILE_SIZE_LIMIT;
 import static ee.openeid.siva.resttest.ValidationRequestIT.getFailMessageForKey;
 import static ee.openeid.siva.resttest.ValidationRequestIT.getRequestErrorsCount;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -336,6 +337,28 @@ public class GetDataFileRequestIT extends SiVaRestTests {
         setTestFilesDirectory("document_format_test_files/");
         String response = postForDataFiles(dataFilesRequestExtended("Picture.png", "test.DDOC")).asString();
         assertEquals(1, getRequestErrorsCount(response, DOCUMENT, DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE), getFailMessageForKey(DOCUMENT_TYPE));
+    }
+
+    /**
+     * TestCaseID: Request-Size-Limit-Pass-GetDataFiles
+     *
+     * TestType: Automated
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters
+     *
+     * Title: Datafiles request with request body of limit length
+     *
+     * Expected Result: The data file is returned
+     *
+     * File: 18912.ddoc
+     */
+    @Test
+    public void requestSizeLimitPassGetDataFiles() {
+        setTestFilesDirectory("ddoc/live/timemark/");
+        postForDataFiles(requestWithFixedBodyLength(dataFilesRequest("18912.ddoc"), SIVA_FILE_SIZE_LIMIT))
+                .then()
+                .statusCode(200)
+                .body("dataFiles[0].filename", Matchers.is("readme"));
     }
 
     @Override
