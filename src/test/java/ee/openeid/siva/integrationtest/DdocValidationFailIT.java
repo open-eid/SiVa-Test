@@ -159,7 +159,7 @@ public class DdocValidationFailIT extends SiVaRestTests{
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.notNullValue())
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("Please add Time-Stamp to the file for long term DDOC validation. This can be done with Time-Stamping application TeRa"))
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0));
     }
 
@@ -186,7 +186,7 @@ public class DdocValidationFailIT extends SiVaRestTests{
                 .body("signatures[0].errors.size()", Matchers.is(1))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("Please add Time-Stamp to the file for long term DDOC validation. This can be done with Time-Stamping application TeRa"))
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0));
     }
 
@@ -215,7 +215,7 @@ public class DdocValidationFailIT extends SiVaRestTests{
                 .body("signatures[0].warnings[0].content", Matchers.is("Old and unsupported format: DIGIDOC-XML version: 1.2"))
                 .body("signatures[0].warnings.size()", Matchers.is(1))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("Please add Time-Stamp to the file for long term DDOC validation. This can be done with Time-Stamping application TeRa"))
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0));
     }
 
@@ -481,7 +481,7 @@ public class DdocValidationFailIT extends SiVaRestTests{
                 .body("signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("Please add Time-Stamp to the file for long term DDOC validation. This can be done with Time-Stamping application TeRa"));
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"));
     }
 
     /**
@@ -519,7 +519,7 @@ public class DdocValidationFailIT extends SiVaRestTests{
                 .body("signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("Please add Time-Stamp to the file for long term DDOC validation. This can be done with Time-Stamping application TeRa"));
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"));
     }
 
     /**
@@ -557,7 +557,7 @@ public class DdocValidationFailIT extends SiVaRestTests{
                 .body("signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("Please add Time-Stamp to the file for long term DDOC validation. This can be done with Time-Stamping application TeRa"));
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"));
     }
 
     @Override

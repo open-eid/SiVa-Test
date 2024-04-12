@@ -175,7 +175,7 @@ public class DdocValidationReportValueVerificationIT extends SiVaRestTests {
                 .body("signatureForm", Matchers.is("DIGIDOC_XML_1.3"))
                 .body("validatedDocument.filename", Matchers.is("18912.ddoc"))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("Please add Time-Stamp to the file for long term DDOC validation. This can be done with Time-Stamping application TeRa"))
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1));
     }
@@ -201,7 +201,7 @@ public class DdocValidationReportValueVerificationIT extends SiVaRestTests {
                 .body("signatureForm", Matchers.is("DIGIDOC_XML_1.3"))
                 .body("validatedDocument.filename", Matchers.is("DdocContainerNoSignature.ddoc"))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("Please add Time-Stamp to the file for long term DDOC validation. This can be done with Time-Stamping application TeRa"))
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(0));
     }
