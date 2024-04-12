@@ -89,14 +89,13 @@ public class PdfBaselineProfileIT extends SiVaRestTests{
      * File: pades-baseline-t-live-aj.pdf
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'NOT_ADES_QC_QSCD', Actual: INDETERMINATE_QESIG")
     public void baselineProfileTDocumentShouldFailpolv3() {
         String encodedString = Base64.encodeBase64String(readFileFromTestResources("pades-baseline-t-live-aj.pdf"));
         post(validationRequestWithValidKeys(encodedString, "pades-baseline-t-live-aj.pdf", VALID_SIGNATURE_POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_T"))
-                .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES_QC_QSCD"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
+                .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_QESIG"))
+                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE))
                 .body("signatures[0].warnings", Matchers.hasSize(1))
                 .body("signatures[0].certificates.size()", Matchers.is(2))

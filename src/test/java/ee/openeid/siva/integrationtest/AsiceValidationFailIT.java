@@ -251,14 +251,13 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: TM-01_bdoc21-unknown-resp.bdoc
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'TOTAL-FAILED', Actual: INDETERMINATE")
     public void asiceNotTrustedOcspCert() {
         setTestFilesDirectory("bdoc/live/timemark/");
         post(validationRequestForDSS("TM-01_bdoc21-unknown-resp.bdoc", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
-                .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_FORMAT_FAILURE))
+                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
+                .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_CERTIFICATE_CHAIN_GENERAL_FAILURE))
                 .body("signatures[0].errors.content", Matchers.hasItems(VALID_VALIDATION_PROCESS_ERROR_VALUE_5, REVOCATION_NOT_TRUSTED))
                 .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].certificates.size()", Matchers.is(2))
@@ -286,12 +285,11 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: TS-05_23634_TS_unknown_TSA.asice
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'TOTAL-FAILED', Actual: INDETERMINATE")
     public void asiceNotTrustedTsaCert() {
         post(validationRequestFor("TS-05_23634_TS_unknown_TSA.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItems(TS_NOT_TRUSTED))
                 .body("signatures[0].certificates.size()", Matchers.is(3))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName",  Matchers.is("ŽAIKOVSKI,IGOR,37101010021"))
@@ -485,13 +483,12 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: SS-4_teadmataCA.4.asice
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'TOTAL-FAILED', Actual: INDETERMINATE")
     public void asiceSignersCertNotTrusted() {
         setTestFilesDirectory("bdoc/live/timemark/");
         post(validationRequestFor("SS-4_teadmataCA.4.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItems(SIG_NOT_TRUSTED, CERT_PATH_NOT_TRUSTED))
                 .body("signatures[0].signedBy", Matchers.is("signer1"))
                 .body("signatures[0].certificates.size()", Matchers.is(2))
@@ -645,13 +642,12 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: TS-06_23634_TS_missing_OCSP.asice
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'TOTAL-FAILED', Actual: INDETERMINATE")
     public void asiceBaselineTSignature() {
         post(validationRequestFor("TS-06_23634_TS_missing_OCSP.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
                 .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_T))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, REVOCATION_NOT_FOUND))
                 .body("signatures[0].signedBy", Matchers.is("ŽAIKOVSKI,IGOR,37101010021"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName",  Matchers.is("ŽAIKOVSKI,IGOR,37101010021"))
@@ -704,7 +700,6 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * File: TM-invalid-sig-no-sign-cert.asice
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'TOTAL-FAILED', Actual: INDETERMINATE")
     public void asiceInvalidSignatureNoSigningCertificateFound() {
         setTestFilesDirectory("bdoc/test/timemark/");
         String fileName = "TM-invalid-sig-no-sign-cert.asice";
@@ -713,7 +708,8 @@ public class AsiceValidationFailIT extends SiVaRestTests {
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
                 .body("signatures[0].signedBy", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_T))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
+                .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_NO_SIGNING_CERTIFICATE_FOUND))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2013-10-11T11:47:40Z"))
                 .body("signatures[0].errors.content", Matchers.hasItems(VALID_VALIDATION_PROCESS_ERROR_VALUE_9, SIG_NO_CANDIDATE))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))

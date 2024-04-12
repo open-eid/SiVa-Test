@@ -1195,7 +1195,6 @@ public class SignaturePolicyIT extends SiVaRestTests {
      * File: PadesProfileT.pdf
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'NOT_ADES_QC_QSCD', Actual: INDETERMINATE_QESIG")
     public void pdfDocumentWithoutRevocationInfoShouldFail() {
         setTestFilesDirectory("signature_policy_test_files/");
         post(validationRequestFor("PadesProfileT.pdf", VALID_SIGNATURE_POLICY_4, null))
@@ -1204,8 +1203,8 @@ public class SignaturePolicyIT extends SiVaRestTests {
                 .body("policy.policyName", Matchers.is(VALID_SIGNATURE_POLICY_4))
                 .body("policy.policyUrl", Matchers.is(POLICY_4_URL))
                 .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_T"))
-                .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES_QC_QSCD"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
+                .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_QESIG"))
+                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, REVOCATION_NOT_FOUND))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1));

@@ -204,7 +204,6 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
      * File: hellopades-lt-rsa1024-sha1-expired.pdf
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'NOT_ADES', Actual: INDETERMINATE_QESIG")
     public void pdfAllElementsArePresentIndeterminateSignature() {
         setTestFilesDirectory("pdf/signing_certifacte_test_files/");
         post(validationRequestFor("hellopades-lt-rsa1024-sha1-expired.pdf"))
@@ -212,15 +211,15 @@ public class PdfValidationReportValueVerificationIT extends SiVaRestTests {
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S-B2DE2D1E57C3DD8F518A13F027988A4BDBE03DC7A1DF96301351694DCDB88213"))
                 .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_T"))
-                .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES"))
+                .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_UNKNOWN"))
                 .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
+                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItem(CERT_VALIDATION_NOT_CONCLUSIVE))
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("Partial PDF"))
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is("PARTIAL"))
                 .body("signatures[0].signatureScopes[0].content", Matchers.is("The document ByteRange : [0, 14153, 52047, 491]"))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2012-01-24T11:08:15Z"))
-                .body("signatures[0].warnings", Matchers.hasSize(7))
+                .body("signatures[0].warnings", Matchers.hasSize(5))
                 .body("signatures[0].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIFx5F/YSDew7evstDVhsdXKaN1B3k/wDBgLOOs1YFdJr"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2015-08-24T10:08:25Z"))
                 .body("signatures[0].info.timestampCreationTime", Matchers.is("2015-08-24T10:08:25Z"))

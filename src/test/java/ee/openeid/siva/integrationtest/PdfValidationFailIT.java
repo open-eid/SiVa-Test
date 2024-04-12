@@ -50,16 +50,15 @@ public class PdfValidationFailIT extends SiVaRestTests {
      * File: hellopades-lt-rsa1024-sha1-expired.pdf
      */
     @Test
-    @Disabled("Fails after SIVA-419 changes. Expected: is 'NOT_ADES', Actual: INDETERMINATE_QESIG")
     public void signaturesMadeWithExpiredSigningCertificatesAreInvalid() {
         post(validationRequestFor("hellopades-lt-rsa1024-sha1-expired.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_T"))
-                .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
+                .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_UNKNOWN"))
+                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItem(CERT_VALIDATION_NOT_CONCLUSIVE))
-                .body("signatures[0].warnings.content[0]", Matchers.is("The signature/seal is not a valid AdES digital signature!"))
+                .body("signatures[0].warnings.content[0]", Matchers.is("The signature/seal is an INDETERMINATE AdES digital signature!"))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1));
     }
