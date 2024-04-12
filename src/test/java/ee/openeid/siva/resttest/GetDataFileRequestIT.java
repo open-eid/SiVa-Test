@@ -350,15 +350,15 @@ public class GetDataFileRequestIT extends SiVaRestTests {
      *
      * Expected Result: The data file is returned
      *
-     * File: 18912.ddoc
+     * File: valid_XML1_3.ddoc
      */
     @Test
     public void requestSizeLimitPassGetDataFiles() {
-        setTestFilesDirectory("ddoc/live/timemark/");
-        postForDataFiles(requestWithFixedBodyLength(dataFilesRequest("18912.ddoc"), SIVA_FILE_SIZE_LIMIT))
+        setTestFilesDirectory("ddoc/get_data_files/");
+        postForDataFiles(requestWithFixedBodyLength(dataFilesRequest("valid_XML1_3.ddoc"), SIVA_FILE_SIZE_LIMIT))
                 .then()
                 .statusCode(200)
-                .body("dataFiles[0].filename", Matchers.is("readme"));
+                .body("dataFiles[0].filename", Matchers.is("test.txt"));
     }
 
     @Override
