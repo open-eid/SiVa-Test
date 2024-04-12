@@ -77,6 +77,7 @@ import static ee.openeid.siva.integrationtest.TestData.SUB_INDICATION_SIG_CRYPTO
 import static ee.openeid.siva.integrationtest.TestData.TOTAL_PASSED;
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX;
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_PROCESS_PREFIX;
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_PROCESS_TS_PREFIX;
 import static ee.openeid.siva.integrationtest.TestData.VALID_INDICATION_VALUE_FAILED;
 import static ee.openeid.siva.integrationtest.TestData.VALID_INDICATION_VALUE_PASSED;
 import static ee.openeid.siva.integrationtest.TestData.VALID_SIGNATURE_SCOPE_CONTENT_FULL;
@@ -91,10 +92,8 @@ import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_
 import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_3;
 import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_4;
 import static ee.openeid.siva.integrationtest.TestData.VALID_VALIDATION_PROCESS_VALUE_9;
-import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -587,21 +586,19 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
      *
      * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface
      *
-     * Title: Filtering out warning "The trusted certificate does not match the trust service!" in Simple Report
+     * Title: Warning "The trusted certificate does not match the trust service!" in Detailed Report
      *
-     * Expected Result: Warning "The trusted certificate does not match the trust service!" is not displayed in Simple Report
+     * Expected Result: Warning "The trusted certificate does not match the trust service!" is not filtered out and is present in Detailed Report
      *
      * File: validTsSignatureWithRolesAndProductionPlace.asice
      */
     @Test
-    @Disabled("SIVA-620 - filtering is not yet implemented for detailed report")
-    public void detailedReportFilterTrustServiceWarning() {
+    public void detailedReportTrustServiceWarningPresent() {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestFor("validTsSignatureWithRolesAndProductionPlace.asice", null, REPORT_TYPE_DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord.validationSignatureQualification.")
-                .body("conclusion.warnings.key[0]", not(hasItem("QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2")))
-                .body("conclusion.warnings.value[0]", not(hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue())))
-                .body("conclusion.warnings", emptyOrNullString());
+                .body("conclusion.warnings.key[0]", hasItem("QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2"))
+                .body("conclusion.warnings.value[0]", hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue()));
     }
 
     /**
@@ -611,21 +608,21 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
      *
      * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface
      *
-     * Title: Filtering out warning "The certificate is not related to a granted status at time-stamp lowest POE time!" in Simple Report
+     * Title: Error "The certificate is not related to a granted status at time-stamp lowest POE time!" in Detailed Report
      *
-     * Expected Result: Error "The certificate is not related to a granted status at time-stamp lowest POE time!" is not displayed in Simple Report
+     * Expected Result: Error "The certificate is not related to a granted status at time-stamp lowest POE time!" is displayed in Detailed Report and signature is TOTAL-PASSED
      *
-     * File: TS-02_23634_TS_wrong_SignatureValue.asice
+     * File: IB-4183_3.4kaart_RSA2047_TS.asice
      */
     @Test
-    @Disabled("SIVA-620 - filtering is not yet implemented for detailed report")
-    public void detailedReportFilterLowestPoeTimeError() {
+    public void detailedReportLowestPoeTimeErrorPresent() {
         setTestFilesDirectory("bdoc/live/timestamp/");
-        post(validationRequestFor("TS-02_23634_TS_wrong_SignatureValue.asice", null, REPORT_TYPE_DETAILED))
-                .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord.timestamps.validationTimestampQualification.")
-                .body("conclusion.errors.key[0][0]", not(hasItem("QUAL_HAS_GRANTED_AT_ANS")))
-                .body("conclusion.errors.value[0][0]", not(hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue())))
-                .body("conclusion.errors", emptyOrNullString());
+        post(validationRequestFor("IB-4183_3.4kaart_RSA2047_TS.asice", null, REPORT_TYPE_DETAILED))
+                .then().rootPath("validationReport.")
+                .body(VALIDATION_PROCESS_TS_PREFIX + "conclusion[0][0].indication", equalTo("PASSED"))
+                .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.key[0][0]", hasItem("QUAL_HAS_GRANTED_AT_ANS"))
+                .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.value[0][0]", hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue()))
+                .body("validationConclusion.signatures[0].indication", equalTo(TOTAL_PASSED));
     }
 
     @Override
