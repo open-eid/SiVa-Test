@@ -556,16 +556,16 @@ public class AsiceValidationReportValueVerificationIT extends SiVaRestTests {
      *
      * Expected Result: Error "The certificate is not related to a granted status at time-stamp lowest POE time!" is not displayed in Simple Report
      *
-     * File: TS-02_23634_TS_wrong_SignatureValue.asice
+     * File: IB-4183_3.4kaart_RSA2047_TS.asice
      */
     @Test
-    public void bdocFilterLowestPoeTimeErrorLtSignature() {
+    public void bdocFilterLowestPoeTimeErrorSimpleReport() {
         setTestFilesDirectory("/bdoc/live/timestamp/");
-        post(validationRequestFor("TS-02_23634_TS_wrong_SignatureValue.asice"))
+        post(validationRequestFor("IB-4183_3.4kaart_RSA2047_TS.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
                 .body("signatures[0].errors.content", Matchers.not(Matchers.hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue())))
-                .body("signatures[0].errors.content", Matchers.hasSize(5));
+                .body("signatures[0].errors.content", Matchers.emptyOrNullString());
     }
 
     @Override
