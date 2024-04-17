@@ -597,7 +597,7 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestFor("validTsSignatureWithRolesAndProductionPlace.asice", null, REPORT_TYPE_DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord.validationSignatureQualification.")
-                .body("conclusion.warnings.key[0]", hasItem("QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2"))
+                .body("conclusion.warnings.key[0]", hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getKey()))
                 .body("conclusion.warnings.value[0]", hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue()));
     }
 
@@ -620,7 +620,7 @@ public class DetailedReportValidationManualIT extends SiVaRestTests {
         post(validationRequestFor("IB-4183_3.4kaart_RSA2047_TS.asice", null, REPORT_TYPE_DETAILED))
                 .then().rootPath("validationReport.")
                 .body(VALIDATION_PROCESS_TS_PREFIX + "conclusion[0][0].indication", equalTo("PASSED"))
-                .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.key[0][0]", hasItem("QUAL_HAS_GRANTED_AT_ANS"))
+                .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.key[0][0]", hasItem(QUAL_HAS_GRANTED_AT_ANS.getKey()))
                 .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.value[0][0]", hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue()))
                 .body("validationConclusion.signatures[0].indication", equalTo(TOTAL_PASSED));
     }

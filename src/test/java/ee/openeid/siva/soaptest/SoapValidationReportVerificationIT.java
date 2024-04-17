@@ -4,6 +4,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import static ee.openeid.siva.common.DssMessages.QUAL_HAS_GRANTED_AT_ANS;
+import static ee.openeid.siva.common.DssMessages.QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2;
 import static ee.openeid.siva.integrationtest.TestData.REPORT_TYPE_DETAILED;
 import static ee.openeid.siva.integrationtest.TestData.SOAP_DETAILED_DATA_PREFIX;
 import static ee.openeid.siva.integrationtest.TestData.SOAP_VALIDATION_CONCLUSION_PREFIX;
@@ -74,7 +75,7 @@ public class SoapValidationReportVerificationIT extends SiVaSoapTests {
         setTestFilesDirectory("bdoc/test/timestamp/");
         post(validationRequestForDocumentReportType("validTsSignatureWithRolesAndProductionPlace.asice", REPORT_TYPE_DETAILED))
                 .then().rootPath(SOAP_DETAILED_DATA_PREFIX + ".Signature.ValidationSignatureQualification.")
-                .body("Conclusion.Warnings[0]", Matchers.equalTo("The trusted certificate does not match the trust service!"));
+                .body("Conclusion.Warnings[0]", Matchers.equalTo(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue()));
     }
 
     /**
