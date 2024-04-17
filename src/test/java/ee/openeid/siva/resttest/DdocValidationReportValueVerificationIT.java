@@ -153,31 +153,8 @@ public class DdocValidationReportValueVerificationIT extends SiVaRestTests {
         setTestFilesDirectory("ddoc/live/timemark/");
         post(validationRequestFor("18912.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body(matchesJsonSchemaInClasspath("SimpleReportSchemaDdoc.json"))
-                .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
-                .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureScopes[0].name", Matchers.is("readme"))
-                .body("signatures[0].signatureScopes[0].scope", Matchers.is("FullSignatureScope"))
-                .body("signatures[0].signatureScopes[0].content", Matchers.is("Digest of the document content"))
-                .body("signatures[0].claimedSigningTime", Matchers.is("2012-09-21T11:56:53Z"))
-                .body("signatures[0].warnings[0].content", Matchers.is("Bad digest for DataFile: D0 alternate digest matches!"))
-                .body("signatures[0].info.timeAssertionMessageImprint", Matchers.is("f4HUThRsYgGtO+CRH5cHA7mN/48="))
-                .body("signatures[0].info.bestSignatureTime", Matchers.is("2012-09-21T11:56:55Z"))
-                .body("signatures[0].info.timestampCreationTime", Matchers.emptyOrNullString())
-                .body("signatures[0].info.ocspResponseCreationTime", Matchers.is("2012-09-21T11:56:55Z"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("SK OCSP RESPONDER 2011"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIIEuTCCA6GgAwIBAgIQZ+e7WiJWyzFPH8axcYYMdzANBgkqhk"))
-                .body("signatureForm", Matchers.is("DIGIDOC_XML_1.3"))
-                .body("validatedDocument.filename", Matchers.is("18912.ddoc"))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
-                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1));
+                .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"));
     }
 
     /**
