@@ -6,9 +6,9 @@ Test_cases = open('INSERT_CORRECT_PATH/siva_tc.md','w', encoding="utf8")
 Test_cases.write("Test Case Descriptions\n")
 Test_cases.write("==================\n")
 Test_cases.write("\n## Introduction\n")
-Test_cases.write("This document gives overview of the test cases. This page is partially generated using a script, more info about the script can be found in [SiVa GitHub](https://github.com/open-eid/SiVa-Test/tree/master/test-helpers).\n\n")
+Test_cases.write("This document gives overview of the test cases. This page is partially generated using a script, more info about the script can be found in [SiVa-Test GitHub](https://github.com/open-eid/SiVa-Test/tree/develop/docs).\n\n")
 Test_cases.write("The structure and elements of test case is described in [QA Strategy](https://open-eid.github.io/SiVa/siva3/qa_strategy/#testing) document.\n")
-Test_cases.write("All the files used in the tests can be found in [SiVa GitHub](https://github.com/open-eid/SiVa-Test/tree/master/src/test/resources).\n")
+Test_cases.write("All the files used in the tests can be found in [SiVa-Test GitHub](https://github.com/open-eid/SiVa-Test/tree/develop/src/test/resources).\n")
 
 new_file = 1
         
@@ -30,7 +30,7 @@ for root, dirs, filenames in os.walk(source_in_dir):
                 if (new_file):
                     Test_cases.write("\n## "+f+"\n")
                     correct_folder = os.path.relpath(root,os.path.dirname(root))
-                    Test_cases.write("[Open file](https://github.com/open-eid/SiVa-Test/tree/master/src/test/java/ee/openeid/siva/"+correct_folder+"/"+f+")\n\n")
+                    Test_cases.write("[Open file](https://github.com/open-eid/SiVa-Test/tree/develop/src/test/java/ee/openeid/siva/"+correct_folder+"/"+f+")\n\n")
                     new_file = 0
                 Test_cases.write("\n**"+a_line.lstrip("* ").rstrip()+"**\n\n")
             elif '* TestType:' in a_line:
@@ -43,8 +43,8 @@ for root, dirs, filenames in os.walk(source_in_dir):
                 Test_cases.write("  "+a_line.lstrip().rstrip()+"\n")
             elif '* File:' in a_line:
                 Test_cases.write("  "+a_line.lstrip().rstrip()+"\n\n")
-            elif '@Ignore' in a_line:
-                a_line = a_line.replace("@Ignore","")
+            elif '@Disabled' in a_line:
+                a_line = a_line.replace("@Disabled","")
                 if '//TODO:' in a_line:
                     Test_cases.write("  **Attention! This test is disabled: "+a_line[12:].strip()+"\n\n")
                 else:
