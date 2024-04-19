@@ -30,7 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @Tag("IntegrationTest")
-@Disabled("SIVA-196")
+@Disabled("SIVA-196") //Class disabled
 public class ReportSignatureIT extends SiVaRestTests {
 
     private static final String TEST_FILES_DIRECTORY = "document_format_test_files/";

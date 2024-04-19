@@ -37,7 +37,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @Tag("IntegrationTest")
-@Disabled("SIVA-196")
+@Disabled("SIVA-196") //Class disabled
 public class ReportSignatureManuallT  extends SiVaSoapTests {
     private static final String DEFAULT_TEST_FILES_DIRECTORY = "pdf/signature_cryptographic_algorithm_test_files/";
     private static final String VALIDATION_ENDPOINT = "/validate";

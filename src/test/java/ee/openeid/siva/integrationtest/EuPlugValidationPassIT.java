@@ -28,7 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-@Disabled("SIVA-469")
+@Disabled("SIVA-469") //Class disabled
 public class EuPlugValidationPassIT extends SiVaRestTests {
 
     // TODO: fix location issue, ticket number: SIVA-469
