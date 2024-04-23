@@ -1,8 +1,8 @@
 import os
 
-source_in_dir = 'C:/Users/heiti/Development/SiVa_collection/SiVa-Test/src/test/java/ee/openeid/siva/'
+source_in_dir = 'INSERT_CORRECT_PATH/SiVa-Test/src/test/java/ee/openeid/siva/'
 
-Test_cases = open('C:/Users/heiti/Development/SiVa_collection/SiVa-Test/docs/tc_cases.md','w', encoding="utf8")
+Test_cases = open('INSERT_CORRECT_PATH/SiVa-Test/docs/tc_cases.md','w', encoding="utf8")
 Test_cases.write("Test Case Descriptions\n")
 Test_cases.write("==================\n")
 Test_cases.write("\n## Introduction\n")

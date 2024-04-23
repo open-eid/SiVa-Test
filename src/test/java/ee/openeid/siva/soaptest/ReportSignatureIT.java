@@ -42,12 +42,38 @@ public class ReportSignatureIT extends SiVaSoapTests {
         setTestFilesDirectory(TEST_FILES_DIRECTORY);
     }
 
+    /**
+     * TestCaseID: Soap-Detailed-Report-Signature-1
+     *
+     * TestType: Auto
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface
+     *
+     * Title: Simple report signature should not be in response
+     *
+     * Expected Result: Simple report response should not contain signature
+     *
+     * File: hellopades-pades-lt-sha256-sign.pdf
+     */
     @Test
     public void whenRequestingSimpleReport_thenValidationReportSignatureShouldNotBeInResponse() {
         Document report = extractValidateDocumentResponseDom(post(validationRequestForDocument("hellopades-pades-lt-sha256-sign.pdf")).andReturn().body().asString());
         assertThat(getValidateDocumentResponseFromDom(report).getValidationReportSignature(), emptyOrNullString());
     }
 
+    /**
+     * TestCaseID: Soap-Detailed-Report-Signature-2
+     *
+     * TestType: Auto
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface
+     *
+     * Title: Detailed report signature should be in response
+     *
+     * Expected Result: Detailed report response should contain signature
+     *
+     * File: hellopades-pades-lt-sha256-sign.pdf
+     */
     @Test
     @Disabled("SIVA-196")
     public void whenRequestingDetailedReport_thenValidationReportSignatureShouldBeInResponse() {
