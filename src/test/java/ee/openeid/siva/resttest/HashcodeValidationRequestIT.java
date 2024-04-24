@@ -1012,6 +1012,40 @@ public class HashcodeValidationRequestIT extends SiVaRestTests {
                 .body("signaturesCount", is(1));
     }
 
+    /**
+     * TestCaseID: Signature-Level-Re-Evaluation-2
+     *
+     * TestType: Automated
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface
+     *
+     * Title: Signature level not re-evaluated in POLv3
+     *
+     * Expected Result: Signatures is valid according to policy, no warning is returned about signature level re-evaluation.
+     *
+     * File: Needs new test file. For manual testing a file from SIVA-605 can be used.
+     **/
+    @Disabled("SIVA-662") // TODO: Missing test file. For manual testing a file from SIVA-605 can be used.
+    @Test
+    public void signatureLevelNoReEvaluation() {
+        JSONHashcodeValidationRequest request = new JSONHashcodeValidationRequest();
+        SignatureFile signatureFile = new SignatureFile();
+        signatureFile.setSignature(Base64.encodeBase64String(readFileFromPath("TODO")));
+        request.setSignatureFiles(Collections.singletonList(signatureFile));
+        request.setSignaturePolicy("POLv3");
+        ValidatableResponse response = postHashcodeValidation(toRequest(request)).then();
+        response
+                .rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures", hasSize(1))
+                .body("signatures[0].signatureLevel", is("UNKNOWN_QC"))
+                .body("signatures[0].indication", is(TOTAL_PASSED))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings.size()", Matchers.is(1))
+                .body("signatures[0].warnings[0].content", Matchers.is("The private key does not reside in a QSCD at (best) signing time!"))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1));
+    }
+
     List<String> returnFiles(String filesLocation) {
 
         List<String> files = new ArrayList<>();
