@@ -30,6 +30,7 @@ import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -975,6 +976,40 @@ public class HashcodeValidationRequestIT extends SiVaRestTests {
                 .then()
                 .statusCode(200)
                 .rootPath(VALIDATION_CONCLUSION_PREFIX);
+    }
+
+    /**
+     * TestCaseID: Signature-Level-Re-Evaluation
+     *
+     * TestType: Automated
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface
+     *
+     * Title: Signature level re-evaluation
+     *
+     * Expected Result: Signatures is valid according to policy, warning is returned about signature level re-evaluation.
+     *
+     * File: Needs new test file. For manual testing a file from SIVA-605 can be used.
+     **/
+    @Disabled("SIVA-662") // TODO: Missing test file. For manual testing a file from SIVA-605 can be used.
+    @Test
+    public void signatureLevelReEvaluation() {
+        JSONHashcodeValidationRequest request = new JSONHashcodeValidationRequest();
+        SignatureFile signatureFile = new SignatureFile();
+        signatureFile.setSignature(Base64.encodeBase64String(readFileFromPath("TODO")));
+        request.setSignatureFiles(Collections.singletonList(signatureFile));
+        ValidatableResponse response = postHashcodeValidation(toRequest(request)).then();
+        response
+                .rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures", hasSize(1))
+                .body("signatures[0].signatureLevel", is("ADESEAL_QC"))
+                .body("signatures[0].indication", is(TOTAL_PASSED))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings.size()", Matchers.is(2))
+                .body("signatures[0].warnings[0].content", Matchers.is("The private key does not reside in a QSCD at (best) signing time!"))
+                .body("signatures[0].warnings[1].content", Matchers.is("The signature level has been re-evaluated from initial UNKNOWN_QC to ADESEAL_QC by SiVa validation policy!"))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1));
     }
 
     List<String> returnFiles(String filesLocation) {

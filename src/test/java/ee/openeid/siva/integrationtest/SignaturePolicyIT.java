@@ -609,6 +609,26 @@ public class SignaturePolicyIT extends SiVaRestTests {
     }
 
     /**
+     * TestCaseID: POLv4-Signature-Policy-19
+     *
+     * TestType: Automated
+     *
+     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#siva-signature-validation-policy-version-4-polv4
+     *
+     * Title: Signature level re-evaluation
+     *
+     * Expected Result: Signatures is valid according to policy, warning is returned about signature level re-evaluation.
+     *
+     * File: Needs new test file.
+     **/
+    @Disabled("SIVA-662") // TODO: Test to be completed. Missing test file.
+    // Due to missing test file a workaround for manual testing is to use a substitute hashcode test
+    // Signature-Level-Re-Evaluation from HashcodeValidationRequestIT.java.
+    @Test
+    public void signatureLevelReEvaluation() {
+    }
+
+    /**
      * TestCaseID: POLv3-Signature-Policy-1
      *
      * TestType: Automated
