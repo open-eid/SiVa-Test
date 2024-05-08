@@ -10,6 +10,23 @@ Tests for Signature Verification Service.
 - Maven
 - [SiVa](https://github.com/open-eid/SiVa) must be deployed as accessible service.
 
+## Configuring the tests
+
+Modify the file [application-test.yml](src/test/resources/application-test.yml) according to the
+environment where SiVa is running at.
+
+If you are running SiVa in local docker-compose setup as described at
+https://github.com/open-eid/SiVa?tab=readme-ov-file#with-docker, then the default configuration should work.
+
+**Descriptions of parameters in `application-test.yml`:**
+
+| Parameter                     | Example     | Description             |
+|:------------------------------|:------------|:------------------------|
+| siva.application-context-path | `/v3`       | Custom service context. |
+| siva.hostname                 | `localhost` | Service URL.            |
+| siva.port                     | `8080`      | Service port.           |
+| siva.protocol                 | `http`      | Service protocol.       |
+
 ## Execute tests and generate report
 
 How to run tests in local environment.
