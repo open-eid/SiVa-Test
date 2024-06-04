@@ -6,7 +6,7 @@ Tests for Signature Verification Service.
 
 ## Prerequisites
 
-- Java 11 JDK
+- Java 21 JDK
 - Maven
 - [SiVa](https://github.com/open-eid/SiVa) must be deployed as accessible service.
 
@@ -38,7 +38,7 @@ How to run tests in local environment.
 - Open this project in IntelliJ (Community version will do) and press _'Load Maven project'_ when doing so for the first time.
 - Open file -> Project Structure
 - In the view:
-    - Make sure -> SDK points to Java 11
+    - Make sure -> SDK points to Java 21
 
   ![Project Structure](docs/img/Project_Structure.png)
 
@@ -50,7 +50,7 @@ Open up src/test and right-click on the java folder, then press _Run 'Tests in '
 
 ### Using Maven
 
-- Make sure Java 11 JDK and Maven are installed. 
+- Make sure Java 21 JDK and Maven are installed. 
 - Both PATH and JAVA_HOME are configured. Instructions for these can be found [here](https://www.baeldung.com/java-home-on-windows-7-8-10-mac-os-x-linux) and [here](https://www.tutorialspoint.com/maven/maven_environment_setup.htm).
 
 ### Report

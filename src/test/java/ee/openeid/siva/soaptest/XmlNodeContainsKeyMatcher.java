@@ -16,14 +16,14 @@
 
 package ee.openeid.siva.soaptest;
 
-import io.restassured.internal.path.xml.NodeChildrenImpl;
+import io.restassured.path.xml.element.NodeChildren;
 import io.restassured.path.xml.element.Node;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 import static java.util.Objects.requireNonNull;
 
-public class XmlNodeContainsKeyMatcher extends TypeSafeMatcher<NodeChildrenImpl> {
+public class XmlNodeContainsKeyMatcher extends TypeSafeMatcher<NodeChildren> {
 
     private final String key;
 
@@ -32,7 +32,7 @@ public class XmlNodeContainsKeyMatcher extends TypeSafeMatcher<NodeChildrenImpl>
     }
 
     @Override
-    protected boolean matchesSafely(NodeChildrenImpl nodeChildren) {
+    protected boolean matchesSafely(NodeChildren nodeChildren) {
         if (nodeChildren.isEmpty()) {
             return false;
         }
