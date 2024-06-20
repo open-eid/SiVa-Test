@@ -22,8 +22,10 @@ import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+@Tag("ManualTest")
 public class StatisticsToLogsManualIT extends SiVaRestTests {
 
     @BeforeEach

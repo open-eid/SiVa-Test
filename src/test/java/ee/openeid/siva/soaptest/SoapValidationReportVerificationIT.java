@@ -1,6 +1,7 @@
 package ee.openeid.siva.soaptest;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static ee.openeid.siva.common.DssMessages.QUAL_HAS_GRANTED_AT_ANS;
@@ -10,6 +11,7 @@ import static ee.openeid.siva.integrationtest.TestData.SOAP_DETAILED_DATA_PREFIX
 import static ee.openeid.siva.integrationtest.TestData.SOAP_VALIDATION_CONCLUSION_PREFIX;
 import static ee.openeid.siva.integrationtest.TestData.TOTAL_PASSED;
 
+@Tag("IntegrationTest")
 public class SoapValidationReportVerificationIT extends SiVaSoapTests {
 
     private static final String DEFAULT_TEST_FILES_DIRECTORY = "document_format_test_files/";
