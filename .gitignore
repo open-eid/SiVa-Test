@@ -9,3 +9,6 @@ dependency-reduced-pom.xml
 target
 allure-results
 siva-test.iml
+
+### Project specific ###
+/src/test/resources/application.properties
