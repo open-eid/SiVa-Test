@@ -20,7 +20,7 @@
 
     <groupId>ee.openid.siva.test</groupId>
     <artifactId>siva-test</artifactId>
-    <version>3.8.0</version>
+    <version>3.8.1</version>
     <name>SiVa Web Service integration tests</name>
 
     <properties>
