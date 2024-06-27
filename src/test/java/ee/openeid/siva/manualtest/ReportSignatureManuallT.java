@@ -16,7 +16,7 @@
 
 package ee.openeid.siva.manualtest;
 
-import ee.openeid.siva.soaptest.SiVaSoapTests;
+import ee.openeid.siva.integrationtest.SiVaRestTests;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
 import io.restassured.http.ContentType;
@@ -38,7 +38,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @Tag("IntegrationTest")
 @Disabled("SIVA-196") //Class disabled
-public class ReportSignatureManuallT  extends SiVaSoapTests {
+public class ReportSignatureManuallT  extends SiVaRestTests {
     private static final String DEFAULT_TEST_FILES_DIRECTORY = "pdf/signature_cryptographic_algorithm_test_files/";
     private static final String VALIDATION_ENDPOINT = "/validate";
     protected static final String VALID_SIGNATURE_POLICY_4 = "POLv4";
