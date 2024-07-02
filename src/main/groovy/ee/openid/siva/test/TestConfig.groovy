@@ -18,4 +18,10 @@ interface TestConfig extends Config {
 
     @Key("siva.protocol")
     String sivaProtocol()
+
+    @Key("test-files-directory")
+    String testFilesDirectory()
+
+    @Key("rest-assured-console-logging")
+    Boolean restAssuredConsoleLogging()
 }
