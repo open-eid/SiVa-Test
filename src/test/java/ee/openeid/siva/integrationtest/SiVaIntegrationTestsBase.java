@@ -16,8 +16,9 @@
 
 package ee.openeid.siva.integrationtest;
 
-import io.qameta.allure.restassured.AllureRestAssured;
+import ee.openid.siva.test.util.AllureRestAssuredWithStep;
 import io.restassured.RestAssured;
+import io.restassured.filter.Filter;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -101,7 +102,10 @@ public abstract class SiVaIntegrationTestsBase {
         }
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.filters(new AllureRestAssured());
+        Filter filter = new AllureRestAssuredWithStep();
+        if (RestAssured.filters().stream().noneMatch(f -> f.getClass().getName().equals(filter.getClass().getName()))) {
+            RestAssured.filters(filter);
+        }
     }
 
     public String createUrl(String endpoint) {
