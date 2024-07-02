@@ -3,7 +3,7 @@ package ee.openid.siva.test
 
 import static io.restassured.RestAssured.given
 
-class SoapEndpoints extends GenericSpecification {
+class SoapEndpointsDeprecatedSpec extends GenericSpecification {
 
     /**
      * TestCaseID: Soap-Endpoints-Deprecated

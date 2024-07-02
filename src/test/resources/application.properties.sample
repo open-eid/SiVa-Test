@@ -1,4 +1,9 @@
+# SiVa configuration
 siva.application-context-path=
 siva.hostname=localhost
 siva.port=8080
 siva.protocol=http
+
+# Test configuration
+test-files-directory=src/test/resources/
+rest-assured-console-logging=true
