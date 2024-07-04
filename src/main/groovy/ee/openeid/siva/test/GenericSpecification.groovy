@@ -1,4 +1,4 @@
-package ee.openid.siva.test
+package ee.openeid.siva.test
 
 import spock.lang.Shared
 import spock.lang.Specification

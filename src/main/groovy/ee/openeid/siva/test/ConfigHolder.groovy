@@ -1,4 +1,4 @@
-package ee.openid.siva.test
+package ee.openeid.siva.test
 
 import org.aeonbits.owner.ConfigFactory
 

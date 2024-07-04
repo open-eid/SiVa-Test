@@ -1,6 +1,6 @@
-package ee.openid.siva.test
+package ee.openeid.siva.test
 
-import ee.openid.siva.test.util.AllureRestAssuredWithStep
+import ee.openeid.siva.test.util.AllureRestAssuredWithStep
 import io.restassured.RestAssured
 import io.restassured.filter.Filter
 import io.restassured.filter.log.RequestLoggingFilter

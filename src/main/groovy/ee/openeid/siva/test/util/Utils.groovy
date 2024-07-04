@@ -1,7 +1,7 @@
-package ee.openid.siva.test.util
+package ee.openeid.siva.test.util
 
-import ee.openid.siva.test.ConfigHolder
-import ee.openid.siva.test.TestConfig
+import ee.openeid.siva.test.ConfigHolder
+import ee.openeid.siva.test.TestConfig
 
 import java.nio.file.Files
 import java.nio.file.Path
