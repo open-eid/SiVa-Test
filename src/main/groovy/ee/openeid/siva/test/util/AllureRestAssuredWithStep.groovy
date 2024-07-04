@@ -1,6 +1,6 @@
-package ee.openid.siva.test.util
+package ee.openeid.siva.test.util
 
-import ee.openid.siva.test.Steps
+import ee.openeid.siva.test.Steps
 import io.qameta.allure.restassured.AllureRestAssured
 import io.restassured.filter.FilterContext
 import io.restassured.response.Response
