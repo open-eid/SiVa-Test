@@ -1,21 +1,12 @@
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.allure.SivaRequirement
 
 import static io.restassured.RestAssured.given
 
 class SoapEndpointsDeprecatedSpec extends GenericSpecification {
 
-    /**
-     * TestCaseID: Soap-Endpoints-Deprecated
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface
-     *
-     * Title: Soap endpoints deprecated
-     *
-     * Expected Result: 404 Not Found
-     */
+    @SivaRequirement("interfaces")
     def "Soap #endpoint endpoint deprecated"() {
         given:
         String sivaServiceUrl = "${conf.sivaProtocol()}://${conf.sivaHostname()}:${conf.sivaPort()}${conf.sivaContextPath()}"
