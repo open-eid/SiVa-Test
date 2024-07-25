@@ -641,7 +641,7 @@ public class AsiceValidationFailIT extends SiVaRestTests {
      * <p>
      * File: TS-06_23634_TS_missing_OCSP.asice
      */
-    @Test
+    @Test //TODO Find more appropriate testfile -> current test signature has live timestamp with countryCode = CH, which is not trusted in TEST mode.
     public void asiceBaselineTSignature() {
         post(validationRequestFor("TS-06_23634_TS_missing_OCSP.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
