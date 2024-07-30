@@ -1,6 +1,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.util.AllureRestAssuredWithStep
+import ee.openeid.siva.test.util.Utils
 import io.restassured.RestAssured
 import io.restassured.filter.Filter
 import io.restassured.filter.log.RequestLoggingFilter
@@ -17,12 +18,11 @@ class BeforeAll {
 //        RestAssured.filters(new AllureRestAssuredWithStep())
 //         Temporary solution to prevent log duplication in Allure report. TODO: remove once JUnit tests are removed.
         addRestAssuredFilterSafely(new AllureRestAssuredWithStep())
-        // Limit console logging to failed tests only
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails()
         // Relax validation
         RestAssured.useRelaxedHTTPSValidation()
         // Log requests and responses to console for debugging
-        if (conf.restAssuredConsoleLogging()) {
+        // Enabled when not running in docker (i.e. running locally) or when toggled in configuration
+        if (Utils.isLocal() || conf.restAssuredConsoleLogging()) {
 //            RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter())
 //             Temporary solution to prevent log duplication in Allure report. TODO: remove once JUnit tests are removed.
             addRestAssuredFilterSafely(new RequestLoggingFilter())
@@ -31,7 +31,7 @@ class BeforeAll {
     }
 
     static void addRestAssuredFilterSafely(Filter filter) {
-        if (RestAssured.filters().stream().noneMatch {f -> (f.metaClass.theClass.name == filter.metaClass.theClass.name) }){
+        if (RestAssured.filters().stream().noneMatch { f -> (f.metaClass.theClass.name == filter.metaClass.theClass.name) }) {
             RestAssured.filters(filter)
         }
     }

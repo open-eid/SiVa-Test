@@ -17,7 +17,10 @@
 package ee.openeid.siva.integrationtest;
 
 import ee.openeid.siva.test.util.AllureRestAssuredWithStep;
+import ee.openeid.siva.test.util.Utils;
 import io.restassured.RestAssured;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -101,9 +104,12 @@ public abstract class SiVaIntegrationTestsBase {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.useRelaxedHTTPSValidation();
         addRestAssuredFilterSafely(new AllureRestAssuredWithStep());
+        if (Utils.isLocal()) {
+            addRestAssuredFilterSafely(new RequestLoggingFilter());
+            addRestAssuredFilterSafely(new ResponseLoggingFilter());
+        }
     }
 
     public String createUrl(String endpoint) {
