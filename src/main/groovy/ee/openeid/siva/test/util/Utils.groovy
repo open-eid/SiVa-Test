@@ -11,6 +11,20 @@ import java.util.stream.Stream
 class Utils {
     static TestConfig conf = ConfigHolder.getConf()
 
+    static boolean isRunningInDocker() {
+        def cgroupFile = new File('/proc/1/cgroup')
+        // Check if the OS is Linux and /proc/1/cgroup exists
+        if (System.getProperty('os.name').toLowerCase().contains('linux') && cgroupFile.exists()) {
+            // Check if /proc/1/cgroup contents contain the string "docker"
+            return cgroupFile.text.contains('docker')
+        }
+        return false
+    }
+
+    static boolean isLocal() {
+        return !isRunningInDocker()
+    }
+
     private static Path findFileRecursively(Path basePath, String filename) {
         if (!Files.exists(basePath) || !Files.isDirectory(basePath)) {
             throw new FileNotFoundException("Base directory '$basePath' not found or is not a directory")
