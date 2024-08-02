@@ -16,6 +16,7 @@
 package ee.openeid.siva.test.request
 
 import ee.openeid.siva.test.util.Utils
+import groovy.json.JsonOutput
 import io.qameta.allure.Step
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FilenameUtils
@@ -53,13 +54,21 @@ class RequestData {
         return validationRequest
     }
 
-    @Step("Data file request data from {file}")
-    static Map dataFileRequest(String file) {
+    static Map dataFileRequest(String document, String filename) {
         Map data = [
-                document: Base64.encodeBase64String(Utils.readFileFromResources(file)),
-                filename: file
+                document: document,
+                filename: filename
         ]
         return data
+    }
+
+    @Step("Data file request data from {file}")
+    static Map dataFileRequestFromFile(String filename, String filenameOverride) {
+        return dataFileRequest(Base64.encodeBase64String(Utils.readFileFromResources(filename)), filenameOverride)
+    }
+
+    static Map dataFileRequestFromFile(String filename) {
+        return dataFileRequestFromFile(filename, filename)
     }
 
     @Step("Hashcode validation request data from {signatureFiles}")
@@ -83,23 +92,39 @@ class RequestData {
             }
         }
 
-        Map data = [
-                signatureFiles : signatures,
-                signaturePolicy: signaturePolicy,
-                reportType     : reportType,
+        Map<String, Object> data = [
+                signatureFiles: signatures
         ]
+
+        if (signaturePolicy != null) {
+            data.signaturePolicy = signaturePolicy
+        }
+        if (reportType != null) {
+            data.reportType = reportType
+        }
+
         return data
     }
 
-    static Map hashcodeValidationRequest(String signatureFile, String signaturePolicy, String reportType, String dataFile, String hashAlgo, String hash) {
+    static Map hashcodeValidationRequest(String signatureFile, String signaturePolicy, String reportType, String dataFile = null, String hashAlgo = null, String hash = null) {
         hashcodeValidationRequestBase([signatureFile], signaturePolicy, reportType, dataFile, hashAlgo, hash)
     }
 
-    static Map hashcodeValidationRequestSimple(String signatureFile, String signaturePolicy, String reportType) {
-        hashcodeValidationRequestBase([signatureFile], signaturePolicy, reportType, null, null, null)
+    static Map hashcodeValidationRequest(List<String> signatureFiles, String signaturePolicy, String reportType, String dataFile = null, String hashAlgo = null, String hash = null) {
+        hashcodeValidationRequestBase(signatureFiles, signaturePolicy, reportType, dataFile, hashAlgo, hash)
     }
 
-    static Map hashcodeValidationRequestSimple(List<String> signatureFiles, String signaturePolicy, String reportType) {
-        hashcodeValidationRequestBase(signatureFiles, signaturePolicy, reportType, null, null, null)
+    static requestWithFixedBodyLength(Map request, int expectedBodyLength) {
+        int requestAsStringLength = JsonOutput.toJson(request).length()
+
+        // Structure for extra body adds 10 additional characters
+        if (requestAsStringLength > expectedBodyLength - 10) {
+            throw new IllegalArgumentException("Provided request is too big to extend request with extra body.")
+        }
+
+        def loadLength = expectedBodyLength - 10 - requestAsStringLength
+        request.load = 't' * loadLength
+
+        return request
     }
 }

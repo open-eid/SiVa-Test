@@ -307,5 +307,39 @@ public class TestData {
     public static final String SOAP_ERROR_RESPONSE_PREFIX = "Envelope.Body.Fault";
 
     public static final Integer SIVA_FILE_SIZE_LIMIT = 28311552; // 27MB
+//    public static final Integer SIVA_FILE_SIZE_LIMIT = 16000; // 27MB
 
+
+    // Migrated from SiVaIntegrationTestsBase
+    public static final String DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE = "Document malformed or not matching documentType";
+    public static final String DOCUMENT_TYPE_NOT_ACCEPTED = "documentType is not a valid request parameter";
+    public static final String INVALID_DATA_FILE_FILENAME = "Invalid filename. Can only return data files for DDOC type containers.";
+    public static final String INVALID_FILENAME = "Invalid filename";
+    public static final String INVALID_DATAFILES_LIST = "Invalid dataFiles list";
+    public static final String INVALID_FILENAME_SIZE = "size must be between 1 and 260";
+    public static final String INVALID_HASH_SIZE = "size must be between 1 and 1000";
+    public static final String INVALID_POLICY_SIZE = "size must be between 1 and 100";
+    public static final String INVALID_REPORT_TYPE = "Invalid report type";
+    public static final String INVALID_HASH_ALGO = "Invalid hash algorithm";
+    public static final String MUST_NOT_BE_BLANK = "must not be blank";
+    public static final String MUST_NOT_BE_EMPTY = "must not be empty";
+    public static final String MUST_NOT_BE_NULL = "must not be null";
+    public static final String INVALID_BASE_64 = "Document is not encoded in a valid base64 string";
+    public static final String SIGNATURE_FILE_NOT_BASE64_ENCODED = "Signature file is not valid base64 encoded string";
+    public static final String SIGNATURE_MALFORMED = "Signature file malformed";
+    public static final String INVALID_SIGNATURE_POLICY = "Invalid signature policy";
+    public static final String SIGNATURE_FILE_MALFORMED = "Signature file malformed";
+    public static final String DOCUMENT_TYPE = "documentType";
+    public static final String FILENAME = "filename";
+    public static final String DOCUMENT = "document";
+    public static final String SIGNATURE_POLICY = "signaturePolicy";
+    public static final String REPORT_TYPE = "reportType";
+    public static final String SIGNATURE_INDEX_0 = "signatureFiles[0].signature";
+    public static final String SIGNATURE = "signatureFiles.signature";
+    public static final String SIGNATURE_FILES = "signatureFiles";
+    public static final String DATAFILES = "signatureFiles[0].datafiles";
+    public static final String DATAFILES_FILENAME = "signatureFiles[0].datafiles[0].filename";
+    public static final String DATAFILES_HASH = "signatureFiles[0].datafiles[0].hash";
+    public static final String DATAFILES_HASH_ALGO = "signatureFiles[0].datafiles[0].hashAlgo";
+    public static final String TEST_FILE_BASE = "src/test/resources/";
 }

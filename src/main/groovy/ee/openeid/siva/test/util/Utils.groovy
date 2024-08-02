@@ -55,7 +55,7 @@ class Utils {
         }
     }
 
-    static byte[] readFileFromResources(String filename) throws IOException {
+    static byte[] readFileFromResources(String filename) {
         String basePath = conf.testFilesDirectory() ?: "src/test/resources/"
         Path foundFile = findFileRecursively(Paths.get(basePath), filename)
         if (!foundFile) {

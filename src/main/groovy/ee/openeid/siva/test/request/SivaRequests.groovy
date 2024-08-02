@@ -39,6 +39,16 @@ class SivaRequests {
                 .post(sivaServiceUrl + endpoint)
     }
 
+    @Step("POST {endpoint}")
+    static Response post(String endpoint, String data) {
+        return given()
+//                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(data)
+                .contentType(ContentType.JSON)
+                .when()
+                .post(sivaServiceUrl + endpoint)
+    }
+
     @Step("GET {endpoint}")
     static Response get(String endpoint) {
         return given()
@@ -71,6 +81,10 @@ class SivaRequests {
     }
 
     static Response tryValidateHashcode(Map data) {
+        return post("/validateHashcode", data)
+    }
+
+    static Response tryValidateHashcode(String data) {
         return post("/validateHashcode", data)
     }
 
