@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2024 Riigi Infosüsteemi Amet
+ * Copyright 2024 - 2024 Riigi Infosüsteemi Amet
  *
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence")
@@ -18,25 +18,16 @@ package ee.openeid.siva.test
 
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import io.qameta.allure.Description
+import io.qameta.allure.Link
 import org.hamcrest.Matchers
 
 import static ee.openeid.siva.integrationtest.TestData.*
 
+@Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy")
 class AsiceValidationPassSpec extends GenericSpecification {
 
-    /**
-     * TestCaseID: Asice-ValidationPass-1
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4
-     *
-     * Title: Asice with single valid signature
-     *
-     * Expected Result: The document should pass the validation
-     *
-     * File: ValidLiveSignature.asice
-     */
+    @Description("Asice with single valid signature")
     def "validAsiceSingleSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice"))
@@ -60,19 +51,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-2
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4
-     *
-     * Title: Asice with multiple valid signatures
-     *
-     * Expected Result: The document should pass the validation
-     *
-     * File: BDOC-TS.asice
-     */
+    @Description("Asice with multiple valid signatures")
     def "validAsiceMultipleSignatures"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BDOC-TS.asice"))
@@ -87,19 +66,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(2))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-4
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4
-     *
-     * Title: Asice One LT signature with certificates from different countries
-     *
-     * Expected Result: The document should pass the validation
-     *
-     * File: EE_SER-AEX-B-LT-V-30.asice
-     */
+    @Description("Asice One LT signature with certificates from different countries")
     def "asiceDifferentCertificateCountries"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-30.asice"))
@@ -124,20 +91,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-
-    /**
-     * TestCaseID: Asice-ValidationPass-5
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4
-     *
-     * Title: Asice Baseline-LT file
-     *
-     * Expected Result: The document should pass the validation
-     *
-     * File: EE_SER-AEX-B-LT-V-49.asice
-     */
+    @Description("Asice Baseline-LT file")
     def "asiceBaselineLtProfileValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-49.asice"))
@@ -160,19 +114,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-7
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4
-     *
-     * Title: Asice file signed with Mobile-ID, ECC-SHA256 signature with prime256v1 key
-     *
-     * Expected Result: The document should pass the validation
-     *
-     * File: EE_SER-AEX-B-LT-V-2.asice
-     */
+    @Description("Asice file signed with Mobile-ID, ECC-SHA256 signature with prime256v1 key")
     def "asiceWithEccSha256ValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-2.asice"))
@@ -184,19 +126,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-8
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4
-     *
-     * Title: Asice file with 	ESTEID-SK 2015 certificate chain
-     *
-     * Expected Result: The document should pass the validation
-     *
-     * File: IB-4270_TS_ESTEID-SK 2015  SK OCSP RESPONDER 2011.asice
-     */
+    @Description("Asice file with \tESTEID-SK 2015 certificate chain")
     def "asiceSk2015CertificateChainValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("IB-4270_TS_ESTEID-SK 2015  SK OCSP RESPONDER 2011.asice"))
@@ -219,19 +149,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-9
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4
-     *
-     * Title: Asice file with KLASS3-SK 2010 (EECCRCA) certificate chain
-     *
-     * Expected Result: The document should pass the validation
-     *
-     * File: EE_SER-AEX-B-LT-V-28.asice
-     */
+    @Description("Asice file with KLASS3-SK 2010 (EECCRCA) certificate chain")
     def "asiceKlass3Sk2010CertificateChainValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice"))
@@ -260,19 +178,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-10
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     *
-     * Title: *.sce file with TimeStamp
-     *
-     * Expected Result: The document should pass the validation
-     *
-     * File: ASICE_TS_LTA_content_as_sce.sce
-     */
+    @Description("*.sce file with TimeStamp")
     def "asiceWithSceFileExtensionShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce"))
@@ -291,19 +197,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(3))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-11
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     *
-     * Title: Asice-TS with special characters in data file
-     *
-     * Expected Result: The document should pass the validation with correct signature scope
-     *
-     * File: Nonconventionalcharacters.asice
-     */
+    @Description("Asice-TS with special characters in data file")
     def "asiceWithSpecialCharactersInDataFileShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Nonconventionalcharacters.asice"))
@@ -320,19 +214,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-12
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: New Estonian ECC signature
-     * <p>
-     * Expected Result: The document should pass the validation
-     * <p>
-     * File: Mac_AS0099904_EsimeneAmetlikSKTestElliptilistega_TS.asice
-     */
+    @Description("New Estonian ECC signature")
     def "asiceEccSignatureShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Mac_AS0099904_EsimeneAmetlikSKTestElliptilistega_TS.asice"))
@@ -348,19 +230,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-13
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice pss signature
-     * <p>
-     * Expected Result: The document should pass the validation
-     * <p>
-     * File: PSS-signature.asice
-     */
+    @Description("Asice pss signature")
     def "asicePssSignatureShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("PSS-signature.asice"))
@@ -377,19 +247,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-14
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice with empty datafiles
-     * <p>
-     * Expected Result: The document should pass the validation but with warnings about empty datafiles
-     * <p>
-     * File: signed-container-with-empty-datafiles.asice
-     */
+    @Description("Asice with empty datafiles")
     def "asiceWithEmptyDataFilesShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("signed-container-with-empty-datafiles.asice"))
@@ -410,20 +268,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationPass-15
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: ASICE with new Smart-ID certificate profile without personal number in CommonName
-     * <p>
-     * Expected Result: The document should pass
-     * <p>
-     * File: validSidSignatureWithCertWithoutPnoInCn.asice
-     */
-
+    @Description("ASICE with new Smart-ID certificate profile without personal number in CommonName")
     def "validSignatureSignerCertDoNotHavePersonalNumberInCnShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("validSidSignatureWithCertWithoutPnoInCn.asice"))
