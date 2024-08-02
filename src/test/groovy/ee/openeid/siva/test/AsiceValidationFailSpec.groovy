@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2024 Riigi Infosüsteemi Amet
+ * Copyright 2024 - 2024 Riigi Infosüsteemi Amet
  *
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence")
@@ -19,27 +19,18 @@ package ee.openeid.siva.test
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import io.qameta.allure.Description
+import io.qameta.allure.Link
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
 import static ee.openeid.siva.integrationtest.TestData.*
 
+@Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class AsiceValidationFailSpec extends GenericSpecification {
 
-    /**
-     * TestCaseID: Asice-ValidationFail-1
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common-validation-constraints-polv3-polv4
-     * <p>
-     * Title: Bdoc with single invalid signature
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: InvalidLiveSignature.asice
-     */
+    @Description("Bdoc with single invalid signature")
     def "asiceInvalidSingleSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("InvalidLiveSignature.asice"))
@@ -57,19 +48,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-2
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice with multiple invalid signatures
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: InvalidMultipleSignatures.bdoc
-     */
+    @Description("Asice with multiple invalid signatures")
     def "asiceInvalidMultipleSignatures"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("InvalidMultipleSignatures.asice"))
@@ -88,19 +67,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(2))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-3
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice with multiple signatures both valid and invalid
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: InvalidAndValidSignatures.asice
-     */
+    @Description("Asice with multiple signatures both valid and invalid")
     def "asiceInvalidAndValidMultipleSignatures"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("InvalidAndValidSignatures.asice"))
@@ -117,19 +84,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(2))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-4
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice with no signatures
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: AsiceContainerNoSignature.asice
-     */
+    @Description("Asice with no signatures")
     def "asiceNoSignatures"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerNoSignature.asice"))
@@ -140,19 +95,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validationReport.validationConclusion.signaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-5
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Wrong signature timestamp
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: TS-02_23634_TS_wrong_SignatureValue.asice
-     */
+    @Description("Wrong signature timestamp")
     def "asiceInvalidTimeStampDontMatchSigValue"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice"))
@@ -166,19 +109,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-6
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice No non-repudiation key usage value in the certificate, verification of AdES signature level
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: EE_SER-AEX-B-LT-I-43.asice
-     */
+    @Description("Asice No non-repudiation key usage value in the certificate, verification of AdES signature level")
     def "asiceInvalidNonRepudiationKey"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-I-43.asice", SignaturePolicy.POLICY_3.name, "Simple"))
@@ -192,19 +123,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-7
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice signers certificate does not have non-repudiation value in the certificates key usage field and it does not contain the QC and SSCD compliance information.
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: EE_SER-AEX-B-LT-I-26.asice
-     */
+    @Description("Asice signers certificate does not have non-repudiation value in the certificates key usage field and it does not contain the QC and SSCD compliance information.")
     def "asiceInvalidNonRepudiationKeyNoComplianceInfo"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-I-26.asice"))
@@ -220,19 +139,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-8
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: OCSP certificate is not trusted
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: TM-01_bdoc21-unknown-resp.bdoc
-     */
+    @Description("OCSP certificate is not trusted")
     def "asiceNotTrustedOcspCert"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDDS("TM-01_bdoc21-unknown-resp.bdoc", null, null))
@@ -253,19 +160,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-9
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice TSA certificate is not trusted
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: TS-05_23634_TS_unknown_TSA.asice
-     */
+    @Description("Asice TSA certificate is not trusted")
     def "asiceNotTrustedTsaCert"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TS-05_23634_TS_unknown_TSA.asice", null, null))
@@ -286,19 +181,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-10
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice OCSP response status is revoked
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: EE_SER-AEX-B-LT-R-25.asice
-     */
+    @Description("Asice OCSP response status is revoked")
     def "asiceTsOcspStatusRevoked"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-R-25.asice"))
@@ -312,19 +195,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-11
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice difference between OCSP and time-stamp issuing times is more than 24 hours
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: EE_SER-AEX-B-LT-V-20.asice
-     */
+    @Description("Asice difference between OCSP and time-stamp issuing times is more than 24 hours")
     def "asiceOcspAndTsDifferenceOver24H"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-20.asice"))
@@ -337,19 +208,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-12
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice unsigned data files in the container
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: EE_SER-AEX-B-LT-V-34.asice
-     */
+    @Description("Asice unsigned data files in the container")
     def "asiceUnsignedDataFiles"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-34.asice"))
@@ -361,19 +220,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-13
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice SignatureValue does not correspond to the SignedInfo block
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: REF-19_bdoc21-no-sig-asn1-pref.bdoc
-     */
+    @Description("Asice SignatureValue does not correspond to the SignedInfo block")
     def "asiceSignatureValueDoNotCorrespondToSignedInfo"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDDS("REF-19_bdoc21-no-sig-asn1-pref.bdoc", null, null))
@@ -386,19 +233,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-14
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice Baseline-BES file
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: signWithIdCard_d4j_1.0.4_BES.asice
-     */
+    @Description("Asice Baseline-BES file")
     def "asiceBaselineBesSignatureLevel"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("signWithIdCard_d4j_1.0.4_BES.asice"))
@@ -418,19 +253,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-15
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice Baseline-EPES file
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: TM-04_kehtivuskinnituset.4.asice
-     */
+    @Description("Asice Baseline-EPES file")
     def "asiceBaselineEpesSignatureLevel"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TM-04_kehtivuskinnituset.4.asice"))
@@ -449,19 +272,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-16
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice signers certificate is not trusted
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: SS-4_teadmataCA.4.asice
-     */
+    @Description("Asice signers certificate is not trusted")
     def "asiceSignersCertNotTrusted"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("SS-4_teadmataCA.4.asice"))
@@ -481,19 +292,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-17
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice OCSP response status is revoked
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: TM-15_revoked.4.asice
-     */
+    @Description("Asice OCSP response status is revoked")
     def "asiceTmOcspStatusRevoked"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TM-15_revoked.4.asice"))
@@ -507,19 +306,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-18
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice OCSP response status is unknown
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: TM-16_unknown.4.asice
-     */
+    @Description("Asice OCSP response status is unknown")
     def "asiceTmOcspStatusUnknown"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TM-16_unknown.4.asice"))
@@ -531,19 +318,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-19
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice signed data file has been removed from the container
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: KS-21_fileeemaldatud.4.asice
-     */
+    @Description("Asice signed data file has been removed from the container")
     def "asiceSignedFileRemoved"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("KS-21_fileeemaldatud.4.asice"))
@@ -556,19 +331,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-20
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice no files in container
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: KS-02_tyhi.bdoc
-     */
+    @Description("Asice no files in container")
     def "asiceNoFilesInContainer"() {
         expect:
         SivaRequests.tryValidate(RequestData.validationRequestForDDS("KS-02_tyhi.bdoc", null, null))
@@ -577,19 +340,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("requestErrors", Matchers.hasSize(2))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-21
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice signed data file(s) don't match the hash values in reference elements
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: REF-14_filesisumuudetud.4.bdoc
-     */
+    @Description("Asice signed data file(s) don't match the hash values in reference elements")
     def "asiceDataFilesDontMatchHash"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDDS("REF-14_filesisumuudetud.4.bdoc", null, null))
@@ -602,19 +353,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-22
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice Baseline-T signature
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: TS-06_23634_TS_missing_OCSP.asice
-     */
+    @Description("Asice Baseline-T signature")
     def "asiceBaselineTSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TS-06_23634_TS_missing_OCSP.asice", null, null))
@@ -634,21 +373,9 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-23
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice certificate's validity time is not in the period of OCSP producedAt time
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File:
-     */
     @Ignore("Missing test file")
     //TODO: test file is needed where certificate expiration end is before the OCSP produced at time
+    @Description("Asice certificate's validity time is not in the period of OCSP producedAt time")
     def "asiceCertificateValidityOutOfOcspRange"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDDS("", null, null))
@@ -660,19 +387,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-24
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: BDoc with invalid signature, no signing certificate found
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: TM-invalid-sig-no-sign-cert.asice
-     */
+    @Description("BDoc with invalid signature, no signing certificate found")
     def "asiceInvalidSignatureNoSigningCertificateFound"() {
         expect:
         String fileName = "TM-invalid-sig-no-sign-cert.asice"
@@ -691,19 +406,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validatedDocument.filename", Matchers.is(fileName))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-25
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: BDoc with invalid signature, signed with expired certificate
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: IB-5987_signed_with_expired_certificate.asice
-     */
+    @Description("BDoc with invalid signature, signed with expired certificate")
     def "asiceSignedWithExpiredCertificate"() {
         expect:
         String fileName = "IB-5987_signed_with_expired_certificate.asice"
@@ -721,19 +424,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validatedDocument.filename", Matchers.is(fileName))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-26
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Bdoc signed properties element missing
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: REF-03_bdoc21-TS-no-signedpropref.asice
-     */
+    @Description("Bdoc signed properties element missing")
     def "bdocTimemarkSignedPropertiesMissing"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("REF-03_bdoc21-TS-no-signedpropref.asice"))
@@ -745,19 +436,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-27
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice LT signature signed with expired AIA OCSP certificate
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: esteid2018signerAiaOcspLT.asice
-     */
+    @Description("Asice LT signature signed with expired AIA OCSP certificate")
     def "asiceLtSignatureSignedWithExpiredAiaOCSP"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("esteid2018signerAiaOcspLT.asice"))
@@ -769,19 +448,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-28
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     * <p>
-     * Title: Asice LTA signature signed with expired AIA OCSP certificate
-     * <p>
-     * Expected Result: The document should fail the validation
-     * <p>
-     * File: esteid2018signerAiaOcspLTA.asice
-     */
+    @Description("Asice LTA signature signed with expired AIA OCSP certificate")
     def "asiceLtaSignatureSignedWithExpiredAiaOCSP"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("esteid2018signerAiaOcspLTA.asice"))
@@ -793,19 +460,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-29
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4
-     *
-     * Title: Asice simple/batchsignature/attachment xroad document
-     *
-     * Expected Result: Document should fail as xroad document validation is not supported
-     *
-     * File: xroad-simple.asice, xroad-batchsignature.asice, xroad-attachment.asice
-     */
+    @Description("Asice simple/batchsignature/attachment xroad document")
     def "asiceSimpleXroadDocumentShouldFail"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest(filename, SignaturePolicy.POLICY_3.name))
@@ -822,25 +477,14 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
 
         where:
-        filename                     | _
-        "xroad-simple.asice"         | _
-        "xroad-batchsignature.asice" | _
-        "xroad-attachment.asice"     | _
+        filetype         | filename
+        "simple"         | "xroad-simple.asice"
+        "batchsignature" | "xroad-batchsignature.asice"
+        "attachment"     | "xroad-attachment.asice"
     }
 
-    /**
-     * TestCaseID: Asice-ValidationFail-30
-     *
-     * TestType: Automated
-     *
-     * Requirement: http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4
-     *
-     * Title: Asice Baseline-LTA file
-     *
-     * Expected Result: The document should fail the validation as TS is not qualified
-     *
-     * File: EE_SER-AEX-B-LTA-V-24.asice
-     */
+    @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
+    @Description("Asice Baseline-LTA file")
     def "asiceBaselineLtaProfileInvalidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LTA-V-24.asice"))

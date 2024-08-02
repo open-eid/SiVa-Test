@@ -1,0 +1,115 @@
+/*
+ * Copyright 2024 - 2024 Riigi Infosüsteemi Amet
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
+ * the European Commission - subsequent versions of the EUPL (the "Licence")
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * https://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is
+ * distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
+
+package ee.openeid.siva.test
+
+import ee.openeid.siva.test.request.RequestData
+import ee.openeid.siva.test.request.SivaRequests
+import io.qameta.allure.Description
+import io.qameta.allure.Link
+import org.hamcrest.Matchers
+import spock.lang.Ignore
+
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+
+@Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
+class DocumentFormatSpec extends GenericSpecification {
+
+    @Description("Validation of pdf document acceptance")
+    def "PAdESDocumentShouldPass"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings", Matchers.emptyOrNullString())
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+    }
+
+    @Description("Validation of bdoc document acceptance")
+    def "BdocDocumentShouldPass"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings", Matchers.hasSize(1))
+                .body("signatures[0].warnings[0].content", Matchers.is("Data file 'Proov (2).txt' is empty"))
+                .body("signaturesCount", Matchers.is(2))
+                .body("validSignaturesCount", Matchers.is(2))
+    }
+
+    @Description("Validation of asice document acceptance")
+    def "asiceDocumentShouldPass"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("bdoc21-TS.asice"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings", Matchers.emptyOrNullString())
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+    }
+
+    @Description("Validation of asics document acceptance")
+    def "asicsDocumentShouldPass"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.asics"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
+                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings", Matchers.emptyOrNullString())
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+    }
+
+    @Description("Validation of xades acceptance")
+    def "xadesDocumentShouldPass"() {
+        expect:
+        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequestSimple("signatures0.xml", "POLv4", "Simple"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings", Matchers.emptyOrNullString())
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+    }
+
+    @Ignore
+    //TODO: Test file needed
+    @Description("Validation of cades acceptance")
+    def "cadesDocumentShouldPass"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(""))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatures[0].signatureFormat", Matchers.is("CAdES_BASELINE_LT"))
+                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings", Matchers.emptyOrNullString())
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+    }
+}

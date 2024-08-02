@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2024 Riigi Infosüsteemi Amet
+ * Copyright 2024 - 2024 Riigi Infosüsteemi Amet
  *
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence")
@@ -18,25 +18,14 @@ package ee.openeid.siva.test
 
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import io.qameta.allure.Description
 import org.hamcrest.Matchers
 
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 
 class AsicsValidationPassSpec extends GenericSpecification {
 
-    /**
-     * TestCaseID: Asics-ValidationPass-1
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement:
-     * <p>
-     * Title: Validation of ASICs with DDOC inside
-     * <p>
-     * Expected Result: TST and inner DDOC are valid
-     * <p>
-     * File: ddocWithRoleAndSigProductionPlace.asics
-     */
+    @Description("Validation of ASICs with DDOC inside")
     def "validDdocInsideValidAsics"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ddocWithRoleAndSigProductionPlace.asics"))
@@ -67,19 +56,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(3))
     }
 
-    /**
-     * TestCaseID: Asics-ValidationPass-2
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement:
-     * <p>
-     * Title: Validation of ASICs with DDOC inside SCS extension
-     * <p>
-     * Expected Result: TST and inner DDOC are valid
-     * <p>
-     * File: ValidDDOCinsideAsics.scs
-     */
+    @Description("Validation of ASICs with DDOC inside SCS extension")
     def "validDdocInsideValidAsicsScsExtension"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.scs"))
@@ -99,19 +76,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    /**
-     * TestCaseID: Asics-ValidationPass-3
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement:
-     * <p>
-     * Title: Validation of ASICs with BDOC inside
-     * <p>
-     * Expected Result: TST and inner BDOC are valid
-     * <p>
-     * File: ValidBDOCinsideAsics.asics
-     */
+    @Description("Validation of ASICs with BDOC inside")
     def "validBdocInsideValidAsics"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidBDOCinsideAsics.asics"))
@@ -140,19 +105,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(2))
     }
 
-    /**
-     * TestCaseID: Asics-ValidationPass-4
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement:
-     * <p>
-     * Title: Validation of ASICs with text document inside
-     * <p>
-     * Expected Result: TST is valid
-     * <p>
-     * File: TXTinsideAsics.asics
-     */
+    @Description("Validation of ASICs with text document inside")
     def "textInsideValidAsics"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TXTinsideAsics.asics"))
@@ -166,19 +119,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", Matchers.is("TXTinsideAsics.asics"))
     }
 
-    /**
-     * TestCaseID: Asics-ValidationPass-5
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement:
-     * <p>
-     * Title: Validation of ASICs with ASICs inside
-     * <p>
-     * Expected Result: TST is valid, no inner looping of ASICs
-     * <p>
-     * File: ValidASICSinsideAsics.asics
-     */
+    @Description("Validation of ASICs with ASICs inside")
     def "asicsInsideValidAsics"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidASICSinsideAsics.asics"))
@@ -190,19 +131,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", Matchers.is("ValidASICSinsideAsics.asics"))
     }
 
-    /**
-     * TestCaseID: Asics-ValidationPass-6
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement:
-     * <p>
-     * Title: Validation of ASICs with DDOC inside ZIP extension
-     * <p>
-     * Expected Result: TST and inner DDOC are valid
-     * <p>
-     * File: ValidDDOCinsideAsics.zip
-     */
+    @Description("Validation of ASICs with DDOC inside ZIP extension")
     def "ValidDdocInsideValidAsicsZipExtension"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.zip"))
@@ -220,19 +149,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", Matchers.is("ValidDDOCinsideAsics.zip"))
     }
 
-    /**
-     * TestCaseID: Asics-ValidationPass-7
-     * <p>
-     * TestType: Automated
-     * <p>
-     * Requirement:
-     * <p>
-     * Title: Validation of ASICs with wrong mimetype with DDOC inside
-     * <p>
-     * Expected Result: TST and inner DDOC are valid
-     * <p>
-     * File: ValidDDOCinsideAsicsWrongMime.asics
-     */
+    @Description("Validation of ASICs with wrong mimetype with DDOC inside")
     def "ValidDdocInsideValidAsicsWrongMimeType"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsicsWrongMime.asics"))
