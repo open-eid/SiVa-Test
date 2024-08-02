@@ -29,7 +29,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
 
     @Description("XAdES extracted from ASICE")
     def "validXadesWithHashcodeFromAsice() throws IOException, SAXException, ParserConfigurationException"() {
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequestSimple("Valid_XAdES_LT_TS.xml", null, null))
+        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
@@ -44,7 +44,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
     @Description("XAdES extracted from BDOC")
     def "validXadesWithHashcodeFromBdoc"() {
         expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequestSimple("Valid_XAdES_LT_TM.xml", null, null))
+        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
@@ -57,7 +57,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
 
     @Description("XAdES extracted from BDOC")
     def "validXadesWithHashcodeWithMultipleDataFiles() throws IOException, SAXException, ParserConfigurationException"() {
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequestSimple("Valid_XAdES_LT_TS_multiple_datafiles.xml", null, null))
+        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS_multiple_datafiles.xml", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))

@@ -29,7 +29,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("Valid DDOC with data file used")
     def "testGetDataFileFromValidDdoc"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequest("18912.ddoc"))
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("18912.ddoc"))
                 .then()
                 .body("dataFiles[0].filename", Matchers.is("readme"))
                 .body("dataFiles[0].mimeType", Matchers.is("text/plain"))
@@ -40,7 +40,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("Invalid DDOC with data file used")
     def "testGetDataFileFromInvalidDdoc"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequest("OCSP nonce vale.ddoc"))
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("OCSP nonce vale.ddoc"))
                 .then()
                 .body("dataFiles[0].filename", Matchers.is("testfail.txt"))
                 .body("dataFiles[0].mimeType", Matchers.is("text/plain"))
@@ -51,7 +51,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("DDOC with xml v1.1 is  used")
     def "testGetDataFileFromDdocXml1_0"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequest("SK-XML1.0.ddoc"))
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("SK-XML1.0.ddoc"))
                 .then()
                 .body("dataFiles[0].filename", Matchers.is("Tartu ja Tallinna koostooleping.doc"))
                 .body("dataFiles[0].mimeType", Matchers.is("application/msword"))
@@ -62,7 +62,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("DDOC with xml v1.1 is  used")
     def "testGetDataFileFromDdocXml1_1"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequest("DIGIDOC-XML1.1.ddoc"))
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.1.ddoc"))
                 .then()
                 .body("dataFiles[0].filename", Matchers.is("puhkus_urmo_062006.doc"))
                 .body("dataFiles[0].mimeType", Matchers.is("application/msword"))
@@ -73,7 +73,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("DDOC with xml v1.2 is  used")
     def "testGetDataFileFromDdocXml1_2"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequest("DIGIDOC-XML1.2.ddoc"))
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.2.ddoc"))
                 .then()
                 .body("dataFiles[0].filename", Matchers.is("RO219559508.pdf"))
                 .body("dataFiles[0].mimeType", Matchers.is("text/text"))
@@ -84,7 +84,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("DDOC with xml v1.3 is  used")
     def "testGetDataFileFromDdocXml1_3"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequest("valid_XML1_3.ddoc"))
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
                 .then()
                 .body("dataFiles[0].filename", Matchers.is("test.txt"))
                 .body("dataFiles[0].mimeType", Matchers.is("application/octet-stream"))
@@ -96,7 +96,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("Hashcoded DDOC  is  used")
     def "testGetDataFileFromDdocHashcoded"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequest("DIGIDOC-XML1.3_hashcode.ddoc"))
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.3_hashcode.ddoc"))
                 .then()
                 .body("dataFiles[0].filename", Matchers.is("Glitter-rock-4_gallery.jpg"))
                 .body("dataFiles[0].mimeType", Matchers.is("application/octet-stream"))
@@ -107,7 +107,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("DDOC  with 12 different  files of different types  is  used")
     def "testGetMultipileDataFilesFromDdoc"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequest("igasugust1.3.ddoc"))
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("igasugust1.3.ddoc"))
                 .then()
                 .body("dataFiles[0].filename", Matchers.is("DigiDocService_spec_1_110_est.pdf"))
                 .body("dataFiles[0].mimeType", Matchers.is("application/pdf"))
@@ -162,7 +162,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("BDOC with data file used")
     def "testGetDataFileFromBdocShouldFail"() {
         expect:
-        SivaRequests.tryGetDataFiles(RequestData.dataFileRequest("BDOC-TS.bdoc"))
+        SivaRequests.tryGetDataFiles(RequestData.dataFileRequestFromFile("BDOC-TS.bdoc"))
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].message", Matchers.is("Invalid filename. Can only return data files for DDOC type containers."))
@@ -172,7 +172,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     @Description("PDF file used")
     def "testGetDataFileFromPdfShouldFail"() {
         expect:
-        SivaRequests.tryGetDataFiles(RequestData.dataFileRequest("hellopades-lt-b.pdf"))
+        SivaRequests.tryGetDataFiles(RequestData.dataFileRequestFromFile("hellopades-lt-b.pdf"))
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].message", Matchers.is("Invalid filename. Can only return data files for DDOC type containers."))

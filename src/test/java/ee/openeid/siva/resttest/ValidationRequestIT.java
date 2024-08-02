@@ -46,7 +46,7 @@ public class ValidationRequestIT extends SiVaRestTests {
     private static final String DEFAULT_TEST_FILES_DIRECTORY = "bdoc/test/timestamp/";
     private String testFilesDirectory = DEFAULT_TEST_FILES_DIRECTORY;
 
-    static int getRequestErrorsCount(String json, String field, String message) {
+    public static int getRequestErrorsCount(String json, String field, String message) {
         List<Map> errors = from(json).get("requestErrors.findAll { requestError -> requestError.key == '" + field + "' && requestError.message=='" + message + "' }");
         return errors.size();
     }
