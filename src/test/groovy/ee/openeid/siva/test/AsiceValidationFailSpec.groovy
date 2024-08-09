@@ -16,6 +16,7 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -112,7 +113,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
     @Description("Asice No non-repudiation key usage value in the certificate, verification of AdES signature level")
     def "asiceInvalidNonRepudiationKey"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-I-43.asice", SignaturePolicy.POLICY_3.name, "Simple"))
+        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-I-43.asice", SignaturePolicy.POLICY_3.name, ReportType.SIMPLE))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
                 .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_INDETERMINATE_UNKNOWN))

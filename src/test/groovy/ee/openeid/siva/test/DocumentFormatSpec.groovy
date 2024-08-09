@@ -16,6 +16,7 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -87,7 +88,7 @@ class DocumentFormatSpec extends GenericSpecification {
     @Description("Validation of xades acceptance")
     def "xadesDocumentShouldPass"() {
         expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("signatures0.xml", "POLv4", "Simple"))
+        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("signatures0.xml", "POLv4", ReportType.SIMPLE))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))

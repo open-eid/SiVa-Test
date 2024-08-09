@@ -16,6 +16,7 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestError
@@ -193,7 +194,7 @@ class ValidationRequestSpec extends GenericSpecification {
     @Description("ReportType parameter Simple")
     def "Given reportType simple, then simple report is returned"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, REPORT_TYPE_SIMPLE))
+        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.SIMPLE))
                 .then()
                 .body("validationReport.validationProcess", emptyOrNullString())
                 .body("validationReport.diagnosticData", emptyOrNullString())
@@ -203,7 +204,7 @@ class ValidationRequestSpec extends GenericSpecification {
     @Description("ReportType parameter Detailed")
     def "Given reportType detailed, then detailed report is returned"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.DETAILED))
                 .then()
                 .body("validationReport.diagnosticData", emptyOrNullString())
                 .body("validationReport.validationProcess.signatureOrTimestampOrEvidenceRecord[0].validationSignatureQualification.signatureQualification", equalTo("QESIG"))
@@ -213,7 +214,7 @@ class ValidationRequestSpec extends GenericSpecification {
     @Description("ReportType parameter Diagnostic")
     def "Given reportType diagnostic, then diagnostic report is returned"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, REPORT_TYPE_DIAGNOSTIC))
+        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.DIAGNOSTIC))
                 .then()
                 .body("validationReport.validationProcess", emptyOrNullString())
                 .body("validationReport.diagnosticData.documentName", equalTo("singleValidSignatureTS.asice"))

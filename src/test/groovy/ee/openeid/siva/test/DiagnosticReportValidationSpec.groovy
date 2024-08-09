@@ -16,6 +16,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.DateTimeMatcher
+import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -38,7 +39,7 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
         expect:
         ZonedDateTime testStartDate = ZonedDateTime.now(ZoneId.of("GMT"))
 
-        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, REPORT_TYPE_DIAGNOSTIC))
+        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, ReportType.DIAGNOSTIC))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SIGNATURE_POLICY_2))
@@ -64,7 +65,7 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
     @Description("Diagnostic report includes tlanalysis element and its values")
     def "Given diagnostic report, then it includes tlanalysis element"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, REPORT_TYPE_DIAGNOSTIC))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DIAGNOSTIC))
                 .then().rootPath(DIAGNOSTIC_DATA_PREFIX)
                 .body("signatures[0]", notNullValue())
                 .body("signatures[0].signatureFilename", equalTo("pades-baseline-lta-live-aj.pdf"))
@@ -97,7 +98,7 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
     @Description("Diagnostic report includes used certificates element and its values")
     def "Given diagnostic report, then it includes certificates element"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, REPORT_TYPE_DIAGNOSTIC))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DIAGNOSTIC))
                 .then().rootPath(DIAGNOSTIC_DATA_PREFIX)
                 .body("usedCertificates", notNullValue())
                 .body("usedCertificates.serialNumber", notNullValue())
@@ -114,7 +115,7 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
     @Description("Diagnostic report includes wrong signature value")
     def "Given detailed report, then it includes wrong signature value"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice", null, REPORT_TYPE_DIAGNOSTIC))
+        SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice", null, ReportType.DIAGNOSTIC))
                 .then().rootPath(DIAGNOSTIC_DATA_PREFIX)
                 .body("signatures[0].basicSignature.encryptionAlgoUsedToSignThisToken", equalTo("RSA"))
                 .body("signatures[0].basicSignature.keyLengthUsedToSignThisToken", equalTo("2048"))
