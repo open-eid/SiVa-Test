@@ -16,12 +16,12 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.DateTimeMatcher
+import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.hamcrest.Matchers
 import org.hamcrest.core.Every
 import spock.lang.Ignore
 
@@ -40,7 +40,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
         expect:
         ZonedDateTime testStartDate = ZonedDateTime.now(ZoneId.of("GMT"))
 
-        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SIGNATURE_POLICY_2))
@@ -68,7 +68,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     def "Given detailed report, then it includes tlanalysis element"() {
         expect:
 
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX)
                 .body("tlanalysis", notNullValue())
                 .body("tlanalysis.constraint", notNullValue())
@@ -121,7 +121,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Detailed report includes signatures element and its sub-elements and its values")
     def "Given detailed report, then it includes signatures element and its sub-elements"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec256.pdf", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec256.pdf", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrCertificate[0].")
                 .body("validationProcessBasicSignature.constraint.name.key", hasItem(BSV_IFCRC.getKey()))
                 .body("validationProcessBasicSignature.constraint.name.key", hasItem(BSV_IISCRC.getKey()))
@@ -177,7 +177,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Detailed report includes basicBuildingBlocks element and its sub-elements and its values")
     def "Given detailed report, then it includes basicBuildingBlocks element, when type timestamp"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX)
                 .body("basicBuildingBlocks[1].isc.constraint[0].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_9))
                 .body("basicBuildingBlocks[1].isc.constraint[0].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_9))
@@ -186,14 +186,14 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("basicBuildingBlocks[1].isc.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("basicBuildingBlocks[1].isc.certificateChain.chainItem[0].source", equalTo("TRUSTED_LIST"))
                 .body("basicBuildingBlocks[1].isc.certificateChain.chainItem[0].id", notNullValue())
-                .body("basicBuildingBlocks[1].cv.constraint.name.key", Matchers.hasItems(BBB_CV_TSP_IRDOF.getKey(), BBB_CV_TSP_IRDOI.getKey(), BBB_CV_ISIT.getKey()))
+                .body("basicBuildingBlocks[1].cv.constraint.name.key", hasItems(BBB_CV_TSP_IRDOF.getKey(), BBB_CV_TSP_IRDOI.getKey(), BBB_CV_ISIT.getKey()))
                 .body("basicBuildingBlocks[1].cv.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[1].cv.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("basicBuildingBlocks[1].sav.constraint.name.key", Every.everyItem(equalTo(ACCM.getKey())))
                 .body("basicBuildingBlocks[1].sav.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[1].sav.constraint[0].additionalInfo", notNullValue())
                 .body("basicBuildingBlocks[1].sav.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
-                .body("basicBuildingBlocks[1].xcv.constraint.name.key", Matchers.hasItems(BBB_XCV_CCCBB.getKey(), BBB_XCV_SUB.getKey()))
+                .body("basicBuildingBlocks[1].xcv.constraint.name.key", hasItems(BBB_XCV_CCCBB.getKey(), BBB_XCV_SUB.getKey()))
                 .body("basicBuildingBlocks[1].xcv.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[1].xcv.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("basicBuildingBlocks[1].xcv.subXCV[0].conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
@@ -210,21 +210,21 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Detailed report includes basicBuildingBlocks element and its sub-elements and its values")
     def "Given detailed report, then it includes basicBuildingBlocks element, when type revocation"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX)
-                .body("basicBuildingBlocks[0].isc.constraint.name.key", Matchers.hasItem(BBB_ICS_ISCI.getKey()))
+                .body("basicBuildingBlocks[0].isc.constraint.name.key", hasItem(BBB_ICS_ISCI.getKey()))
                 .body("basicBuildingBlocks[0].isc.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[0].isc.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("basicBuildingBlocks[0].isc.certificateChain.chainItem[0].source", equalTo("TRUSTED_LIST"))
                 .body("basicBuildingBlocks[0].isc.certificateChain.chainItem[0].id", notNullValue())
-                .body("basicBuildingBlocks[0].cv.constraint.name.key", Matchers.hasItem(BBB_CV_ISIR.getKey()))
+                .body("basicBuildingBlocks[0].cv.constraint.name.key", hasItem(BBB_CV_ISIR.getKey()))
                 .body("basicBuildingBlocks[0].cv.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[0].cv.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
-                .body("basicBuildingBlocks[0].sav.constraint.name.key", Matchers.hasItem(ACCM.getKey()))
+                .body("basicBuildingBlocks[0].sav.constraint.name.key", hasItem(ACCM.getKey()))
                 .body("basicBuildingBlocks[0].sav.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[0].sav.constraint[0].additionalInfo", notNullValue())
                 .body("basicBuildingBlocks[0].sav.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
-                .body("basicBuildingBlocks[0].xcv.constraint.name.key", Matchers.hasItems(BBB_XCV_CCCBB.getKey(), BBB_XCV_SUB.getKey()))
+                .body("basicBuildingBlocks[0].xcv.constraint.name.key", hasItems(BBB_XCV_CCCBB.getKey(), BBB_XCV_SUB.getKey()))
                 .body("basicBuildingBlocks[0].xcv.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[0].xcv.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("basicBuildingBlocks[0].xcv.subXCV[0].conclusion", notNullValue())
@@ -243,22 +243,22 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Detailed report includes basicBuildingBlocks element and its sub-elements and its values")
     def "Given detailed report, then it includes basicBuildingBlocks element, when type signature"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX)
-                .body("basicBuildingBlocks[3].isc.constraint.name.key", Matchers.hasItem(BBB_ICS_ISCI.getKey()))
+                .body("basicBuildingBlocks[3].isc.constraint.name.key", hasItem(BBB_ICS_ISCI.getKey()))
                 .body("basicBuildingBlocks[3].isc.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[3].isc.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
         //.body("basicBuildingBlocks[3].isc.certificateChain.chainItem[0].source", equalTo("SIGNATURE"))
                 .body("basicBuildingBlocks[3].isc.certificateChain.chainItem[0].id", notNullValue())
-                .body("basicBuildingBlocks[3].cv.constraint.name.key", Matchers.hasItem(BBB_CV_IRDOF.getKey()))
+                .body("basicBuildingBlocks[3].cv.constraint.name.key", hasItem(BBB_CV_IRDOF.getKey()))
                 .body("basicBuildingBlocks[3].cv.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[3].cv.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("basicBuildingBlocks[3].sav.constraint[0].name.value", notNullValue())
-                .body("basicBuildingBlocks[3].sav.constraint.name.key", Matchers.hasItems(BBB_SAV_ISSV.getKey(), BBB_SAV_ISQPSTP.getKey(), BBB_SAV_ISQPMDOSPP.getKey(), ACCM.getKey()))
+                .body("basicBuildingBlocks[3].sav.constraint.name.key", hasItems(BBB_SAV_ISSV.getKey(), BBB_SAV_ISQPSTP.getKey(), BBB_SAV_ISQPMDOSPP.getKey(), ACCM.getKey()))
                 .body("basicBuildingBlocks[3].sav.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[3].sav.constraint.additionalInfo", notNullValue())
                 .body("basicBuildingBlocks[3].sav.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
-                .body("basicBuildingBlocks[3].xcv.constraint.name.key", Matchers.hasItems(BBB_XCV_CCCBB.getKey(), BBB_XCV_SUB.getKey()))
+                .body("basicBuildingBlocks[3].xcv.constraint.name.key", hasItems(BBB_XCV_CCCBB.getKey(), BBB_XCV_SUB.getKey()))
                 .body("basicBuildingBlocks[3].xcv.constraint.find { it.name.key == 'BBB_XCV_CCCBB' }.status", equalTo("OK"))
                 .body("basicBuildingBlocks[3].xcv.constraint.find { it.name.key == 'BBB_XCV_SUB' }.status", equalTo("NOT_OK"))
                 .body("basicBuildingBlocks[3].xcv.conclusion.indication", equalTo(INDETERMINATE))
@@ -276,7 +276,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     def "Given detailed report, then it includes wrong signature value"() {
         expect:
 
-        SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord[0]")
                 .body("validationProcessBasicSignature.constraint.name.key", hasItem(BSV_IFCRC.getKey()))
                 .body("validationProcessBasicSignature.constraint.find { it.name.key == 'BSV_IFCRC' }.status", equalTo("OK"))
@@ -337,7 +337,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Wrong data file in manifest")
     def "Given wrong datafile in manifest, then detailed report"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("WrongDataFileInManifestAsics.asics", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("WrongDataFileInManifestAsics.asics", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SIGNATURE_POLICY_2))
@@ -351,7 +351,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Validate detailed report file hash if ReportSignatureEnabled value true. Result: fileHash calculated")
     def "Given reportSignatureEnabled true, then fileHash is calculated"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048.pdf", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048.pdf", null, ReportType.DETAILED))
                 .then()
                 .body("validationReport.validationConclusion.validatedDocument.filename", equalTo("hellopades-lt-sha256-rsa2048.pdf"))
                 .body("validationReport.validationConclusion.validatedDocument.fileHash", notNullValue())
@@ -364,7 +364,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Validate detailed report file hash if ReportSignatureEnabled value false. Result: fileHash not calculated")
     def "Given reportSignatureEnabled false, then fileHash is not calculated"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048.pdf", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048.pdf", null, ReportType.DETAILED))
                 .then()
                 .body("validationReport.validationConclusion.validatedDocument.filename", equalTo("hellopades-lt-sha256-rsa2048.pdf"))
                 .body("validationReport.validationConclusion.validatedDocument.fileHash", nullValue())
@@ -375,7 +375,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Warning \"The trusted certificate does not match the trust service!\" is not filtered out and is present in Detailed Report")
     def "Given detailed report, then trust service warning is not filtered out"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord.validationSignatureQualification.")
                 .body("conclusion.warnings.key[0]", hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getKey()))
                 .body("conclusion.warnings.value[0]", hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue()))
@@ -384,7 +384,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     @Description("Error \"The certificate is not related to a granted status at time-stamp lowest POE time!\" is displayed in Detailed Report and signature is TOTAL-PASSED")
     def "Given detailed report, then lowest POE time error not filtered out"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4183_3.4kaart_RSA2047_TS.asice", null, REPORT_TYPE_DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("IB-4183_3.4kaart_RSA2047_TS.asice", null, ReportType.DETAILED))
                 .then().rootPath("validationReport.")
                 .body(VALIDATION_PROCESS_TS_PREFIX + "conclusion[0][0].indication", equalTo("PASSED"))
                 .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.key[0][0]", hasItem(QUAL_HAS_GRANTED_AT_ANS.getKey()))

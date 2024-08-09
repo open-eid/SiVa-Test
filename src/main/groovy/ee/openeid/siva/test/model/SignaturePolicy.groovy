@@ -48,4 +48,9 @@ result. Validation process is based on eIDAS Article 32 and referred ETSI standa
         this.url = params.url
         this.description = params.description
     }
+
+    @Override
+    String toString() {
+        return name
+    }
 }

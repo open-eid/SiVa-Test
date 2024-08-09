@@ -17,13 +17,12 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.DateTimeMatcher
+import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestError
 import ee.openeid.siva.test.util.Utils
-import ee.openeid.siva.validation.PredefinedValidationPolicySource
-import ee.openeid.siva.validation.ReportType
-import ee.openeid.siva.validation.ValidationPolicy
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.restassured.response.ValidatableResponse
@@ -123,7 +122,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(errorType, error) })
 
         where:
-        policy    | comment                                | errorType        | errors
+        policy    | comment               | errorType        | errors
         "POLv2"   | "invalid"             | SIGNATURE_POLICY | ["Invalid signature policy: POLv2; Available abstractPolicies: [POLv3, POLv4]"]
         "POLv3.*" | "in incorrect format" | SIGNATURE_POLICY | [INVALID_SIGNATURE_POLICY]
         ""        | "empty"               | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
@@ -466,27 +465,25 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .body("validationTime", DateTimeMatcher.isEqualOrAfter(testStartDate))
                 .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
 
-        ValidationPolicy signaturePolicy
-        if (request.signaturePolicy == null) {
-            signaturePolicy = determineValidationPolicy(SIGNATURE_POLICY_2)
-        } else {
-            signaturePolicy = determineValidationPolicy(request.signaturePolicy.toString())
-        }
+        SignaturePolicy signaturePolicy = determineValidationPolicy(request.signaturePolicy)
 
         response
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("policy.policyDescription", equalTo(signaturePolicy.getDescription()))
-                .body("policy.policyName", equalTo(signaturePolicy.getName()))
-                .body("policy.policyUrl", equalTo(signaturePolicy.getUrl()))
+                .body("policy.policyDescription", equalTo(signaturePolicy.description))
+                .body("policy.policyName", equalTo(signaturePolicy.name))
+                .body("policy.policyUrl", equalTo(signaturePolicy.url))
     }
 
-    private static ValidationPolicy determineValidationPolicy(String signaturePolicy) {
-        if (SIGNATURE_POLICY_1 == signaturePolicy) {
-            return PredefinedValidationPolicySource.ADES_POLICY
-        } else if (SIGNATURE_POLICY_2 == signaturePolicy) {
-            return PredefinedValidationPolicySource.QES_POLICY
+    private static SignaturePolicy determineValidationPolicy(def signaturePolicy) {
+        if (signaturePolicy == null) {
+            return SignaturePolicy.POLICY_4
+        }
+        if (SIGNATURE_POLICY_1 == signaturePolicy.toString()) {
+            return SignaturePolicy.POLICY_3
+        } else if (SIGNATURE_POLICY_2 == signaturePolicy.toString()) {
+            return SignaturePolicy.POLICY_4
         } else {
-            throw new IllegalArgumentException("Unknown validation policy '" + signaturePolicy + "'")
+            throw new IllegalArgumentException("Unknown validation policy '" + signaturePolicy.toString() + "'")
         }
     }
 

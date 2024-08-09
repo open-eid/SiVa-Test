@@ -16,6 +16,7 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -224,7 +225,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
     @Description("JSON structure has all elements (Bdoc indeterminate status)")
     def "bdocAllElementsArePresentIndeterminateSignature"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("SS-4_teadmataCA.4.asice", SignaturePolicy.POLICY_3.name, "simple"))
+        SivaRequests.validate(RequestData.validationRequest("SS-4_teadmataCA.4.asice", SignaturePolicy.POLICY_3.name, ReportType.SIMPLE))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
