@@ -39,4 +39,10 @@ interface TestConfig extends Config {
 
     @Key("rest-assured-console-logging")
     Boolean restAssuredConsoleLogging()
+
+    @Key("allure-rest-request-limit")
+    Integer allureRestRequestLimit()
+
+    @Key("allure-rest-response-limit")
+    Integer allureRestResponseLimit()
 }

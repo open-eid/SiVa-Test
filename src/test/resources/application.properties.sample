@@ -7,3 +7,5 @@ siva.protocol=http
 # Test configuration
 test-files-directory=src/test/resources/
 rest-assured-console-logging=true
+allure-rest-request-limit=2000000
+allure-rest-response-limit=5000000
