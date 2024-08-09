@@ -125,6 +125,15 @@ class RequestData {
         def loadLength = expectedBodyLength - 10 - requestAsStringLength
         request.load = 't' * loadLength
 
-        return request
+        return request as FixedBodyLengthMap
+    }
+}
+
+class FixedBodyLengthMap extends LinkedHashMap{
+    String toString() {
+        def newMap = [:]
+        newMap.putAll(this)
+        newMap.load = "t * ${newMap.load.toString().length()}"
+        return newMap.toString()
     }
 }
