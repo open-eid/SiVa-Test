@@ -23,6 +23,8 @@ import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
+import static ee.openeid.siva.integrationtest.TestData.INVALID_DATA_FILE_FILENAME
+
 @Link("http://open-eid.github.io/SiVa/siva3/use_cases/#ddoc-data-file-extraction-process")
 class DdocGetDataFilesSpec extends GenericSpecification {
 
@@ -165,7 +167,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
         SivaRequests.tryGetDataFiles(RequestData.dataFileRequestFromFile("BDOC-TS.bdoc"))
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].message", Matchers.is("Invalid filename. Can only return data files for DDOC type containers."))
+                .body("requestErrors[0].message", Matchers.is(INVALID_DATA_FILE_FILENAME))
                 .body("requestErrors[0].key", Matchers.is("filename"))
     }
 
@@ -175,7 +177,7 @@ class DdocGetDataFilesSpec extends GenericSpecification {
         SivaRequests.tryGetDataFiles(RequestData.dataFileRequestFromFile("hellopades-lt-b.pdf"))
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].message", Matchers.is("Invalid filename. Can only return data files for DDOC type containers."))
+                .body("requestErrors[0].message", Matchers.is(INVALID_DATA_FILE_FILENAME))
                 .body("requestErrors[0].key", Matchers.is("filename"))
     }
 }

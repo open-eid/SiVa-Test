@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestError
@@ -150,10 +151,10 @@ class ValidationRequestSpec extends GenericSpecification {
                 .body("policy.policyName", equalTo(expectedPolicy))
 
         where:
-        policy             | expectedPolicy     | condition | expected
-        SIGNATURE_POLICY_1 | SIGNATURE_POLICY_1 | "POLv3"   | "correct policy is returned"
-        SIGNATURE_POLICY_2 | SIGNATURE_POLICY_2 | "POLv4"   | "correct policy is returned"
-        null               | SIGNATURE_POLICY_2 | "missing" | "default policy is used"
+        policy                        | expectedPolicy                | condition | expected
+        SignaturePolicy.POLICY_3.name | SignaturePolicy.POLICY_3.name | "POLv3"   | "correct policy is returned"
+        SignaturePolicy.POLICY_4.name | SignaturePolicy.POLICY_4.name | "POLv4"   | "correct policy is returned"
+        null                          | SignaturePolicy.POLICY_4.name | "missing" | "default policy is used"
     }
 
     @Description("Invalid signature policy")

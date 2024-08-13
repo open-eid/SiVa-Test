@@ -16,6 +16,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.DateTimeMatcher
+import ee.openeid.siva.test.model.HashAlgo
 import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
@@ -42,7 +43,7 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, ReportType.DIAGNOSTIC))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
-                .body("policy.policyName", equalTo(SIGNATURE_POLICY_2))
+                .body("policy.policyName", equalTo(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", equalTo(SignaturePolicy.POLICY_4.url))
                 .body("signatureForm", equalTo(SIGNATURE_FORM_ASICE))
                 .body("validationTime", DateTimeMatcher.isEqualOrAfter(testStartDate))
@@ -73,14 +74,14 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
                 .body("signatures[0].signatureFormat", equalTo("PAdES-BASELINE-LTA"))
                 .body("signatures[0].contentType", equalTo("1.2.840.113549.1.7.1"))
                 .body("signatures[0].structuralValidation.valid", equalTo(true))
-                .body("signatures[0].digestMatchers[0].digestMethod", equalTo(HASH_ALGO_SHA256))
+                .body("signatures[0].digestMatchers[0].digestMethod", equalTo(HashAlgo.SHA256))
                 .body("signatures[0].digestMatchers[0].digestValue", equalTo("7UlS2NYiVo7OhneOHdb6gsTuA1HLM433vrBKSYnI46c="))
                 .body("signatures[0].digestMatchers[0].dataFound", equalTo(true))
                 .body("signatures[0].digestMatchers[0].dataIntact", equalTo(true))
                 .body("signatures[0].digestMatchers[0].type", equalTo("MESSAGE_DIGEST"))
                 .body("signatures[0].basicSignature.encryptionAlgoUsedToSignThisToken", equalTo("RSA"))
                 .body("signatures[0].basicSignature.keyLengthUsedToSignThisToken", equalTo("2048"))
-                .body("signatures[0].basicSignature.digestAlgoUsedToSignThisToken", equalTo(HASH_ALGO_SHA256))
+                .body("signatures[0].basicSignature.digestAlgoUsedToSignThisToken", equalTo(HashAlgo.SHA256))
                 .body("signatures[0].basicSignature.signatureIntact", equalTo(true))
                 .body("signatures[0].basicSignature.signatureValid", equalTo(true))
                 .body("signatures[0].signingCertificate.certificate", equalTo("C-F014C7DF249D8734DF273D937EE5EBF0F8166BE0775C47A80608F1A14EB23F4C"))
@@ -119,7 +120,7 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
                 .then().rootPath(DIAGNOSTIC_DATA_PREFIX)
                 .body("signatures[0].basicSignature.encryptionAlgoUsedToSignThisToken", equalTo("RSA"))
                 .body("signatures[0].basicSignature.keyLengthUsedToSignThisToken", equalTo("2048"))
-                .body("signatures[0].basicSignature.digestAlgoUsedToSignThisToken", equalTo(HASH_ALGO_SHA256))
+                .body("signatures[0].basicSignature.digestAlgoUsedToSignThisToken", equalTo(HashAlgo.SHA256))
                 .body("signatures[0].basicSignature.signatureIntact", equalTo(false))
                 .body("signatures[0].basicSignature.signatureValid", equalTo(false))
     }

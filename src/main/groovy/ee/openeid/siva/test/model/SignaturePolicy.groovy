@@ -49,6 +49,20 @@ result. Validation process is based on eIDAS Article 32 and referred ETSI standa
         this.description = params.description
     }
 
+    static SignaturePolicy determineValidationPolicy(def signaturePolicy) {
+        if (signaturePolicy == null) {
+            return POLICY_4
+        }
+
+        SignaturePolicy policy = values().find { it.name == signaturePolicy.toString() }
+
+        if (policy) {
+            return policy
+        }
+
+        throw new IllegalArgumentException("Unknown validation policy '${signaturePolicy}'")
+    }
+
     @Override
     String toString() {
         return name

@@ -24,6 +24,7 @@ import io.qameta.allure.Link
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 
+import static ee.openeid.siva.integrationtest.TestData.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.equalTo
 
@@ -76,7 +77,7 @@ class LargeFileSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document malformed or not matching documentType"))
+                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("Asice Zip container with Bomb file")
@@ -89,7 +90,7 @@ class LargeFileSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document malformed or not matching documentType"))
+                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("Asice Zip container with Matryoshka Bomb file")
@@ -125,6 +126,6 @@ class LargeFileSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document malformed or not matching documentType"))
+                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 }

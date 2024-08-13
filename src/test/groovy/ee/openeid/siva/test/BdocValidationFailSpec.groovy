@@ -305,7 +305,7 @@ class BdocValidationFailSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document malformed or not matching documentType"))
+                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("Bdoc no files in container")
@@ -392,7 +392,7 @@ class BdocValidationFailSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document malformed or not matching documentType"))
+                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("Asice unsigned data files in the container")

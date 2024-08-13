@@ -22,6 +22,7 @@ import io.qameta.allure.Description
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 
+import static ee.openeid.siva.integrationtest.TestData.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 
 class AsicsValidationFailSpec extends GenericSpecification {
@@ -89,7 +90,7 @@ class AsicsValidationFailSpec extends GenericSpecification {
         SivaRequests.tryValidate(RequestData.validationRequest("AsicsTSTsignatureBroken.asics"))
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document malformed or not matching documentType"))
+                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("Data file changed")

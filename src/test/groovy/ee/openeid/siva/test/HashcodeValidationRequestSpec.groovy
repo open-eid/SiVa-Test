@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.DateTimeMatcher
+import ee.openeid.siva.test.model.HashAlgo
 import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
@@ -105,10 +106,10 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         assertSimpleReportWithSignature(response, requestData)
 
         where:
-        policy             | expectedPolicy     | condition | expected
-        SIGNATURE_POLICY_1 | SIGNATURE_POLICY_1 | "POLv3"   | "correct policy is returned"
-        SIGNATURE_POLICY_2 | SIGNATURE_POLICY_2 | "POLv4"   | "correct policy is returned"
-        null               | SIGNATURE_POLICY_2 | "missing" | "default policy is used"
+        policy                        | expectedPolicy                | condition | expected
+        SignaturePolicy.POLICY_3.name | SignaturePolicy.POLICY_3.name | "POLv3"   | "correct policy is returned"
+        SignaturePolicy.POLICY_4.name | SignaturePolicy.POLICY_4.name | "POLv4"   | "correct policy is returned"
+        null                          | SignaturePolicy.POLICY_4.name | "missing" | "default policy is used"
     }
 
     @Description("Invalid signature policy")
@@ -189,7 +190,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         "NOT.BASE64.ENCODED.VALUE"
               | "incorrect signature"                                                        | SIGNATURE_INDEX_0 | SIGNATURE_FILE_NOT_BASE64_ENCODED
         Base64.encodeBase64String("NOT_XML_FORMATTED_FILE_CONTENT".getBytes(StandardCharsets.UTF_8))
-              | "not correct file type"                                                      | SIGNATURE         | SIGNATURE_MALFORMED
+              | "not correct file type"                                                      | SIGNATURE         | SIGNATURE_FILE_MALFORMED
     }
 
     @Description("Input file without signature")
@@ -291,7 +292,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 "                    \"hashAlgo\": \"SHA512\",\n" +
                 "                    \"hash\": \"IucjUcbRo9RkdsfdfsscwiIiplP9pSrSPr7LKln1EiI=\",\n" +
                 "                    \"filename\": \"" + MOCK_XADES_DATAFILE_FILENAME + "\",\n" +
-                "                    \"hashAlgo\": \"" + MOCK_XADES_DATAFILE_HASH_ALGO + "\",\n" +
+                "                    \"hashAlgo\": \"" + HashAlgo.SHA256 + "\",\n" +
                 "                    \"hash\": \"" + MOCK_XADES_DATAFILE_HASH + "\"\n" +
                 "                }\n" +
                 "            ]\n" +
@@ -312,7 +313,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         Map requestData = validRequestBody()
         Map invalidDataFile = [
                 filename: "INVALID_FILE",
-                hashAlgo: MOCK_XADES_DATAFILE_HASH_ALGO,
+                hashAlgo: HashAlgo.SHA256,
                 hash    : Base64.encodeBase64String("INVALID_SIGNATURE_DIGEST".getBytes(StandardCharsets.UTF_8))
         ]
         ((requestData.signatureFiles as List<Map>).first().datafiles as List<Map>).add(invalidDataFile)
@@ -332,11 +333,11 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         SivaRequests.validateHashcode(requestData)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", Matchers.is(5))
-                .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA384))
-                .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'VÄRNICK,KRÕÕT,48812040138'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'ÅLT-DELETÈ,CØNTROLINA,48908209998'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA512))
+                .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA384))
+                .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'VÄRNICK,KRÕÕT,48812040138'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'ÅLT-DELETÈ,CØNTROLINA,48908209998'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA512))
     }
 
     @Description("Several signatures validated with datafile info")
@@ -350,11 +351,11 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         SivaRequests.validateHashcode(requestDataWithDatafiles)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", Matchers.is(5))
-                .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA384))
-                .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'VÄRNICK,KRÕÕT,48812040138'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'ÅLT-DELETÈ,CØNTROLINA,48908209998'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA512))
+                .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA384))
+                .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'VÄRNICK,KRÕÕT,48812040138'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'ÅLT-DELETÈ,CØNTROLINA,48908209998'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA512))
     }
 
     @Description("Several signatures validated one signature not valid")
@@ -370,11 +371,11 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", Matchers.is(4))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.indication", is("TOTAL-FAILED"))
-                .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA384))
-                .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'VÄRNICK,KRÕÕT,48812040138'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA256))
-                .body("signatures.find {signatures -> signatures.signedBy == 'ÅLT-DELETÈ,CØNTROLINA,48908209998'}.signatureScopes[0].hashAlgo", is(HASH_ALGO_SHA512))
+                .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA384))
+                .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'VÄRNICK,KRÕÕT,48812040138'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
+                .body("signatures.find {signatures -> signatures.signedBy == 'ÅLT-DELETÈ,CØNTROLINA,48908209998'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA512))
     }
 
     @Description("Hashcode validation request with request body of limit length")
@@ -465,26 +466,13 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .body("validationTime", DateTimeMatcher.isEqualOrAfter(testStartDate))
                 .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
 
-        SignaturePolicy signaturePolicy = determineValidationPolicy(request.signaturePolicy)
+        SignaturePolicy signaturePolicy = SignaturePolicy.determineValidationPolicy(request.signaturePolicy)
 
         response
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(signaturePolicy.description))
                 .body("policy.policyName", equalTo(signaturePolicy.name))
                 .body("policy.policyUrl", equalTo(signaturePolicy.url))
-    }
-
-    private static SignaturePolicy determineValidationPolicy(def signaturePolicy) {
-        if (signaturePolicy == null) {
-            return SignaturePolicy.POLICY_4
-        }
-        if (SIGNATURE_POLICY_1 == signaturePolicy.toString()) {
-            return SignaturePolicy.POLICY_3
-        } else if (SIGNATURE_POLICY_2 == signaturePolicy.toString()) {
-            return SignaturePolicy.POLICY_4
-        } else {
-            throw new IllegalArgumentException("Unknown validation policy '" + signaturePolicy.toString() + "'")
-        }
     }
 
     private static void assertSignatureTotalPassed(ValidatableResponse response) {
@@ -500,7 +488,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .body("signatures[0].signatureScopes[0].name", is(MOCK_XADES_DATAFILE_FILENAME))
                 .body("signatures[0].signatureScopes[0].scope", is(SIGNATURE_SCOPE_DIGEST))
                 .body("signatures[0].signatureScopes[0].content", is(VALID_SIGNATURE_SCOPE_CONTENT_DIGEST))
-                .body("signatures[0].signatureScopes[0].hashAlgo", is(MOCK_XADES_DATAFILE_HASH_ALGO))
+                .body("signatures[0].signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
                 .body("signatures[0].signatureScopes[0].hash", is(MOCK_XADES_DATAFILE_HASH))
                 .body("signatures[0].claimedSigningTime", is(MOCK_XADES_SIGNATURE_CLAIMED_SIGNING_TIME))
                 .body("signatures[0].info.bestSignatureTime", is(MOCK_XADES_SIGNATURE_BEST_SIGNATURE_TIME))
@@ -512,10 +500,10 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
     private static Map validRequestBody() {
         RequestData.hashcodeValidationRequest(
                 MOCK_XADES_SIGNATURE_FILE,
-                SIGNATURE_POLICY_2,
+                SignaturePolicy.POLICY_4.name,
                 ReportType.SIMPLE,
                 MOCK_XADES_DATAFILE_FILENAME,
-                MOCK_XADES_DATAFILE_HASH_ALGO,
+                HashAlgo.SHA256,
                 MOCK_XADES_DATAFILE_HASH
         )
     }

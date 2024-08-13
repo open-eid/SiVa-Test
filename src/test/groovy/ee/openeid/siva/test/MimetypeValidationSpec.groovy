@@ -190,7 +190,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .rootPath("requestErrors[0]")
-                .body("message", Matchers.is("Document malformed or not matching documentType"))
+                .body("message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("Invalid BDOC container, where mimetype filename is with extra space in the end (\"mimetype \").")
@@ -200,7 +200,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .rootPath("requestErrors[0]")
-                .body("message", Matchers.is("Document malformed or not matching documentType"))
+                .body("message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("BDOC container with invalid mimetype as \"application/zip\".")
@@ -210,7 +210,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .rootPath("requestErrors[0]")
-                .body("message", Matchers.is("Document malformed or not matching documentType"))
+                .body("message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("ASICs container with valid mimetype and Tmp file inside.")

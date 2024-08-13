@@ -223,7 +223,7 @@ class DdocValidationFailSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document malformed or not matching documentType"))
+                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("Ddoc with XML server side request forgery attack")
@@ -234,7 +234,7 @@ class DdocValidationFailSpec extends GenericSpecification {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document malformed or not matching documentType"))
+                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
     }
 
     @Description("Ddoc no files in container")
@@ -243,7 +243,7 @@ class DdocValidationFailSpec extends GenericSpecification {
         SivaRequests.tryValidate(RequestData.validationRequest("KS-02_tyhi.ddoc"))
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors.message", Matchers.hasItems("Document is not encoded in a valid base64 string", "must not be blank"))
+                .body("requestErrors.message", Matchers.hasItems(INVALID_BASE_64, MUST_NOT_BE_BLANK))
                 .body("requestErrors", Matchers.hasSize(2))
     }
 
