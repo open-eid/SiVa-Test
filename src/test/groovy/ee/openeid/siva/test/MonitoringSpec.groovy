@@ -16,9 +16,10 @@
 
 package ee.openeid.siva.test
 
-import ee.openeid.siva.test.allure.SivaRequirement
+
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import io.qameta.allure.Link
 import org.hamcrest.Matchers
 import spock.lang.Tag
 
@@ -28,7 +29,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 class MonitoringSpec extends GenericSpecification {
 
     @Description("Health monitor response structure")
-    @SivaRequirement("interfaces/#service-health-monitoring")
+    @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#service-health-monitoring")
     def "Verify health response structure"() {
         expect: "health response to match structure"
         SivaRequests.getMonitoringHealth()
@@ -42,7 +43,7 @@ class MonitoringSpec extends GenericSpecification {
     }
 
     @Description("Heartbeat monitor response structure")
-    @SivaRequirement("interfaces/#simplified-health-monitoring")
+    @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#simplified-health-monitoring")
     def "Verify heartbeat response structure"() {
         expect: "heartbeat response to match structure"
         SivaRequests.getMonitoringHeartbeat()
@@ -55,7 +56,7 @@ class MonitoringSpec extends GenericSpecification {
     }
 
     @Description("Version monitor response structure")
-    @SivaRequirement("interfaces/#version-information")
+    @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#version-information")
     def "Verify version response structure"() {
         expect: "version response to match structure"
         SivaRequests.getMonitoringVersion()

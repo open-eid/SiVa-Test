@@ -16,13 +16,13 @@
 
 package ee.openeid.siva.test
 
-import ee.openeid.siva.test.allure.SivaRequirement
+import io.qameta.allure.Link
 
 import static io.restassured.RestAssured.given
 
 class SoapEndpointsDeprecatedSpec extends GenericSpecification {
 
-    @SivaRequirement("interfaces")
+    @Link("http://open-eid.github.io/SiVa/siva3/interfaces")
     def "Soap #endpoint endpoint deprecated"() {
         given:
         String sivaServiceUrl = "${conf.sivaProtocol()}://${conf.sivaHostname()}:${conf.sivaPort()}${conf.sivaContextPath()}"
