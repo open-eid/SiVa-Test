@@ -16,6 +16,7 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -36,7 +37,7 @@ class LargeFileSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("9MB_PDF.pdf", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo("PAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.PAdES_BASELINE_LT))
                 .body("validatedDocument.filename", equalTo("9MB_PDF.pdf"))
     }
 
@@ -45,7 +46,7 @@ class LargeFileSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("9MB_BDOC-TS.bdoc", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_LT))
                 .body("validatedDocument.filename", equalTo("9MB_BDOC-TS.bdoc"))
                 .body("validSignaturesCount", equalTo(1))
     }
@@ -55,7 +56,7 @@ class LargeFileSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("9MB_BDOC-TM.bdoc", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("validatedDocument.filename", equalTo("9MB_BDOC-TM.bdoc"))
                 .body("validSignaturesCount", equalTo(1))
     }
@@ -98,7 +99,7 @@ class LargeFileSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo("XAdES_BASELINE_B"))
+                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_B))
                 .body("validatedDocument.filename", equalTo("zip-bomb-packages.asice"))
                 .body("validSignaturesCount", equalTo(0))
     }
@@ -111,7 +112,7 @@ class LargeFileSpec extends GenericSpecification {
         then:
         SivaRequests.validate(requestData)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo("XAdES_BASELINE_B_BES"))
+                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_B_BES))
                 .body("validatedDocument.filename", equalTo("zip-bomb-packages.bdoc"))
                 .body("validSignaturesCount", equalTo(0))
     }

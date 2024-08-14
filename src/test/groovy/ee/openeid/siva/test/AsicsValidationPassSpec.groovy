@@ -16,6 +16,7 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -83,7 +84,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is("ASiC-S"))
                 .body("validatedDocument.filename", Matchers.is("ValidBDOCinsideAsics.asics"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2016-05-11T10:18:06Z"))
@@ -95,7 +96,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("38211015222"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("NURM,AARE,38211015222"))
-                .body("signatures[1].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[1].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[1].info.bestSignatureTime", Matchers.is("2016-05-11T10:19:38Z"))
                 .body("timeStampTokens[0].indication", Matchers.is("TOTAL-PASSED"))

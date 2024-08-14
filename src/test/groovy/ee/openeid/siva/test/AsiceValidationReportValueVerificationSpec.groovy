@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -38,7 +39,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("id-2d1a98a8173d01473aa7e88bc74b361a"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
@@ -80,7 +81,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("id-7022c18f415891f9cb9124927ab14cfb"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].signedBy", Matchers.is("JÕEORG,JAAK-KRISTJAN,38001085718"))
@@ -126,7 +127,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_LT_TM))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_QESIG))
                 .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
@@ -158,7 +159,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S1510667783001"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES_QC"))
                 .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
@@ -196,7 +197,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].signedBy", Matchers.is("MICHAL,KRISTEN,37507120348"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
@@ -229,7 +230,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_T"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_T))
                 .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_QESIG))
                 .body("signatures[0].signedBy", Matchers.is("signer1"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
@@ -271,11 +272,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIGzgagluBCVuUgrnT6C5BmSAXBxuuxvlAN7epdGqHP0/"))
-                .body("signatures[1].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[1].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIBcwYgTTCv5dabbTMJENwex0W1UHxP2OnhiwIcDE89RE"))
-                .body("signatures[2].signatureFormat", Matchers.is("XAdES_BASELINE_LTA"))
+                .body("signatures[2].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("signatures[2].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIOcfB5FibacEVizcnKhNisrfXU1QyXFzrVGjCQQdntiB"))
     }
 
@@ -285,11 +286,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIGzgagluBCVuUgrnT6C5BmSAXBxuuxvlAN7epdGqHP0/"))
-                .body("signatures[1].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[1].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIBcwYgTTCv5dabbTMJENwex0W1UHxP2OnhiwIcDE89RE"))
-                .body("signatures[2].signatureFormat", Matchers.is("XAdES_BASELINE_LTA"))
+                .body("signatures[2].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("signatures[2].info.timeAssertionMessageImprint", Matchers.is("MDEwDQYJYIZIAWUDBAIBBQAEIOcfB5FibacEVizcnKhNisrfXU1QyXFzrVGjCQQdntiB"))
 
     }
@@ -301,11 +302,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].info.ocspResponseCreationTime", Matchers.is("2021-01-29T14:15:43Z"))
-                .body("signatures[1].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[1].info.ocspResponseCreationTime", Matchers.is("2021-01-29T14:31:37Z"))
-                .body("signatures[2].signatureFormat", Matchers.is("XAdES_BASELINE_LTA"))
+                .body("signatures[2].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("signatures[2].info.ocspResponseCreationTime", Matchers.is("2021-01-29T14:38:11Z"))
     }
 
@@ -315,11 +316,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].info.ocspResponseCreationTime", Matchers.is("2021-01-29T14:15:43Z"))
-                .body("signatures[1].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[1].info.ocspResponseCreationTime", Matchers.is("2021-01-29T14:31:37Z"))
-                .body("signatures[2].signatureFormat", Matchers.is("XAdES_BASELINE_LTA"))
+                .body("signatures[2].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("signatures[2].info.ocspResponseCreationTime", Matchers.is("2021-01-29T14:38:11Z"))
     }
 
@@ -329,9 +330,9 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("2_signatures_T_LT.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_T"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_T))
                 .body("signatures[0].info", Matchers.not(Matchers.hasKey("ocspResponseCreationTime")))
-                .body("signatures[1].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[1].info.ocspResponseCreationTime", Matchers.is("2022-08-25T09:05:10Z"))
     }
 
@@ -341,9 +342,9 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("2_signatures_B_TM.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_B_EPES"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_B_EPES))
                 .body("signatures[0].info", Matchers.not(Matchers.hasKey("ocspResponseCreationTime")))
-                .body("signatures[1].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[1].info.ocspResponseCreationTime", Matchers.is("2022-08-25T12:22:37Z"))
     }
 

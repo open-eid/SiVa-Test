@@ -19,6 +19,7 @@ package ee.openeid.siva.test
 import ee.openeid.siva.common.DateTimeMatcher
 import ee.openeid.siva.test.model.HashAlgo
 import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -52,8 +53,8 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         testStartDate = ZonedDateTime.now(ZoneId.of("GMT"))
     }
 
-    @Description("Simple report is returned")
-    def "Given #reportType reportType, then simple report is returned"() {
+    @Description("Hashcode validation report with valid report type options return simple report")
+    def "Given reportType '#reportType', then simple report is returned"() {
         given:
         Map requestData = validRequestBody()
         requestData.reportType = reportType
@@ -63,25 +64,12 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         assertSimpleReportWithSignature(response, requestData)
 
         where:
-        reportType            | _
-        ReportType.SIMPLE     | _
-        ReportType.DETAILED   | _
-        ReportType.DIAGNOSTIC | _
-    }
-
-    @Description("Report type valid options")
-    def "Given report type #condition, then #result"() {
-        given:
-        Map requestData = validRequestBody()
-        requestData[key] = value
-        expect:
-        ValidatableResponse response = SivaRequests.validateHashcode(requestData).then()
-        assertSimpleReportWithSignature(response, requestData)
-
-        where:
-        key          | value    | condition       | result
-        "reportType" | null     | "missing"       | "default report type is used"
-        "reportType" | "SiMpLe" | "in mixed case" | "report type is case insensitive"
+        reportType            | comment
+        ReportType.SIMPLE     | "simple type"
+        ReportType.DETAILED   | "hashcode doesn't support detailed report blocks"
+        ReportType.DIAGNOSTIC | "hashcode doesn't support diagnostic report blocks"
+        null                  | "default type is simple"
+        "SiMpLe"              | "report type is case insensitive"
     }
 
     @Description("Data file hash algorithm case insensitivity")
@@ -480,7 +468,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures", hasSize(1))
                 .body("signatures[0].id", is(MOCK_XADES_SIGNATURE_ID))
-                .body("signatures[0].signatureFormat", is(SIGNATURE_FORMAT_XADES_LT))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SIGNATURE_LEVEL_QESIG))
                 .body("signatures[0].signedBy", is(MOCK_XADES_SIGNATURE_SIGNER))
                 .body("signatures[0].indication", is(TOTAL_PASSED))

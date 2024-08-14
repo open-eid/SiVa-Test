@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -37,7 +38,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("InvalidLiveSignature.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_LT))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("NURM,AARE,38211015222"))
@@ -240,7 +241,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("signWithIdCard_d4j_1.0.4_BES.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_B))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_B))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, SIG_UNEXPECTED_FORMAT))
                 .body("signatures[0].signedBy", Matchers.is("UUKKIVI,KRISTI,48505280278"))
@@ -260,7 +261,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("TM-04_kehtivuskinnituset.4.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_B))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_B))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].errors.content", Matchers.hasItems(SIG_UNEXPECTED_FORMAT))
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
@@ -360,7 +361,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("TS-06_23634_TS_missing_OCSP.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_T))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_T))
                 .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, REVOCATION_NOT_FOUND))
                 .body("signatures[0].signedBy", Matchers.is("ŽAIKOVSKI,IGOR,37101010021"))
@@ -396,7 +397,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
                 .body("signatures[0].signedBy", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_T))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_T))
                 .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is(SUB_INDICATION_NO_SIGNING_CERTIFICATE_FOUND))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2013-10-11T11:47:40Z"))
@@ -415,7 +416,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_B))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_B))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2016-08-01T13:07:13Z"))
                 .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_10))
@@ -443,7 +444,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("esteid2018signerAiaOcspLT.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_LT))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_5))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -455,7 +456,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("esteid2018signerAiaOcspLTA.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_LTA))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("signatures[0].indication", Matchers.is(INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_5))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -491,7 +492,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LTA-V-24.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_XADES_LTA))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2014-10-30T18:50:35Z"))
                 .body("signatures[0].signedBy", Matchers.is("METSMA,RAUL,38207162766"))

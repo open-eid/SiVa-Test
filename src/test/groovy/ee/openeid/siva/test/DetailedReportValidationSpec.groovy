@@ -17,6 +17,7 @@ package ee.openeid.siva.test
 
 import ee.openeid.siva.common.DateTimeMatcher
 import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -51,7 +52,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("validSignaturesCount", equalTo(1))
                 .body("signatures", notNullValue())
                 .body("signatures.id[0]", equalTo("S0"))
-                .body("signatures.signatureFormat[0]", equalTo(SIGNATURE_FORMAT_XADES_LT))
+                .body("signatures.signatureFormat[0]", equalTo(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures.signatureLevel[0]", equalTo(SIGNATURE_LEVEL_QESIG))
                 .body("signatures.signedBy[0]", equalTo("NURM,AARE,38211015222"))
                 .body("signatures.indication[0]", equalTo(TOTAL_PASSED))

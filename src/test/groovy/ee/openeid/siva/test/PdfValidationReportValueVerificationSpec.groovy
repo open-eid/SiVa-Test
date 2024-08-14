@@ -16,7 +16,7 @@
 
 package ee.openeid.siva.test
 
-
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -37,7 +37,7 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S-4D0D5A83688FC617AA83810ED74E26C5A79063D110B00AD207EAB3EFDC3F5619"))
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].signedBy", Matchers.is("ŽÕRINÜWŠKY,MÄRÜ-LÖÖZ,11404176865"))
@@ -78,7 +78,7 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[1].id", Matchers.is("S-E5D6D118C4B604343E1395213075D5C429CD68E9178E4E8252EDB027732EF3F6"))
-                .body("signatures[1].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[1].signatureMethod", Matchers.is("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"))
                 .body("signatures[1].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[1].signedBy", Matchers.is("VOLL,ANDRES,39004170346"))
@@ -116,7 +116,7 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[1].id", Matchers.is("S-9D2DD421E47AE2C851EBD4C467DA97042362BB48331511E272B64110CFF862EE"))
-                .body("signatures[1].signatureFormat", Matchers.is("PAdES_BASELINE_B"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_B))
                 .body("signatures[1].signatureLevel", Matchers.is("NOT_ADES"))
                 .body("signatures[1].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[1].indication", Matchers.is("TOTAL-FAILED"))
@@ -152,7 +152,7 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S-B2DE2D1E57C3DD8F518A13F027988A4BDBE03DC7A1DF96301351694DCDB88213"))
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_T"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_T))
                 .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_UNKNOWN"))
                 .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].indication", Matchers.is(INDETERMINATE))
@@ -198,11 +198,11 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-b.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].info", Matchers.hasKey("ocspResponseCreationTime"))
-                .body("signatures[1].signatureFormat", Matchers.is("PAdES_BASELINE_B"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_B))
                 .body("signatures[1].signatureLevel", Matchers.is("NOT_ADES"))
                 .body("signatures[1].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[1].info", Matchers.not(Matchers.hasKey("ocspResponseCreationTime")))
@@ -216,11 +216,11 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-pades-b-lt-sha256-auth.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_B"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_B))
                 .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].info", Matchers.not(Matchers.hasKey("ocspResponseCreationTime")))
-                .body("signatures[1].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[1].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[1].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[1].info.ocspResponseCreationTime", Matchers.is("2022-08-23T14:59:17Z"))

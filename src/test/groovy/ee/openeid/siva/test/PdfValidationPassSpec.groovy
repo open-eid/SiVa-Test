@@ -16,6 +16,7 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -34,7 +35,7 @@ class PdfValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024-not-expired.pdf", SignaturePolicy.POLICY_3.name, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].signedBy", Matchers.is("Veiko Sinivee"))
@@ -49,7 +50,7 @@ class PdfValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-7d.pdf", SignaturePolicy.POLICY_3.name, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -63,7 +64,7 @@ class PdfValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -80,7 +81,7 @@ class PdfValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ocsp-15min1s.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].warnings[0].content", Matchers.is("The revocation information is not considered as 'fresh'."))
@@ -98,7 +99,7 @@ class PdfValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("pades-lt-CRL-taken-days-later.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
-        //.body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+        //.body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())

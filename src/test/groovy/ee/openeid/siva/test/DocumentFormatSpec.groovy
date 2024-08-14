@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -34,7 +35,7 @@ class DocumentFormatSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -48,7 +49,7 @@ class DocumentFormatSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.hasSize(1))
@@ -63,7 +64,7 @@ class DocumentFormatSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("bdoc21-TS.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -90,7 +91,7 @@ class DocumentFormatSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("signatures0.xml", "POLv4", ReportType.SIMPLE))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -106,7 +107,7 @@ class DocumentFormatSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest(""))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].signatureFormat", Matchers.is("CAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.CAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())

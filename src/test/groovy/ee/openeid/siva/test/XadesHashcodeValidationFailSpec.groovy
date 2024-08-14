@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.HashAlgo
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -33,7 +34,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA512, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
                 .body("signatures[0].subIndication", Matchers.is("SIGNED_DATA_NOT_FOUND"))
                 .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_FOUND))
@@ -51,7 +52,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "kl2ZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", Matchers.is("HASH_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_INTACT))
@@ -66,7 +67,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null, "wrongDataFileName.jpg", HashAlgo.SHA256, "Sj/WcgsM57hpCiR5E8OycJ4jioYwdHzz3s4e5LXditA="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
                 .body("signatures[0].subIndication", Matchers.is("SIGNED_DATA_NOT_FOUND"))
                 .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_FOUND))
@@ -83,7 +84,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Invalid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", Matchers.is("SIG_CRYPTO_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_9))
@@ -98,7 +99,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Invalid_base64_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", Matchers.is("SIG_CRYPTO_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_9))

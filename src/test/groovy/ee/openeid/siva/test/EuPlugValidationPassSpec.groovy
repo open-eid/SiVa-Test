@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.Constants
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -25,8 +26,10 @@ import org.hamcrest.Matchers
 import spock.lang.Ignore
 import spock.lang.Tag
 
-@Ignore("SIVA-469") // Requires new test files and a special mechanism to retrieve them.
-@Tag("ManualTest") // Uses private files and different SiVa settings.
+@Ignore("SIVA-469")
+// Requires new test files and a special mechanism to retrieve them.
+@Tag("ManualTest")
+// Uses private files and different SiVa settings.
 class EuPlugValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of Lithuania adoc-v2.0 signature")
@@ -123,7 +126,7 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(validationRequestForEu("Signature-A-SK_DIT-3.asice"))
                 .then()
                 .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LTA"))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-05-02T09:16:58Z"))
                 .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-05-02T09:35:58Z"))
@@ -326,7 +329,7 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(validationRequestForEu("Signature-P-LV_EUSO-1.pdf"))
                 .then()
                 .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-11T13:33:37Z"))
                 .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-11T13:33:49Z"))
@@ -341,7 +344,7 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(validationRequestForEu("Signature-P-LV_EUSO-2.pdf"))
                 .then()
                 .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("validationReport.validationConclusion.signatures[0].warnings", Matchers.hasSize(0))
                 .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-11T13:33:37Z"))
@@ -359,7 +362,7 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(validationRequestForEu("Signature-P-PL_ADS-6.pdf"))
                 .then()
                 .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is("ADESIG_QC"))
                 .body("validationReport.validationConclusion.signatures[0].errors[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
                 .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-08T12:56:31Z"))
@@ -376,7 +379,7 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         SivaRequests.validate(validationRequestForEu("Signature-P-PL_ADS-8.pdf"))
                 .then()
                 .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE_LT"))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is("QESIG"))
                 .body("validationReport.validationConclusion.signatures[0].Errors[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
                 .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-08T08:47:28Z"))

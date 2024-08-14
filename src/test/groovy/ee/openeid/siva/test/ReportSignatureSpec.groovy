@@ -16,7 +16,7 @@
 
 package ee.openeid.siva.test
 
-
+import ee.openeid.siva.test.model.SignatureFormat
 import io.qameta.allure.Description
 import io.restassured.RestAssured
 import io.restassured.config.EncoderConfig
@@ -79,7 +79,7 @@ class ReportSignatureSpec extends GenericSpecification {
         expect:
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signaturesCount"), equalTo("1"))
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.validSignaturesCount"), equalTo("1"))
-        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat"), equalTo("XAdES_BASELINE_LTA"))
+        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat"), equalTo(SignatureFormat.XAdES_BASELINE_LTA))
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureLevel"), equalTo("QESIG"))
     }
 
@@ -119,7 +119,7 @@ class ReportSignatureSpec extends GenericSpecification {
         expect:
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signaturesCount"), equalTo("1"))
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.validSignaturesCount"), equalTo("1"))
-        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat"), equalTo("XAdES_BASELINE_LT"))
+        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat"), equalTo(SignatureFormat.XAdES_BASELINE_LT))
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureLevel"), equalTo("QESIG"))
     }
 
@@ -158,7 +158,7 @@ class ReportSignatureSpec extends GenericSpecification {
                 .response()
         expect:
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signaturesCount"), equalTo("1"))
-        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat[0]"), equalTo("XAdES_BASELINE_T"))
+        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat[0]"), equalTo(SignatureFormat.XAdES_BASELINE_T))
 
     }
 
@@ -197,7 +197,7 @@ class ReportSignatureSpec extends GenericSpecification {
                 .response()
         expect:
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signaturesCount"), equalTo("1"))
-        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat[0]"), equalTo("XAdES_BASELINE_B"))
+        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat[0]"), equalTo(SignatureFormat.XAdES_BASELINE_B))
     }
 
 
@@ -237,7 +237,7 @@ class ReportSignatureSpec extends GenericSpecification {
         expect:
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signaturesCount"), equalTo("1"))
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.validSignaturesCount"), equalTo("1"))
-        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat"), equalTo("XAdES_BASELINE_LTA"))
+        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat"), equalTo(SignatureFormat.XAdES_BASELINE_LTA))
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureLevel"), equalTo("QESIG"))
     }
 
@@ -277,7 +277,7 @@ class ReportSignatureSpec extends GenericSpecification {
         expect:
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signaturesCount"), equalTo("1"))
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.validSignaturesCount"), equalTo("1"))
-        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat"), equalTo("XAdES_BASELINE_LT"))
+        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat"), equalTo(SignatureFormat.XAdES_BASELINE_LT))
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureLevel"), equalTo("QESIG"))
     }
 
@@ -316,7 +316,7 @@ class ReportSignatureSpec extends GenericSpecification {
                 .response()
         expect:
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signaturesCount"), equalTo("1"))
-        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat[0]"), equalTo("XAdES_BASELINE_T"))
+        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat[0]"), equalTo(SignatureFormat.XAdES_BASELINE_T))
     }
 
     /**
@@ -354,7 +354,7 @@ class ReportSignatureSpec extends GenericSpecification {
                 .response()
         expect:
         assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signaturesCount"), equalTo("1"))
-        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat[0]"), equalTo("XAdES_BASELINE_B"))
+        assertThat(reportSignatureValidation.jsonPath().getString("validationReport.validationConclusion.signatures.signatureFormat[0]"), equalTo(SignatureFormat.XAdES_BASELINE_B))
     }
 
     /**

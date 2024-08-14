@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.HashAlgo
+import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -32,7 +33,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
     def "validXadesWithHashcodeFromAsice() throws IOException, SAXException, ParserConfigurationException"() {
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
@@ -47,7 +48,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
@@ -57,10 +58,10 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
     }
 
     @Description("XAdES extracted from BDOC")
-    def "validXadesWithHashcodeWithMultipleDataFiles() throws IOException, SAXException, ParserConfigurationException"() {
+    def "validXadesWithHashcodeWithMultipleDataFiles"() {
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS_multiple_datafiles.xml", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T12:48:26Z"))
                 .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
@@ -72,7 +73,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("test+document.xml", null, null, "test+document.txt", HashAlgo.SHA256, "heKN3NGQ0HttzgmfKG0L243dfG7W+6kTMO5n7YbKeS4="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T12:43:15Z"))
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("test+document.txt"))
@@ -85,7 +86,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("spacesInDatafile.xml", null, null, "Te st in g.txt", HashAlgo.SHA256, "5UxI8Rm1jUZm48+Vkdutyrsyr3L/MPu/RK1V81AeKEY="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:22:04Z"))
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("Te st in g.txt"))
@@ -98,7 +99,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("sha1_TM.xml", null, null, "test.txt", "SHA1", "qP3CBanxnMHHUHpgxPAbE9Edf9A="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT_TM"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].signatureScopes[0].hashAlgo", Matchers.is("SHA1"))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -109,7 +110,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("sha224_TS.xml", null, null, "test1.txt", HashAlgo.SHA224, "C7YzVACWz0f8pxd7shHKB1BzOuIuSjBysO3xgw=="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].signatureScopes[0].hashAlgo", Matchers.is(HashAlgo.SHA224))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -120,7 +121,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].signatureScopes[0].hashAlgo", Matchers.is(HashAlgo.SHA256))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -131,7 +132,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("sha384_TS.xml", null, null, "test1.txt", HashAlgo.SHA384, "DU5PS1Qcd2gu8U3g+4hDYldhAoT/sxEWz6YV8cEdjAaVEFMYSNOypSL+xt4KkK9k"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].signatureScopes[0].hashAlgo", Matchers.is(HashAlgo.SHA384))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -142,7 +143,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("sha512_TS.xml", null, null, "test1.txt", HashAlgo.SHA512, "pA2Dh2/WoCnnxGL9PZd+DQivXUmq8dQG1nyQY3phKZPKlm/HfZZDG8yB79hTG2F4pV9LqW+6SGsETE9d+LQsRg=="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is("XAdES_BASELINE_LT"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].signatureScopes[0].hashAlgo", Matchers.is(HashAlgo.SHA512))
                 .body("validSignaturesCount", Matchers.is(1))
