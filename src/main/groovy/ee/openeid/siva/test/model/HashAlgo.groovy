@@ -6,6 +6,7 @@ import groovy.transform.Immutable
 @CompileStatic
 @Immutable
 final class HashAlgo {
+    static final String SHA1 = "SHA1"
     static final String SHA224 = "SHA224"
     static final String SHA256 = "SHA256"
     static final String SHA384 = "SHA384"

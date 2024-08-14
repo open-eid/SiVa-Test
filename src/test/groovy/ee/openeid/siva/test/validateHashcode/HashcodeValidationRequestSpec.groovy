@@ -14,9 +14,10 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test
+package ee.openeid.siva.test.validateHashcode
 
 import ee.openeid.siva.common.DateTimeMatcher
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.HashAlgo
 import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.model.SignatureFormat

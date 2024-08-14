@@ -14,9 +14,11 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test
+package ee.openeid.siva.test.validateHashcode
 
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.HashAlgo
+import ee.openeid.siva.test.model.ReportType
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -28,6 +30,19 @@ import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PRE
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
 class XadesHashcodeValidationPassSpec extends GenericSpecification {
+
+    @Description("Validation of xades acceptance")
+    def "xadesDocumentShouldPass"() {
+        expect:
+        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("signatures0.xml", "POLv4", ReportType.SIMPLE))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].errors", Matchers.emptyOrNullString())
+                .body("signatures[0].warnings", Matchers.emptyOrNullString())
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+    }
 
     @Description("XAdES extracted from ASICE")
     def "validXadesWithHashcodeFromAsice() throws IOException, SAXException, ParserConfigurationException"() {
@@ -97,11 +112,11 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
     @Description("Datafile digest in SHA1")
     def "sha1DatafileDigestSignatureShouldPass"() {
         expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("sha1_TM.xml", null, null, "test.txt", "SHA1", "qP3CBanxnMHHUHpgxPAbE9Edf9A="))
+        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("sha1_TM.xml", null, null, "test.txt", HashAlgo.SHA1, "qP3CBanxnMHHUHpgxPAbE9Edf9A="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signatures[0].signatureScopes[0].hashAlgo", Matchers.is("SHA1"))
+                .body("signatures[0].signatureScopes[0].hashAlgo", Matchers.is(HashAlgo.SHA1))
                 .body("validSignaturesCount", Matchers.is(1))
     }
 

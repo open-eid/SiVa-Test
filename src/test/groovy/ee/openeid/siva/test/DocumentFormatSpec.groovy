@@ -86,19 +86,6 @@ class DocumentFormatSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    @Description("Validation of xades acceptance")
-    def "xadesDocumentShouldPass"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("signatures0.xml", "POLv4", ReportType.SIMPLE))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("signatures[0].warnings", Matchers.emptyOrNullString())
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-    }
-
     @Ignore
     //TODO: Test file needed
     @Description("Validation of cades acceptance")
