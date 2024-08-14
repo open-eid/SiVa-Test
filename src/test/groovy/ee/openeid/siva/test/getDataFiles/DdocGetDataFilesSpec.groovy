@@ -13,23 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package ee.openeid.siva.test
+package ee.openeid.siva.test.getDataFiles
 
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import spock.lang.Ignore
-
-import static ee.openeid.siva.integrationtest.TestData.INVALID_DATA_FILE_FILENAME
 
 @Link("http://open-eid.github.io/SiVa/siva3/use_cases/#ddoc-data-file-extraction-process")
 class DdocGetDataFilesSpec extends GenericSpecification {
 
-    @Description("Valid DDOC with data file used")
-    def "testGetDataFileFromValidDdoc"() {
+    @Description("Requesting data files from valid DDOC with data file returns data file")
+    def "Given valid DDOC, then data files request returns data file"() {
         expect:
         SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("18912.ddoc"))
                 .then()
@@ -39,8 +37,8 @@ class DdocGetDataFilesSpec extends GenericSpecification {
                 .body("dataFiles[0].size", Matchers.is(491))
     }
 
-    @Description("Invalid DDOC with data file used")
-    def "testGetDataFileFromInvalidDdoc"() {
+    @Description("Requesting data files from invalid DDOC with data file returns data file")
+    def "Given invalid DDOC, then data files request returns data file"() {
         expect:
         SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("OCSP nonce vale.ddoc"))
                 .then()
@@ -50,8 +48,8 @@ class DdocGetDataFilesSpec extends GenericSpecification {
                 .body("dataFiles[0].size", Matchers.is(15))
     }
 
-    @Description("DDOC with xml v1.1 is  used")
-    def "testGetDataFileFromDdocXml1_0"() {
+    @Description("Requesting data files from DDOC with xml v1.0 returns data file")
+    def "Given DDOC with xml v1.0, then data files request returns data file"() {
         expect:
         SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("SK-XML1.0.ddoc"))
                 .then()
@@ -61,8 +59,8 @@ class DdocGetDataFilesSpec extends GenericSpecification {
                 .body("dataFiles[0].size", Matchers.is(44544))
     }
 
-    @Description("DDOC with xml v1.1 is  used")
-    def "testGetDataFileFromDdocXml1_1"() {
+    @Description("Requesting data files from DDOC with xml v1.1 returns data file")
+    def "Given DDOC with xml v1.1, then data files request returns data file"() {
         expect:
         SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.1.ddoc"))
                 .then()
@@ -72,8 +70,8 @@ class DdocGetDataFilesSpec extends GenericSpecification {
                 .body("dataFiles[0].size", Matchers.is(549376))
     }
 
-    @Description("DDOC with xml v1.2 is  used")
-    def "testGetDataFileFromDdocXml1_2"() {
+    @Description("Requesting data files from DDOC with xml v1.2 returns data file")
+    def "Given DDOC with xml v1.2, then data files request returns data file"() {
         expect:
         SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.2.ddoc"))
                 .then()
@@ -83,8 +81,8 @@ class DdocGetDataFilesSpec extends GenericSpecification {
                 .body("dataFiles[0].size", Matchers.is(3938))
     }
 
-    @Description("DDOC with xml v1.3 is  used")
-    def "testGetDataFileFromDdocXml1_3"() {
+    @Description("Requesting data files from DDOC with xml v1.3 returns data file")
+    def "Given DDOC with xml v1.3, then data files request returns data file"() {
         expect:
         SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
                 .then()
@@ -95,8 +93,8 @@ class DdocGetDataFilesSpec extends GenericSpecification {
     }
 
     @Ignore("SIVA-376")
-    @Description("Hashcoded DDOC  is  used")
-    def "testGetDataFileFromDdocHashcoded"() {
+    @Description("Requesting data files from hashcoded DDOC returns null as data file")
+    def "Given hashcoded DDOC, then data files request returns null for data file"() {
         expect:
         SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.3_hashcode.ddoc"))
                 .then()
@@ -106,8 +104,8 @@ class DdocGetDataFilesSpec extends GenericSpecification {
                 .body("dataFiles[0].size", Matchers.is(41114))
     }
 
-    @Description("DDOC  with 12 different  files of different types  is  used")
-    def "testGetMultipileDataFilesFromDdoc"() {
+    @Description("Requesting data files from DDOC with 12 different files of different types returns data files")
+    def "Given DDOC with multiple different files, then data files request returns data files"() {
         expect:
         SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("igasugust1.3.ddoc"))
                 .then()
@@ -159,25 +157,5 @@ class DdocGetDataFilesSpec extends GenericSpecification {
                 .body("dataFiles[11].mimeType", Matchers.is("application/pdf"))
                 .body("dataFiles[11].base64", Matchers.startsWith("JVBERi0xLjMKJeTjz9IKNSAwIG9iago8PC9MZW5ndGggNiAwIFIKL0ZpbHRlci9GbGF0ZURlY29"))
                 .body("dataFiles[11].size", Matchers.is(2783))
-    }
-
-    @Description("BDOC with data file used")
-    def "testGetDataFileFromBdocShouldFail"() {
-        expect:
-        SivaRequests.tryGetDataFiles(RequestData.dataFileRequestFromFile("BDOC-TS.bdoc"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].message", Matchers.is(INVALID_DATA_FILE_FILENAME))
-                .body("requestErrors[0].key", Matchers.is("filename"))
-    }
-
-    @Description("PDF file used")
-    def "testGetDataFileFromPdfShouldFail"() {
-        expect:
-        SivaRequests.tryGetDataFiles(RequestData.dataFileRequestFromFile("hellopades-lt-b.pdf"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].message", Matchers.is(INVALID_DATA_FILE_FILENAME))
-                .body("requestErrors[0].key", Matchers.is("filename"))
     }
 }

@@ -13,8 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package ee.openeid.siva.test
+package ee.openeid.siva.test.getDataFiles
 
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestError
@@ -28,10 +29,10 @@ import static ee.openeid.siva.integrationtest.TestData.*
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#data-files-request-interface")
 class GetDataFileRequestSpec extends GenericSpecification {
 
-    @Description("Input empty values")
-    def "Given empty request parameters, then error is returned"() {
+    @Description("Request with empty body or empty values results in error")
+    def "Given #comment, then error is returned"() {
         when:
-        ValidatableResponse response = SivaRequests.tryGetDataFiles(RequestData.dataFileRequest("", "")).then()
+        ValidatableResponse response = SivaRequests.tryGetDataFiles(body).then()
 
         then:
         List errors = [
@@ -40,20 +41,11 @@ class GetDataFileRequestSpec extends GenericSpecification {
                 new Tuple(DOCUMENT, INVALID_BASE_64)
         ]
         RequestError.assertErrorResponse(response, *errors.collect { errorType, error -> new RequestError(errorType, error) })
-    }
 
-    @Description("Totally empty request body is sent")
-    def "Given empty request body, then error is returned"() {
-        when:
-        ValidatableResponse response = SivaRequests.tryGetDataFiles([:]).then()
-
-        then:
-        List errors = [
-                new Tuple(FILENAME, INVALID_DATA_FILE_FILENAME),
-                new Tuple(DOCUMENT, MUST_NOT_BE_BLANK),
-                new Tuple(DOCUMENT, INVALID_BASE_64)
-        ]
-        RequestError.assertErrorResponse(response, *errors.collect { errorType, error -> new RequestError(errorType, error) })
+        where:
+        body                                | comment
+        [:]                                 | "empty request body"
+        RequestData.dataFileRequest("", "") | "empty request parameters"
     }
 
     @Description("Order of elements is changed in request")
@@ -83,22 +75,26 @@ class GetDataFileRequestSpec extends GenericSpecification {
                 .body("dataFiles[0].base64", Matchers.is("VGVzdCBhbmQgc29tZSBvdGhlciB0ZXN0"))
     }
 
-    @Description("Mandatory element 'document' is deleted")
-    def "Given 'document' parameter missing, then error is returned"() {
+    @Description("Requesting data files with missing mandatory body element results in error")
+    def "Given #key parameter missing, then error is returned"() {
         given:
         Map requestData = RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc")
-        requestData.remove("document")
+        requestData.remove(key)
 
         when:
         ValidatableResponse response = SivaRequests.tryGetDataFiles(requestData).then()
 
         then:
-        List errors = [MUST_NOT_BE_BLANK, INVALID_BASE_64]
-        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(DOCUMENT, error) })
+        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(errorType, error) })
+
+        where:
+        key        | comment | errorType | errors
+        "document" | ""      | DOCUMENT  | [MUST_NOT_BE_BLANK, INVALID_BASE_64]
+        "filename" | ""      | FILENAME  | [INVALID_DATA_FILE_FILENAME]
     }
 
-    @Description("Document type in filename differs from document (ddoc)")
-    def "Given #comment, then invalid datafile filename error is returned"() {
+    @Description("Requesting data files from valid or invalid document with invalid (non-ddoc) type in filename returns error for invalid datafile filename")
+    def "Given #comment, then data files request returns invalid datafile filename error"() {
         given:
         Map requestData = RequestData.dataFileRequestFromFile(document, filename)
 
@@ -109,16 +105,18 @@ class GetDataFileRequestSpec extends GenericSpecification {
         RequestError.assertErrorResponse(response, new RequestError(FILENAME, INVALID_DATA_FILE_FILENAME))
 
         where:
-        document            | filename             | comment
-        "valid_XML1_3.ddoc" | "valid_XML1_3.bdoc"  | "ddoc with .bdoc extension"
-        "valid_XML1_3.ddoc" | "valid_XML1_3.pdf"   | "ddoc with .pdf extension"
-        "valid_XML1_3.ddoc" | "valid_XML1_3.jpg"   | "ddoc with .jpg extension"
-        "valid_XML1_3.ddoc" | "valid_XML1_3.xroad" | "ddoc with .xroad extension"
+        document              | filename              | comment
+        "BDOC-TS.bdoc"        | "BDOC-TS.bdoc"        | "bdoc document"
+        "hellopades-lt-b.pdf" | "hellopades-lt-b.pdf" | "ddoc with .bdoc extension"
+        "valid_XML1_3.ddoc"   | "valid_XML1_3.bdoc"   | "ddoc with .bdoc extension"
+        "valid_XML1_3.ddoc"   | "valid_XML1_3.pdf"    | "ddoc with .pdf extension"
+        "valid_XML1_3.ddoc"   | "valid_XML1_3.jpg"    | "ddoc with .jpg extension"
+        "valid_XML1_3.ddoc"   | "valid_XML1_3.xroad"  | "ddoc with .xroad extension"
 
     }
 
-    @Description("Document type in filename differs from document")
-    def "Given #comment, then 'Document malformed or not matching documentType'"() {
+    @Description("Requesting data files from non-ddoc document with ddoc type in filename returns error for document malformed or not matching documentType")
+    def "Given #comment, then data files request returns 'Document malformed or not matching documentType' error"() {
         given:
         Map requestData = RequestData.dataFileRequestFromFile(document, filename)
 
@@ -135,9 +133,9 @@ class GetDataFileRequestSpec extends GenericSpecification {
         "Picture.png"                 | "Picture.ddoc"                 | "png with .ddoc extension"
     }
 
-    @Description("Datafiles request with request body of limit length")
+    @Description("Datafiles request with request body of limit length succeeds")
     @Link("http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters")
-    def "Given request body of limit length, then valid response is returned"() {
+    def "Given request with body of limit length, then data files request succeeds"() {
         expect:
         SivaRequests.getDataFiles(RequestData.requestWithFixedBodyLength(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"), SIVA_FILE_SIZE_LIMIT))
                 .then()
