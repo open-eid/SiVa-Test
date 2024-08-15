@@ -17,8 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.Constants
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -37,7 +36,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("IB-3960_bdoc2.1_TSA_SignatureValue_altered.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
                 .body("signatures[0].certificates.size()", Matchers.is(3))
@@ -55,13 +54,13 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocMultipleSignaturesInvalid.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[1].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signatures[2].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[2].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[2].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signaturesCount", Matchers.is(3))
                 .body("validSignaturesCount", Matchers.is(0))
     }
@@ -71,17 +70,17 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocMultipleSignaturesMixedWithValidAndInvalid.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[1].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signatures[2].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[2].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[2].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signatures[3].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[3].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[3].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[3].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[3].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[3].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(5))
                 .body("validSignaturesCount", Matchers.is(3))
 
@@ -92,7 +91,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocContainerNoSignature.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(1))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
@@ -103,7 +102,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("TS-02_23634_TS_wrong_SignatureValue.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", Matchers.is("SIG_CRYPTO_FAILURE"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2015-11-13T11:15:36Z"))
@@ -116,9 +115,9 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-I-43.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_INDETERMINATE_UNKNOWN))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_UNKNOWN))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("CHAIN_CONSTRAINTS_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, NOT_EXPECTED_KEY_USAGE))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -129,8 +128,8 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-I-26.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("CHAIN_CONSTRAINTS_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.contains(
                         CERT_VALIDATION_NOT_CONCLUSIVE,
@@ -144,7 +143,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TM-01_bdoc21-unknown-resp.bdoc", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", Matchers.is("FORMAT_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, REVOCATION_NOT_TRUSTED))
@@ -162,7 +161,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("TS-05_23634_TS_unknown_TSA.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2014-05-19T10:45:19Z"))
                 .body("signatures[0].errors.content", Matchers.hasItems("Signature has an invalid timestamp"))
@@ -182,8 +181,8 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-R-25.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("REVOKED_NO_POE"))
                 .body("signatures[0].errors.content", Matchers.hasItems("The past signature validation is not conclusive!"))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -194,7 +193,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-20.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors[0].content", Matchers.is("The difference between the OCSP response time and the signature timestamp is too large"))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -205,7 +204,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("23613_TM_wrong-manifest-mimetype.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors.content", Matchers.hasItems("Manifest file has an entry for file <test.txt> with mimetype <application/binary> but the signature file for signature S0 indicates the mimetype is <application/octet-stream>"))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -216,7 +215,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("REF-19_bdoc21-no-sig-asn1-pref.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", Matchers.is("SIG_CRYPTO_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, VALID_VALIDATION_PROCESS_ERROR_VALUE_9))
@@ -228,7 +227,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("signWithIdCard_d4j_1.0.4_BES.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_B_BES))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
@@ -247,7 +246,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("TM-04_kehtivuskinnituset.4.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_B_EPES))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE))
@@ -263,7 +262,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("SS-4_teadmataCA.4.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2013-10-11T08:15:47Z"))
                 .body("signatures[0].errors.content", Matchers.hasItems(SIG_NOT_TRUSTED, CERT_PATH_NOT_TRUSTED))
@@ -281,8 +280,8 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("TM-15_revoked.4.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("REVOKED_NO_POE"))
                 .body("signatures[0].errors.content", Matchers.hasItems("The past signature validation is not conclusive!"))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -293,8 +292,8 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("TM-16_unknown.4.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, REVOCATION_UNKNOWN))
                 .body("validSignaturesCount", Matchers.is(0))
     }
@@ -323,7 +322,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TM-10_noncevale.4.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors.content", Matchers.hasItem("OCSP nonce is invalid"))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -334,7 +333,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("REF-14_filesisumuudetud.4.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", Matchers.is("HASH_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, REFERENCE_DATA_NOT_INTACT))
@@ -346,7 +345,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("TS-06_23634_TS_missing_OCSP.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2014-05-19T10:48:04Z"))
@@ -364,7 +363,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("23608-bdoc21-TM-ocsp-bad-nonce.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].info.bestSignatureTime", emptyOrNullString())
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors.content", Matchers.hasItem("OCSP nonce is invalid"))
@@ -376,8 +375,8 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-OK-prodat-NOK-1.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.contains(
                         CERT_VALIDATION_NOT_CONCLUSIVE,
                         VALID_VALIDATION_PROCESS_ERROR_VALUE_5,
@@ -401,7 +400,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-34.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors[0].content", Matchers.is("Manifest file has an entry for file <unsigned.txt> with mimetype <text/plain> but the signature file for signature S0 does not have an entry for this file"))
                 .body("signatures[0].errors[1].content", Matchers.is("Container contains a file named <unsigned.txt> which is not found in the signature file"))
@@ -415,9 +414,9 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("REF-03_bdoc21-TM-no-signedpropref.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signatures[0].errors.content", Matchers.hasItem(SIG_QUALIFYING_PROPERTY_MISSING))
                 .body("validSignaturesCount", Matchers.is(0))
     }
@@ -427,7 +426,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("NoOcspCertificateAnywhere.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors.content", Matchers.hasItem("OCSP Responder does not meet TM requirements"))
@@ -440,7 +439,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LTA-V-24.asice", null, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2014-10-30T18:50:35Z"))

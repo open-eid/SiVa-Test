@@ -14,14 +14,16 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test
+package ee.openeid.siva.test.model
 
-import spock.lang.Shared
-import spock.lang.Specification
+import groovy.transform.CompileStatic
+import groovy.transform.Immutable
 
-abstract class GenericSpecification extends Specification {
-    static BeforeAll beforeAll = new BeforeAll()
+@CompileStatic
+@Immutable
+final class SignatureIndication {
 
-    @Shared
-    TestConfig conf = ConfigHolder.getConf()
+    static final String TOTAL_PASSED = "TOTAL-PASSED"
+    static final String TOTAL_FAILED = "TOTAL-FAILED"
+    static final String INDETERMINATE = "INDETERMINATE"
 }

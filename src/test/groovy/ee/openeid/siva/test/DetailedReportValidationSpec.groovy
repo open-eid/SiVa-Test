@@ -13,12 +13,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
+
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.DateTimeMatcher
-import ee.openeid.siva.test.model.ReportType
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -46,16 +45,16 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", equalTo(SignaturePolicy.POLICY_4.url))
-                .body("signatureForm", equalTo(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
                 .body("validationTime", DateTimeMatcher.isEqualOrAfter(testStartDate))
                 .body("signaturesCount", equalTo(1))
                 .body("validSignaturesCount", equalTo(1))
                 .body("signatures", notNullValue())
                 .body("signatures.id[0]", equalTo("S0"))
                 .body("signatures.signatureFormat[0]", equalTo(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures.signatureLevel[0]", equalTo(SIGNATURE_LEVEL_QESIG))
+                .body("signatures.signatureLevel[0]", equalTo(SignatureLevel.QESIG))
                 .body("signatures.signedBy[0]", equalTo("NURM,AARE,38211015222"))
-                .body("signatures.indication[0]", equalTo(TOTAL_PASSED))
+                .body("signatures.indication[0]", equalTo(SignatureIndication.TOTAL_PASSED))
                 .body("signatures.signatureScopes[0].name[0]", equalTo("Tresting.txt"))
                 .body("signatures.signatureScopes[0].scope[0]", equalTo(SIGNATURE_SCOPE_FULL))
                 .body("signatures.signatureScopes[0].content[0]", equalTo(VALID_SIGNATURE_SCOPE_CONTENT_FULL))
@@ -262,13 +261,13 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("basicBuildingBlocks[3].xcv.constraint.name.key", hasItems(BBB_XCV_CCCBB.getKey(), BBB_XCV_SUB.getKey()))
                 .body("basicBuildingBlocks[3].xcv.constraint.find { it.name.key == 'BBB_XCV_CCCBB' }.status", equalTo("OK"))
                 .body("basicBuildingBlocks[3].xcv.constraint.find { it.name.key == 'BBB_XCV_SUB' }.status", equalTo("NOT_OK"))
-                .body("basicBuildingBlocks[3].xcv.conclusion.indication", equalTo(INDETERMINATE))
+                .body("basicBuildingBlocks[3].xcv.conclusion.indication", equalTo(SignatureIndication.INDETERMINATE))
                 .body("basicBuildingBlocks[3].xcv.subXCV[1].conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("basicBuildingBlocks[3].xcv.subXCV[1].id", notNullValue())
                 .body("basicBuildingBlocks[3].xcv.subXCV[1].trustAnchor", equalTo(true))
         //.body("basicBuildingBlocks[3].certificateChain.chainItem[0].source", equalTo("SIGNATURE"))
                 .body("basicBuildingBlocks[3].certificateChain.chainItem[0].id", notNullValue())
-                .body("basicBuildingBlocks[3].conclusion.indication", equalTo(INDETERMINATE))
+                .body("basicBuildingBlocks[3].conclusion.indication", equalTo(SignatureIndication.INDETERMINATE))
                 .body("basicBuildingBlocks[3].id", notNullValue())
                 .body("basicBuildingBlocks[3].type", equalTo("SIGNATURE"))
     }
@@ -343,7 +342,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", equalTo(SignaturePolicy.POLICY_4.url))
-                .body("signatureForm", equalTo(SIGNATURE_FORM_ASICS))
+                .body("signatureForm", equalTo(ContainerFormat.ASiC_S))
                 .body("signaturesCount", equalTo(1))
                 .body("validSignaturesCount", equalTo(1))
     }
@@ -390,6 +389,6 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body(VALIDATION_PROCESS_TS_PREFIX + "conclusion[0][0].indication", equalTo("PASSED"))
                 .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.key[0][0]", hasItem(QUAL_HAS_GRANTED_AT_ANS.getKey()))
                 .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.value[0][0]", hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue()))
-                .body("validationConclusion.signatures[0].indication", equalTo(TOTAL_PASSED))
+                .body("validationConclusion.signatures[0].indication", equalTo(SignatureIndication.TOTAL_PASSED))
     }
 }

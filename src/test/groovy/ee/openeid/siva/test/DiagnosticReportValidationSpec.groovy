@@ -13,13 +13,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
+
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.DateTimeMatcher
-import ee.openeid.siva.test.model.HashAlgo
-import ee.openeid.siva.test.model.ReportType
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -46,16 +44,16 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", equalTo(SignaturePolicy.POLICY_4.url))
-                .body("signatureForm", equalTo(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
                 .body("validationTime", DateTimeMatcher.isEqualOrAfter(testStartDate))
                 .body("signaturesCount", equalTo(1))
                 .body("validSignaturesCount", equalTo(1))
                 .body("signatures", notNullValue())
                 .body("signatures[0].id", equalTo("S0"))
                 .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", equalTo(SIGNATURE_LEVEL_QESIG))
+                .body("signatures[0].signatureLevel", equalTo(SignatureLevel.QESIG))
                 .body("signatures[0].signedBy", equalTo("NURM,AARE,38211015222"))
-                .body("signatures[0].indication", equalTo(TOTAL_PASSED))
+                .body("signatures[0].indication", equalTo(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signatureScopes[0].name", equalTo("Tresting.txt"))
                 .body("signatures[0].signatureScopes[0].scope", equalTo(SIGNATURE_SCOPE_FULL))
                 .body("signatures[0].signatureScopes[0].content", equalTo(VALID_SIGNATURE_SCOPE_CONTENT_FULL))

@@ -16,9 +16,7 @@
 
 package ee.openeid.siva.test
 
-import ee.openeid.siva.test.model.ReportType
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -27,7 +25,8 @@ import spock.lang.Ignore
 
 import static ee.openeid.siva.common.DssMessages.QUAL_HAS_GRANTED_AT_ANS
 import static ee.openeid.siva.common.DssMessages.QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.integrationtest.TestData.CERT_VALIDATION_NOT_CONCLUSIVE
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 
 class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
@@ -41,13 +40,13 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[0].id", Matchers.is("id-2d1a98a8173d01473aa7e88bc74b361a"))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
                 .body("signatures[0].subjectDistinguishedName.givenName", Matchers.is("MARI-LIIS"))
                 .body("signatures[0].subjectDistinguishedName.surname", Matchers.is("MÄNNIK"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("test.txt"))
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is("FullSignatureScope"))
@@ -68,7 +67,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEijCCA3KgAwIBAgIQaI8x6BnacYdNdNwlYnn/mzANBgkqhk"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIIGHjCCBAagAwIBAgIQNcO4eO0xcsNbIk36aVrDqjANBgkqhk"))
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validatedDocument.filename", Matchers.is("TwoValidTmSignaturesWithRolesAndProductionPlace.bdoc"))
                 .body("validSignaturesCount", Matchers.is(2))
                 .body("signaturesCount", Matchers.is(2))
@@ -83,13 +82,13 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[0].id", Matchers.is("id-7022c18f415891f9cb9124927ab14cfb"))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].signedBy", Matchers.is("JÕEORG,JAAK-KRISTJAN,38001085718"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("PNOEE-38001085718"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("JÕEORG,JAAK-KRISTJAN,38001085718"))
                 .body("signatures[0].subjectDistinguishedName.givenName", Matchers.is("JAAK-KRISTJAN"))
                 .body("signatures[0].subjectDistinguishedName.surname", Matchers.is("JÕEORG"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("test.txt"))
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is("FULL"))
@@ -114,7 +113,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.content", Matchers.startsWith("MIIFfDCCBN2gAwIBAgIQNhjzSfd2UEpbkO14EY4ORTAKBggqhk"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].commonName", Matchers.is("DEMO of SK TSA 2014"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].content", Matchers.startsWith("MIIEFTCCAv2gAwIBAgIQTqz7bCP8W45UBZa7tztTTDANBgkqhk"))
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validatedDocument.filename", Matchers.is("validTsSignatureWithRolesAndProductionPlace.asice"))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
@@ -128,9 +127,9 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_QESIG))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].subIndication", Matchers.emptyOrNullString())
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("build.xml"))
@@ -146,7 +145,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEijCCA3KgAwIBAgIQaI8x6BnacYdNdNwlYnn/mzANBgkqhk"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIID3DCCAsSgAwIBAgIER/idhzANBgkqhkiG9w0BAQUFADBbMQ"))
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validatedDocument.filename", Matchers.is("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc"))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
@@ -160,7 +159,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S1510667783001"))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES_QC"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.NOT_ADES_QC))
                 .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", Matchers.is("HASH_FAILURE"))
@@ -184,7 +183,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.content", Matchers.startsWith("MIIG4jCCBcqgAwIBAgIQO4A6a2nBKoxXxVAFMRvE2jANBgkqhk"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].commonName", Matchers.is("SK TIMESTAMPING AUTHORITY"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].content", Matchers.startsWith("MIIEDTCCAvWgAwIBAgIQJK/s6xJo0AJUF/eG7W8BWTANBgkqhk"))
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validatedDocument.filename", Matchers.is("testAdesQCInvalid.asice"))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1))
@@ -198,9 +197,9 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].signedBy", Matchers.is("MICHAL,KRISTEN,37507120348"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("Baltic MoU digital signing_04112015.docx"))
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is("FullSignatureScope"))
@@ -215,7 +214,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhk"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("MICHAL,KRISTEN,37507120348"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIIEoTCCA4mgAwIBAgIQXESH+ckjJK1SC2r9DcQrDzANBgkqhk"))
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validatedDocument.filename", Matchers.is("Baltic MoU digital signing_EST_LT_LV.bdoc"))
                 .body("validSignaturesCount", Matchers.is(3))
                 .body("signaturesCount", Matchers.is(3))
@@ -231,7 +230,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_T))
-                .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_QESIG))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].signedBy", Matchers.is("signer1"))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors[0].content", Matchers.is("The certificate path is not trusted!"))
@@ -247,7 +246,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIICHDCCAYWgAwIBAgIBAjANBgkqhkiG9w0BAQUFADAqMQswCQ"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", Matchers.is("libdigidocpp Inter"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.content", Matchers.startsWith("MIICCTCCAXKgAwIBAgIBAzANBgkqhkiG9w0BAQUFADAnMQswCQ"))
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validatedDocument.filename", Matchers.is("SS-4_teadmataCA.4.asice"))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1))
@@ -260,7 +259,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures", Matchers.emptyOrNullString())
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validatedDocument.filename", Matchers.is("BdocContainerNoSignature.bdoc"))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(0))
@@ -353,7 +352,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings.content", Matchers.not(Matchers.hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue())))
                 .body("signatures[0].warnings.content", Matchers.emptyOrNullString())
     }
@@ -363,7 +362,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("IB-4183_3.4kaart_RSA2047_TS.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors.content", Matchers.not(Matchers.hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue())))
                 .body("signatures[0].errors.content", Matchers.emptyOrNullString())
     }

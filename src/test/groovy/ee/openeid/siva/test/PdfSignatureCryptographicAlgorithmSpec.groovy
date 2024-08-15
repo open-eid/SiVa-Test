@@ -17,6 +17,8 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
+import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -35,7 +37,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha512.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
@@ -47,7 +49,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha1.pdf", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -62,8 +64,8 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec224.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_QESIG"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItem("The algorithm ECDSA with key size 224 is too small for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1))
@@ -75,7 +77,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec256.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
@@ -87,7 +89,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024.pdf", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("validSignaturesCount", Matchers.is(1))
@@ -99,7 +101,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1023.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("CRYPTO_CONSTRAINTS_FAILURE_NO_POE"))
                 .body("signatures[0].errors.content", Matchers.hasItem("The past signature validation is not conclusive!"))
     }
@@ -110,7 +112,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2047.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
@@ -123,7 +125,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))

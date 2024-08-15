@@ -16,6 +16,7 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -77,7 +78,7 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsTSTsignatureModified.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", Matchers.is("AsicsTSTsignatureModified.asics"))
                 .body("timeStampTokens[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("timeStampTokens[0].error[0].content", Matchers.is("Signature not intact"))
@@ -98,7 +99,7 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DatafileAlteredButStillValid.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", Matchers.is("DatafileAlteredButStillValid.asics"))
                 .body("timeStampTokens[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("timeStampTokens[0].error[0].content", Matchers.is("Signature not intact"))

@@ -19,6 +19,7 @@ package ee.openeid.siva.test.validateHashcode
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.HashAlgo
 import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -36,7 +37,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA512, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("SIGNED_DATA_NOT_FOUND"))
                 .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_FOUND))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
@@ -69,7 +70,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null, "wrongDataFileName.jpg", HashAlgo.SHA256, "Sj/WcgsM57hpCiR5E8OycJ4jioYwdHzz3s4e5LXditA="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("SIGNED_DATA_NOT_FOUND"))
                 .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_FOUND))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:27:24Z"))

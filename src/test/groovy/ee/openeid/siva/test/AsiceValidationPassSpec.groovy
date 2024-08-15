@@ -16,7 +16,10 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
+import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -33,9 +36,9 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2016-10-11T09:36:10Z"))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
@@ -57,11 +60,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BDOC-TS.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[1].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(2))
@@ -72,8 +75,8 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-30.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("PELANIS,MINDAUGAS,37412260478"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MINDAUGAS PELANIS"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("37412260478"))
@@ -97,9 +100,9 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-49.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2016-05-23T10:06:23Z"))
                 .body("signatures[0].signedBy", Matchers.is("UUKKIVI,KRISTI,48505280278"))
                 .body("signatures[0].certificates.size()", Matchers.is(3))
@@ -120,9 +123,9 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-2.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(1))
     }
@@ -132,10 +135,10 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("IB-4270_TS_ESTEID-SK 2015  SK OCSP RESPONDER 2011.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_QESIG))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("LUKIN,LIISA,47710110274"))
                 .body("signatures[0].certificates.size()", Matchers.is(3))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("LUKIN,LIISA,47710110274"))
@@ -155,10 +158,10 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_QESIG))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("Wilson OÜ digital stamp"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("Wilson OÜ digital stamp"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("12508548"))
@@ -184,11 +187,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("signatures[2].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
-                .body("signatures[2].signatureLevel", Matchers.is(SIGNATURE_LEVEL_QESIG))
-                .body("signatures[2].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[2].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[2].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[2].info.bestSignatureTime", Matchers.is("2021-01-29T14:38:11Z"))
                 .body("signatures[2].subjectDistinguishedName.commonName", Matchers.notNullValue())
                 .body("signatures[2].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
@@ -203,10 +206,10 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Nonconventionalcharacters.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SIGNATURE_LEVEL_QESIG))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("!~#¤%%&()=+-_.txt"))
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is(SIGNATURE_SCOPE_FULL))
                 .body("signatures[0].signatureScopes[0].content", Matchers.is(VALID_SIGNATURE_SCOPE_CONTENT_FULL))
@@ -220,8 +223,8 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Mac_AS0099904_EsimeneAmetlikSKTestElliptilistega_TS.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
@@ -236,8 +239,8 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("PSS-signature.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2007/05/xmldsig-more#sha256-rsa-MGF1"))
                 .body("signatures[0].signedBy", Matchers.is("ŽÕRINÜWŠKY,MÄRÜ-LÖÖZ,11404176865"))
@@ -253,9 +256,9 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("signed-container-with-empty-datafiles.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signatureScopes.size()", Matchers.is(5))
                 .body("signatures[0].signatureScopes.name", Matchers.containsInRelativeOrder(
                         "data-file-1.txt", "empty-file-2.txt", "data-file-3.txt", "empty-file-4.txt", "data-file-5.txt"
@@ -274,14 +277,14 @@ class AsiceValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("validSidSignatureWithCertWithoutPnoInCn.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("TESTNUMBER,QUALIFIED OK1,30303039914"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("TESTNUMBER,QUALIFIED OK1"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("PNOEE-30303039914"))
                 .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[1].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[1].signedBy", Matchers.is("TESTNUMBER,BOD,39912319997"))
                 .body("signatures[1].subjectDistinguishedName.commonName", Matchers.is("TESTNUMBER,BOD"))
                 .body("signatures[1].subjectDistinguishedName.serialNumber", Matchers.is("PNOEE-39912319997"))

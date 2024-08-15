@@ -16,7 +16,9 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -25,7 +27,8 @@ import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 
 import static ee.openeid.siva.common.Constants.*
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.integrationtest.TestData.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 
 @Link("http://open-eid.github.io/SiVa/siva3/overview/#main-features-of-siva-validation-service")
 class MimetypeValidationSpec extends GenericSpecification {
@@ -35,9 +38,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerValidMimetype.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
@@ -49,9 +52,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeAsLast.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -63,9 +66,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeIsDeflated.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -77,9 +80,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerNoMimetype.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -91,9 +94,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeWithCapitalLetter.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -105,9 +108,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeFilenameWithExtraSpace.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -119,9 +122,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeWithCapitalLetter.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_FAILED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -133,9 +136,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceInvalidMimetypeAsText.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -147,9 +150,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocContainerValidMimetype.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
@@ -161,9 +164,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocContainerMimetypeAsLast.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -175,9 +178,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocContainerMimetypeIsDeflated.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_ASICE))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -219,9 +222,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerValidMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
@@ -233,8 +236,8 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerValidMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -247,9 +250,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeAsLast.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -261,8 +264,8 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerMimetypeAsLast.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -275,9 +278,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeIsDeflated.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -289,8 +292,8 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerMimetypeIsDeflated.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -303,9 +306,9 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerNoMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
@@ -317,8 +320,8 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerNoMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -331,7 +334,7 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeFilenameWithExtraSpace.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signaturesCount", Matchers.is(1))
@@ -346,7 +349,7 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsInvalidMimetypeAsXml.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signaturesCount", Matchers.is(1))
@@ -360,7 +363,7 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EdocContainerValidMimetype.edoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
@@ -373,7 +376,7 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EdocContainerValidMimetypeAsLast.edoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-E"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
@@ -386,10 +389,10 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EdocContainerNoMimetype.edoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("validationWarnings", Matchers.hasSize(2))
                 .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
     }
@@ -399,7 +402,7 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AdocContainerMimetypeWithExtraFields.adoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))

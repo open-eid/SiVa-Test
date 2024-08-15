@@ -13,6 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
+
 package ee.openeid.siva.test.request
 
 import ee.openeid.siva.test.util.Utils
@@ -29,7 +30,7 @@ class RequestData {
                 document: Base64.encodeBase64String(Utils.readFileFromResources(file)),
                 filename: file
         ]
-        if (signaturePolicy != null) {
+        if (signaturePolicy) {
             data.signaturePolicy = signaturePolicy
         }
         if (reportType != null) {
@@ -96,7 +97,7 @@ class RequestData {
                 signatureFiles: signatures
         ]
 
-        if (signaturePolicy != null) {
+        if (signaturePolicy) {
             data.signaturePolicy = signaturePolicy
         }
         if (reportType != null) {
@@ -129,7 +130,7 @@ class RequestData {
     }
 }
 
-class FixedBodyLengthMap extends LinkedHashMap{
+class FixedBodyLengthMap extends LinkedHashMap {
     String toString() {
         def newMap = [:]
         newMap.putAll(this)

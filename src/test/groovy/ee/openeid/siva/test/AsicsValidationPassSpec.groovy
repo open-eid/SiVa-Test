@@ -16,7 +16,9 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
@@ -31,9 +33,9 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ddocWithRoleAndSigProductionPlace.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2000/09/xmldsig#rsa-sha1"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2009-06-01T10:46:42Z"))
                 .body("signatures[0].info.signerRole[0].claimedRole", Matchers.is("Test"))
@@ -62,11 +64,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.scs"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", Matchers.is("ValidDDOCinsideAsics.scs"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2000/09/xmldsig#rsa-sha1"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2012-10-03T07:46:31Z"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2012-10-03T07:46:51Z"))
                 .body("signatures[0].signedBy", Matchers.is("LUKIN,LIISA,47710110274"))
@@ -82,11 +84,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidBDOCinsideAsics.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", Matchers.is("ValidBDOCinsideAsics.asics"))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureMethod", Matchers.is("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2016-05-11T10:18:06Z"))
                 .body("signatures[0].info.signerRole[0].claimedRole", Matchers.is("Signer / Proper signature"))
                 .body("signatures[0].info.signatureProductionPlace.countryName", Matchers.is("Estonia"))
@@ -97,7 +99,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("38211015222"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("NURM,AARE,38211015222"))
                 .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[1].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[1].info.bestSignatureTime", Matchers.is("2016-05-11T10:19:38Z"))
                 .body("timeStampTokens[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("timeStampTokens[0].signedBy", Matchers.is("SK TIMESTAMPING AUTHORITY"))
@@ -111,7 +113,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TXTinsideAsics.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("timeStampTokens[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("timeStampTokens[0].signedBy", Matchers.is("SK TIMESTAMPING AUTHORITY"))
                 .body("timeStampTokens[0].signedTime", Matchers.is("2017-08-25T09:56:33Z"))
@@ -125,7 +127,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidASICSinsideAsics.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("timeStampTokens[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("timeStampTokens[0].signedBy", Matchers.is("SK TIMESTAMPING AUTHORITY"))
                 .body("timeStampTokens[0].signedTime", Matchers.is("2017-08-25T11:24:01Z"))
@@ -137,9 +139,9 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.zip"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2012-10-03T07:46:31Z"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2012-10-03T07:46:51Z"))
                 .body("timeStampTokens[0].indication", Matchers.is("TOTAL-PASSED"))
@@ -155,10 +157,10 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsicsWrongMime.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is("ASiC-S"))
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", Matchers.is("ValidDDOCinsideAsicsWrongMime.asics"))
-                .body("signatures[0].signatureFormat", Matchers.is("DIGIDOC_XML_1.3"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2012-10-03T07:46:31Z"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2012-10-03T07:46:51Z"))
                 .body("timeStampTokens[0].indication", Matchers.is("TOTAL-PASSED"))

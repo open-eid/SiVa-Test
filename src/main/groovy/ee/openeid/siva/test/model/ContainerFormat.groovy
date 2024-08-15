@@ -21,10 +21,20 @@ import groovy.transform.Immutable
 
 @CompileStatic
 @Immutable
-final class HashAlgo {
-    static final String SHA1 = "SHA1"
-    static final String SHA224 = "SHA224"
-    static final String SHA256 = "SHA256"
-    static final String SHA384 = "SHA384"
-    static final String SHA512 = "SHA512"
+final class ContainerFormat {
+    // DSS
+    // https://github.com/esig/dss/blob/master/dss-enumerations/src/main/java/eu/europa/esig/dss/enumerations/ASiCContainerType.java
+    static final String ASiC_E = "ASiC-E"
+    static final String ASiC_S = "ASiC-S"
+
+    // Additional
+    static final String DIGIDOC_XML_1_0 = "DIGIDOC_XML_1.0"
+    static final String DIGIDOC_XML_1_0_hashcode = "DIGIDOC_XML_1.0_hashcode"
+    static final String DIGIDOC_XML_1_1 = "DIGIDOC_XML_1.1"
+    static final String DIGIDOC_XML_1_1_hashcode = "DIGIDOC_XML_1.1_hashcode"
+    static final String DIGIDOC_XML_1_2 = "DIGIDOC_XML_1.2"
+    static final String DIGIDOC_XML_1_2_hashcode = "DIGIDOC_XML_1.2_hashcode"
+    static final String DIGIDOC_XML_1_3 = "DIGIDOC_XML_1.3"
+    static final String DIGIDOC_XML_1_3_hashcode = "DIGIDOC_XML_1.3_hashcode"
+
 }

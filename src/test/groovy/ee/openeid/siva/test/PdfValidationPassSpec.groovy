@@ -17,6 +17,8 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
+import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -36,8 +38,8 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("Veiko Sinivee"))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
@@ -51,8 +53,8 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
 
@@ -65,8 +67,8 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
                 .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
@@ -82,8 +84,8 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings[0].content", Matchers.is("The revocation information is not considered as 'fresh'."))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.notNullValue())
@@ -100,8 +102,8 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
         //.body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.notNullValue())
                 .body("validSignaturesCount", Matchers.is(1))

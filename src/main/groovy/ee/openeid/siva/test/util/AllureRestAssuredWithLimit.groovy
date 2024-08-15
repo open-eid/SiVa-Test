@@ -38,6 +38,7 @@
  * the European Commission - subsequent versions of the EUPL
  * https://joinup.ec.europa.eu/software/page/eupl
  */
+
 package ee.openeid.siva.test.util
 
 import ee.openeid.siva.test.ConfigHolder
@@ -110,7 +111,7 @@ class AllureRestAssuredWithLimit extends AllureRestAssured {
                 int requestLimit = ConfigHolder.getConf().allureRestRequestLimit()
                 int requestBodyLength = requestSpec.getBody().toString().length()
                 if (requestBodyLength > requestLimit) {
-                    requestAttachmentBuilder.setBody(requestSpec.getBody().toString().substring(0,requestLimit) +
+                    requestAttachmentBuilder.setBody(requestSpec.getBody().toString().substring(0, requestLimit) +
                             "...\n\n The request body length (${requestBodyLength}) exceeds the limit (${requestLimit}) for report attachment.")
                 } else {
                     requestAttachmentBuilder.setBody(prettifier.getPrettifiedBodyIfPossible(requestSpec))
@@ -145,7 +146,7 @@ class AllureRestAssuredWithLimit extends AllureRestAssured {
             int responseLimit = ConfigHolder.getConf().allureRestResponseLimit()
             int requestBodyLength = response.getBody().toString().length()
             if (requestBodyLength > responseLimit) {
-                responseAttachmentBuilder.setBody(response.getBody().toString().substring(0,responseLimit) +
+                responseAttachmentBuilder.setBody(response.getBody().toString().substring(0, responseLimit) +
                         "...\n\n The response body (${requestBodyLength}) exceeds the limit (${responseLimit}) for report attachment.")
             } else {
                 responseAttachmentBuilder.setBody(prettifier.getPrettifiedBodyIfPossible(response, response.getBody()))

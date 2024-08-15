@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -208,7 +209,7 @@ class ValidationRequestSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.DETAILED))
                 .then()
                 .body("validationReport.diagnosticData", emptyOrNullString())
-                .body("validationReport.validationProcess.signatureOrTimestampOrEvidenceRecord[0].validationSignatureQualification.signatureQualification", equalTo("QESIG"))
+                .body("validationReport.validationProcess.signatureOrTimestampOrEvidenceRecord[0].validationSignatureQualification.signatureQualification", equalTo(SignatureLevel.QESIG))
                 .body(VALIDATION_CONCLUSION_PREFIX + "validSignaturesCount", equalTo(1))
     }
 

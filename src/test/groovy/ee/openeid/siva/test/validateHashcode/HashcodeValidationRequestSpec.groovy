@@ -18,10 +18,7 @@ package ee.openeid.siva.test.validateHashcode
 
 import ee.openeid.siva.common.DateTimeMatcher
 import ee.openeid.siva.test.GenericSpecification
-import ee.openeid.siva.test.model.HashAlgo
-import ee.openeid.siva.test.model.ReportType
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestError
@@ -389,8 +386,8 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         response
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures", hasSize(1))
-                .body("signatures[0].signatureLevel", is("ADESEAL_QC"))
-                .body("signatures[0].indication", is(TOTAL_PASSED))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.ADESEAL_QC))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", emptyOrNullString())
                 .body("signatures[0].warnings.size()", Matchers.is(2))
                 .body("signatures[0].warnings[0].content", Matchers.is("The private key does not reside in a QSCD at (best) signing time!"))
@@ -412,8 +409,8 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         response
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures", hasSize(1))
-                .body("signatures[0].signatureLevel", is("UNKNOWN_QC"))
-                .body("signatures[0].indication", is(TOTAL_PASSED))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.UNKNOWN_QC))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", emptyOrNullString())
                 .body("signatures[0].warnings.size()", Matchers.is(1))
                 .body("signatures[0].warnings[0].content", Matchers.is("The private key does not reside in a QSCD at (best) signing time!"))
@@ -470,9 +467,9 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .body("signatures", hasSize(1))
                 .body("signatures[0].id", is(MOCK_XADES_SIGNATURE_ID))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", is(SIGNATURE_LEVEL_QESIG))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].signedBy", is(MOCK_XADES_SIGNATURE_SIGNER))
-                .body("signatures[0].indication", is(TOTAL_PASSED))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signatureScopes", hasSize(1))
                 .body("signatures[0].signatureScopes[0].name", is(MOCK_XADES_DATAFILE_FILENAME))
                 .body("signatures[0].signatureScopes[0].scope", is(SIGNATURE_SCOPE_DIGEST))

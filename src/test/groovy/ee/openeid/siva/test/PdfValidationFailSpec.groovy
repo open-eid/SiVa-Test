@@ -17,6 +17,8 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
+import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -37,8 +39,8 @@ class PdfValidationFailSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_T))
-                .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_UNKNOWN"))
-                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_UNKNOWN))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItem(CERT_VALIDATION_NOT_CONCLUSIVE))
                 .body("signatures[0].warnings.content[0]", Matchers.is("The signature/seal is an INDETERMINATE AdES digital signature!"))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -52,9 +54,9 @@ class PdfValidationFailSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_QESIG))
                 .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("REVOKED_NO_POE"))
                 .body("signatures[0].errors.content", Matchers.hasItem("The past signature validation is not conclusive!"))
                 .body("signatures[0].claimedSigningTime", Matchers.is("2016-06-29T08:38:31Z"))
@@ -71,11 +73,11 @@ class PdfValidationFailSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-        //.body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_QESIG"))
+        //.body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_QESIG))
                 .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("36706020210"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("CHAIN_CONSTRAINTS_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.contains(
                         CERT_VALIDATION_NOT_CONCLUSIVE,
@@ -94,8 +96,8 @@ class PdfValidationFailSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
-                .body("signatures[0].indication", Matchers.is("INDETERMINATE"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", Matchers.is("NO_POE"))
                 .body("signatures[0].errors.content", Matchers.hasItem("The past signature validation is not conclusive!"))
                 .body("signatures[0].warnings", Matchers.hasSize(0))

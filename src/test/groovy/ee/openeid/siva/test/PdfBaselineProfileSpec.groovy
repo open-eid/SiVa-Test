@@ -17,6 +17,8 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
+import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -35,7 +37,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-pades-b-sha256-auth.pdf", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_B))
-                .body("signatures[0].signatureLevel", Matchers.is("NOT_ADES"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.NOT_ADES))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[0].errors.content", Matchers.contains(
                         SIG_UNEXPECTED_FORMAT,
@@ -56,8 +58,8 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("pades-baseline-t-live-aj.pdf", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_T))
-                .body("signatures[0].signatureLevel", Matchers.is("INDETERMINATE_QESIG"))
-                .body("signatures[0].indication", Matchers.is(INDETERMINATE))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_QESIG))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE))
                 .body("signatures[0].warnings", Matchers.hasSize(1))
                 .body("signatures[0].certificates.size()", Matchers.is(2))
@@ -74,7 +76,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -93,7 +95,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_4.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -107,7 +109,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LTA))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -127,7 +129,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_4.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LTA))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].warnings", Matchers.emptyOrNullString())
@@ -147,10 +149,10 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-b.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_B))
-                .body("signatures[1].signatureLevel", Matchers.is("NOT_ADES"))
+                .body("signatures[1].signatureLevel", Matchers.is(SignatureLevel.NOT_ADES))
                 .body("signatures[1].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[1].errors.content", Matchers.hasItem(CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
                 .body("signatures[1].warnings.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_VALUE_35))
@@ -165,7 +167,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt1-lt2-wrongDigestValue.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[1].signatureLevel", Matchers.is("NOT_ADES_QC"))
+                .body("signatures[1].signatureLevel", Matchers.is(SignatureLevel.NOT_ADES_QC))
                 .body("signatures[1].indication", Matchers.is("TOTAL-FAILED"))
                 .body("signatures[1].subIndication", Matchers.is("HASH_FAILURE"))
                 .body("signatures[1].errors[0].content", Matchers.is(CERT_VALIDATION_NOT_CONCLUSIVE))
@@ -179,7 +181,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt1-lt2-Serial.pdf", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is("QESIG"))
+                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("validSignaturesCount", Matchers.is(2))

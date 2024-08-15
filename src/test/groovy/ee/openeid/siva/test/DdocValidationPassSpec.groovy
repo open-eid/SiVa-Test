@@ -17,6 +17,9 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.Constants
+import ee.openeid.siva.test.model.ContainerFormat
+import ee.openeid.siva.test.model.SignatureFormat
+import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -24,7 +27,7 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy")
 class DdocValidationPassSpec extends GenericSpecification {
@@ -34,13 +37,13 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("SK-XML1.0.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_10))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_SK_XML))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_0))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.SK_XML))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings[0].content", Matchers.is("Old and unsupported format: SK-XML version: 1.0"))
                 .body("signatures[0].warnings.size()", Matchers.is(1))
-                .body("signatures[1].signatureFormat", Matchers.is(SIGNATURE_FORMAT_SK_XML))
-                .body("signatures[1].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.SK_XML))
+                .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[1].warnings[0].content", Matchers.is("Old and unsupported format: SK-XML version: 1.0"))
                 .body("signatures[1].warnings.size()", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(2))
@@ -52,9 +55,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.1.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_11))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_11))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_1))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_1))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings[0].content", Matchers.is("Old and unsupported format: DIGIDOC-XML version: 1.1"))
                 .body("signatures[0].warnings.size()", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
@@ -66,9 +69,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.2.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_12))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_12))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_2))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_2))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings[0].content", Matchers.is("Old and unsupported format: DIGIDOC-XML version: 1.2"))
                 .body("signatures[0].warnings.size()", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
@@ -80,9 +83,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
     }
@@ -92,9 +95,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("susisevad1_3.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
     }
@@ -104,9 +107,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("KLASS3-SK _ KLASS3-SK OCSP RESPONDER uus.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("SK: dokumendi kinnitus"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("SK: dokumendi kinnitus"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("10747013"))
@@ -120,9 +123,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("KLASS3-SK 2010 _ KLASS3-SK 2010 OCSP RESPONDER.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("Sertifitseerimiskeskus AS Klienditoe osakond"))
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("KLASS3-SK 2010 OCSP RESPONDER"))
                 .body("signaturesCount", Matchers.is(1))
@@ -134,9 +137,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("vaikesed1.1.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_11))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_11))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_1))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_1))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings[0].content", Matchers.is("Old and unsupported format: DIGIDOC-XML version: 1.1"))
                 .body("signatures[0].warnings.size()", Matchers.is(1))
                 .body("signatures[0].signedBy", Matchers.is("SOONSEIN,SIMMO,38508134916"))
@@ -150,9 +153,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("IB-4270_ESTEID-SK 2015  SK OCSP RESPONDER 2011.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("LUKIN,LIISA,47710110274"))
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("SK OCSP RESPONDER 2011"))
                 .body("signaturesCount", Matchers.is(1))
@@ -164,9 +167,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EID-SK _ EID-SK OCSP RESPONDER.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_11))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_11))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_1))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_1))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings[0].content", Matchers.is("Old and unsupported format: DIGIDOC-XML version: 1.1"))
                 .body("signatures[0].warnings.size()", Matchers.is(1))
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("EID-SK OCSP RESPONDER"))
@@ -179,11 +182,11 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EID-SK 2007 _ EID-SK 2007 OCSP RESPONDER 2010.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
-                .body("signatures[1].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[1].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[1].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("EID-SK 2007 OCSP RESPONDER 2010"))
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(2))
@@ -194,9 +197,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EID-SK 2007 _ EID-SK 2007 OCSP RESPONDER.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("EID-SK 2007 OCSP RESPONDER"))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
@@ -207,9 +210,9 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EID-SK 2011 _ SK OCSP RESPONDER 2011.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings[0].content", Matchers.is("X509IssuerName has none or invalid namespace: null"))
                 .body("signatures[0].warnings[1].content", Matchers.is("X509SerialNumber has none or invalid namespace: null"))
                 .body("signatures[0].warnings.size()", Matchers.is(2))
@@ -224,11 +227,11 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("18912.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("36706020210"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
@@ -251,7 +254,7 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DdocContainerNoSignature.ddoc", SignaturePolicy.POLICY_4.name, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("validatedDocument.filename", Matchers.is("DdocContainerNoSignature.ddoc"))
                 .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
@@ -264,11 +267,11 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("SK-XML1_0_hashcode.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_10_HASHCODE))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_0_hashcode))
                 .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_SK_XML))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.SK_XML))
                 .body("signatures[0].signedBy", Matchers.is("ANSIP,ANDRUS,35610012722"))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("Tartu ja Tallinna koostooleping.doc"))
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is("FullSignatureScope"))
@@ -289,11 +292,11 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.1_hashcode.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_11_HASHCODE))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_1_hashcode))
                 .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORM_DDOC_11))
+                .body("signatures[0].signatureFormat", Matchers.is(ContainerFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].signedBy", Matchers.is("KESKEL,URMO,38002240232"))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("puhkus_urmo_062006.doc"))
                 .body("signatures[0].signatureScopes[0].scope", Matchers.is("FullSignatureScope"))
@@ -311,12 +314,12 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.2_hashcode.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_12_HASHCODE))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_2_hashcode))
                 .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_12))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_2))
                 .body("signatures[0].signatureLevel", Matchers.emptyOrNullString())
                 .body("signatures[0].signedBy", Matchers.is("Eesti Ühispank: Ülekandejuhise kinnitus"))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].subIndication", Matchers.emptyOrNullString())
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("RO219559508.pdf"))
@@ -335,12 +338,12 @@ class DdocValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3_hashcode.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(SIGNATURE_FORM_DDOC_13_HASHCODE))
+                .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3_hashcode))
                 .body("signatures[0].id", Matchers.is("S0"))
-                .body("signatures[0].signatureFormat", Matchers.is(SIGNATURE_FORMAT_DIGIDOC_XML_13))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureLevel", Matchers.emptyOrNullString())
                 .body("signatures[0].signedBy", Matchers.is("LUKIN,LIISA,47710110274"))
-                .body("signatures[0].indication", Matchers.is(TOTAL_PASSED))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].subIndication", Matchers.emptyOrNullString())
                 .body("signatures[0].errors", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("Glitter-rock-4_gallery.jpg"))

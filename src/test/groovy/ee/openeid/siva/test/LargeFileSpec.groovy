@@ -66,7 +66,7 @@ class LargeFileSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("9MB_DDOC.ddoc", SignaturePolicy.POLICY_3.name))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo("DIGIDOC_XML_1.3"))
+                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("validatedDocument.filename", equalTo("9MB_DDOC.ddoc"))
                 .body("validSignaturesCount", equalTo(1))
     }
