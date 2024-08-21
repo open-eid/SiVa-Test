@@ -22,12 +22,12 @@ import groovy.transform.Immutable
 @CompileStatic
 @Immutable
 final class ContainerFormat {
-    // DSS
+    // From DSS
     // https://github.com/esig/dss/blob/master/dss-enumerations/src/main/java/eu/europa/esig/dss/enumerations/ASiCContainerType.java
     static final String ASiC_E = "ASiC-E"
     static final String ASiC_S = "ASiC-S"
 
-    // Additional
+    // Estonian specific DDOC
     static final String DIGIDOC_XML_1_0 = "DIGIDOC_XML_1.0"
     static final String DIGIDOC_XML_1_0_hashcode = "DIGIDOC_XML_1.0_hashcode"
     static final String DIGIDOC_XML_1_1 = "DIGIDOC_XML_1.1"
@@ -36,5 +36,4 @@ final class ContainerFormat {
     static final String DIGIDOC_XML_1_2_hashcode = "DIGIDOC_XML_1.2_hashcode"
     static final String DIGIDOC_XML_1_3 = "DIGIDOC_XML_1.3"
     static final String DIGIDOC_XML_1_3_hashcode = "DIGIDOC_XML_1.3_hashcode"
-
 }

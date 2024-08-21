@@ -33,7 +33,7 @@ class RequestData {
         if (signaturePolicy) {
             data.signaturePolicy = signaturePolicy
         }
-        if (reportType != null) {
+        if (reportType) {
             data.reportType = reportType
         }
         return data
@@ -100,7 +100,7 @@ class RequestData {
         if (signaturePolicy) {
             data.signaturePolicy = signaturePolicy
         }
-        if (reportType != null) {
+        if (reportType) {
             data.reportType = reportType
         }
 

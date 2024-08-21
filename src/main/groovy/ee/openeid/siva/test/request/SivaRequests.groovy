@@ -19,11 +19,13 @@ package ee.openeid.siva.test.request
 import ee.openeid.siva.test.ConfigHolder
 import ee.openeid.siva.test.TestConfig
 import io.qameta.allure.Step
+import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import io.restassured.response.Response
 import org.apache.http.HttpStatus
 
 import static io.restassured.RestAssured.given
+import static io.restassured.config.EncoderConfig.encoderConfig
 
 class SivaRequests {
 
@@ -31,20 +33,20 @@ class SivaRequests {
     static String sivaServiceUrl = "${conf.sivaProtocol()}://${conf.sivaHostname()}:${conf.sivaPort()}${conf.sivaContextPath()}"
 
     @Step("POST {endpoint}")
-    static Response post(String endpoint, Map data) {
+    static Response post(String endpoint, Map requestBody) {
         return given()
-//                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
-                .body(data)
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(requestBody)
                 .contentType(ContentType.JSON)
                 .when()
                 .post(sivaServiceUrl + endpoint)
     }
 
     @Step("POST {endpoint}")
-    static Response post(String endpoint, String data) {
+    static Response post(String endpoint, String requestBody) {
         return given()
-//                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
-                .body(data)
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(requestBody)
                 .contentType(ContentType.JSON)
                 .when()
                 .post(sivaServiceUrl + endpoint)
@@ -53,49 +55,48 @@ class SivaRequests {
     @Step("GET {endpoint}")
     static Response get(String endpoint) {
         return given()
-//                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
                 .contentType(ContentType.JSON)
                 .when()
                 .get(sivaServiceUrl + endpoint)
     }
 
-    static Response tryValidate(Map data) {
-        return post("/validate", data)
+    static Response tryValidate(Map requestBody) {
+        return post("/validate", requestBody)
     }
 
     @Step("Validate")
-    static Response validate(Map data) {
-        Response response = tryValidate(data)
+    static Response validate(Map requestBody) {
+        Response response = tryValidate(requestBody)
         response.then().statusCode(HttpStatus.SC_OK)
         return response
     }
 
-    static Response tryGetDataFiles(Map data) {
-        return post("/getDataFiles", data)
+    static Response tryGetDataFiles(Map requestBody) {
+        return post("/getDataFiles", requestBody)
     }
 
     @Step("Get data files")
-    static Response getDataFiles(Map data) {
-        Response response = tryGetDataFiles(data)
+    static Response getDataFiles(Map requestBody) {
+        Response response = tryGetDataFiles(requestBody)
         response.then().statusCode(HttpStatus.SC_OK)
         return response
     }
 
-    static Response tryValidateHashcode(Map data) {
-        return post("/validateHashcode", data)
+    static Response tryValidateHashcode(Map requestBody) {
+        return post("/validateHashcode", requestBody)
     }
 
-    static Response tryValidateHashcode(String data) {
-        return post("/validateHashcode", data)
+    static Response tryValidateHashcode(String requestBody) {
+        return post("/validateHashcode", requestBody)
     }
 
     @Step("Validate hashcode")
-    static Response validateHashcode(Map data) {
-        Response response = tryValidateHashcode(data)
+    static Response validateHashcode(Map requestBody) {
+        Response response = tryValidateHashcode(requestBody)
         response.then().statusCode(HttpStatus.SC_OK)
         return response
     }
-
 
     @Step("Get Monitoring Health")
     static Response getMonitoringHealth() {

@@ -22,7 +22,7 @@ import groovy.transform.Immutable
 @CompileStatic
 @Immutable
 final class SignatureFormat {
-    // DSS
+    // From DSS
     // https://github.com/esig/dss/blob/master/dss-enumerations/src/main/java/eu/europa/esig/dss/enumerations/SignatureLevel.java
     static final String CAdES_A = "CAdES_A"
     static final String CAdES_BASELINE_B = "CAdES_BASELINE_B"
@@ -66,12 +66,12 @@ final class SignatureFormat {
     static final String XAdES_XL = "XAdES_XL"
     static final String XML_NOT_ETSI = "XML_NOT_ETSI"
 
-    // Additional SD-DSS
+    // Estonian specific from SD-DSS
     // https://github.com/open-eid/sd-dss/blob/master/dss-enumerations/src/main/java/eu/europa/esig/dss/enumerations/SignatureLevel.java
     static final String XAdES_BASELINE_B_EPES = "XAdES_BASELINE_B_EPES"
     static final String XAdES_BASELINE_LT_TM = "XAdES_BASELINE_LT_TM"
 
-    // Additional
+    // Estonian specific
     static final String XAdES_BASELINE_B_BES = "XAdES_BASELINE_B_BES"
     static final String SK_XML = "SK_XML_1.0"
     static final String DIGIDOC_XML_1_1 = "DIGIDOC_XML_1.1"
