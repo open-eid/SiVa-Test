@@ -16,18 +16,20 @@
 
 package ee.openeid.siva.test
 
+
 import ee.openeid.siva.test.model.ContainerFormat
+import ee.openeid.siva.test.model.RequestError
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.apache.http.HttpStatus
+import io.restassured.response.Response
 import org.hamcrest.Matchers
 
 import static ee.openeid.siva.common.Constants.*
-import static ee.openeid.siva.integrationtest.TestData.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 
 @Link("http://open-eid.github.io/SiVa/siva3/overview/#main-features-of-siva-validation-service")
@@ -189,32 +191,29 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid BDOC container without mimetype.")
     def "bdocWithNoMimetype"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("BdocContainerNoMimetype.bdoc"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .rootPath("requestErrors[0]")
-                .body("message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("BdocContainerNoMimetype.bdoc"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Invalid BDOC container, where mimetype filename is with extra space in the end (\"mimetype \").")
     def "bdocMimetypeFilenameWithExtraSpace"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("BdocContainerMimetypeFilenameWithExtraSpace.bdoc"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .rootPath("requestErrors[0]")
-                .body("message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("BdocContainerMimetypeFilenameWithExtraSpace.bdoc"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("BDOC container with invalid mimetype as \"application/zip\".")
     def "bdocInvalidMimetypeAsZip"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("BdocInvalidMimetypeAsZip.bdoc"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .rootPath("requestErrors[0]")
-                .body("message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("BdocInvalidMimetypeAsZip.bdoc"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("ASICs container with valid mimetype and Tmp file inside.")

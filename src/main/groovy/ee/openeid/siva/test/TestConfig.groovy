@@ -17,6 +17,7 @@
 package ee.openeid.siva.test
 
 import org.aeonbits.owner.Config
+import org.aeonbits.owner.Config.DefaultValue
 import org.aeonbits.owner.Config.Key
 import org.aeonbits.owner.Config.Sources
 
@@ -34,6 +35,10 @@ interface TestConfig extends Config {
 
     @Key("siva.protocol")
     String sivaProtocol()
+
+    @Key("siva.request-size-limit")
+    @DefaultValue("28311552")
+    Integer sivaRequestSizeLimit()
 
     @Key("test-files-directory")
     String testFilesDirectory()

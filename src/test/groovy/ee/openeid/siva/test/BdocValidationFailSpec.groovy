@@ -20,8 +20,10 @@ import ee.openeid.siva.common.Constants
 import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 
@@ -300,12 +302,12 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc signed data file has been removed from the container")
     def "bdocSignedFileRemoved"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequestForDD4J("KS-21_fileeemaldatud.4.asice", null, null))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequestForDD4J(
+                "KS-21_fileeemaldatud.4.asice", null, null))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Bdoc no files in container")
@@ -387,12 +389,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc BDOC-1.0 version container")
     def "bdocOldNotSupportedVersion"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("BDOC-1.0.bdoc"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("BDOC-1.0.bdoc"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Asice unsigned data files in the container")

@@ -3,6 +3,7 @@ siva.application-context-path=
 siva.hostname=localhost
 siva.port=8080
 siva.protocol=http
+siva.request-size-limit=28311552
 
 # Test configuration
 test-files-directory=src/test/resources/

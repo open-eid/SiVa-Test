@@ -16,24 +16,25 @@
 
 package ee.openeid.siva.test
 
+
 import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.RequestError
 import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
-import ee.openeid.siva.test.util.RequestError
+import ee.openeid.siva.test.util.RequestErrorValidator
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import io.restassured.response.ValidatableResponse
+import io.restassured.response.Response
 import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.integrationtest.TestData.*
-import static org.hamcrest.Matchers.emptyOrNullString
-import static org.hamcrest.Matchers.equalTo
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")
 class ValidationRequestSpec extends GenericSpecification {
@@ -50,16 +51,16 @@ class ValidationRequestSpec extends GenericSpecification {
     @Description("Totally empty request body is sent")
     def "Given validation request with empty body, then error is returned"() {
         when:
-        ValidatableResponse response = SivaRequests.tryValidate([:]).then()
+        Response response = SivaRequests.tryValidate([:])
 
         then:
-        List errors = [
-                new Tuple(DOCUMENT, MUST_NOT_BE_BLANK),
-                new Tuple(DOCUMENT, INVALID_BASE_64),
-                new Tuple(FILENAME, MUST_NOT_BE_EMPTY),
-                new Tuple(FILENAME, INVALID_FILENAME)
-        ]
-        RequestError.assertErrorResponse(response, *errors.collect { errorType, error -> new RequestError(errorType, error) })
+        RequestErrorValidator.validate(
+                response,
+                RequestError.DOCUMENT_BLANK,
+                RequestError.DOCUMENT_INVALID_BASE_64,
+                RequestError.FILENAME_EMPTY,
+                RequestError.FILENAME_INVALID
+        )
     }
 
 
@@ -85,16 +86,16 @@ class ValidationRequestSpec extends GenericSpecification {
         ]
 
         when:
-        ValidatableResponse response = SivaRequests.tryValidate(requestData).then()
+        Response response = SivaRequests.tryValidate(requestData)
 
         then:
-        List errors = [
-                new Tuple(DOCUMENT, MUST_NOT_BE_BLANK),
-                new Tuple(DOCUMENT, INVALID_BASE_64),
-                new Tuple(FILENAME, MUST_NOT_BE_EMPTY),
-                new Tuple(FILENAME, INVALID_FILENAME)
-        ]
-        RequestError.assertErrorResponse(response, *errors.collect { errorType, error -> new RequestError(errorType, error) })
+        RequestErrorValidator.validate(
+                response,
+                RequestError.DOCUMENT_BLANK,
+                RequestError.DOCUMENT_INVALID_BASE_64,
+                RequestError.FILENAME_EMPTY,
+                RequestError.FILENAME_INVALID
+        )
     }
 
     @Description("Invalid input")
@@ -103,21 +104,23 @@ class ValidationRequestSpec extends GenericSpecification {
         Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
         requestData[key] = value
 
-        expect:
-        ValidatableResponse response = SivaRequests.tryValidate(requestData).then()
-        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(errorType, error) })
+        when:
+        Response response = SivaRequests.tryValidate(requestData)
+
+        then:
+        RequestErrorValidator.validate(response, *errors)
 
         where:
-        key               | value               | comment                           | errorType        | errors
-        "document"        | ""                  | "document parameter empty"        | DOCUMENT         | [MUST_NOT_BE_BLANK, INVALID_BASE_64]
-        "document"        | "aaa"               | "malformed base64 as document"    | DOCUMENT         | [DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE]
-        "document"        | ",:"                | "not base64 as document"          | DOCUMENT         | [INVALID_BASE_64]
-        "filename"        | ""                  | "filename parameter empty"        | FILENAME         | [MUST_NOT_BE_EMPTY, INVALID_FILENAME_SIZE]
-        "filename"        | "a" * 256 + ".bdoc" | "filename too long"               | FILENAME         | [INVALID_FILENAME_SIZE]
-        "signaturePolicy" | ""                  | "signaturePolicy parameter empty" | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
-        "signaturePolicy" | "a" * 101           | "signaturePolicy too long"        | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
-        "reportType"      | ""                  | "reportType parameter empty"      | REPORT_TYPE      | [INVALID_REPORT_TYPE]
-        "reportType"      | "NotValid"          | "invalid reportType"              | REPORT_TYPE      | [INVALID_REPORT_TYPE]
+        key               | value               | comment                           | errors
+        "document"        | ""                  | "document parameter empty"        | [RequestError.DOCUMENT_BLANK, RequestError.DOCUMENT_INVALID_BASE_64]
+        "document"        | "aaa"               | "malformed base64 as document"    | [RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE]
+        "document"        | ",:"                | "not base64 as document"          | [RequestError.DOCUMENT_INVALID_BASE_64]
+        "filename"        | ""                  | "filename parameter empty"        | [RequestError.FILENAME_EMPTY, RequestError.FILENAME_INVALID_SIZE]
+        "filename"        | "a" * 256 + ".bdoc" | "filename too long"               | [RequestError.FILENAME_INVALID_SIZE]
+        "signaturePolicy" | ""                  | "signaturePolicy parameter empty" | [RequestError.SIGNATURE_POLICY_INVALID_SIZE]
+        "signaturePolicy" | "a" * 101           | "signaturePolicy too long"        | [RequestError.SIGNATURE_POLICY_INVALID_SIZE]
+        "reportType"      | ""                  | "reportType parameter empty"      | [RequestError.REPORT_TYPE_INVALID]
+        "reportType"      | "NotValid"          | "invalid reportType"              | [RequestError.REPORT_TYPE_INVALID]
     }
 
     @Description("Filename valid values")
@@ -158,22 +161,43 @@ class ValidationRequestSpec extends GenericSpecification {
         null                          | SignaturePolicy.POLICY_4.name | "missing" | "default policy is used"
     }
 
+    @Description("Not available signature policy")
+    def "Given not available signature policy, then error is returned"() {
+        given:
+        Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
+        requestData.signaturePolicy = "POLv2"
+
+        when:
+        Response response = SivaRequests.tryValidate(requestData)
+        then:
+        response.then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .body("requestErrors", hasSize(1))
+                .body("requestErrors.findAll { requestError -> " +
+                        "requestError.key == 'signaturePolicy' && " +
+                        "requestError.message == 'Invalid signature policy: POLv2; Available abstractPolicies: [POLv3, POLv4]' }",
+                        hasSize(1)
+                )
+    }
+
     @Description("Invalid signature policy")
     def "Given signature policy #comment, then error is returned"() {
         given:
         Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
         requestData.signaturePolicy = policy
 
-        expect:
-        ValidatableResponse response = SivaRequests.tryValidate(requestData).then()
-        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(errorType, error) })
+        when:
+        Response response = SivaRequests.tryValidate(requestData)
+
+        then:
+        RequestErrorValidator.validate(response, errors)
+
 
         where:
-        policy    | comment               | errorType        | errors
-        "POLv2"   | "invalid"             | SIGNATURE_POLICY | ["Invalid signature policy: POLv2; Available abstractPolicies: [POLv3, POLv4]"]
-        "POLv3.*" | "in incorrect format" | SIGNATURE_POLICY | [INVALID_SIGNATURE_POLICY]
-        ""        | "empty"               | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
-        'a' * 101 | "too long"            | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
+        policy    | comment               | errors
+        "POLv3.*" | "in incorrect format" | RequestError.SIGNATURE_POLICY_INVALID
+        ""        | "empty"               | RequestError.SIGNATURE_POLICY_INVALID_SIZE
+        'a' * 101 | "too long"            | RequestError.SIGNATURE_POLICY_INVALID_SIZE
     }
 
     @Description("")
@@ -228,11 +252,12 @@ class ValidationRequestSpec extends GenericSpecification {
         given:
         Map requestData = RequestData.validationRequest("xroad-simple.asice")
         requestData.documentType = "xroad"
-        expect:
-        SivaRequests.tryValidate(requestData)
-                .then().statusCode(400)
-                .body("requestErrors[0].key", Matchers.is("documentType"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_TYPE_NOT_ACCEPTED))
+
+        when:
+        Response response = SivaRequests.tryValidate(requestData)
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_TYPE_INVALID)
     }
 
     @Description("Mismatch in stated and actual document resulting in error: 'Document malformed or not matching documentType'")
@@ -241,9 +266,11 @@ class ValidationRequestSpec extends GenericSpecification {
         Map requestData = RequestData.validationRequest(document)
         requestData.filename = filename
 
-        expect:
-        ValidatableResponse response = SivaRequests.tryValidate(requestData).then()
-        RequestError.assertErrorResponse(response, new RequestError(DOCUMENT, DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(requestData)
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
 
         where:
         document                       | filename                      | comment
@@ -277,7 +304,7 @@ class ValidationRequestSpec extends GenericSpecification {
         Map requestData = RequestData.validationRequest("singleValidSignatureTS.asice")
         requestData.filename = "singleValidSignatureTS.bdoc"
         expect:
-        SivaRequests.tryValidate(requestData)
+        SivaRequests.validate(requestData)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", Matchers.is(1))
     }
@@ -290,12 +317,11 @@ class ValidationRequestSpec extends GenericSpecification {
                 filename: "some_file." + extension,
         ]
 
-        expect:
-        SivaRequests.tryValidate(requestData)
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is(DOCUMENT))
-                .body("requestErrors[0].message", Matchers.containsString(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(requestData)
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
 
         where:
         extension | _
@@ -311,7 +337,7 @@ class ValidationRequestSpec extends GenericSpecification {
         SivaRequests.validate(
                 RequestData.requestWithFixedBodyLength(
                         RequestData.validationRequest("singleValidSignatureTS.asice"),
-                        SIVA_FILE_SIZE_LIMIT))
+                        conf.sivaRequestSizeLimit()))
                 .then()
                 .statusCode(200)
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
@@ -323,11 +349,11 @@ class ValidationRequestSpec extends GenericSpecification {
     def "Given request body over limit length, then error is returned"() {
         expect:
         String errorMessageTemplate = "Request content-length (%s bytes) exceeds request size limit (%s bytes)"
-        String errorMessage = String.format(errorMessageTemplate, SIVA_FILE_SIZE_LIMIT + 1, SIVA_FILE_SIZE_LIMIT)
+        String errorMessage = String.format(errorMessageTemplate, conf.sivaRequestSizeLimit() + 1, conf.sivaRequestSizeLimit())
         SivaRequests.validate(
                 RequestData.requestWithFixedBodyLength(
                         RequestData.validationRequest("singleValidSignatureTS.asice"),
-                        SIVA_FILE_SIZE_LIMIT + 1))
+                        conf.sivaRequestSizeLimit() + 1))
                 .then()
                 .statusCode(400)
                 .body("requestErrors[0].key", Matchers.is("request"))

@@ -16,17 +16,16 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.RequestError
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
+import io.restassured.response.Response
 import org.apache.http.HttpStatus
-import org.hamcrest.Matchers
 import spock.lang.Ignore
 import spock.lang.Tag
-
-import static ee.openeid.siva.integrationtest.TestData.DOCUMENT
-import static ee.openeid.siva.integrationtest.TestData.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE
 
 @Ignore("Rewrite these tests in siga-log-test to check logs from elk automatically")
 @Tag("ManualTest")
@@ -124,12 +123,11 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Ignore("SIVA-352 - remark 8")
     @Description("")
     def "bdocWithErrorResponse"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("xroad-simple.bdoc", "POLv3"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is(DOCUMENT))
-                .body("requestErrors[0].message", Matchers.containsString(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("xroad-simple.bdoc", "POLv3"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     /**
@@ -257,12 +255,11 @@ class StatisticsToLogsSpec extends GenericSpecification {
      */
     @Description("")
     def "ddocWithErrorResponse"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("xroad-simple.ddoc", "POLv3"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is(DOCUMENT))
-                .body("requestErrors[0].message", Matchers.containsString(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("xroad-simple.ddoc", "POLv3"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     /**

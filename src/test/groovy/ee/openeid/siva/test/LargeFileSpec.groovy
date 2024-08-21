@@ -16,16 +16,16 @@
 
 package ee.openeid.siva.test
 
+import ee.openeid.siva.test.model.RequestError
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.apache.http.HttpStatus
-import org.hamcrest.Matchers
+import io.restassured.response.Response
 
-import static ee.openeid.siva.integrationtest.TestData.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.equalTo
 
@@ -73,25 +73,25 @@ class LargeFileSpec extends GenericSpecification {
 
     @Description("Bdoc Zip container with Bomb file")
     def "bdocZipBombsAreNotAccepted"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3.name))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest(
+                "zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3.name))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Asice Zip container with Bomb file")
     def "asiceZipBombsAreNotAccepted"() {
-        when:
+        given:
         Map requestData = RequestData.validationRequest("zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3.name)
         requestData.filename = "zip-bomb-package-zip-1gb.asice"
+
+        when:
+        Response response = SivaRequests.tryValidate(requestData)
+
         then:
-        SivaRequests.tryValidate(requestData)
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Asice Zip container with Matryoshka Bomb file")
@@ -109,6 +109,7 @@ class LargeFileSpec extends GenericSpecification {
         when:
         Map requestData = RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3.name)
         requestData.filename = "zip-bomb-packages.bdoc"
+
         then:
         SivaRequests.validate(requestData)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
@@ -119,14 +120,14 @@ class LargeFileSpec extends GenericSpecification {
 
     @Description("Asics Zip container with Bomb file")
     def "asicsZipBombsAreNotAccepted"() {
-        when:
+        given:
         Map requestData = RequestData.validationRequest("zip-bomb-package-zip-1gb-asics.asics", SignaturePolicy.POLICY_3.name)
         requestData.filename = "zip-bomb-package-zip-1gb.asics"
+
+        when:
+        Response response = SivaRequests.tryValidate(requestData)
+
         then:
-        SivaRequests.tryValidate(requestData)
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 }

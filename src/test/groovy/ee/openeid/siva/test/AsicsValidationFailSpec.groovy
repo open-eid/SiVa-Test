@@ -17,13 +17,15 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.model.ContainerFormat
+import ee.openeid.siva.test.model.RequestError
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
+import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 
 class AsicsValidationFailSpec extends GenericSpecification {
@@ -87,11 +89,11 @@ class AsicsValidationFailSpec extends GenericSpecification {
 
     @Description("TST has been corrupted")
     def "brokenTstAsicsShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("AsicsTSTsignatureBroken.asics"))
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("AsicsTSTsignatureBroken.asics"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Data file changed")

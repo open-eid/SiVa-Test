@@ -21,10 +21,11 @@ import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
-import ee.openeid.siva.test.util.RequestError
+import ee.openeid.siva.test.util.RequestErrorValidator
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 import io.restassured.response.ValidatableResponse
 import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpStatus
@@ -98,22 +99,23 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         null                          | SignaturePolicy.POLICY_4.name | "missing" | "default policy is used"
     }
 
-    @Description("Invalid signature policy")
-    def "Given signature policy #comment, then error is returned"() {
+    @Description("Not available signature policy")
+    def "Given not available signature policy, then error is returned"() {
         given:
         Map requestData = validRequestBody()
-        requestData.signaturePolicy = policy
+        requestData.signaturePolicy = "POLv2"
 
-        expect:
-        ValidatableResponse response = SivaRequests.tryValidateHashcode(requestData).then()
-        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(errorType, error) })
-
-        where:
-        policy    | comment               | errorType        | errors
-        "POLv2"   | "invalid"             | SIGNATURE_POLICY | ["Invalid signature policy: POLv2; Available abstractPolicies: [POLv3, POLv4]"]
-        "POLv3.*" | "in incorrect format" | SIGNATURE_POLICY | [INVALID_SIGNATURE_POLICY]
-        ""        | "empty"               | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
-        'a' * 101 | "too long"            | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
+        when:
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+        then:
+        response.then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .body("requestErrors", hasSize(1))
+                .body("requestErrors.findAll { requestError -> " +
+                        "requestError.key == 'signaturePolicy' && " +
+                        "requestError.message == 'Invalid signature policy: POLv2; Available abstractPolicies: [POLv3, POLv4]' }",
+                        hasSize(1)
+                )
     }
 
     @Description("Invalid input")
@@ -122,20 +124,21 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         Map requestData = validRequestBody()
         requestData[key] = value
 
-        expect:
-        ValidatableResponse response = SivaRequests.tryValidateHashcode(requestData).then()
-        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(errorType, error) })
+        when:
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+
+        then:
+        RequestErrorValidator.validate(response, *errors)
 
         where:
-        key               | value      | comment                                | errorType        | errors
-        "signaturePolicy" | "POLv2"    | "invalid signature policy"             | SIGNATURE_POLICY | ["Invalid signature policy: POLv2; Available abstractPolicies: [POLv3, POLv4]"]
-        "signaturePolicy" | "POLv3.*"  | "signature policy in incorrect format" | SIGNATURE_POLICY | [INVALID_SIGNATURE_POLICY]
-        "signaturePolicy" | ""         | "empty signature policy"               | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
-        "signaturePolicy" | 'a' * 101  | "too long signature policy"            | SIGNATURE_POLICY | [INVALID_POLICY_SIZE]
-        "signatureFiles"  | null       | "missing signature files"              | SIGNATURE_FILES  | [MUST_NOT_BE_EMPTY, MUST_NOT_BE_NULL]
-        "signatureFiles"  | []         | "empty signature files list"           | SIGNATURE_FILES  | [MUST_NOT_BE_EMPTY]
-        "reportType"      | ""         | "reportType parameter empty"           | REPORT_TYPE      | [INVALID_REPORT_TYPE]
-        "reportType"      | "NotValid" | "invalid reportType"                   | REPORT_TYPE      | [INVALID_REPORT_TYPE]
+        key               | value      | comment                                | errors
+        "signaturePolicy" | "POLv3.*"  | "signature policy in incorrect format" | [RequestError.SIGNATURE_POLICY_INVALID]
+        "signaturePolicy" | ""         | "empty signature policy"               | [RequestError.SIGNATURE_POLICY_INVALID_SIZE]
+        "signaturePolicy" | 'a' * 101  | "too long signature policy"            | [RequestError.SIGNATURE_POLICY_INVALID_SIZE]
+        "signatureFiles"  | null       | "missing signature files"              | [RequestError.SIGNATURE_FILES_EMPTY, RequestError.SIGNATURE_FILES_NULL]
+        "signatureFiles"  | []         | "empty signature files list"           | [RequestError.SIGNATURE_FILES_EMPTY]
+        "reportType"      | ""         | "reportType parameter empty"           | [RequestError.REPORT_TYPE_INVALID]
+        "reportType"      | "NotValid" | "invalid reportType"                   | [RequestError.REPORT_TYPE_INVALID]
 
     }
 
@@ -155,10 +158,10 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 "}"
 
         when:
-        ValidatableResponse response = SivaRequests.tryValidateHashcode(requestData).then()
+        Response response = SivaRequests.tryValidateHashcode(requestData)
 
         then:
-        RequestError.assertErrorResponse(response, new RequestError(SIGNATURE_POLICY, INVALID_SIGNATURE_POLICY))
+        RequestErrorValidator.validate(response, RequestError.SIGNATURE_POLICY_INVALID)
     }
 
     @Description("Input incorrect signature")
@@ -168,15 +171,15 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         (requestData.signatureFiles as List<Map>).first().signature = value
 
         expect:
-        ValidatableResponse response = SivaRequests.tryValidateHashcode(requestData).then()
-        RequestError.assertErrorResponse(response, new RequestError(errorType, error))
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+        RequestErrorValidator.validate(response, error)
 
         where:
-        value | comment                                                                      | errorType         | error
+        value | comment                                                                      | error
         "NOT.BASE64.ENCODED.VALUE"
-              | "incorrect signature"                                                        | SIGNATURE_INDEX_0 | SIGNATURE_FILE_NOT_BASE64_ENCODED
+              | "incorrect signature"                                                        | RequestError.SIGNATURE_FILE_NOT_BASE64
         Base64.encodeBase64String("NOT_XML_FORMATTED_FILE_CONTENT".getBytes(StandardCharsets.UTF_8))
-              | "not correct file type"                                                      | SIGNATURE         | SIGNATURE_FILE_MALFORMED
+              | "not correct file type"                                                      | RequestError.SIGNATURE_FILE_MALFORMED
     }
 
     @Description("Input file without signature")
@@ -209,10 +212,12 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         given:
         Map requestData = validRequestBody()
         (requestData.signatureFiles as List<Map>).first().datafiles = []
-        expect:
-        ValidatableResponse response = SivaRequests.tryValidateHashcode(requestData).then()
-        RequestError.assertErrorResponse(response, new RequestError(DATAFILES, INVALID_DATAFILES_LIST)
-        )
+
+        when:
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DATAFILES_LIST_INVALID)
     }
 
     @Description("Invalid data file filename")
@@ -221,15 +226,17 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         Map requestData = validRequestBody()
         ((requestData.signatureFiles as List<Map>).first().datafiles as List<Map>).first().filename = value
 
-        expect:
-        ValidatableResponse response = SivaRequests.tryValidateHashcode(requestData).then()
-        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(DATAFILES_FILENAME, error) })
+        when:
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+
+        then:
+        RequestErrorValidator.validate(response, *errors)
 
         where:
         value     | comment    | errors
-        ""        | "empty"    | [INVALID_FILENAME_SIZE, MUST_NOT_BE_EMPTY]
-        null      | "missing"  | [INVALID_FILENAME, MUST_NOT_BE_EMPTY]
-        'a' * 261 | "too long" | [INVALID_FILENAME_SIZE]
+        ""        | "empty"    | [RequestError.DATAFILE_FILENAME_INVALID_SIZE, RequestError.DATAFILE_FILENAME_EMPTY]
+        null      | "missing"  | [RequestError.DATAFILE_FILENAME_INVALID, RequestError.DATAFILE_FILENAME_EMPTY]
+        'a' * 261 | "too long" | [RequestError.DATAFILE_FILENAME_INVALID_SIZE]
     }
 
     @Description("Data file invalid hash algorithm")
@@ -239,8 +246,8 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         ((requestData.signatureFiles as List<Map>).first().datafiles as List<Map>).first().hashAlgo = "INVALID_HASH_ALGORITHM"
 
         expect:
-        ValidatableResponse response = SivaRequests.tryValidateHashcode(requestData).then()
-        RequestError.assertErrorResponse(response, new RequestError(DATAFILES_HASH_ALGO, INVALID_HASH_ALGO))
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+        RequestErrorValidator.validate(response, RequestError.DATAFILE_HASH_ALGO_INVALID)
     }
 
     @Description("Invalid data file hash")
@@ -250,15 +257,15 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         ((requestData.signatureFiles as List<Map>).first().datafiles as List<Map>).first().hash = value
 
         expect:
-        ValidatableResponse response = SivaRequests.tryValidateHashcode(requestData).then()
-        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(DATAFILES_HASH, error) })
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+        RequestErrorValidator.validate(response, *errors)
 
         where:
         value                      | comment           | errors
-        null                       | "missing"         | [MUST_NOT_BE_BLANK, INVALID_BASE_64]
-        ""                         | "empty"           | [MUST_NOT_BE_BLANK, INVALID_BASE_64, INVALID_HASH_SIZE]
-        "NOT.BASE64.ENCODED.VALUE" | "in wrong format" | [INVALID_BASE_64]
-        'P' * 1001                 | "too long"        | [INVALID_HASH_SIZE]
+        null                       | "missing"         | [RequestError.DATAFILE_HASH_BLANK, RequestError.DATAFILE_HASH_INVALID_BASE_64]
+        ""                         | "empty"           | [RequestError.DATAFILE_HASH_BLANK, RequestError.DATAFILE_HASH_INVALID_BASE_64, RequestError.DATAFILE_HASH_INVALID_SIZE]
+        "NOT.BASE64.ENCODED.VALUE" | "in wrong format" | [RequestError.DATAFILE_HASH_INVALID_BASE_64]
+        'P' * 1001                 | "too long"        | [RequestError.DATAFILE_HASH_INVALID_SIZE]
     }
 
     @Description("Double fields in datafile object")
@@ -368,7 +375,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
     @Link("http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters")
     def "Given request body of limit length, then validation report is returned"() {
         expect:
-        SivaRequests.validateHashcode(RequestData.requestWithFixedBodyLength(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null), SIVA_FILE_SIZE_LIMIT))
+        SivaRequests.validateHashcode(RequestData.requestWithFixedBodyLength(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null), conf.sivaRequestSizeLimit()))
                 .then()
                 .statusCode(200)
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)

@@ -17,18 +17,16 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.common.Constants
-import ee.openeid.siva.test.model.ContainerFormat
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignatureIndication
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
+import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.apache.http.HttpStatus
+import io.restassured.response.Response
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class DdocValidationFailSpec extends GenericSpecification {
@@ -221,33 +219,30 @@ class DdocValidationFailSpec extends GenericSpecification {
     @Description("Ddoc with XML Entity expansion attack")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/")
     def "ddocWithXMLEntityExpansionAttackShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("xml_expansion.ddoc"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("xml_expansion.ddoc"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Ddoc with XML server side request forgery attack")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/")
     def "ddocWithXMLServerSideRequestForgeryAttackShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("xml_entity.ddoc"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is(DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("xml_entity.ddoc"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Ddoc no files in container")
     def "ddocNoFilesInContainer"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("KS-02_tyhi.ddoc"))
-                .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors.message", Matchers.hasItems(INVALID_BASE_64, MUST_NOT_BE_BLANK))
-                .body("requestErrors", Matchers.hasSize(2))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("KS-02_tyhi.ddoc"))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_INVALID_BASE_64, RequestError.DOCUMENT_BLANK)
     }
 
     @Description("Ddoc with invalid datafile id")

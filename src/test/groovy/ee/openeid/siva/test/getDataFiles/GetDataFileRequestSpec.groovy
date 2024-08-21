@@ -17,15 +17,14 @@
 package ee.openeid.siva.test.getDataFiles
 
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.model.RequestError
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
-import ee.openeid.siva.test.util.RequestError
+import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import io.restassured.response.ValidatableResponse
+import io.restassured.response.Response
 import org.hamcrest.Matchers
-
-import static ee.openeid.siva.integrationtest.TestData.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#data-files-request-interface")
 class GetDataFileRequestSpec extends GenericSpecification {
@@ -33,15 +32,15 @@ class GetDataFileRequestSpec extends GenericSpecification {
     @Description("Request with empty body or empty values results in error")
     def "Given #comment, then error is returned"() {
         when:
-        ValidatableResponse response = SivaRequests.tryGetDataFiles(body).then()
+        Response response = SivaRequests.tryGetDataFiles(body)
 
         then:
-        List errors = [
-                new Tuple(FILENAME, INVALID_DATA_FILE_FILENAME),
-                new Tuple(DOCUMENT, MUST_NOT_BE_BLANK),
-                new Tuple(DOCUMENT, INVALID_BASE_64)
-        ]
-        RequestError.assertErrorResponse(response, *errors.collect { errorType, error -> new RequestError(errorType, error) })
+        RequestErrorValidator.validate(
+                response,
+                RequestError.DATA_FILE_FILENAME_INVALID,
+                RequestError.DOCUMENT_BLANK,
+                RequestError.DOCUMENT_INVALID_BASE_64
+        )
 
         where:
         body                                | comment
@@ -83,15 +82,15 @@ class GetDataFileRequestSpec extends GenericSpecification {
         requestData.remove(key)
 
         when:
-        ValidatableResponse response = SivaRequests.tryGetDataFiles(requestData).then()
+        Response response = SivaRequests.tryGetDataFiles(requestData)
 
         then:
-        RequestError.assertErrorResponse(response, *errors.collect { error -> new RequestError(errorType, error) })
+        RequestErrorValidator.validate(response, *errors)
 
         where:
-        key        | comment | errorType | errors
-        "document" | ""      | DOCUMENT  | [MUST_NOT_BE_BLANK, INVALID_BASE_64]
-        "filename" | ""      | FILENAME  | [INVALID_DATA_FILE_FILENAME]
+        key        | comment | errors
+        "document" | ""      | [RequestError.DOCUMENT_BLANK, RequestError.DOCUMENT_INVALID_BASE_64]
+        "filename" | ""      | [RequestError.DATA_FILE_FILENAME_INVALID]
     }
 
     @Description("Requesting data files from valid or invalid document with invalid (non-ddoc) type in filename returns error for invalid datafile filename")
@@ -100,10 +99,10 @@ class GetDataFileRequestSpec extends GenericSpecification {
         Map requestData = RequestData.dataFileRequestFromFile(document, filename)
 
         when:
-        ValidatableResponse response = SivaRequests.tryGetDataFiles(requestData).then()
+        Response response = SivaRequests.tryGetDataFiles(requestData)
 
         then:
-        RequestError.assertErrorResponse(response, new RequestError(FILENAME, INVALID_DATA_FILE_FILENAME))
+        RequestErrorValidator.validate(response, RequestError.DATA_FILE_FILENAME_INVALID)
 
         where:
         document              | filename              | comment
@@ -122,10 +121,10 @@ class GetDataFileRequestSpec extends GenericSpecification {
         Map requestData = RequestData.dataFileRequestFromFile(document, filename)
 
         when:
-        ValidatableResponse response = SivaRequests.tryGetDataFiles(requestData).then()
+        Response response = SivaRequests.tryGetDataFiles(requestData)
 
         then:
-        RequestError.assertErrorResponse(response, new RequestError(DOCUMENT, DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE))
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
 
         where:
         document                      | filename                       | comment
@@ -138,7 +137,7 @@ class GetDataFileRequestSpec extends GenericSpecification {
     @Link("http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters")
     def "Given request with body of limit length, then data files request succeeds"() {
         expect:
-        SivaRequests.getDataFiles(RequestData.requestWithFixedBodyLength(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"), SIVA_FILE_SIZE_LIMIT))
+        SivaRequests.getDataFiles(RequestData.requestWithFixedBodyLength(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"), conf.sivaRequestSizeLimit()))
                 .then()
                 .statusCode(200)
                 .body("dataFiles[0].filename", Matchers.is("test.txt"))
