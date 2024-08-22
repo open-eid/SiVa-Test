@@ -24,8 +24,6 @@ import io.qameta.allure.Description
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.common.DssMessages.QUAL_HAS_GRANTED_AT_ANS
-import static ee.openeid.siva.common.DssMessages.QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2
 import static ee.openeid.siva.integrationtest.TestData.CERT_VALIDATION_NOT_CONCLUSIVE
 import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
@@ -354,7 +352,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", Matchers.not(Matchers.hasItem(QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.getValue())))
+                .body("signatures[0].warnings.content", Matchers.not(Matchers.hasItem(DssMessage.QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.message)))
                 .body("signatures[0].warnings.content", Matchers.emptyOrNullString())
     }
 
@@ -364,7 +362,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("IB-4183_3.4kaart_RSA2047_TS.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].errors.content", Matchers.not(Matchers.hasItem(QUAL_HAS_GRANTED_AT_ANS.getValue())))
+                .body("signatures[0].errors.content", Matchers.not(Matchers.hasItem(DssMessage.QUAL_HAS_GRANTED_AT_ANS.message)))
                 .body("signatures[0].errors.content", Matchers.emptyOrNullString())
     }
 }

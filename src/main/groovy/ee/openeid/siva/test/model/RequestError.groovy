@@ -17,40 +17,40 @@
 package ee.openeid.siva.test.model
 
 enum RequestError {
-    FILENAME_EMPTY(key: "filename", message: CommonError.MUST_NOT_BE_EMPTY),
-    FILENAME_INVALID(key: "filename", message: "Invalid filename"),
-    FILENAME_INVALID_SIZE(key: "filename", message: SizeError.getSizeError(260)),
+    FILENAME_EMPTY("filename", CommonError.MUST_NOT_BE_EMPTY),
+    FILENAME_INVALID("filename", "Invalid filename"),
+    FILENAME_INVALID_SIZE("filename", SizeError.getSizeError(260)),
 
-    DATA_FILE_FILENAME_INVALID(key: "filename", message: "Invalid filename. Can only return data files for DDOC type containers."),
+    DATA_FILE_FILENAME_INVALID("filename", "Invalid filename. Can only return data files for DDOC type containers."),
 
-    DATAFILES_LIST_INVALID(key: "signatureFiles[0].datafiles", message: "Invalid dataFiles list"),
+    DATAFILES_LIST_INVALID("signatureFiles[0].datafiles", "Invalid dataFiles list"),
 
-    DATAFILE_FILENAME_EMPTY(key: "signatureFiles[0].datafiles[0].filename", message: CommonError.MUST_NOT_BE_EMPTY),
-    DATAFILE_FILENAME_INVALID(key: "signatureFiles[0].datafiles[0].filename", message: "Invalid filename"),
-    DATAFILE_FILENAME_INVALID_SIZE(key: "signatureFiles[0].datafiles[0].filename", message: SizeError.getSizeError(260)),
+    DATAFILE_FILENAME_EMPTY("signatureFiles[0].datafiles[0].filename", CommonError.MUST_NOT_BE_EMPTY),
+    DATAFILE_FILENAME_INVALID("signatureFiles[0].datafiles[0].filename", "Invalid filename"),
+    DATAFILE_FILENAME_INVALID_SIZE("signatureFiles[0].datafiles[0].filename", SizeError.getSizeError(260)),
 
-    DATAFILE_HASH_ALGO_INVALID(key: "signatureFiles[0].datafiles[0].hashAlgo", message: "Invalid hash algorithm"),
+    DATAFILE_HASH_ALGO_INVALID("signatureFiles[0].datafiles[0].hashAlgo", "Invalid hash algorithm"),
 
-    DATAFILE_HASH_BLANK(key: "signatureFiles[0].datafiles[0].hash", message: CommonError.MUST_NOT_BE_BLANK),
-    DATAFILE_HASH_INVALID_BASE_64(key: "signatureFiles[0].datafiles[0].hash", message: "Document is not encoded in a valid base64 string"),
-    DATAFILE_HASH_INVALID_SIZE(key: "signatureFiles[0].datafiles[0].hash", message: SizeError.getSizeError(1000)),
+    DATAFILE_HASH_BLANK("signatureFiles[0].datafiles[0].hash", CommonError.MUST_NOT_BE_BLANK),
+    DATAFILE_HASH_INVALID_BASE_64("signatureFiles[0].datafiles[0].hash", "Document is not encoded in a valid base64 string"),
+    DATAFILE_HASH_INVALID_SIZE("signatureFiles[0].datafiles[0].hash", SizeError.getSizeError(1000)),
 
-    DOCUMENT_BLANK(key: "document", message: CommonError.MUST_NOT_BE_BLANK),
-    DOCUMENT_INVALID_BASE_64(key: "document", message: "Document is not encoded in a valid base64 string"),
-    DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE(key: "document", message: "Document malformed or not matching documentType"),
+    DOCUMENT_BLANK("document", CommonError.MUST_NOT_BE_BLANK),
+    DOCUMENT_INVALID_BASE_64("document", "Document is not encoded in a valid base64 string"),
+    DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE("document", "Document malformed or not matching documentType"),
 
-    DOCUMENT_TYPE_INVALID(key: "documentType", message: "documentType is not a valid request parameter"),
+    DOCUMENT_TYPE_INVALID("documentType", "documentType is not a valid request parameter"),
 
-    REPORT_TYPE_INVALID(key: "reportType", message: "Invalid report type"),
+    REPORT_TYPE_INVALID("reportType", "Invalid report type"),
 
-    SIGNATURE_FILES_EMPTY(key: "signatureFiles", message: CommonError.MUST_NOT_BE_EMPTY),
-    SIGNATURE_FILES_NULL(key: "signatureFiles", message: CommonError.MUST_NOT_BE_NULL),
+    SIGNATURE_FILES_EMPTY("signatureFiles", CommonError.MUST_NOT_BE_EMPTY),
+    SIGNATURE_FILES_NULL("signatureFiles", CommonError.MUST_NOT_BE_NULL),
 
-    SIGNATURE_FILE_MALFORMED(key: "signatureFiles.signature", message: "Signature file malformed"),
-    SIGNATURE_FILE_NOT_BASE64(key: "signatureFiles[0].signature", message: "Signature file is not valid base64 encoded string"),
+    SIGNATURE_FILE_MALFORMED("signatureFiles.signature", "Signature file malformed"),
+    SIGNATURE_FILE_NOT_BASE64("signatureFiles[0].signature", "Signature file is not valid base64 encoded string"),
 
-    SIGNATURE_POLICY_INVALID(key: "signaturePolicy", message: "Invalid signature policy"),
-    SIGNATURE_POLICY_INVALID_SIZE(key: "signaturePolicy", message: SizeError.getSizeError(100)),
+    SIGNATURE_POLICY_INVALID("signaturePolicy", "Invalid signature policy"),
+    SIGNATURE_POLICY_INVALID_SIZE("signaturePolicy", SizeError.getSizeError(100)),
 
     // TODO: Investigate if these errors are used and should be covered by tests.
     // "Invalid filename extension. Only xml files accepted."
@@ -63,18 +63,16 @@ enum RequestError {
     final String key
     final String message
 
-    RequestError(Map<String, String> params) {
-        this.key = params.key
-        this.message = params.message
+    RequestError(String key, String message) {
+        this.key = key
+        this.message = message
     }
-
 }
 
 final class CommonError {
     static final String MUST_NOT_BE_BLANK = "must not be blank"
     static final String MUST_NOT_BE_EMPTY = "must not be empty"
     static final String MUST_NOT_BE_NULL = "must not be null"
-
 }
 
 class SizeError {
