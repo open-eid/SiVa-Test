@@ -23,7 +23,6 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import org.hamcrest.Matchers
-import org.junit.jupiter.api.Disabled
 import spock.lang.Ignore
 
 import java.time.ZoneId
@@ -95,7 +94,7 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
                 .body("signatures[0].signatureScopes[0].scope", equalTo("PARTIAL"))
     }
 
-    @Disabled("SIVA-499")
+    @Ignore("SIVA-499")
     @Description("Diagnostic report includes used certificates element and its values")
     def "Given diagnostic report, then it includes certificates element"() {
         expect:

@@ -30,20 +30,19 @@
         <project.encoding>UTF-8</project.encoding>
 
     <!-- Dependency versions -->
-        <groovy.version>4.0.21</groovy.version>
-        <spock.version>2.4-M1-groovy-4.0</spock.version>
-        <allure.version>2.27.0</allure.version>
-        <restassured.version>5.4.0</restassured.version>
+        <groovy.version>4.0.22</groovy.version>
+        <spock.version>2.4-M4-groovy-4.0</spock.version>
+        <allure.version>2.29.0</allure.version>
+        <restassured.version>5.5.0</restassured.version>
         <aspectj.version>1.9.22.1</aspectj.version>
         <aeonbits.owner.version>1.0.12</aeonbits.owner.version>
         <slf4j.version>2.0.13</slf4j.version>
-        <junit.jupiter.version>5.9.3</junit.jupiter.version>
 
     <!-- Plugin versions -->
-        <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
+        <maven.surefire.plugin.version>3.4.0</maven.surefire.plugin.version>
         <gmavenplus.plugin.version>3.0.2</gmavenplus.plugin.version>
         <build.helper.plugin.version>3.6.0</build.helper.plugin.version>
-        <allure-maven.version>2.12.0</allure-maven.version>
+        <allure-maven.version>2.13.0</allure-maven.version>
 
     </properties>
 
@@ -149,37 +148,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-junit5</artifactId>
-            <version>${allure.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
             <version>2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.32</version>
         </dependency>
         <dependency>
             <groupId>jakarta.validation</groupId>
@@ -233,12 +204,10 @@
                     <properties>
                         <property>
                             <name>listener</name>
-<!--                            <value>io.qameta.allure.spock2.AllureSpock2</value>-->
-                            <value>io.qameta.allure.junit5.AllureJunit5</value>
+                            <value>io.qameta.allure.spock2.AllureSpock2</value>
                         </property>
                     </properties>
                     <systemPropertyVariables>
-                        <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                     </systemPropertyVariables>
                 </configuration>
