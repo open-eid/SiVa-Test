@@ -14,8 +14,9 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test
+package ee.openeid.siva.test.validate.asice
 
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests

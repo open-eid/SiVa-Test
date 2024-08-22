@@ -14,9 +14,9 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test
+package ee.openeid.siva.test.validate
 
-import ee.openeid.siva.common.Constants
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.model.SignatureLevel
@@ -354,7 +354,7 @@ class EuPlugValidationPassSpec extends GenericSpecification {
                 .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
                 .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TEST_ENV_VALIDATION_WARNING))
     }
 
     //The file should not be valid

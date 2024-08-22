@@ -14,9 +14,10 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test
+package ee.openeid.siva.test.validate.ddoc
 
 import ee.openeid.siva.common.Constants
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureIndication

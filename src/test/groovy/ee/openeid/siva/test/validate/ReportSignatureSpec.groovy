@@ -14,8 +14,9 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test
+package ee.openeid.siva.test.validate
 
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureLevel
 import io.qameta.allure.Description
@@ -35,7 +36,7 @@ import static org.hamcrest.CoreMatchers.equalTo
 import static org.hamcrest.MatcherAssert.assertThat
 
 @Ignore("SIVA-196")
-//Class disabled
+//Class disabled - feature not implemented
 class ReportSignatureSpec extends GenericSpecification {
     private static final String VALIDATION_ENDPOINT = "/validate"
     protected static final String VALID_SIGNATURE_POLICY_4 = "POLv4"
