@@ -28,7 +28,7 @@ import io.qameta.allure.Link
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class PdfValidationFailSpec extends GenericSpecification {

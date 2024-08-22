@@ -16,7 +16,7 @@
 
 package ee.openeid.siva.test.validate
 
-import ee.openeid.siva.common.DateTimeMatcher
+import ee.openeid.siva.test.DateTimeMatcher
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
@@ -29,7 +29,7 @@ import spock.lang.Ignore
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface")
@@ -76,42 +76,42 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("tlanalysis[0].constraint[0]", notNullValue())
                 .body("tlanalysis[0].constraint[0].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_1))
                 .body("tlanalysis[0].constraint[0].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_1))
-                .body("tlanalysis[0].constraint[0].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("tlanalysis[0].constraint[0].status", equalTo("OK"))
                 .body("tlanalysis[0]", notNullValue())
                 .body("tlanalysis[0].constraint[1]", notNullValue())
                 .body("tlanalysis[0].constraint[1].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_2))
                 .body("tlanalysis[0].constraint[1].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_2))
-                .body("tlanalysis[0].constraint[1].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("tlanalysis[0].constraint[1].status", equalTo("OK"))
                 .body("tlanalysis[0].constraint[2]", notNullValue())
                 .body("tlanalysis[0].constraint[2].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_3))
                 .body("tlanalysis[0].constraint[2].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_3))
-                .body("tlanalysis[0].constraint[2].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("tlanalysis[0].constraint[2].status", equalTo("OK"))
                 .body("tlanalysis[0].constraint[3]", notNullValue())
                 .body("tlanalysis[0].constraint[3].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_4))
                 .body("tlanalysis[0].constraint[3].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_4))
-                .body("tlanalysis[0].constraint[3].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("tlanalysis[0].constraint[3].status", equalTo("OK"))
                 .body("tlanalysis[0].conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("tlanalysis[0].countryCode", equalTo("EU"))
                 .body("tlanalysis[1]", notNullValue())
                 .body("tlanalysis[1].constraint[0]", notNullValue())
                 .body("tlanalysis[1].constraint[0].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_1))
                 .body("tlanalysis[1].constraint[0].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_1))
-                .body("tlanalysis[1].constraint[0].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("tlanalysis[1].constraint[0].status", equalTo("OK"))
                 .body("tlanalysis[1]", notNullValue())
                 .body("tlanalysis[1].constraint[1]", notNullValue())
                 .body("tlanalysis[1].constraint[1].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_2))
                 .body("tlanalysis[1].constraint[1].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_2))
-                .body("tlanalysis[1].constraint[1].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("tlanalysis[1].constraint[1].status", equalTo("OK"))
                 .body("tlanalysis[1]", notNullValue())
                 .body("tlanalysis[1].constraint[2]", notNullValue())
                 .body("tlanalysis[1].constraint[2].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_3))
                 .body("tlanalysis[1].constraint[2].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_3))
-                .body("tlanalysis[1].constraint[2].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("tlanalysis[1].constraint[2].status", equalTo("OK"))
                 .body("tlanalysis[1]", notNullValue())
                 .body("tlanalysis[1].constraint[3]", notNullValue())
                 .body("tlanalysis[1].constraint[3].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_4))
                 .body("tlanalysis[1].constraint[3].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_4))
-                .body("tlanalysis[1].constraint[3].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("tlanalysis[1].constraint[3].status", equalTo("OK"))
                 .body("tlanalysis[1].conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("tlanalysis[1].countryCode", equalTo("EE"))
     }
@@ -181,7 +181,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_PROCESS_PREFIX)
                 .body("basicBuildingBlocks[1].isc.constraint[0].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_9))
                 .body("basicBuildingBlocks[1].isc.constraint[0].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_9))
-                .body("basicBuildingBlocks[1].isc.constraint[0].status", equalTo(VALID_VALIDATION_PROCESS_STATUS_2))
+                .body("basicBuildingBlocks[1].isc.constraint[0].status", equalTo("OK"))
                 .body("basicBuildingBlocks[1].isc.conclusion.", notNullValue())
                 .body("basicBuildingBlocks[1].isc.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
                 .body("basicBuildingBlocks[1].isc.certificateChain.chainItem[0].source", equalTo("TRUSTED_LIST"))

@@ -27,7 +27,7 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy")
 class AsiceValidationPassSpec extends GenericSpecification {

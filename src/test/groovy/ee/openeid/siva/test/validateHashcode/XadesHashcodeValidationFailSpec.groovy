@@ -26,7 +26,7 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 
 class XadesHashcodeValidationFailSpec extends GenericSpecification {
 
@@ -44,7 +44,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
@@ -59,7 +59,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].subIndication", Matchers.is("HASH_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_INTACT))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
@@ -76,7 +76,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:27:24Z"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
@@ -91,7 +91,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].subIndication", Matchers.is("SIG_CRYPTO_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_9))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
@@ -106,7 +106,7 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].subIndication", Matchers.is("SIG_CRYPTO_FAILURE"))
                 .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_9))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(0))
     }
 }

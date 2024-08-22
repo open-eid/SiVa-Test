@@ -24,8 +24,8 @@ import io.qameta.allure.Description
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.integrationtest.TestData.CERT_VALIDATION_NOT_CONCLUSIVE
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.getCERT_VALIDATION_NOT_CONCLUSIVE
+import static ee.openeid.siva.test.TestData.getVALIDATION_CONCLUSION_PREFIX
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 
 class AsiceValidationReportValueVerificationSpec extends GenericSpecification {

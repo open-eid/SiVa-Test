@@ -27,7 +27,7 @@ import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 
 class AsicsValidationFailSpec extends GenericSpecification {
 

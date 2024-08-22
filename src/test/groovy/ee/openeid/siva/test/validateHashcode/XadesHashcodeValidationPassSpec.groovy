@@ -26,7 +26,8 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_LEVEL_ARCHIVAL_DATA
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
 class XadesHashcodeValidationPassSpec extends GenericSpecification {
@@ -53,7 +54,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:27:24Z"))
     }
@@ -67,7 +68,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
     }
@@ -79,7 +80,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T12:48:26Z"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
@@ -92,7 +93,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T12:43:15Z"))
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("test+document.txt"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
@@ -105,7 +106,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:22:04Z"))
                 .body("signatures[0].signatureScopes[0].name", Matchers.is("Te st in g.txt"))
-                .body("validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", Matchers.is(1))
     }
 

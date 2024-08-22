@@ -27,7 +27,7 @@ import io.qameta.allure.Description
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 
 class BdocValidationPassSpec extends GenericSpecification {
 

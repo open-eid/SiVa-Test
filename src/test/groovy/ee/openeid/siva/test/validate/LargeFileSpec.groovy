@@ -27,7 +27,7 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.restassured.response.Response
 
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.equalTo
 
 @Link("http://open-eid.github.io/SiVa/siva3/overview/#main-features-of-siva-validation-service")

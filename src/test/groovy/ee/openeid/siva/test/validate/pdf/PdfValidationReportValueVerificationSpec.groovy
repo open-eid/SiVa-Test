@@ -27,7 +27,7 @@ import io.qameta.allure.Link
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface")

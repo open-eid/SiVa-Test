@@ -16,8 +16,8 @@
 
 package ee.openeid.siva.test.validate.asice
 
-import ee.openeid.siva.common.Constants
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.model.SignaturePolicy
@@ -27,7 +27,7 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class DocumentValidationSpec extends GenericSpecification {
@@ -141,7 +141,7 @@ class DocumentValidationSpec extends GenericSpecification {
                 .body("signatures[0].subIndication", Matchers.is("SIGNED_DATA_NOT_FOUND"))
                 .body("signatures[0].errors.content", Matchers.hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, REFERENCE_DATA_NOT_FOUND))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Bdoc with deleted document, also removed from manifest.")
@@ -193,7 +193,7 @@ class DocumentValidationSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
 
     }
 }

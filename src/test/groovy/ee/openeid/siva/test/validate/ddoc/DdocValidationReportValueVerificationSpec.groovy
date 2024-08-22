@@ -16,8 +16,8 @@
 
 package ee.openeid.siva.test.validate.ddoc
 
-import ee.openeid.siva.common.Constants
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureIndication
@@ -28,7 +28,7 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-response-interface")
@@ -112,7 +112,7 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("18912.ddoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
     }
 
@@ -123,7 +123,7 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("validatedDocument.filename", Matchers.is("DdocContainerNoSignature.ddoc"))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(0))

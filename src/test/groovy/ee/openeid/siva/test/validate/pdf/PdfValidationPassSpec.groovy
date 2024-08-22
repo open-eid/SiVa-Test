@@ -27,7 +27,7 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
 class PdfValidationPassSpec extends GenericSpecification {

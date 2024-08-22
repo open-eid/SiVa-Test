@@ -16,7 +16,7 @@
 
 package ee.openeid.siva.test.validateHashcode
 
-import ee.openeid.siva.common.DateTimeMatcher
+import ee.openeid.siva.test.DateTimeMatcher
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
@@ -40,7 +40,7 @@ import java.nio.charset.StandardCharsets
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")

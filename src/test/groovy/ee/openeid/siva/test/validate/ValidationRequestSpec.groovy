@@ -33,7 +33,7 @@ import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")

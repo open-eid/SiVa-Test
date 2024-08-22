@@ -26,7 +26,7 @@ import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class AsiceValidationFailSpec extends GenericSpecification {
@@ -91,7 +91,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerNoSignature.asice"))
                 .then()
                 .body("validationReport.validationConclusion.signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("validationReport.validationConclusion.validationLevel", Matchers.is("ARCHIVAL_DATA"))
+                .body("validationReport.validationConclusion.validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(0))
                 .body("validationReport.validationConclusion.signaturesCount", Matchers.is(0))
     }

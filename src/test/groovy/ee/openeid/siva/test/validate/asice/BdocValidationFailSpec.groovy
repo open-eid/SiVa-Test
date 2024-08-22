@@ -16,8 +16,8 @@
 
 package ee.openeid.siva.test.validate.asice
 
-import ee.openeid.siva.common.Constants
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -28,7 +28,7 @@ import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.*
+import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.emptyOrNullString
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
@@ -97,7 +97,7 @@ class BdocValidationFailSpec extends GenericSpecification {
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Wrong signature timestamp")

@@ -16,8 +16,8 @@
 
 package ee.openeid.siva.test.validate.ddoc
 
-import ee.openeid.siva.common.Constants
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -27,7 +27,7 @@ import io.qameta.allure.Link
 import io.restassured.response.Response
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class DdocValidationFailSpec extends GenericSpecification {
@@ -100,7 +100,7 @@ class DdocValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2012-09-19T06:28:55Z"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
                 .body("signatures[0].subjectDistinguishedName.commonName", Matchers.notNullValue())
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0))
     }
@@ -114,7 +114,7 @@ class DdocValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].errors[0].content", Matchers.containsString("Bad digest for DataFile: D0"))
                 .body("signatures[0].errors.size()", Matchers.is(1))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0))
     }
@@ -130,7 +130,7 @@ class DdocValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
                 .body("signatures[0].warnings[0].content", Matchers.is("Old and unsupported format: DIGIDOC-XML version: 1.2"))
                 .body("signatures[0].warnings.size()", Matchers.is(1))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
                 .body("validSignaturesCount", Matchers.is(0))
     }
@@ -268,7 +268,7 @@ class DdocValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
     }
 
@@ -294,7 +294,7 @@ class DdocValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
     }
 
@@ -320,7 +320,7 @@ class DdocValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings[0].content", Matchers.is(Constants.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", Matchers.is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
     }
 }

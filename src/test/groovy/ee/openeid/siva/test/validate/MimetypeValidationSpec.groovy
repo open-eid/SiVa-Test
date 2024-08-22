@@ -17,6 +17,7 @@
 package ee.openeid.siva.test.validate
 
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.RequestError
 import ee.openeid.siva.test.model.SignatureFormat
@@ -29,8 +30,7 @@ import io.qameta.allure.Link
 import io.restassured.response.Response
 import org.hamcrest.Matchers
 
-import static ee.openeid.siva.common.Constants.*
-import static ee.openeid.siva.integrationtest.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 
 @Link("http://open-eid.github.io/SiVa/siva3/overview/#main-features-of-siva-validation-service")
 class MimetypeValidationSpec extends GenericSpecification {
@@ -46,7 +46,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Invalid ASICe container with mimetype as last in cointainer.")
@@ -60,7 +60,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICe container with deflated mimetype.")
@@ -74,7 +74,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_COMPRESSED_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
     @Description("Invalid ASICe container without mimetype.")
@@ -88,7 +88,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICe container mimetype filename with capital letter (Mimetype).")
@@ -102,7 +102,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICe container, where mimetype filename is with extra space in the end (\"mimetype \").")
@@ -116,7 +116,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICe container with extra byte in the beginning of the container.")
@@ -130,7 +130,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("ASICe container with invalid mimetype as \"text/plain\".")
@@ -144,7 +144,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_INVALID_TYPE))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_INVALID_TYPE))
     }
 
     @Description("BDOC container with valid mimetype.")
@@ -158,7 +158,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Invalid BDOC container with mimetype as last.")
@@ -172,7 +172,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid BDOC container with deflated mimetype.")
@@ -186,7 +186,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_COMPRESSED_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
     @Description("Invalid BDOC container without mimetype.")
@@ -227,7 +227,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("ASICs container with valid mimetype and DDOC inside.")
@@ -241,7 +241,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Invalid ASICs container with mimetype as last and Tmp file inside.")
@@ -255,7 +255,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICs container with mimetype as last and DDOC inside.")
@@ -269,7 +269,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICs container with deflated mimetype and Tmp file inside.")
@@ -283,7 +283,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_COMPRESSED_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
     @Description("Invalid ASICs container with deflated mimetype and DDOC inside.")
@@ -297,7 +297,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_COMPRESSED_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
     @Description("Invalid ASICs container without mimetype and Tmp file inside.")
@@ -311,7 +311,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICs container without mimetype and DDOC inside.")
@@ -325,7 +325,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICs container, where mimetype filename is with extra space in the end (\"mimetype \").")
@@ -339,7 +339,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
                 .body("signatures[0].errors.content", Matchers.hasItem("The manifest file is absent!"))
     }
 
@@ -354,7 +354,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_INVALID_TYPE))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_INVALID_TYPE))
     }
 
     @Description("Valid EDOC container with valid.")
@@ -367,7 +367,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Invalid EDOC container with mimetype as last in cointainer.")
@@ -380,7 +380,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid EDOC container without mimetype.")
@@ -393,7 +393,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_NOT_FIRST_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Valid ADOC container with mimetype.")
@@ -406,6 +406,6 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
                 .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(MIMETYPE_EXTRA_FIELDS_WARNING))
+                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_EXTRA_FIELDS_WARNING))
     }
 }
