@@ -12,20 +12,26 @@ Tests for Signature Verification Service.
 
 ## Configuring the tests
 
-Modify the file [application-test.yml](src/test/resources/application-test.yml) according to the
+Create _application.properties_ based on [application.properties.sample](src/test/resources/application.properties.sample).
+If needed, modify properties according to the
 environment where SiVa is running at.
 
 If you are running SiVa in local docker-compose setup as described at
 https://github.com/open-eid/SiVa?tab=readme-ov-file#with-docker, then the default configuration should work.
 
-**Descriptions of parameters in `application-test.yml`:**
+**Descriptions of parameters in `application.properties`:**
 
-| Parameter                     | Example     | Description             |
-|:------------------------------|:------------|:------------------------|
-| siva.application-context-path | `/v3`       | Custom service context. |
-| siva.hostname                 | `localhost` | Service URL.            |
-| siva.port                     | `8080`      | Service port.           |
-| siva.protocol                 | `http`      | Service protocol.       |
+| Parameter                     | Example               | Description                                                                   |
+|:------------------------------|:----------------------|:------------------------------------------------------------------------------|
+| siva.application-context-path | `/v3`                 | Custom service context.                                                       |
+| siva.hostname                 | `localhost`           | Service URL.                                                                  |
+| siva.port                     | `8080`                | Service port.                                                                 |
+| siva.protocol                 | `http`                | Service protocol.                                                             |
+| siva.request-size-limit       | `28311552`            | Service request size limit.                                                   |
+| test-files-directory          | `src/test/resources/` | Test files directory path.                                                    |
+| rest-assured-console-logging  | `true`                | Toggles printing Rest Assured logs in console.                                |
+| allure-rest-request-limit     | `2000000`             | Sets limit for Allure rest request size to prevent report generation issues.  |
+| allure-rest-response-limit    | `5000000`             | Sets limit for Allure rest response size to prevent report generation issues. |
 
 ## Execute tests and generate report
 
@@ -44,7 +50,7 @@ How to run tests in local environment.
 
 #### Running tests
 
-Open up src/test and right-click on the java folder, then press _Run 'Tests in 'java''_.
+Open up src/test and right-click on the groovy folder, then press _Run 'Tests in 'groovy''_.
 
 ![Running tests](docs/img/Run_tests.png)
 
@@ -56,5 +62,5 @@ Open up src/test and right-click on the java folder, then press _Run 'Tests in '
 ### Report
 
 - To generate a test report, Allure is required ([instructions for download](https://docs.qameta.io/allure/#_installing_a_commandline)).
-- After running the tests, _allure-results_ folder is created under the project and the Allure report can be generated locally by the following command:
-  - `allure serve`
+- After running the tests, _allure-results_ folder is created under the _target_ directory and the Allure report can be generated locally by the following command:
+  - `allure serve target/allure-results/`

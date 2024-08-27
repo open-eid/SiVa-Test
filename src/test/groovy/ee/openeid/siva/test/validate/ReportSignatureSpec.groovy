@@ -25,7 +25,6 @@ import io.restassured.config.EncoderConfig
 import io.restassured.http.ContentType
 import io.restassured.response.Response
 import org.apache.commons.codec.binary.Base64
-import org.json.JSONObject
 import spock.lang.Ignore
 
 import java.nio.file.FileSystems
@@ -63,16 +62,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportRsaSignatureXadesBaselineLTA"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -103,16 +103,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportRsaSignatureXadesBaselineLT"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -143,16 +144,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportRsaSignatureXadesBaselineT"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -182,16 +184,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportRsaSignatureXadesBaselineB"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -221,16 +224,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportEccSignatureXadesBaselineLTA"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -261,16 +265,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportEccSignatureXadesBaselineLT"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -301,16 +306,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportEccSignatureXadesBaselineT"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -339,16 +345,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportEccSignatureXadesBaselineB"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -377,7 +384,7 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportSignatureOcspUrlValueEmpty"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
     }
 
@@ -398,7 +405,7 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportSignatureTspUrlValueEmpty"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
     }
 
@@ -420,16 +427,17 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportSignaturePkcs11WrongCert"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
         String validationReportSignature = response.jsonPath().getString("validationReportSignature")
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", validationReportSignature)
-        jsonObject.put("filename", "filename.pdf")
+        Map requestBody = [
+                document: validationReportSignature,
+                filename: "filename.pdf"
+        ]
         Response reportSignatureValidation = given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(jsonObject.toString())
+                .body(requestBody)
                 .when()
                 .post(createUrl(VALIDATION_ENDPOINT))
                 .then()
@@ -458,7 +466,7 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportSignatureLevelEmptyValue"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
     }
 
@@ -484,15 +492,15 @@ class ReportSignatureSpec extends GenericSpecification {
     def "validateDetailedReportSignatureLevelPkcs11"() {
         given:
         String filename = "hellopades-lt-sha256-rsa2048.pdf"
-        String request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
+        Map request = detailedReportRequest(filename, VALID_SIGNATURE_POLICY_4)
         response = validateRequestForDetailedReport(request, VALIDATION_ENDPOINT)
     }
 
-    private Response validateRequestForDetailedReport(String request, String validationUrl) {
+    private Response validateRequestForDetailedReport(Map requestBody, String validationUrl) {
         return given()
                 .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset("UTF-8")))
-                .body(request)
+                .body(requestBody)
                 .when()
                 .post(createUrl(validationUrl))
                 .then()
@@ -500,13 +508,13 @@ class ReportSignatureSpec extends GenericSpecification {
                 .response()
     }
 
-    private String detailedReportRequest(String fileName, String signaturePolicy) {
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("document", Base64.encodeBase64String(readFileFromTestResources(fileName)))
-        jsonObject.put("filename", fileName)
-        jsonObject.put("signaturePolicy", signaturePolicy)
-        jsonObject.put("reportType", "Detailed")
-        return jsonObject.toString()
+    private Map detailedReportRequest(String fileName, String signaturePolicy) {
+        [
+                document: Base64.encodeBase64String(readFileFromTestResources(fileName)),
+                filename: fileName,
+                signaturePolicy: signaturePolicy,
+                reportType: "Detailed"
+        ]
     }
 
     protected byte[] readFileFromTestResources(String filename) {
