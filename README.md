@@ -27,7 +27,7 @@ https://github.com/open-eid/SiVa?tab=readme-ov-file#with-docker, then the defaul
 | siva.hostname                 | `localhost`           | Service URL.                                                                  |
 | siva.port                     | `8080`                | Service port.                                                                 |
 | siva.protocol                 | `http`                | Service protocol.                                                             |
-| siva.request-size-limit       | `28311552`            | Service request size limit.                                                   |
+| siva.request-size-limit       | `28311552`            | Service request body size limit.                                              |
 | test-files-directory          | `src/test/resources/` | Test files directory path.                                                    |
 | rest-assured-console-logging  | `true`                | Toggles printing Rest Assured logs in console.                                |
 | allure-rest-request-limit     | `2000000`             | Sets limit for Allure rest request size to prevent report generation issues.  |
