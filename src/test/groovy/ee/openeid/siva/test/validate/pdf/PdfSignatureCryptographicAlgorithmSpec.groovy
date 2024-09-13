@@ -47,7 +47,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
     @Description("SHA1 algorithms (PAdES Baseline LT)")
     def "documentSignedWithSha1CertificateShouldPass"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha1.pdf", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha1.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -87,7 +87,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
     @Description("RSA1024 algorithms (PAdES Baseline LT)")
     def "documentSignedWithSha256Rsa1024AlgoShouldPass"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024.pdf", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))

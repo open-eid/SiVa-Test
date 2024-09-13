@@ -144,7 +144,7 @@ class BdocValidationFailSpec extends GenericSpecification {
     @Description("Bdoc OCSP certificate is not trusted")
     def "bdocNotTrustedOcspCert"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("TM-01_bdoc21-unknown-resp.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("TM-01_bdoc21-unknown-resp.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))

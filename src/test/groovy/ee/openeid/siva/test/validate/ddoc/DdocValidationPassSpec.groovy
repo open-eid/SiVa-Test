@@ -253,7 +253,7 @@ class DdocValidationPassSpec extends GenericSpecification {
     @Description("Ddoc with no signatures")
     def "ddocNoSignatures"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("DdocContainerNoSignature.ddoc", SignaturePolicy.POLICY_4.name, null))
+        SivaRequests.validate(RequestData.validationRequest("DdocContainerNoSignature.ddoc", SignaturePolicy.POLICY_4, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("validatedDocument.filename", Matchers.is("DdocContainerNoSignature.ddoc"))

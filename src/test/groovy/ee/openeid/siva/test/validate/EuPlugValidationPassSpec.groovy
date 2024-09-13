@@ -17,6 +17,7 @@
 package ee.openeid.siva.test.validate
 
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.model.SignatureLevel
@@ -354,7 +355,7 @@ class EuPlugValidationPassSpec extends GenericSpecification {
                 .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
                 .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
                 .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings[0].content", Matchers.is(TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     //The file should not be valid
@@ -441,6 +442,6 @@ class EuPlugValidationPassSpec extends GenericSpecification {
 
     private static Map validationRequestForEu(String file) {
         // TODO: Since these test files are not public the retrieval mechanism needs to be changed.
-        return RequestData.validationRequest(file, SignaturePolicy.POLICY_3.name)
+        return RequestData.validationRequest(file, SignaturePolicy.POLICY_3)
     }
 }

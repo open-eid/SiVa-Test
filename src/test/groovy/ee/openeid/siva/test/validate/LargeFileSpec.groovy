@@ -36,7 +36,7 @@ class LargeFileSpec extends GenericSpecification {
     @Description("9MB PDF files (PAdES Baseline LT).")
     def "pdfNineMegabyteFilesWithLtSignatureAreAccepted"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("9MB_PDF.pdf", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("9MB_PDF.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", equalTo(SignatureFormat.PAdES_BASELINE_LT))
                 .body("validatedDocument.filename", equalTo("9MB_PDF.pdf"))
@@ -45,7 +45,7 @@ class LargeFileSpec extends GenericSpecification {
     @Description("9MB ASIC-E file")
     def "bdocTsNineMegabyteFilesValidSignatureAreAccepted"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("9MB_BDOC-TS.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("9MB_BDOC-TS.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_LT))
                 .body("validatedDocument.filename", equalTo("9MB_BDOC-TS.bdoc"))
@@ -55,7 +55,7 @@ class LargeFileSpec extends GenericSpecification {
     @Description("9MB BDOC-TM")
     def "bdocTmNineMegabyteFilesValidSignatureAreAccepted"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("9MB_BDOC-TM.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("9MB_BDOC-TM.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("validatedDocument.filename", equalTo("9MB_BDOC-TM.bdoc"))
@@ -65,7 +65,7 @@ class LargeFileSpec extends GenericSpecification {
     @Description("9MB DDOC")
     def "ddocTenMegabyteFilesWithValidSignatureAreAccepted"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("9MB_DDOC.ddoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("9MB_DDOC.ddoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", equalTo(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("validatedDocument.filename", equalTo("9MB_DDOC.ddoc"))
@@ -76,7 +76,7 @@ class LargeFileSpec extends GenericSpecification {
     def "bdocZipBombsAreNotAccepted"() {
         when:
         Response response = SivaRequests.tryValidate(RequestData.validationRequest(
-                "zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3.name))
+                "zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3))
 
         then:
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
@@ -85,7 +85,7 @@ class LargeFileSpec extends GenericSpecification {
     @Description("Asice Zip container with Bomb file")
     def "asiceZipBombsAreNotAccepted"() {
         given:
-        Map requestData = RequestData.validationRequest("zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3.name)
+        Map requestData = RequestData.validationRequest("zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3)
         requestData.filename = "zip-bomb-package-zip-1gb.asice"
 
         when:
@@ -98,7 +98,7 @@ class LargeFileSpec extends GenericSpecification {
     @Description("Asice Zip container with Matryoshka Bomb file")
     def "asiceZipBombsWithMatryoshkaAreAccepted"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_B))
                 .body("validatedDocument.filename", equalTo("zip-bomb-packages.asice"))
@@ -108,7 +108,7 @@ class LargeFileSpec extends GenericSpecification {
     @Description("Bdoc Zip container with Matryoshka Bomb file")
     def "bdocZipBombsWithMatryoshkaAreAccepted"() {
         when:
-        Map requestData = RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3.name)
+        Map requestData = RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3)
         requestData.filename = "zip-bomb-packages.bdoc"
 
         then:
@@ -122,7 +122,7 @@ class LargeFileSpec extends GenericSpecification {
     @Description("Asics Zip container with Bomb file")
     def "asicsZipBombsAreNotAccepted"() {
         given:
-        Map requestData = RequestData.validationRequest("zip-bomb-package-zip-1gb-asics.asics", SignaturePolicy.POLICY_3.name)
+        Map requestData = RequestData.validationRequest("zip-bomb-package-zip-1gb-asics.asics", SignaturePolicy.POLICY_3)
         requestData.filename = "zip-bomb-package-zip-1gb.asics"
 
         when:

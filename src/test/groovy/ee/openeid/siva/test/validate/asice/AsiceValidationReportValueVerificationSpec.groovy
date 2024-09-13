@@ -121,7 +121,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
     @Description("Verification of values in Validation Report XAdES_BASELINE_LT, QES, FullSignatureScope")
     def "bdocCorrectValuesArePresentValidLtSignatureAdesWarning"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
@@ -191,7 +191,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
     @Description("JSON structure has all elements (Bdoc valid multiple signatures)")
     def "bdocAllElementsArePresentValidMultipleSignatures"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))
@@ -224,7 +224,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
     @Description("JSON structure has all elements (Bdoc indeterminate status)")
     def "bdocAllElementsArePresentIndeterminateSignature"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("SS-4_teadmataCA.4.asice", SignaturePolicy.POLICY_3.name, ReportType.SIMPLE))
+        SivaRequests.validate(RequestData.validationRequest("SS-4_teadmataCA.4.asice", SignaturePolicy.POLICY_3, ReportType.SIMPLE))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", Matchers.is("S0"))

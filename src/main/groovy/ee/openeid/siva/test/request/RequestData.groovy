@@ -16,6 +16,8 @@
 
 package ee.openeid.siva.test.request
 
+import ee.openeid.siva.test.model.ReportType
+import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.util.Utils
 import groovy.json.JsonOutput
 import io.qameta.allure.Step
@@ -25,33 +27,35 @@ import org.apache.commons.io.FilenameUtils
 class RequestData {
 
     @Step("Validation request data from {file}")
-    static Map validationRequestBase(String file, String signaturePolicy, String reportType) {
+    static Map validationRequestBase(String file, String extension, SignaturePolicy signaturePolicy, ReportType reportType) {
         Map data = [
                 document: Base64.encodeBase64String(Utils.readFileFromResources(file)),
-                filename: file
+                filename: extension ? "${FilenameUtils.getBaseName(file)}.${extension}".toString() : file
         ]
         if (signaturePolicy) {
-            data.signaturePolicy = signaturePolicy
+            data.signaturePolicy = signaturePolicy.name
         }
         if (reportType) {
-            data.reportType = reportType
+            data.reportType = reportType.toString()
         }
         return data
     }
 
-    static Map validationRequest(String file, String signaturePolicy = null, String reportType = null) {
-        return validationRequestBase(file, signaturePolicy, reportType)
+    static Map validationRequest(String file, SignaturePolicy signaturePolicy = null, ReportType reportType = null) {
+        return validationRequestBase(file, null, signaturePolicy, reportType)
     }
 
-    static Map validationRequestForDDS(String file, String signaturePolicy = null, String reportType = null) {
-        Map validationRequest = validationRequestBase(file, signaturePolicy, reportType)
-        validationRequest.filename = FilenameUtils.getBaseName(file) + ".asice"
+    static Map validationRequest(String file, String extension, SignaturePolicy signaturePolicy = null, ReportType reportType = null) {
+        return validationRequestBase(file, extension, signaturePolicy, reportType)
+    }
+
+    static Map validationRequestForDDS(String file, SignaturePolicy signaturePolicy = null, ReportType reportType = null) {
+        Map validationRequest = validationRequestBase(file, "asice", signaturePolicy, reportType)
         return validationRequest
     }
 
-    static Map validationRequestForDD4J(String file, String signaturePolicy = null, String reportType = null) {
-        Map validationRequest = validationRequestBase(file, signaturePolicy, reportType)
-        validationRequest.filename = FilenameUtils.getBaseName(file) + ".bdoc"
+    static Map validationRequestForDD4J(String file, SignaturePolicy signaturePolicy = null, ReportType reportType = null) {
+        Map validationRequest = validationRequestBase(file, "bdoc", signaturePolicy, reportType)
         return validationRequest
     }
 
@@ -73,7 +77,7 @@ class RequestData {
     }
 
     @Step("Hashcode validation request data from {signatureFiles}")
-    static Map hashcodeValidationRequestBase(List<String> signatureFiles, String signaturePolicy, String reportType, String dataFile, String hashAlgo, String hash) {
+    static Map hashcodeValidationRequestBase(List<String> signatureFiles, SignaturePolicy signaturePolicy, ReportType reportType, String dataFile, String hashAlgo, String hash) {
         List signatures = signatureFiles.collect() { signature ->
             if (dataFile == null) {
                 [
@@ -98,20 +102,20 @@ class RequestData {
         ]
 
         if (signaturePolicy) {
-            data.signaturePolicy = signaturePolicy
+            data.signaturePolicy = signaturePolicy.name
         }
         if (reportType) {
-            data.reportType = reportType
+            data.reportType = reportType.toString()
         }
 
         return data
     }
 
-    static Map hashcodeValidationRequest(String signatureFile, String signaturePolicy, String reportType, String dataFile = null, String hashAlgo = null, String hash = null) {
+    static Map hashcodeValidationRequest(String signatureFile, SignaturePolicy signaturePolicy, ReportType reportType, String dataFile = null, String hashAlgo = null, String hash = null) {
         hashcodeValidationRequestBase([signatureFile], signaturePolicy, reportType, dataFile, hashAlgo, hash)
     }
 
-    static Map hashcodeValidationRequest(List<String> signatureFiles, String signaturePolicy, String reportType, String dataFile = null, String hashAlgo = null, String hash = null) {
+    static Map hashcodeValidationRequest(List<String> signatureFiles, SignaturePolicy signaturePolicy, ReportType reportType, String dataFile = null, String hashAlgo = null, String hash = null) {
         hashcodeValidationRequestBase(signatureFiles, signaturePolicy, reportType, dataFile, hashAlgo, hash)
     }
 

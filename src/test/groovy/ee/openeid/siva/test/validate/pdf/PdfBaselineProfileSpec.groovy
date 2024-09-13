@@ -35,7 +35,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
     @Description("The PDF has PAdES-B profile signature polv3")
     def "baselineProfileBDocumentShouldFailpolv3"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-b-sha256-auth.pdf", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-b-sha256-auth.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_B))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.NOT_ADES))
@@ -56,7 +56,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
     @Description("The PDF has PAdES-T profile signature polv3")
     def "baselineProfileTDocumentShouldFailpolv3"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-t-live-aj.pdf", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-t-live-aj.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_T))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_QESIG))
@@ -74,7 +74,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
     @Description("The PDF has PAdES-LT profile signature polv3")
     def "baselineProfileLTDocumentShouldPasspolv3"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -93,7 +93,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
     @Description("The PDF has PAdES-LT profile signature polv4")
     def "baselineProfileLTDocumentShouldPasspolv4"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_4.name))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_4))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -107,7 +107,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
     @Description("The PDF has PAdES-LTA profile signature polv3")
     def "baselineProfileLTADocumentShouldPasspolv3"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LTA))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -127,7 +127,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
     @Description("The PDF has PAdES-LTA profile signature polv4")
     def "baselineProfileLTADocumentShouldPasspolv4"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_4.name))
+        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_4))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LTA))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -179,7 +179,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
     @Description("PDF file with a serial signature")
     def "documentSignedWithMultipleSignersSerialSignature"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt1-lt2-Serial.pdf", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-lt1-lt2-Serial.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))

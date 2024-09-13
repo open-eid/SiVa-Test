@@ -113,7 +113,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
     @Description("Asice No non-repudiation key usage value in the certificate, verification of AdES signature level")
     def "asiceInvalidNonRepudiationKey"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-I-43.asice", SignaturePolicy.POLICY_3.name, ReportType.SIMPLE))
+        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-I-43.asice", SignaturePolicy.POLICY_3, ReportType.SIMPLE))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_UNKNOWN))
@@ -464,7 +464,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
     @Description("Asice simple/batchsignature/attachment xroad document")
     def "asiceSimpleXroadDocumentShouldFail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest(filename, SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest(filename, SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))

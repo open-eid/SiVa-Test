@@ -16,13 +16,18 @@
 
 package ee.openeid.siva.test.model
 
-import groovy.transform.CompileStatic
-import groovy.transform.Immutable
+enum ReportType {
+    SIMPLE("Simple"),
+    DETAILED("Detailed"),
+    DIAGNOSTIC("Diagnostic"),
 
-@CompileStatic
-@Immutable
-final class ReportType {
-    static final String SIMPLE = "Simple"
-    static final String DETAILED = "Detailed"
-    static final String DIAGNOSTIC = "Diagnostic"
+    final String stringRepresentation
+
+    ReportType(String s) {
+        this.stringRepresentation = s
+    }
+
+    String toString() {
+        return stringRepresentation
+    }
 }

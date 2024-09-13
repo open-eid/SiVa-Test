@@ -51,7 +51,7 @@ class PdfValidationFailSpec extends GenericSpecification {
     @Description("The PDF-file has been signed with revoked certificate (PAdES Baseline LT)")
     def "documentSignedWithRevokedCertificateShouldFail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("pades_lt_revoked.pdf", SignaturePolicy.POLICY_3.name, null))
+        SivaRequests.validate(RequestData.validationRequest("pades_lt_revoked.pdf", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))

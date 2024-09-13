@@ -50,7 +50,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "bdocWithValidSignatures"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -87,7 +87,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "bdocWithInvalidSignatures"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("SS-4_teadmataCA.4.asice", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("SS-4_teadmataCA.4.asice", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -124,7 +124,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "bdocWithErrorResponse"() {
         when:
-        Response response = SivaRequests.validate(RequestData.validationRequest("xroad-simple.bdoc", "POLv3"))
+        Response response = SivaRequests.validate(RequestData.validationRequest("xroad-simple.bdoc", SignaturePolicy.POLICY_3))
 
         then:
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
@@ -146,7 +146,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "bdocWithSignaturesFromDifferentCountries"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -184,7 +184,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "ddocWithValidSignatures"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("valid_XML1_3.ddoc", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("valid_XML1_3.ddoc", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -220,7 +220,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "ddocWithInvalidSignatures"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("ilma_kehtivuskinnituseta.ddoc", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("ilma_kehtivuskinnituseta.ddoc", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -256,7 +256,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "ddocWithErrorResponse"() {
         when:
-        Response response = SivaRequests.validate(RequestData.validationRequest("xroad-simple.ddoc", "POLv3"))
+        Response response = SivaRequests.validate(RequestData.validationRequest("xroad-simple.ddoc", SignaturePolicy.POLICY_3))
 
         then:
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
@@ -278,7 +278,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "ddocWithSignaturesFromDifferentCountries"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("Belgia_kandeavaldus_LIV.ddoc", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("Belgia_kandeavaldus_LIV.ddoc", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -315,7 +315,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "pdfWithValidSignatures"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("pades_lt_two_valid_sig.pdf", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("pades_lt_two_valid_sig.pdf", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -352,7 +352,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "pdfWithInvalidSignatures"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("hellopades-lt1-lt2-wrongDigestValue.pdf", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("hellopades-lt1-lt2-wrongDigestValue.pdf", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -389,7 +389,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "pdfWithSignaturesFromDifferentCountries"() {
         expect:
-        postWithXAuthUsrHeader(RequestData.validationRequest("Regulatione-signedbyco-legislators.pdf", SignaturePolicy.POLICY_3.name), "XAuthTest")
+        postWithXAuthUsrHeader(RequestData.validationRequest("Regulatione-signedbyco-legislators.pdf", SignaturePolicy.POLICY_3), "XAuthTest")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -426,7 +426,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "asicsWithValidSignatures"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidBDOCinsideAsics.asics", "POLv4"))
+        SivaRequests.validate(RequestData.validationRequest("ValidBDOCinsideAsics.asics", SignaturePolicy.POLICY_4))
                 .then()
                 .statusCode(HttpStatus.SC_OK)
         /*
@@ -458,7 +458,7 @@ class StatisticsToLogsSpec extends GenericSpecification {
     @Description("")
     def "asicWithErrorResponse"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("TwoDataFilesAsics.asics", "POLv4"))
+        SivaRequests.validate(RequestData.validationRequest("TwoDataFilesAsics.asics", SignaturePolicy.POLICY_4))
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
     }

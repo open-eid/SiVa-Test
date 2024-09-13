@@ -35,7 +35,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with two signatures and one unsigned document.")
     def "bdocWithOneUnsignedDocumentShouldFail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2s_1f_unsigned.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("3f_2s_1f_unsigned.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -58,7 +58,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with two signatures and one document signed by only one signature.")
     def "bdocWithDocumentWithOneSignatureShouldFail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2s_1partly_signed.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("3f_2s_1partly_signed.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -74,7 +74,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with two signatures and two documents signed by only one signature.")
     def "bdocWithNonOverlapingSignaturesShouldFail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2s_2partly_signed.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("3f_2s_2partly_signed.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -91,7 +91,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with two signatures, one unsigned and two partly signed documents.")
     def "bdocWithNonOverlapingSignaturesAndOneUnsignedDocumentShouldFail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("4f_2s_all_combinations.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("4f_2s_all_combinations.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -113,7 +113,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with three unsigned documents.")
     def "bdocWithThreeUnsignedDocumentShouldPass"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("6f_2s_3unsigned.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("6f_2s_3unsigned.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -133,7 +133,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with deleted document, named in manifest.")
     def "bdocWithDeletedDocumentNamedInManifestShouldFail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("2f_2signed_1f_deleted.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("2f_2signed_1f_deleted.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -147,7 +147,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with deleted document, also removed from manifest.")
     def "bdocWithRemovedDocumentDeletedFromManifestShouldFail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("2f_2signed_1f_totally_removed.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("2f_2signed_1f_totally_removed.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -163,7 +163,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with one unsigned document, named in manifest.")
     def "bdocWithOneUnsignedDocumentNamedInManifestShouldPass"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2signed_1unsigned_all_in_manifest.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("3f_2signed_1unsigned_all_in_manifest.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -176,7 +176,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with one unsigned document, NOT named in manifest.")
     def "bdocWithOneUnsignedDocumentNotNamedInManifestShouldPass"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2signed_1unsigned_2in_manifest.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("3f_2signed_1unsigned_2in_manifest.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(0))
@@ -187,7 +187,7 @@ class DocumentValidationSpec extends GenericSpecification {
     @Description("Bdoc with signed documents.")
     def "bdocWithAllSignedDocumentsShouldPass"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("2f_all_signed.bdoc", SignaturePolicy.POLICY_3.name))
+        SivaRequests.validate(RequestData.validationRequest("2f_all_signed.bdoc", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))

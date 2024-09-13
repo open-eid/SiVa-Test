@@ -493,7 +493,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
     private static Map validRequestBody() {
         RequestData.hashcodeValidationRequest(
                 MOCK_XADES_SIGNATURE_FILE,
-                SignaturePolicy.POLICY_4.name,
+                SignaturePolicy.POLICY_4,
                 ReportType.SIMPLE,
                 MOCK_XADES_DATAFILE_FILENAME,
                 HashAlgo.SHA256,

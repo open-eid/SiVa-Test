@@ -249,7 +249,7 @@ class DdocValidationFailSpec extends GenericSpecification {
     @Description("Ddoc with invalid datafile id")
     def "ddocBadDatafileId"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("22915-bad-df-id.ddoc", SignaturePolicy.POLICY_4.name, null))
+        SivaRequests.validate(RequestData.validationRequest("22915-bad-df-id.ddoc", SignaturePolicy.POLICY_4, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].id", Matchers.is("S0"))

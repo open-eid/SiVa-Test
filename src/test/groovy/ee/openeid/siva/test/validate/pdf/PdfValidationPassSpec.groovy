@@ -35,7 +35,7 @@ class PdfValidationPassSpec extends GenericSpecification {
     @Description("The PDF-file has been signed with certificate that is expired after signing (PAdES Baseline LT)")
     def "validSignaturesRemainValidAfterSigningCertificateExpires"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024-not-expired.pdf", SignaturePolicy.POLICY_3.name, null))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024-not-expired.pdf", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
@@ -50,7 +50,7 @@ class PdfValidationPassSpec extends GenericSpecification {
     @Description("The PDF-file has been signed with certificate that will expire in 7 days after signing (PAdES Baseline LT)")
     def "certificateExpired7DaysAfterDocumentSigningShouldPass"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-7d.pdf", SignaturePolicy.POLICY_3.name, null))
+        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-7d.pdf", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.emptyOrNullString())
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
