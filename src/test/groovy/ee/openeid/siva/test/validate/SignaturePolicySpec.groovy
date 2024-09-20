@@ -281,7 +281,7 @@ class SignaturePolicySpec extends GenericSpecification {
     @Description("The bdoc is QES level signature")
     def "bdocDocumentQesigShouldPassWithStrictPolicy"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Valid_ID_sig.bdoc", SignaturePolicy.POLICY_4, null))
+        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc", SignaturePolicy.POLICY_4, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", Matchers.is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", Matchers.is(SignaturePolicy.POLICY_4.name))
@@ -298,7 +298,7 @@ class SignaturePolicySpec extends GenericSpecification {
     @Description("The bdoc is QES level signature")
     def "asiceDocumentQesigShouldPassWithStrictPolicy"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", SignaturePolicy.POLICY_4, null))
+        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce", SignaturePolicy.POLICY_4, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", Matchers.is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", Matchers.is(SignaturePolicy.POLICY_4.name))
@@ -637,7 +637,7 @@ class SignaturePolicySpec extends GenericSpecification {
     @Description("The bdoc is QES level signature")
     def "bdocDocumentQesigShouldPassWithGivenPolicy"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Valid_ID_sig.bdoc", SignaturePolicy.POLICY_3, null))
+        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", Matchers.is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", Matchers.is(SignaturePolicy.POLICY_3.name))
@@ -654,7 +654,7 @@ class SignaturePolicySpec extends GenericSpecification {
     @Description("The bdoc is QES level signature")
     def "asiceDocumentQesigShouldPassWithGivenPolicy"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", SignaturePolicy.POLICY_3, null))
+        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", Matchers.is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", Matchers.is(SignaturePolicy.POLICY_3.name))

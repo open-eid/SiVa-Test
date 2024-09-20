@@ -32,27 +32,27 @@ import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 class BdocValidationPassSpec extends GenericSpecification {
 
     @Description("Bdoc with single valid signature")
-    def "validSignature"() {
+    def "Given BDOC with single valid signature, then successful validation"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Valid_ID_sig.bdoc"))
+        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
+                .body("signatures[0].signedBy", Matchers.is("JÕEORG,JAAK-KRISTJAN,38001085718"))
                 .body("signatures[0].certificates.size()", Matchers.is(2))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("NURM,AARE,38211015222"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIIEmDCCA4CgAwIBAgIQP0r+1SmYLpVSgfYqBWYcBzANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("SK OCSP RESPONDER 2011"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhk"))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("JÕEORG,JAAK-KRISTJAN,38001085718"))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIID6zCCA02gAwIBAgIQT7j6zk6pmVRcyspLo5SqejAKBggqhk"))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("TEST of SK OCSP RESPONDER 2011"))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEijCCA3KgAwIBAgIQaI8x6BnacYdNdNwlYnn/mzANBgkqhk"))
                 .body("signaturesCount", Matchers.is(1))
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
     @Description("Bdoc TM with multiple valid signatures")
-    def "validMultipleSignatures"() {
+    def "Given BDOC with multiple TM signatures, then successful validation"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc"))
+        SivaRequests.validate(RequestData.validationRequest("TwoValidTmSignaturesWithRolesAndProductionPlace.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
@@ -61,7 +61,6 @@ class BdocValidationPassSpec extends GenericSpecification {
                 .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(2))
-
     }
 
     @Ignore

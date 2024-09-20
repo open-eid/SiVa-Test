@@ -26,6 +26,7 @@ import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import org.hamcrest.Matchers
+import org.junit.jupiter.api.Tag
 
 import static ee.openeid.siva.test.TestData.*
 
@@ -33,7 +34,90 @@ import static ee.openeid.siva.test.TestData.*
 class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice with single valid signature")
-    def "validAsiceSingleSignature"() {
+    def "Given ASiC-E with single valid signature, then successful validation"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].info.bestSignatureTime", Matchers.is("2024-09-13T14:14:36Z"))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("signatures[0].signedBy", Matchers.is("JÕEORG,JAAK-KRISTJAN,38001085718"))
+                .body("signatures[0].certificates.size()", Matchers.is(3))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("JÕEORG,JAAK-KRISTJAN,38001085718"))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIID6zCCA02gAwIBAgIQT7j6zk6pmVRcyspLo5SqejAKBggqhk"))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", Matchers.startsWith("TEST of ESTEID2018"))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.content", Matchers.startsWith("MIIFfDCCBN2gAwIBAgIQNhjzSfd2UEpbkO14EY4ORTAKBggqhk"))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].commonName", Matchers.is("DEMO SK TIMESTAMPING AUTHORITY 2023E"))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].content", Matchers.startsWith("MIIDEjCCApigAwIBAgIQM7BQCImkdt18qWDYdbfOtjAKBggqhk"))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("DEMO of ESTEID-SK 2018 AIA OCSP RESPONDER 2018"))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIDvTCCAx+gAwIBAgIQeu2FGJib4Jxb4bucEBkycDAKBggqhk"))
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+    }
+
+    @Description("Asice files with signature from test certificate chain")
+    def "Given ASiC-E with signature from #CN certificate chain, then successful validation"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(testFile))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("signatures[0].certificates.size()", Matchers.is(3))
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", Matchers.is(CN))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.content", Matchers.startsWith(cert))
+
+        where:
+        CN                       | testFile                                   | cert
+        // TODO: missing test files
+//        "TEST of ESTEID-SK 2007" | ""                         | ""
+//        "TEST of ESTEID-SK 2011" | ""                         | ""
+        "TEST of ESTEID-SK 2015" | "TEST_ESTEID-SK2015_ASiC-E_XAdES_LT.asice" | "MIIGgzCCBWugAwIBAgIQEDb9gCZi4PdWc7IoNVIbsTANBgkqhk"
+        "TEST of ESTEID2018"     | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"      | "MIIFfDCCBN2gAwIBAgIQNhjzSfd2UEpbkO14EY4ORTAKBggqhk"
+
+//        "TEST of EID-SK 2016"    | ""                                         | ""
+
+    }
+
+    @Tag("LiveData")
+    @Description("Asice files with signature from live certificate chain")
+    def "Given ASiC-E with signature from live #CN certificate chain, then successful validation"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(testFile))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
+                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("signatures[0].certificates.size()", Matchers.is(3))
+                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", Matchers.is(1))
+
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", Matchers.startsWith(CN))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.content", Matchers.startsWith(cert))
+
+        where:
+        CN               | testFile                                                  | cert
+        // TODO: missing test files
+//        "ESTEID-SK 2007" | ""                                                        | ""
+        "ESTEID-SK 2011" | "EE_SER-AEX-B-LT-V-49.asice"                              | "MIIFBTCCA+2gAwIBAgIQKVKTqv2MxtRNgzCjwmRRDTANBgkqhk"
+        "ESTEID-SK 2015" | "IB-4270_TS_ESTEID-SK 2015  SK OCSP RESPONDER 2011.asice" | "MIIGcDCCBVigAwIBAgIQRUgJC4ec7yFWcqzT3mwbWzANBgkqhk"
+//        "ESTEID2018"     | ""                                                        | ""
+
+//        "EID-SK 2007"     | ""                                                        | ""
+//        "EID-SK 2011"     | ""                                                        | ""
+        "EID-SK 2016"    | "testAdesQC.asice"                                        | "MIIG4jCCBcqgAwIBAgIQO4A6a2nBKoxXxVAFMRvE2jANBgkqhk"
+    }
+
+    @Tag("LiveData")
+    @Description("Asice files with MID signature from live ESTEID-SK 2015 certificate chain (ECC)")
+    def "Given ASiC-E with MID signature from live ESTEID-SK 2015 certificate chain, then successful validation"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
@@ -57,18 +141,26 @@ class AsiceValidationPassSpec extends GenericSpecification {
     }
 
     @Description("Asice with multiple valid signatures")
-    def "validAsiceMultipleSignatures"() {
+    def "Given ASiC-E with multiple signatures (#comment), then successful validation"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("BDOC-TS.asice"))
+        SivaRequests.validate(RequestData.validationRequest(filename))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].signatureFormat", Matchers.is(signatureProfiles[0]))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[1].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[1].signatureFormat", Matchers.is(signatureProfiles[1]))
                 .body("signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(2))
+
+        where:
+        comment   | filename                                   | signatureProfiles
+        "TM+LT"   | "TEST_ASiC-E_XAdES_TM+LT.asice"            | [SignatureFormat.XAdES_BASELINE_LT_TM, SignatureFormat.XAdES_BASELINE_LT]
+        "LT+LT"   | "TEST_ESTEID2018_ASiC-E_XAdES_LT+LT.sce"   | [SignatureFormat.XAdES_BASELINE_LT, SignatureFormat.XAdES_BASELINE_LT]
+        "LT+LTA"  | "TEST_ESTEID2018_ASiC-E_XAdES_LT+LTA.sce"  | [SignatureFormat.XAdES_BASELINE_LT, SignatureFormat.XAdES_BASELINE_LTA]
+        "LTA+LTA" | "TEST_ESTEID2018_ASiC-E_XAdES_LTA+LTA.sce" | [SignatureFormat.XAdES_BASELINE_LTA, SignatureFormat.XAdES_BASELINE_LTA]
+
     }
 
     @Description("Asice One LT signature with certificates from different countries")
@@ -131,7 +223,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
-    @Description("Asice file with \tESTEID-SK 2015 certificate chain")
+    @Description("Asice file with ESTEID-SK 2015 certificate chain")
     def "asiceSk2015CertificateChainValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("IB-4270_TS_ESTEID-SK 2015  SK OCSP RESPONDER 2011.asice"))

@@ -17,10 +17,7 @@
 package ee.openeid.siva.test.validate
 
 import ee.openeid.siva.test.GenericSpecification
-import ee.openeid.siva.test.model.ReportType
-import ee.openeid.siva.test.model.RequestError
-import ee.openeid.siva.test.model.SignatureLevel
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestErrorValidator
@@ -39,13 +36,105 @@ import static org.hamcrest.Matchers.*
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")
 class ValidationRequestSpec extends GenericSpecification {
 
-    @Description("Validation request happy path")
-    def "Given validation request, then validation report is returned"() {
+    @Description("Supported file extensions")
+    def "Given validation request with #extension file, then validation report is returned"() {
+        given:
+        Map requestData = RequestData.validationRequest(file, extension)
         expect:
-        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTM.bdoc"))
+        SivaRequests.validate(requestData)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validatedDocument.filename", equalTo("singleValidSignatureTM.bdoc"))
-                .body("validSignaturesCount", equalTo(1))
+                .body("validatedDocument.filename", equalTo(requestData.filename))
+
+        where:
+        extension | file
+        "asice"   | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"
+        "asics"   | "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"
+        "bdoc"    | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"
+        "ddoc"    | "valid_XML1_3.ddoc"
+        "pdf"     | "TEST_ESTEID2018_PAdES_LT_enveloped.pdf"
+        "sce"     | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"
+        "scs"     | "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"
+        "p7m"     | "TEST_ESTEID2018_CAdES_LT_enveloping.p7m"
+        "p7s"     | "TEST_ESTEID2018_CAdES_LT_detached.p7s"
+    }
+
+    @Description("All signature profiles in container are validated")
+    def "Given validation request with #container #profile signature, then validation report is returned"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(file))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", equalTo(container))
+                .body("validatedDocument.filename", equalTo(file))
+                .body("signatures[0].signatureFormat", Matchers.is(profile))
+
+        where:
+        container                       | profile                               | file
+        // ASiC-S
+        ContainerFormat.ASiC_S          | SignatureFormat.CAdES_BASELINE_B      | "TEST_ESTEID2018_ASiC-S_CAdES_B.scs"
+        ContainerFormat.ASiC_S          | SignatureFormat.CAdES_BASELINE_T      | "TEST_ESTEID2018_ASiC-S_CAdES_T.scs"
+        ContainerFormat.ASiC_S          | SignatureFormat.CAdES_BASELINE_LT     | "TEST_ESTEID2018_ASiC-S_CAdES_LT.scs"
+        ContainerFormat.ASiC_S          | SignatureFormat.CAdES_BASELINE_LTA    | "TEST_ESTEID2018_ASiC-S_CAdES_LTA.scs"
+        ContainerFormat.ASiC_S          | SignatureFormat.XAdES_BASELINE_B      | "TEST_ESTEID2018_ASiC-S_XAdES_B.scs"
+        ContainerFormat.ASiC_S          | SignatureFormat.XAdES_BASELINE_T      | "TEST_ESTEID2018_ASiC-S_XAdES_T.scs"
+        ContainerFormat.ASiC_S          | SignatureFormat.XAdES_BASELINE_LT     | "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"
+        ContainerFormat.ASiC_S          | SignatureFormat.XAdES_BASELINE_LTA    | "TEST_ESTEID2018_ASiC-S_XAdES_LTA.scs"
+        // ASiC-E
+        ContainerFormat.ASiC_E          | SignatureFormat.CAdES_BASELINE_B      | "TEST_ESTEID2018_ASiC-E_CAdES_B.sce"
+        ContainerFormat.ASiC_E          | SignatureFormat.CAdES_BASELINE_T      | "TEST_ESTEID2018_ASiC-E_CAdES_T.sce"
+        ContainerFormat.ASiC_E          | SignatureFormat.CAdES_BASELINE_LT     | "TEST_ESTEID2018_ASiC-E_CAdES_LT.sce"
+        ContainerFormat.ASiC_E          | SignatureFormat.CAdES_BASELINE_LTA    | "TEST_ESTEID2018_ASiC-E_CAdES_LTA.sce"
+        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_B      | "TEST_ESTEID2018_ASiC-E_XAdES_B.sce"
+        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_T      | "TEST_ESTEID2018_ASiC-E_XAdES_T.sce"
+        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_LT     | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"
+        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_LTA    | "TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce"
+        // BDOC
+        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_LT_TM  | "TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc"
+        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_B_BES  | "TEST_ESTEID2018_ASiC-E_XAdES_B_BES.bdoc"
+        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_B_EPES | "TEST_ESTEID2018_ASiC-E_XAdES_B_EPES.bdoc"
+        // DDOC
+        // TODO: missing test files
+//        ContainerFormat.DIGIDOC_XML_1_1 | SignatureFormat.DIGIDOC_XML_1_1       | ""
+//        ContainerFormat.DIGIDOC_XML_1_2 | SignatureFormat.DIGIDOC_XML_1_2       | ""
+        ContainerFormat.DIGIDOC_XML_1_3 | SignatureFormat.DIGIDOC_XML_1_3       | "valid_XML1_3.ddoc"
+    }
+
+    @Description("All standalone signature profiles are validated")
+    def "Given validation request with #profile #packaging signature, then validation report is returned"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(file))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", equalTo(file))
+                .body("signatures[0].signatureFormat", Matchers.is(profile))
+
+        where:
+        profile                            | packaging    | file
+        // CAdES
+        SignatureFormat.CAdES_BASELINE_B   | "detached"   | "TEST_ESTEID2018_CAdES_B_detached.p7s"
+        SignatureFormat.CAdES_BASELINE_B   | "enveloping" | "TEST_ESTEID2018_CAdES_B_enveloping.p7m"
+        SignatureFormat.CAdES_BASELINE_T   | "detached"   | "TEST_ESTEID2018_CAdES_T_detached.p7s"
+        SignatureFormat.CAdES_BASELINE_T   | "enveloping" | "TEST_ESTEID2018_CAdES_T_enveloping.p7m"
+        SignatureFormat.CAdES_BASELINE_LT  | "detached"   | "TEST_ESTEID2018_CAdES_LT_detached.p7s"
+        SignatureFormat.CAdES_BASELINE_LT  | "enveloping" | "TEST_ESTEID2018_CAdES_LT_enveloping.p7m"
+        SignatureFormat.CAdES_BASELINE_LTA | "detached"   | "TEST_ESTEID2018_CAdES_LTA_detached.p7s"
+        SignatureFormat.CAdES_BASELINE_LTA | "enveloping" | "TEST_ESTEID2018_CAdES_LTA_enveloping.p7m"
+        // PAdES
+        SignatureFormat.PAdES_BASELINE_B   | "enveloped"  | "TEST_ESTEID2018_PAdES_B_enveloped.pdf"
+        SignatureFormat.PAdES_BASELINE_T   | "enveloped"  | "TEST_ESTEID2018_PAdES_T_enveloped.pdf"
+        SignatureFormat.PAdES_BASELINE_LT  | "enveloped"  | "TEST_ESTEID2018_PAdES_LT_enveloped.pdf"
+        SignatureFormat.PAdES_BASELINE_LTA | "enveloped"  | "TEST_ESTEID2018_PAdES_LTA_enveloped.pdf"
+        // XAdES
+        SignatureFormat.XAdES_BASELINE_B   | "detached"   | "TEST_ESTEID2018_XAdES_B_detached.xml"
+        SignatureFormat.XAdES_BASELINE_B   | "enveloped"  | "TEST_ESTEID2018_XAdES_B_enveloped.xml"
+        SignatureFormat.XAdES_BASELINE_B   | "enveloping" | "TEST_ESTEID2018_XAdES_B_enveloping.xml"
+        SignatureFormat.XAdES_BASELINE_T   | "detached"   | "TEST_ESTEID2018_XAdES_T_detached.xml"
+        SignatureFormat.XAdES_BASELINE_T   | "enveloped"  | "TEST_ESTEID2018_XAdES_T_enveloped.xml"
+        SignatureFormat.XAdES_BASELINE_T   | "enveloping" | "TEST_ESTEID2018_XAdES_T_enveloping.xml"
+        SignatureFormat.XAdES_BASELINE_LT  | "detached"   | "TEST_ESTEID2018_XAdES_LT_detached.xml"
+        SignatureFormat.XAdES_BASELINE_LT  | "enveloped"  | "TEST_ESTEID2018_XAdES_LT_enveloped.xml"
+        SignatureFormat.XAdES_BASELINE_LT  | "enveloping" | "TEST_ESTEID2018_XAdES_LT_enveloping.xml"
+        SignatureFormat.XAdES_BASELINE_LTA | "detached"   | "TEST_ESTEID2018_XAdES_LTA_detached.xml"
+        SignatureFormat.XAdES_BASELINE_LTA | "enveloped"  | "TEST_ESTEID2018_XAdES_LTA_enveloped.xml"
+        SignatureFormat.XAdES_BASELINE_LTA | "enveloping" | "TEST_ESTEID2018_XAdES_LTA_enveloping.xml"
     }
 
     @Description("Totally empty request body is sent")
@@ -63,7 +152,6 @@ class ValidationRequestSpec extends GenericSpecification {
         )
     }
 
-
     @Description("Extra request parameters are ignored")
     def "Given extra parameters in validation request, then extra parameters are ignored"() {
         given:
@@ -78,24 +166,20 @@ class ValidationRequestSpec extends GenericSpecification {
     }
 
     @Description("Request has invalid keys (capital letters)")
-    def "Given request body with invalid keys, then error is returned"() {
+    def "Given request body with invalid key #newKey, then error is returned"() {
         given:
-        Map requestData = [
-                DOCUMENT: Base64.encodeBase64String(Utils.readFileFromResources("singleValidSignatureTM.bdoc")),
-                FILENAME: "singleValidSignatureTM.bdoc",
-        ]
-
+        Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
+        requestData.put(newKey, requestData.remove(originalKey))
         when:
         Response response = SivaRequests.tryValidate(requestData)
 
         then:
-        RequestErrorValidator.validate(
-                response,
-                RequestError.DOCUMENT_BLANK,
-                RequestError.DOCUMENT_INVALID_BASE_64,
-                RequestError.FILENAME_EMPTY,
-                RequestError.FILENAME_INVALID
-        )
+        RequestErrorValidator.validate(response, *errors)
+
+        where:
+        originalKey | newKey     | errors
+        "document"  | "DOCUMENT" | [RequestError.DOCUMENT_BLANK, RequestError.DOCUMENT_INVALID_BASE_64]
+        "filename"  | "FILENAME" | [RequestError.FILENAME_EMPTY, RequestError.FILENAME_INVALID]
     }
 
     @Description("Invalid input")
@@ -142,7 +226,6 @@ class ValidationRequestSpec extends GenericSpecification {
         "singleValidSignatureTM .bdoc" | "ignores spaces"
         "a" * 255 + ".bdoc"            | "in allowed length"
     }
-
 
     @Description("Correct signature policy usage")
     def "Given signature policy #condition, then #expected"() {
