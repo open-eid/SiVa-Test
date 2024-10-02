@@ -121,7 +121,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
 //        "EID-SK 2007"     | ""                                                        | ""
 //        "EID-SK 2011"     | ""                                                        | ""
-        "EID-SK 2016"    | "testAdesQC.asice"                                        | "MIIG4jCCBcqgAwIBAgIQO4A6a2nBKoxXxVAFMRvE2jANBgkqhk"
+//        TODO: Test file has additional warning:
+//          The private key does not reside in a QSCD at (best) signing time!
+//          The private key does not reside in a QSCD at issuance time!
+//          The signature is not in the Qualified Electronic Signature level
+//        "EID-SK 2016"    | "testAdesQC.asice"                                        | "MIIG4jCCBcqgAwIBAgIQO4A6a2nBKoxXxVAFMRvE2jANBgkqhk"
     }
 
     @Tag("LiveData")
