@@ -29,6 +29,7 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.restassured.response.Response
 import org.hamcrest.Matchers
+import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 
@@ -230,6 +231,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("ASICs container with valid mimetype and DDOC inside.")
     def "asicsValidMimetypeWithDdocContainer"() {
         expect:
@@ -258,6 +260,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Invalid ASICs container with mimetype as last and DDOC inside.")
     def "asicsInvalidMimetypeLocationAsLastWithDdoc"() {
         expect:
@@ -286,6 +289,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Invalid ASICs container with deflated mimetype and DDOC inside.")
     def "asicsInvalidMimetypeCompressionAsDeflatedWithDdoc"() {
         expect:
@@ -314,6 +318,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Invalid ASICs container without mimetype and DDOC inside.")
     def "asicsContainingDdocContainerWithNoMimetype"() {
         expect:

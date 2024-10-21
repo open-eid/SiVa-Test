@@ -26,6 +26,7 @@ import io.qameta.allure.Description
 import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
+import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 
@@ -76,6 +77,7 @@ class AsicsValidationFailSpec extends GenericSpecification {
                 .body("requestErrors[0].message", Matchers.is("Document does not meet the requirements"))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("TST not intact")
     def "modifiedTstShouldFail"() {
         expect:
@@ -97,6 +99,7 @@ class AsicsValidationFailSpec extends GenericSpecification {
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Data file changed")
     def "dataFileChangedAsicsShouldFail"() {
         expect:

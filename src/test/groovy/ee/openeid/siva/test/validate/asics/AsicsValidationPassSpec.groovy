@@ -24,6 +24,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import org.hamcrest.Matchers
+import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 
@@ -60,6 +61,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(3))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Validation of ASICs with DDOC inside SCS extension")
     def "validDdocInsideValidAsicsScsExtension"() {
         expect:
@@ -80,6 +82,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Validation of ASICs with BDOC inside")
     def "validBdocInsideValidAsics"() {
         expect:
@@ -109,6 +112,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(2))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Validation of ASICs with text document inside")
     def "textInsideValidAsics"() {
         expect:
@@ -123,6 +127,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", Matchers.is("TXTinsideAsics.asics"))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Validation of ASICs with ASICs inside")
     def "asicsInsideValidAsics"() {
         expect:
@@ -135,6 +140,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", Matchers.is("ValidASICSinsideAsics.asics"))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Validation of ASICs with DDOC inside ZIP extension")
     def "ValidDdocInsideValidAsicsZipExtension"() {
         expect:
@@ -153,6 +159,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", Matchers.is("ValidDDOCinsideAsics.zip"))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Validation of ASICs with wrong mimetype with DDOC inside")
     def "ValidDdocInsideValidAsicsWrongMimeType"() {
         expect:

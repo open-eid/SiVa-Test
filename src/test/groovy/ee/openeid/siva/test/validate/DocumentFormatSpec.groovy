@@ -74,6 +74,7 @@ class DocumentFormatSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(1))
     }
 
+    @Ignore("SIVA-748 needs a new container")
     @Description("Validation of asics document acceptance")
     def "asicsDocumentShouldPass"() {
         expect:
