@@ -27,10 +27,9 @@ class AsicsValidationReportSpec extends GenericSpecification {
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
 
         and: "report matches expectation"
-        assertJsonEquals(
-                new String(Utils.readFileFromResources("${filename}Report.json")),
-                response.then().extract().asString()
-        )
+        String expected = new String(Utils.readFileFromResources("${filename}Report.json"))
+        String actual = response.then().extract().asString()
+        assertJsonEquals(expected, actual)
 
         where:
         filename                       | description

@@ -1,95 +1,111 @@
-{"validationReport": {"validationConclusion": {
-  "validationTime": "${json-unit.ignore}",
-  "validationWarnings": [{"content": "This is validation service demo. Use it for testing purposes only"}],
-  "signaturesCount": 1,
-  "validatedDocument": {"filename": "ValidBdocInAsics.asics"},
-  "validSignaturesCount": 1,
-  "signatures": [{
-    "signatureFormat": "XAdES_BASELINE_LT_TM",
-    "subjectDistinguishedName": {
-      "commonName": "JÕEORG,JAAK-KRISTJAN,38001085718",
-      "serialNumber": "PNOEE-38001085718",
-      "surname": "JÕEORG",
-      "givenName": "JAAK-KRISTJAN"
-    },
-    "certificates": [
-      {
-        "commonName": "TEST of SK OCSP RESPONDER 2011",
-        "type": "REVOCATION",
-        "content": "MIIEijCCA3KgAwIBAgIQaI8x6BnacYdNdNwlYnn/mzANBgkqhkiG9w0BAQUFADB9MQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEwMC4GA1UEAwwnVEVTVCBvZiBFRSBDZXJ0aWZpY2F0aW9uIENlbnRyZSBSb290IENBMRgwFgYJKoZIhvcNAQkBFglwa2lAc2suZWUwHhcNMTEwMzA3MTMyMjQ1WhcNMjQwOTA3MTIyMjQ1WjCBgzELMAkGA1UEBhMCRUUxIjAgBgNVBAoMGUFTIFNlcnRpZml0c2VlcmltaXNrZXNrdXMxDTALBgNVBAsMBE9DU1AxJzAlBgNVBAMMHlRFU1Qgb2YgU0sgT0NTUCBSRVNQT05ERVIgMjAxMTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0cw6Cja17BbYbHi6frwccDI4BIQLk/fiCE8L45os0xhPgEGR+EHE8LPCIqofPgf4gwN1vDE6cQNUlK0Od+Ush39i9Z45esnfpGq+2HsDJaFmFr5+uC1MEz5Kn1TazEvKbRjkGnSQ9BertlGer2BlU/kqOk5qA5RtJfhT0psc1ixKdPipv59wnf+nHx1+T+fPWndXVZLoDg4t3w8lIvIE/KhOSMlErvBIHIAKV7yH1hOxyeGLghqzMiAn3UeTEOgoOS9URv0C/T5C3mH+Y/uakMSxjNuz41PneimCzbEJZJRiEaMIj8qPAubcbL8GtY03MWmfNtX6/wh6u6TMfW8S2wIDAQABo4H+MIH7MBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMJMB0GA1UdDgQWBBR9/5CuRokEgGiqSzYuZGYAogl8TzCBoAYDVR0gBIGYMIGVMIGSBgorBgEEAc4fAwEBMIGDMFgGCCsGAQUFBwICMEweSgBBAGkAbgB1AGwAdAAgAHQAZQBzAHQAaQBtAGkAcwBlAGsAcwAuACAATwBuAGwAeQAgAGYAbwByACAAdABlAHMAdABpAG4AZwAuMCcGCCsGAQUFBwIBFhtodHRwOi8vd3d3LnNrLmVlL2FqYXRlbXBlbC8wHwYDVR0jBBgwFoAUtTQKnaUvEMXnIQ6+xLFlRxsDdv4wDQYJKoZIhvcNAQEFBQADggEBAAbaj7kTruTAPHqToye9ZtBdaJ3FZjiKug9/5RjsMwDpOeqFDqCorLd+DBI4tgdu0g4lhaI3aVnKdRBkGV18kqp84uU97JRFWQEf6H8hpJ9k/LzAACkP3tD+0ym+md532mV+nRz1Jj+RPLAUk9xYMV7KPczZN1xnl2wZDJwBbQpcSVH1DjlZv3tFLHBLIYTS6qOK4SxStcgRq7KdRczfW6mfXzTCRWM3G9nmDei5Q3+XTED41j8szRWglzYf6zOv4djkja64WYraQ5zb4x8Xh7qTCk6UupZ7je+0oRfuz0h/3zyRdjcRPkjloSpQp/NG8Rmrcnr874p8d9fdwCrRI7U="
+{
+  "validationReport": {
+    "validationConclusion": {
+      "validationTime": "${json-unit.ignore}",
+      "validationWarnings": [
+        {
+          "content": "This is validation service demo. Use it for testing purposes only"
+        }
+      ],
+      "signaturesCount": 1,
+      "validatedDocument": {
+        "filename": "ValidBdocInAsics.asics"
       },
-      {
-        "commonName": "JÕEORG,JAAK-KRISTJAN,38001085718",
-        "type": "SIGNING",
-        "content": "MIID6zCCA02gAwIBAgIQT7j6zk6pmVRcyspLo5SqejAKBggqhkjOPQQDBDBgMQswCQYDVQQGEwJFRTEbMBkGA1UECgwSU0sgSUQgU29sdXRpb25zIEFTMRcwFQYDVQRhDA5OVFJFRS0xMDc0NzAxMzEbMBkGA1UEAwwSVEVTVCBvZiBFU1RFSUQyMDE4MB4XDTE5MDUwMjEwNDUzMVoXDTI5MDUwMjEwNDUzMVowfzELMAkGA1UEBhMCRUUxFjAUBgNVBCoMDUpBQUstS1JJU1RKQU4xEDAOBgNVBAQMB0rDlUVPUkcxKjAoBgNVBAMMIUrDlUVPUkcsSkFBSy1LUklTVEpBTiwzODAwMTA4NTcxODEaMBgGA1UEBRMRUE5PRUUtMzgwMDEwODU3MTgwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAASkwENR8GmCpEs6OshDWDfIiKvGuyNMOD2rjIQW321AnZD3oIsqD0svBMNEJJj9Dlvq/47TYDObIa12KAU5IuOBfJs2lrFdSXZjaM+a5TWT3O2JTM36YDH2GcMe/eisepejggGrMIIBpzAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIGQDBIBgNVHSAEQTA/MDIGCysGAQQBg5EhAQIBMCMwIQYIKwYBBQUHAgEWFWh0dHBzOi8vd3d3LnNrLmVlL0NQUzAJBgcEAIvsQAECMB0GA1UdDgQWBBTVX3s48Spy/Es2TcXgkRvwUn2YcjCBigYIKwYBBQUHAQMEfjB8MAgGBgQAjkYBATAIBgYEAI5GAQQwEwYGBACORgEGMAkGBwQAjkYBBgEwUQYGBACORgEFMEcwRRY/aHR0cHM6Ly9zay5lZS9lbi9yZXBvc2l0b3J5L2NvbmRpdGlvbnMtZm9yLXVzZS1vZi1jZXJ0aWZpY2F0ZXMvEwJFTjAfBgNVHSMEGDAWgBTAhJkpxE6fOwI09pnhClYACCk+ezBzBggrBgEFBQcBAQRnMGUwLAYIKwYBBQUHMAGGIGh0dHA6Ly9haWEuZGVtby5zay5lZS9lc3RlaWQyMDE4MDUGCCsGAQUFBzAChilodHRwOi8vYy5zay5lZS9UZXN0X29mX0VTVEVJRDIwMTguZGVyLmNydDAKBggqhkjOPQQDBAOBiwAwgYcCQgGBr+Jbo1GeqgWdIwgMo7SA29AP38JxNm2HWq2Qb+kIHpusAK574Co1K5D4+Mk7/ITTuXQaET5WphHoN7tdAciTaQJBAn0zBigYyVPYSTO68HM6hmlwTwi/KlJDdXW/2NsMjSqofFFJXpGvpxk2CTqSRCjcavxLPnkasTbNROYSJcmM8Xc="
-      }
-    ],
-    "signedBy": "JÕEORG,JAAK-KRISTJAN,38001085718",
-    "claimedSigningTime": "2020-05-21T14:07:04Z",
-    "signatureLevel": "QESIG",
-    "signatureScopes": [{
-      "scope": "FullSignatureScope",
-      "name": "test.txt",
-      "content": "Digest of the document content"
-    }],
-    "signatureMethod": "http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256",
-    "id": "id-7b7180a5265f919bc0ac65bd02e4b46a",
-    "indication": "TOTAL-PASSED",
-    "info": {
-      "timeAssertionMessageImprint": "MDEwDQYJYIZIAWUDBAIBBQAEIGKrO2Grf+WLkmOnj9QQbCXAa2A3881D9PUIOk0M7Nm6",
-      "bestSignatureTime": "2020-05-21T14:07:01Z",
-      "ocspResponseCreationTime": "2020-05-21T14:07:01Z"
+      "validSignaturesCount": 1,
+      "signatures": [
+        {
+          "signatureFormat": "XAdES_BASELINE_LT_TM",
+          "subjectDistinguishedName": {
+            "commonName": "JÕEORG,JAAK-KRISTJAN,38001085718",
+            "serialNumber": "PNOEE-38001085718",
+            "surname": "JÕEORG",
+            "givenName": "JAAK-KRISTJAN"
+          },
+          "certificates": [
+            {
+              "commonName": "TEST of SK OCSP RESPONDER 2011",
+              "type": "REVOCATION",
+              "content": "MIIEijCCA3KgAwIBAgIQaI8x6BnacYdNdNwlYnn/mzANBgkqhkiG9w0BAQUFADB9MQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEwMC4GA1UEAwwnVEVTVCBvZiBFRSBDZXJ0aWZpY2F0aW9uIENlbnRyZSBSb290IENBMRgwFgYJKoZIhvcNAQkBFglwa2lAc2suZWUwHhcNMTEwMzA3MTMyMjQ1WhcNMjQwOTA3MTIyMjQ1WjCBgzELMAkGA1UEBhMCRUUxIjAgBgNVBAoMGUFTIFNlcnRpZml0c2VlcmltaXNrZXNrdXMxDTALBgNVBAsMBE9DU1AxJzAlBgNVBAMMHlRFU1Qgb2YgU0sgT0NTUCBSRVNQT05ERVIgMjAxMTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0cw6Cja17BbYbHi6frwccDI4BIQLk/fiCE8L45os0xhPgEGR+EHE8LPCIqofPgf4gwN1vDE6cQNUlK0Od+Ush39i9Z45esnfpGq+2HsDJaFmFr5+uC1MEz5Kn1TazEvKbRjkGnSQ9BertlGer2BlU/kqOk5qA5RtJfhT0psc1ixKdPipv59wnf+nHx1+T+fPWndXVZLoDg4t3w8lIvIE/KhOSMlErvBIHIAKV7yH1hOxyeGLghqzMiAn3UeTEOgoOS9URv0C/T5C3mH+Y/uakMSxjNuz41PneimCzbEJZJRiEaMIj8qPAubcbL8GtY03MWmfNtX6/wh6u6TMfW8S2wIDAQABo4H+MIH7MBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMJMB0GA1UdDgQWBBR9/5CuRokEgGiqSzYuZGYAogl8TzCBoAYDVR0gBIGYMIGVMIGSBgorBgEEAc4fAwEBMIGDMFgGCCsGAQUFBwICMEweSgBBAGkAbgB1AGwAdAAgAHQAZQBzAHQAaQBtAGkAcwBlAGsAcwAuACAATwBuAGwAeQAgAGYAbwByACAAdABlAHMAdABpAG4AZwAuMCcGCCsGAQUFBwIBFhtodHRwOi8vd3d3LnNrLmVlL2FqYXRlbXBlbC8wHwYDVR0jBBgwFoAUtTQKnaUvEMXnIQ6+xLFlRxsDdv4wDQYJKoZIhvcNAQEFBQADggEBAAbaj7kTruTAPHqToye9ZtBdaJ3FZjiKug9/5RjsMwDpOeqFDqCorLd+DBI4tgdu0g4lhaI3aVnKdRBkGV18kqp84uU97JRFWQEf6H8hpJ9k/LzAACkP3tD+0ym+md532mV+nRz1Jj+RPLAUk9xYMV7KPczZN1xnl2wZDJwBbQpcSVH1DjlZv3tFLHBLIYTS6qOK4SxStcgRq7KdRczfW6mfXzTCRWM3G9nmDei5Q3+XTED41j8szRWglzYf6zOv4djkja64WYraQ5zb4x8Xh7qTCk6UupZ7je+0oRfuz0h/3zyRdjcRPkjloSpQp/NG8Rmrcnr874p8d9fdwCrRI7U="
+            },
+            {
+              "commonName": "JÕEORG,JAAK-KRISTJAN,38001085718",
+              "type": "SIGNING",
+              "content": "MIID6zCCA02gAwIBAgIQT7j6zk6pmVRcyspLo5SqejAKBggqhkjOPQQDBDBgMQswCQYDVQQGEwJFRTEbMBkGA1UECgwSU0sgSUQgU29sdXRpb25zIEFTMRcwFQYDVQRhDA5OVFJFRS0xMDc0NzAxMzEbMBkGA1UEAwwSVEVTVCBvZiBFU1RFSUQyMDE4MB4XDTE5MDUwMjEwNDUzMVoXDTI5MDUwMjEwNDUzMVowfzELMAkGA1UEBhMCRUUxFjAUBgNVBCoMDUpBQUstS1JJU1RKQU4xEDAOBgNVBAQMB0rDlUVPUkcxKjAoBgNVBAMMIUrDlUVPUkcsSkFBSy1LUklTVEpBTiwzODAwMTA4NTcxODEaMBgGA1UEBRMRUE5PRUUtMzgwMDEwODU3MTgwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAASkwENR8GmCpEs6OshDWDfIiKvGuyNMOD2rjIQW321AnZD3oIsqD0svBMNEJJj9Dlvq/47TYDObIa12KAU5IuOBfJs2lrFdSXZjaM+a5TWT3O2JTM36YDH2GcMe/eisepejggGrMIIBpzAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIGQDBIBgNVHSAEQTA/MDIGCysGAQQBg5EhAQIBMCMwIQYIKwYBBQUHAgEWFWh0dHBzOi8vd3d3LnNrLmVlL0NQUzAJBgcEAIvsQAECMB0GA1UdDgQWBBTVX3s48Spy/Es2TcXgkRvwUn2YcjCBigYIKwYBBQUHAQMEfjB8MAgGBgQAjkYBATAIBgYEAI5GAQQwEwYGBACORgEGMAkGBwQAjkYBBgEwUQYGBACORgEFMEcwRRY/aHR0cHM6Ly9zay5lZS9lbi9yZXBvc2l0b3J5L2NvbmRpdGlvbnMtZm9yLXVzZS1vZi1jZXJ0aWZpY2F0ZXMvEwJFTjAfBgNVHSMEGDAWgBTAhJkpxE6fOwI09pnhClYACCk+ezBzBggrBgEFBQcBAQRnMGUwLAYIKwYBBQUHMAGGIGh0dHA6Ly9haWEuZGVtby5zay5lZS9lc3RlaWQyMDE4MDUGCCsGAQUFBzAChilodHRwOi8vYy5zay5lZS9UZXN0X29mX0VTVEVJRDIwMTguZGVyLmNydDAKBggqhkjOPQQDBAOBiwAwgYcCQgGBr+Jbo1GeqgWdIwgMo7SA29AP38JxNm2HWq2Qb+kIHpusAK574Co1K5D4+Mk7/ITTuXQaET5WphHoN7tdAciTaQJBAn0zBigYyVPYSTO68HM6hmlwTwi/KlJDdXW/2NsMjSqofFFJXpGvpxk2CTqSRCjcavxLPnkasTbNROYSJcmM8Xc="
+            }
+          ],
+          "signedBy": "JÕEORG,JAAK-KRISTJAN,38001085718",
+          "claimedSigningTime": "2020-05-21T14:07:04Z",
+          "signatureLevel": "QESIG",
+          "signatureScopes": [
+            {
+              "scope": "FullSignatureScope",
+              "name": "test.txt",
+              "content": "Digest of the document content"
+            }
+          ],
+          "signatureMethod": "http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256",
+          "id": "id-7b7180a5265f919bc0ac65bd02e4b46a",
+          "indication": "TOTAL-PASSED",
+          "info": {
+            "timeAssertionMessageImprint": "MDEwDQYJYIZIAWUDBAIBBQAEIGKrO2Grf+WLkmOnj9QQbCXAa2A3881D9PUIOk0M7Nm6",
+            "bestSignatureTime": "2020-05-21T14:07:01Z",
+            "ocspResponseCreationTime": "2020-05-21T14:07:01Z"
+          }
+        }
+      ],
+      "timeStampTokens": [
+        {
+          "signedTime": "2024-12-03T14:35:41Z",
+          "certificates": [
+            {
+              "commonName": "DEMO SK TIMESTAMPING AUTHORITY 2023E",
+              "type": "CONTENT_TIMESTAMP",
+              "content": "MIIDEjCCApigAwIBAgIQM7BQCImkdt18qWDYdbfOtjAKBggqhkjOPQQDAjBlMSAwHgYDVQQDDBdURVNUIG9mIFNLIFRTQSBDQSAyMDIzRTEXMBUGA1UEYQwOTlRSRUUtMTA3NDcwMTMxGzAZBgNVBAoMElNLIElEIFNvbHV0aW9ucyBBUzELMAkGA1UEBhMCRUUwHhcNMjMwNjE1MDcxMjA0WhcNMjkwNjE0MDcxMjAzWjByMS0wKwYDVQQDDCRERU1PIFNLIFRJTUVTVEFNUElORyBBVVRIT1JJVFkgMjAyM0UxFzAVBgNVBGEMDk5UUkVFLTEwNzQ3MDEzMRswGQYDVQQKDBJTSyBJRCBTb2x1dGlvbnMgQVMxCzAJBgNVBAYTAkVFMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEFlmfS6324KQUsz5xSbkG0PxwZfi94mYeuZkculhxkgmIAD3/sSOIoNqRTHg9Jl4tR2VNcMocjLRli474M6SKLqOCARswggEXMB8GA1UdIwQYMBaAFGkForSjh0uOXxhFLdWxlzTPZzu3MG8GCCsGAQUFBwEBBGMwYTA7BggrBgEFBQcwAoYvaHR0cHM6Ly9jLnNrLmVlL1RFU1Rfb2ZfU0tfVFNBX0NBXzIwMjNFLmRlci5jcnQwIgYIKwYBBQUHMAGGFmh0dHA6Ly9kZW1vLnNrLmVlL29jc3AwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwgwPAYDVR0fBDUwMzAxoC+gLYYraHR0cHM6Ly9jLnNrLmVlL1RFU1Rfb2ZfU0tfVFNBX0NBXzIwMjNFLmNybDAdBgNVHQ4EFgQUPmDgaUB5qWkDeoNoc62C/QKk93YwDgYDVR0PAQH/BAQDAgbAMAoGCCqGSM49BAMCA2gAMGUCMAK0/sP+jVQFNFakD4SeVy9xAZovv7T9WuaKfztgdefdJNMm8gaS9HpAa/wwVvnjqQIxAOU2sPULdJMNC6qw563eDasMq9fRUnAf17+/I+byednRNGW3SGYtyGWN8IKKBut4lA=="
+            },
+            {
+              "commonName": "TEST of SK TSA CA 2023E",
+              "type": "CONTENT_TIMESTAMP",
+              "content": "MIIDmDCCAvqgAwIBAgIUVfnQsoPZy/BfG5pFKjI2RJU22YgwCgYIKoZIzj0EAwMwbjELMAkGA1UEBhMCRUUxGzAZBgNVBAoMElNLIElEIFNvbHV0aW9ucyBBUzEXMBUGA1UEYQwOTlRSRUUtMTA3NDcwMTMxKTAnBgNVBAMMIFRFU1Qgb2YgU0sgSUQgU29sdXRpb25zIFJPT1QgRzFFMB4XDTIzMDMzMTEwMTQ1OVoXDTM4MDMyNzEwMTQ1OFowZTEgMB4GA1UEAwwXVEVTVCBvZiBTSyBUU0EgQ0EgMjAyM0UxFzAVBgNVBGEMDk5UUkVFLTEwNzQ3MDEzMRswGQYDVQQKDBJTSyBJRCBTb2x1dGlvbnMgQVMxCzAJBgNVBAYTAkVFMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEA9zGJc0JctGXPC9m24cbj7LZhmgVqEk+Uw0WieO3l6NNxYwNY54HQq/UCu1iDa7JyznldH97CSHERnOD5hXoN2AmlSkxa4Lcd0y/WDY/kbA5mDmtyNoSh7XY4Nn9iTHUo4IBYDCCAVwwDwYDVR0TAQH/BAUwAwEB/zAfBgNVHSMEGDAWgBTiHN5j3L74hH4BOy5LgLHhf9Xx5jBtBggrBgEFBQcBAQRhMF8wOAYIKwYBBQUHMAKGLGh0dHA6Ly9jLnNrLmVlL1RFU1RfU0tfUk9PVF9HMV8yMDIxRS5kZXIuY3J0MCMGCCsGAQUFBzABhhdodHRwczovL2RlbW8uc2suZWUvb2NzcDBPBgNVHSAESDBGMEQGA1UdIDA9MDsGCCsGAQUFBwIBFi9odHRwczovL3d3dy5za2lkc29sdXRpb25zLmV1L2VuL3JlcG9zaXRvcnkvdHNhLzA5BgNVHR8EMjAwMC6gLKAqhihodHRwOi8vYy5zay5lZS9URVNUX1NLX1JPT1RfRzFfMjAyMUUuY3JsMB0GA1UdDgQWBBRpBaK0o4dLjl8YRS3VsZc0z2c7tzAOBgNVHQ8BAf8EBAMCAQYwCgYIKoZIzj0EAwMDgYsAMIGHAkFHuLi/IjHv/CbaNtU4k/A1TKuMlChOyHdEgCUk9JUsgMXFrhsuL10E0H/Uhpy70QKAx1SgCaGJBVEC9ZITHPTIRgJCATPbrwhuU+rsA34WT96xHQog1J0AK+7fn1T7rLGIsg7vB42efFDGfq5J9zH0KWSAkYdeceRk/a1mm1amsQYnfWZb"
+            }
+          ],
+          "signedBy": "DEMO SK TIMESTAMPING AUTHORITY 2023E",
+          "indication": "TOTAL-PASSED",
+          "timestampScopes": [
+            {
+              "scope": "FULL",
+              "name": "singleValidSignatureTM.bdoc",
+              "content": "ASiCS archive"
+            },
+            {
+              "scope": "ARCHIVED",
+              "name": "mimetype",
+              "content": "ASiCS archive content"
+            },
+            {
+              "scope": "ARCHIVED",
+              "name": "META-INF/manifest.xml",
+              "content": "ASiCS archive content"
+            },
+            {
+              "scope": "ARCHIVED",
+              "name": "test.txt",
+              "content": "ASiCS archive content"
+            },
+            {
+              "scope": "ARCHIVED",
+              "name": "META-INF/signatures0.xml",
+              "content": "ASiCS archive content"
+            }
+          ],
+          "timestampLevel": "QTSA"
+        }
+      ],
+      "policy": {
+        "policyDescription": "Policy according most common requirements of Estonian Public Administration, to validate Qualified Electronic Signatures and Electronic Seals with Qualified Certificates (according to Regulation (EU) No 910/2014, aka eIDAS). I.e. signatures that have been recognized as Advanced electronic Signatures (AdES) and AdES supported by a Qualified Certificate (AdES/QC) do not produce a positive validation result, with exception for seals, where AdES/QC and above will produce positive result. Signatures and Seals which are not compliant with ETSI standards (referred by eIDAS) may produce unknown or invalid validation result. Validation process is based on eIDAS Article 32 and referred ETSI standards.",
+        "policyUrl": "http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4",
+        "policyName": "POLv4"
+      },
+      "signatureForm": "ASiC-S"
     }
-  }],
-  "timeStampTokens": [{
-    "signedTime": "2024-12-03T14:35:41Z",
-    "certificates": [
-      {
-        "commonName": "DEMO SK TIMESTAMPING AUTHORITY 2023E",
-        "type": "CONTENT_TIMESTAMP",
-        "content": "MIIDEjCCApigAwIBAgIQM7BQCImkdt18qWDYdbfOtjAKBggqhkjOPQQDAjBlMSAwHgYDVQQDDBdURVNUIG9mIFNLIFRTQSBDQSAyMDIzRTEXMBUGA1UEYQwOTlRSRUUtMTA3NDcwMTMxGzAZBgNVBAoMElNLIElEIFNvbHV0aW9ucyBBUzELMAkGA1UEBhMCRUUwHhcNMjMwNjE1MDcxMjA0WhcNMjkwNjE0MDcxMjAzWjByMS0wKwYDVQQDDCRERU1PIFNLIFRJTUVTVEFNUElORyBBVVRIT1JJVFkgMjAyM0UxFzAVBgNVBGEMDk5UUkVFLTEwNzQ3MDEzMRswGQYDVQQKDBJTSyBJRCBTb2x1dGlvbnMgQVMxCzAJBgNVBAYTAkVFMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEFlmfS6324KQUsz5xSbkG0PxwZfi94mYeuZkculhxkgmIAD3/sSOIoNqRTHg9Jl4tR2VNcMocjLRli474M6SKLqOCARswggEXMB8GA1UdIwQYMBaAFGkForSjh0uOXxhFLdWxlzTPZzu3MG8GCCsGAQUFBwEBBGMwYTA7BggrBgEFBQcwAoYvaHR0cHM6Ly9jLnNrLmVlL1RFU1Rfb2ZfU0tfVFNBX0NBXzIwMjNFLmRlci5jcnQwIgYIKwYBBQUHMAGGFmh0dHA6Ly9kZW1vLnNrLmVlL29jc3AwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwgwPAYDVR0fBDUwMzAxoC+gLYYraHR0cHM6Ly9jLnNrLmVlL1RFU1Rfb2ZfU0tfVFNBX0NBXzIwMjNFLmNybDAdBgNVHQ4EFgQUPmDgaUB5qWkDeoNoc62C/QKk93YwDgYDVR0PAQH/BAQDAgbAMAoGCCqGSM49BAMCA2gAMGUCMAK0/sP+jVQFNFakD4SeVy9xAZovv7T9WuaKfztgdefdJNMm8gaS9HpAa/wwVvnjqQIxAOU2sPULdJMNC6qw563eDasMq9fRUnAf17+/I+byednRNGW3SGYtyGWN8IKKBut4lA=="
-      },
-      {
-        "commonName": "TEST of SK TSA CA 2023E",
-        "type": "CONTENT_TIMESTAMP",
-        "content": "MIIDmDCCAvqgAwIBAgIUVfnQsoPZy/BfG5pFKjI2RJU22YgwCgYIKoZIzj0EAwMwbjELMAkGA1UEBhMCRUUxGzAZBgNVBAoMElNLIElEIFNvbHV0aW9ucyBBUzEXMBUGA1UEYQwOTlRSRUUtMTA3NDcwMTMxKTAnBgNVBAMMIFRFU1Qgb2YgU0sgSUQgU29sdXRpb25zIFJPT1QgRzFFMB4XDTIzMDMzMTEwMTQ1OVoXDTM4MDMyNzEwMTQ1OFowZTEgMB4GA1UEAwwXVEVTVCBvZiBTSyBUU0EgQ0EgMjAyM0UxFzAVBgNVBGEMDk5UUkVFLTEwNzQ3MDEzMRswGQYDVQQKDBJTSyBJRCBTb2x1dGlvbnMgQVMxCzAJBgNVBAYTAkVFMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEA9zGJc0JctGXPC9m24cbj7LZhmgVqEk+Uw0WieO3l6NNxYwNY54HQq/UCu1iDa7JyznldH97CSHERnOD5hXoN2AmlSkxa4Lcd0y/WDY/kbA5mDmtyNoSh7XY4Nn9iTHUo4IBYDCCAVwwDwYDVR0TAQH/BAUwAwEB/zAfBgNVHSMEGDAWgBTiHN5j3L74hH4BOy5LgLHhf9Xx5jBtBggrBgEFBQcBAQRhMF8wOAYIKwYBBQUHMAKGLGh0dHA6Ly9jLnNrLmVlL1RFU1RfU0tfUk9PVF9HMV8yMDIxRS5kZXIuY3J0MCMGCCsGAQUFBzABhhdodHRwczovL2RlbW8uc2suZWUvb2NzcDBPBgNVHSAESDBGMEQGA1UdIDA9MDsGCCsGAQUFBwIBFi9odHRwczovL3d3dy5za2lkc29sdXRpb25zLmV1L2VuL3JlcG9zaXRvcnkvdHNhLzA5BgNVHR8EMjAwMC6gLKAqhihodHRwOi8vYy5zay5lZS9URVNUX1NLX1JPT1RfRzFfMjAyMUUuY3JsMB0GA1UdDgQWBBRpBaK0o4dLjl8YRS3VsZc0z2c7tzAOBgNVHQ8BAf8EBAMCAQYwCgYIKoZIzj0EAwMDgYsAMIGHAkFHuLi/IjHv/CbaNtU4k/A1TKuMlChOyHdEgCUk9JUsgMXFrhsuL10E0H/Uhpy70QKAx1SgCaGJBVEC9ZITHPTIRgJCATPbrwhuU+rsA34WT96xHQog1J0AK+7fn1T7rLGIsg7vB42efFDGfq5J9zH0KWSAkYdeceRk/a1mm1amsQYnfWZb"
-      }
-    ],
-    "signedBy": "DEMO SK TIMESTAMPING AUTHORITY 2023E",
-    "indication": "TOTAL-PASSED",
-    "timestampScopes": [
-      {
-        "scope": "FULL",
-        "name": "singleValidSignatureTM.bdoc",
-        "content": "ASiCS archive"
-      },
-      {
-        "scope": "ARCHIVED",
-        "name": "mimetype",
-        "content": "ASiCS archive content"
-      },
-      {
-        "scope": "ARCHIVED",
-        "name": "META-INF/manifest.xml",
-        "content": "ASiCS archive content"
-      },
-      {
-        "scope": "ARCHIVED",
-        "name": "test.txt",
-        "content": "ASiCS archive content"
-      },
-      {
-        "scope": "ARCHIVED",
-        "name": "META-INF/signatures0.xml",
-        "content": "ASiCS archive content"
-      }
-    ],
-    "timestampLevel": "QTSA"
-  }],
-  "policy": {
-    "policyDescription": "Policy according most common requirements of Estonian Public Administration, to validate Qualified Electronic Signatures and Electronic Seals with Qualified Certificates (according to Regulation (EU) No 910/2014, aka eIDAS). I.e. signatures that have been recognized as Advanced electronic Signatures (AdES) and AdES supported by a Qualified Certificate (AdES/QC) do not produce a positive validation result, with exception for seals, where AdES/QC and above will produce positive result. Signatures and Seals which are not compliant with ETSI standards (referred by eIDAS) may produce unknown or invalid validation result. Validation process is based on eIDAS Article 32 and referred ETSI standards.",
-    "policyUrl": "http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4",
-    "policyName": "POLv4"
-  },
-  "signatureForm": "ASiC-S"
-}}}
+  }
+}
