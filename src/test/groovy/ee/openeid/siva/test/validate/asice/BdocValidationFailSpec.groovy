@@ -454,4 +454,21 @@ class BdocValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhk"))
                 .body("validSignaturesCount", Matchers.is(0))
     }
+
+    @Description("Signature with BDOC policy should fail validation when extended to LT or LTA profile")
+    def "Signature with BDOC policy extended to #comment profile should fail validation"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(filename))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", Matchers.is(signatureProfiles))
+                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
+                .body("signatures[0].errors.content", Matchers.hasItem("Invalid signature format for BDOC policy"))
+                .body("validSignaturesCount", Matchers.is(0))
+
+        where:
+        comment | filename                                        | signatureProfiles
+  //TODO: SIVA-777      "LT"    | "singleValidSignatureTmPolicyExtendedToLt.sce"  | SignatureFormat.XAdES_BASELINE_LT_TM
+        "LTA"   | "singleValidSignatureTmPolicyExtendedToLta.sce" | SignatureFormat.XAdES_BASELINE_LTA
+    }
 }
