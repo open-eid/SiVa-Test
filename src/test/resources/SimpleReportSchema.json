@@ -150,6 +150,122 @@
             ]
           }
         },
+        "timeStampTokens": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "signedTime": {
+                "type": "string",
+                "minLength": 1
+              },
+              "certificates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "commonName": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "type": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "content": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "commonName",
+                    "type",
+                    "content"
+                  ]
+                }
+              },
+              "signedBy": {
+                "type": "string",
+                "minLength": 1
+              },
+              "indication": {
+                "type": "string",
+                "minLength": 1
+              },
+              "timestampScopes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "scope": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "content": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "scope",
+                    "name",
+                    "content"
+                  ]
+                }
+              },
+              "timestampLevel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "error": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "content"
+                  ]
+                }
+              },
+              "warning": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "content"
+                  ]
+                }
+              },
+              "subIndication": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "signedTime",
+              "certificates",
+              "signedBy",
+              "indication",
+              "timestampScopes",
+              "timestampLevel"
+            ]
+          }
+        },
         "policy": {
           "type": "object",
           "properties": {
