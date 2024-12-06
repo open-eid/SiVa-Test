@@ -7,6 +7,8 @@ import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.restassured.response.Response
+import org.junit.Ignore
+import spock.lang.Tag
 
 import static ee.openeid.siva.test.TestData.SUB_INDICATION_SIG_CRYPTO_FAILURE
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
@@ -43,6 +45,22 @@ class AsicsValidationReportSpec extends GenericSpecification {
         "ValidDdocInAsics"             | "DDOC in timestamped ASiC-S"
     }
 
+    @Ignore("SIVA-778")
+    @Tag("slow")
+    @Description("Timestamped ASiC-S report matches JSON structure and has expected values")
+    def "Given 200x timestamped ASiC-S, then simple report has correct values present"() {
+        when: "report is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("Valid200xTstAsics.asics"))
+
+        then: "report matches JSON structure"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
+
+        and: "report matches expectation"
+        String expected = new String(Utils.readFileFromResources("Valid200xTstAsicsReport.json"))
+        String actual = response.then().extract().asString()
+        assertJsonEquals(expected, actual)
+    }
 
     @Description("Invalid timestamped ASiC-S report matches JSON structure and has expected values")
     def "Given invalid timestamped ASiC-S, then simple report has correct values present"() {
