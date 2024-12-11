@@ -14,9 +14,10 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test.validate.asice
+package ee.openeid.siva.test.validate.bdoc
 
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureIndication
@@ -27,15 +28,13 @@ import io.qameta.allure.Description
 import org.hamcrest.Matchers
 import spock.lang.Ignore
 
-import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
-
 class BdocValidationPassSpec extends GenericSpecification {
 
     @Description("Bdoc with single valid signature")
     def "Given BDOC with single valid signature, then successful validation"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
@@ -53,7 +52,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "Given BDOC with multiple TM signatures, then successful validation"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("TwoValidTmSignaturesWithRolesAndProductionPlace.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
@@ -69,7 +68,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "alidSignatureWithWarning"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("bdoc_weak_warning_sha1.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].subIndication", Matchers.is(""))
@@ -81,7 +80,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocDifferentCertificateCountries"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-30.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", Matchers.is("PELANIS,MINDAUGAS,37412260478"))
@@ -101,7 +100,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocEccSha256signature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("24050_short_ecdsa_correct_file_mimetype.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
@@ -113,7 +112,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocBaselineLtProfileValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-49.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
@@ -124,7 +123,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocQESProfileValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("ValidLiveSignature.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
@@ -136,7 +135,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocWithEccSha256ValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-2.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
@@ -147,7 +146,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocSk2015CertificateChainValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("IB-4270_TS_ESTEID-SK 2015  SK OCSP RESPONDER 2011.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -159,7 +158,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocKlass3Sk2010CertificateChainValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-28.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -172,7 +171,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocEsteidSk2011CertificateChainQesBaselineLtTmValidSignature"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BDOC2.1.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -184,7 +183,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocTsValidMultipleSignatures"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("Test_id_aa.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -196,7 +195,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocWithSpecialCharactersInDataFileShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Šužlikud sõid ühe õuna ära.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -210,7 +209,7 @@ class BdocValidationPassSpec extends GenericSpecification {
         expect:
 
         SivaRequests.validate(RequestData.validationRequestForDD4J("BDOC2.1_content_as_sce.sce", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -224,7 +223,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "asiceWithSpecialCharactersInDataFileShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("Nonconventionalcharacters.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -240,7 +239,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocWithEccTimeMarkShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("testECCDemo.bdoc", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -256,7 +255,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocWithEccTimeStampShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequestForDD4J("Mac_AS0099904_EsimeneAmetlikSKTestElliptilistega_TS.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
@@ -269,7 +268,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocInvalidMimeTypeCharsShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-33.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2016-04-13T08:37:52Z"))
@@ -281,7 +280,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocMalformedBdocWithInvalidMimetypeInManifestShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("23147_weak-warning-sha1-invalid-mimetype-in-manifest.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", Matchers.is("2013-11-13T10:09:49Z"))
@@ -293,7 +292,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "validSignatureTestOfOCSPResponder2020ForTimeMarkShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("test_of_OCSP_responder_2020.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
@@ -311,7 +310,7 @@ class BdocValidationPassSpec extends GenericSpecification {
     def "bdocWithEmptyDataFilesShouldPass"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("signed-container-with-empty-datafiles.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
