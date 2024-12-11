@@ -1,0 +1,142 @@
+{
+  "validationReport": {
+    "validationConclusion": {
+      "validationTime": "${json-unit.ignore}",
+      "validationWarnings": [
+        {
+          "content": "This is validation service demo. Use it for testing purposes only"
+        }
+      ],
+      "signaturesCount": 1,
+      "validationLevel": "ARCHIVAL_DATA",
+      "validatedDocument": {
+        "filename": "EE_SER-AEX-B-LTA-V-24.asice"
+      },
+      "validSignaturesCount": 0,
+      "signatures": [
+        {
+          "signatureFormat": "XAdES_BASELINE_LTA",
+          "subjectDistinguishedName": {
+            "commonName": "METSMA,RAUL,38207162766",
+            "serialNumber": "38207162766",
+            "surname": "METSMA",
+            "givenName": "RAUL"
+          },
+          "signedBy": "METSMA,RAUL,38207162766",
+          "warnings": [
+            {
+              "content": "The signature/seal is an INDETERMINATE AdES digital signature!"
+            },
+            {
+              "content": "The certificate is not qualified at (best) signing time!"
+            },
+            {
+              "content": "The private key does not reside in a QSCD at (best) signing time!"
+            },
+            {
+              "content": "The certificate is related to a trust service entry with status 'withdrawn'!"
+            }
+          ],
+          "signatureMethod": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+          "subIndication": "OUT_OF_BOUNDS_NOT_REVOKED",
+          "certificates": [
+            {
+              "commonName": "BalTstamp QTSA TSU2",
+              "type": "ARCHIVE_TIMESTAMP",
+              "content": "MIIEtzCCA5+gAwIBAgIKFg5NNQAAAAADhzANBgkqhkiG9w0BAQUFADB/MQswCQYDVQQGEwJMVDErMCkGA1UEChMiU2thaXRtZW5pbmlvIHNlcnRpZmlrYXZpbW8gY2VudHJhczEgMB4GA1UECxMXQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxITAfBgNVBAMTGFNTQyBRdWFsaWZpZWQgQ2xhc3MgMyBDQTAeFw0xMjA1MTUxMTM0NTRaFw0yMjA1MTUxMTM0NTRaMFUxCzAJBgNVBAYTAkxUMRAwDgYDVQQHEwdWaWxuaXVzMRYwFAYDVQQKEw1CYWxUc3RhbXAgVUFCMRwwGgYDVQQDExNCYWxUc3RhbXAgUVRTQSBUU1UyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAghxPoFLFWpkLa2Ll1ZBUtesItzJMa2wpBIBwqTHdWMkOM9kv3tSK05xpfCMKhU7Xt9kwPzqDXpIg5PTuDWLXjWdbjkp14rfvUTybR/IfOOe8zSQozIjoEW3EIzDiRksgUYxo2FCIHqLrRu3lKziWryEoOX8H6vGie18a6VUVV+8Qqm8sVuXCZaS0Q6RwOI11vZgn609iFKtSLQFZVPP0Mluq/csPfzlAelesHwwtRsTLpWjtGluZe1kNBky+JP1sVcHbbYuHTklCXGGn2jCZbxg/TY8vAnnSuIdf8ufx5HtOSdzW3ciGqn3MzwTUgGdNZSDtcZDoeeG2SgRsVZ2qDQIDAQABo4IBXTCCAVkwHQYDVR0OBBYEFFH0sW1OVQ7fk5dcgyNlE3B99q8/MB8GA1UdIwQYMBaAFAjJQf/nm1Yz2vDXs2G0SFwVoxtaMDcGA1UdHwQwMC4wLKAqoCiGJmh0dHA6Ly9uY3JsLnNzYy5sdC9jbGFzczNucWMvY2FjcmwuY3JsMGwGCCsGAQUFBwEBBGAwXjA2BggrBgEFBQcwAoYqaHR0cDovL3d3dy5zc2MubHQvY2FjZXJ0L3NzY19jbGFzczNucWMuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC0zbnFjLnNzYy5sdC8wCQYDVR0TBAIwADAOBgNVHQ8BAf8EBAMCBkAwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwgwPQYDVR0gBDYwNDAyBgsrBgEEAYGvZQECADAjMCEGCCsGAQUFBwIBFhVodHRwOi8vd3d3LnNzYy5sdC9jcHMwDQYJKoZIhvcNAQEFBQADggEBADq7F9uq7ROIFr2V3q+eqVVdD2qTZ437wJKziaYho059h1Vqg5CMoY6Diu6JsosEkYoIsV39LaH+PU/anvysMiD0taViWR+p5O1ZTUXjyk7Cj16tgLeXGosQlJEQexS0WIyMTC4F/9Zv0U95HwALnarJLh2KvWsGRcDXsHmK3BVybs87/CAgVuN10d50xCcSFtdFhqe9pyZsaqZnnNKXc9eRuf8QrpJGTI38UldA+v2k5A0tBnrJOFXvutxGFdSV+5WofGYGWf7HUYXJ71mbrCd7udOvWSLUa4mAyElJ/YoEs3fZU/00eBduUJyLwBLAA7oA0R8n4gdV3JynrhghG9o=",
+              "issuer": {
+                "commonName": "SSC Qualified Class 3 CA",
+                "content": "MIIFvTCCA6WgAwIBAgIQWJFmnMAIyiVAcLMn/5wGnjANBgkqhkiG9w0BAQUFADB0MQswCQYDVQQGEwJMVDErMCkGA1UEChMiU2thaXRtZW5pbmlvIHNlcnRpZmlrYXZpbW8gY2VudHJhczEgMB4GA1UECxMXQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxFjAUBgNVBAMTDVNTQyBSb290IENBIEEwHhcNMTIwMzAzMTEwMDE3WhcNMjYxMDI1MTIwNTAwWjB/MQswCQYDVQQGEwJMVDErMCkGA1UEChMiU2thaXRtZW5pbmlvIHNlcnRpZmlrYXZpbW8gY2VudHJhczEgMB4GA1UECxMXQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxITAfBgNVBAMTGFNTQyBRdWFsaWZpZWQgQ2xhc3MgMyBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ31J4TmT6WT7ezYrZTD3bUD5YpucJRophhaVGFeMVP0h5UwV9uYs3Ne+eFubk5eY+dgBcvK142CudGExMjbFap8il/Ik8PFsLW5DKLscoblIKuAR42u9TgYRv9mmfXZQEwsUUlC3ajCsbqkVV2zdl84kpJX2L2pKy94j28GJ4ezSiOHj/G2ZfTUAu38k/sIlH/Mg4m9KJYwthzg/2pJ4gzWSGtqOGX8/FNOAT3n7M3dtlZZStaIPO4icySMpGRF6mH5kz9peSdSr/1ywYnPQk0y1nZjUeeaGnaM7Ik8ez2G8h3kgRVuUZyLLEJtTZwMN5HwKpNIPTysw+YRxrgG59MCAwEAAaOCAT4wggE6MGQGCCsGAQUFBwEBBFgwVjAzBggrBgEFBQcwAoYnaHR0cDovL3d3dy5zc2MubHQvY2FjZXJ0L3NzY19yb290X2EuY3J0MB8GCCsGAQUFBzABhhNodHRwOi8vb2NzcDIuc3NjLmx0MB8GA1UdIwQYMBaAFMy/3qeQd2JqHXhpLgo4m3dRUwPwMAwGA1UdEwQFMAMBAf8wPQYDVR0gBDYwNDAyBgsrBgEEAYGvZQECADAjMCEGCCsGAQUFBwIBFhVodHRwOi8vd3d3LnNzYy5sdC9jcHMwNQYDVR0fBC4wLDAqoCigJoYkaHR0cDovL3d3dy5zc2MubHQvY3JsL3NzY19yb290X2EuY3JsMA4GA1UdDwEB/wQEAwIBhjAdBgNVHQ4EFgQUCMlB/+ebVjPa8NezYbRIXBWjG1owDQYJKoZIhvcNAQEFBQADggIBAFwDXedviP9lST/mIhdxwUkiMB/7rXfwnXfIFVur8/wmzevqJyTU96OmYw2jkDQmzCAdI/8yj8QKekp0Y8xyslJu6X1MNhgmUmYjaA3Dt5QPVFr5I8Y9vTGUeSmGrXhSfWCcfN0DpWV96h1PHpbLXdAh1cl4LikoasVrWxDsQZuQ7FxCkXMmTYzxQzy1AHU+3zq5NmgBb3WdwqKhRx9JHpb8xhSCqK3K/RGsiVEBYnyVhTYuK5it5MHgFSA66gPDd3YYzdVp5KZsxBWkidnPxGKLskmAyfAxjrmHdsrKnZwK6L+SiLGgTzedvKK+AVxxcG8WtekFMc4zUWXe87U2l3NydgHkCaw1vSBXNZHAxEhN/645oo2oNkMyBlEbvUw12lQYLa5jLlfEfRPvB1qhCTfvP9xbSvgf6yABrLNE5x33wAr8eTIu378IuIiiUzzfDAflDT+QGH2j9J8XAyscVSyAVgc5MdGJsdSQTuY3MzdzRRGm9+ahaWXSCOt+BL2UXRDU1cHYlJdgz1kR7Ozfdkf4Cb3nwxxzYH/zhtUGsdbApuglj01pquN8k4ELoJWGkJXVL90+Ulk+SjfvBnxCpRysfngbpgAPxSVwAXQzz2sQCOHLMQ86HuB40hERBxePozfciEzRW5DrVYpPu/ami20pVMLzkFo4ARLXVdeK5ugp"
+              }
+            },
+            {
+              "commonName": "BalTstamp QTSA TSU2",
+              "type": "SIGNATURE_TIMESTAMP",
+              "content": "MIIEtzCCA5+gAwIBAgIKFg5NNQAAAAADhzANBgkqhkiG9w0BAQUFADB/MQswCQYDVQQGEwJMVDErMCkGA1UEChMiU2thaXRtZW5pbmlvIHNlcnRpZmlrYXZpbW8gY2VudHJhczEgMB4GA1UECxMXQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxITAfBgNVBAMTGFNTQyBRdWFsaWZpZWQgQ2xhc3MgMyBDQTAeFw0xMjA1MTUxMTM0NTRaFw0yMjA1MTUxMTM0NTRaMFUxCzAJBgNVBAYTAkxUMRAwDgYDVQQHEwdWaWxuaXVzMRYwFAYDVQQKEw1CYWxUc3RhbXAgVUFCMRwwGgYDVQQDExNCYWxUc3RhbXAgUVRTQSBUU1UyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAghxPoFLFWpkLa2Ll1ZBUtesItzJMa2wpBIBwqTHdWMkOM9kv3tSK05xpfCMKhU7Xt9kwPzqDXpIg5PTuDWLXjWdbjkp14rfvUTybR/IfOOe8zSQozIjoEW3EIzDiRksgUYxo2FCIHqLrRu3lKziWryEoOX8H6vGie18a6VUVV+8Qqm8sVuXCZaS0Q6RwOI11vZgn609iFKtSLQFZVPP0Mluq/csPfzlAelesHwwtRsTLpWjtGluZe1kNBky+JP1sVcHbbYuHTklCXGGn2jCZbxg/TY8vAnnSuIdf8ufx5HtOSdzW3ciGqn3MzwTUgGdNZSDtcZDoeeG2SgRsVZ2qDQIDAQABo4IBXTCCAVkwHQYDVR0OBBYEFFH0sW1OVQ7fk5dcgyNlE3B99q8/MB8GA1UdIwQYMBaAFAjJQf/nm1Yz2vDXs2G0SFwVoxtaMDcGA1UdHwQwMC4wLKAqoCiGJmh0dHA6Ly9uY3JsLnNzYy5sdC9jbGFzczNucWMvY2FjcmwuY3JsMGwGCCsGAQUFBwEBBGAwXjA2BggrBgEFBQcwAoYqaHR0cDovL3d3dy5zc2MubHQvY2FjZXJ0L3NzY19jbGFzczNucWMuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC0zbnFjLnNzYy5sdC8wCQYDVR0TBAIwADAOBgNVHQ8BAf8EBAMCBkAwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwgwPQYDVR0gBDYwNDAyBgsrBgEEAYGvZQECADAjMCEGCCsGAQUFBwIBFhVodHRwOi8vd3d3LnNzYy5sdC9jcHMwDQYJKoZIhvcNAQEFBQADggEBADq7F9uq7ROIFr2V3q+eqVVdD2qTZ437wJKziaYho059h1Vqg5CMoY6Diu6JsosEkYoIsV39LaH+PU/anvysMiD0taViWR+p5O1ZTUXjyk7Cj16tgLeXGosQlJEQexS0WIyMTC4F/9Zv0U95HwALnarJLh2KvWsGRcDXsHmK3BVybs87/CAgVuN10d50xCcSFtdFhqe9pyZsaqZnnNKXc9eRuf8QrpJGTI38UldA+v2k5A0tBnrJOFXvutxGFdSV+5WofGYGWf7HUYXJ71mbrCd7udOvWSLUa4mAyElJ/YoEs3fZU/00eBduUJyLwBLAA7oA0R8n4gdV3JynrhghG9o=",
+              "issuer": {
+                "commonName": "SSC Qualified Class 3 CA",
+                "content": "MIIFvTCCA6WgAwIBAgIQWJFmnMAIyiVAcLMn/5wGnjANBgkqhkiG9w0BAQUFADB0MQswCQYDVQQGEwJMVDErMCkGA1UEChMiU2thaXRtZW5pbmlvIHNlcnRpZmlrYXZpbW8gY2VudHJhczEgMB4GA1UECxMXQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxFjAUBgNVBAMTDVNTQyBSb290IENBIEEwHhcNMTIwMzAzMTEwMDE3WhcNMjYxMDI1MTIwNTAwWjB/MQswCQYDVQQGEwJMVDErMCkGA1UEChMiU2thaXRtZW5pbmlvIHNlcnRpZmlrYXZpbW8gY2VudHJhczEgMB4GA1UECxMXQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxITAfBgNVBAMTGFNTQyBRdWFsaWZpZWQgQ2xhc3MgMyBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ31J4TmT6WT7ezYrZTD3bUD5YpucJRophhaVGFeMVP0h5UwV9uYs3Ne+eFubk5eY+dgBcvK142CudGExMjbFap8il/Ik8PFsLW5DKLscoblIKuAR42u9TgYRv9mmfXZQEwsUUlC3ajCsbqkVV2zdl84kpJX2L2pKy94j28GJ4ezSiOHj/G2ZfTUAu38k/sIlH/Mg4m9KJYwthzg/2pJ4gzWSGtqOGX8/FNOAT3n7M3dtlZZStaIPO4icySMpGRF6mH5kz9peSdSr/1ywYnPQk0y1nZjUeeaGnaM7Ik8ez2G8h3kgRVuUZyLLEJtTZwMN5HwKpNIPTysw+YRxrgG59MCAwEAAaOCAT4wggE6MGQGCCsGAQUFBwEBBFgwVjAzBggrBgEFBQcwAoYnaHR0cDovL3d3dy5zc2MubHQvY2FjZXJ0L3NzY19yb290X2EuY3J0MB8GCCsGAQUFBzABhhNodHRwOi8vb2NzcDIuc3NjLmx0MB8GA1UdIwQYMBaAFMy/3qeQd2JqHXhpLgo4m3dRUwPwMAwGA1UdEwQFMAMBAf8wPQYDVR0gBDYwNDAyBgsrBgEEAYGvZQECADAjMCEGCCsGAQUFBwIBFhVodHRwOi8vd3d3LnNzYy5sdC9jcHMwNQYDVR0fBC4wLDAqoCigJoYkaHR0cDovL3d3dy5zc2MubHQvY3JsL3NzY19yb290X2EuY3JsMA4GA1UdDwEB/wQEAwIBhjAdBgNVHQ4EFgQUCMlB/+ebVjPa8NezYbRIXBWjG1owDQYJKoZIhvcNAQEFBQADggIBAFwDXedviP9lST/mIhdxwUkiMB/7rXfwnXfIFVur8/wmzevqJyTU96OmYw2jkDQmzCAdI/8yj8QKekp0Y8xyslJu6X1MNhgmUmYjaA3Dt5QPVFr5I8Y9vTGUeSmGrXhSfWCcfN0DpWV96h1PHpbLXdAh1cl4LikoasVrWxDsQZuQ7FxCkXMmTYzxQzy1AHU+3zq5NmgBb3WdwqKhRx9JHpb8xhSCqK3K/RGsiVEBYnyVhTYuK5it5MHgFSA66gPDd3YYzdVp5KZsxBWkidnPxGKLskmAyfAxjrmHdsrKnZwK6L+SiLGgTzedvKK+AVxxcG8WtekFMc4zUWXe87U2l3NydgHkCaw1vSBXNZHAxEhN/645oo2oNkMyBlEbvUw12lQYLa5jLlfEfRPvB1qhCTfvP9xbSvgf6yABrLNE5x33wAr8eTIu378IuIiiUzzfDAflDT+QGH2j9J8XAyscVSyAVgc5MdGJsdSQTuY3MzdzRRGm9+ahaWXSCOt+BL2UXRDU1cHYlJdgz1kR7Ozfdkf4Cb3nwxxzYH/zhtUGsdbApuglj01pquN8k4ELoJWGkJXVL90+Ulk+SjfvBnxCpRysfngbpgAPxSVwAXQzz2sQCOHLMQ86HuB40hERBxePozfciEzRW5DrVYpPu/ami20pVMLzkFo4ARLXVdeK5ugp"
+              }
+            },
+            {
+              "commonName": "METSMA,RAUL,38207162766",
+              "type": "SIGNING",
+              "content": "MIIEmzCCA4OgAwIBAgIQFQe7NKtE06tRSY1vHfPijjANBgkqhkiG9w0BAQUFADBkMQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEXMBUGA1UEAwwORVNURUlELVNLIDIwMTExGDAWBgkqhkiG9w0BCQEWCXBraUBzay5lZTAeFw0xMzAzMjAxMDIwMzFaFw0xNjExMjEyMTU5NTlaMIGSMQswCQYDVQQGEwJFRTEPMA0GA1UECgwGRVNURUlEMRowGAYDVQQLDBFkaWdpdGFsIHNpZ25hdHVyZTEgMB4GA1UEAwwXTUVUU01BLFJBVUwsMzgyMDcxNjI3NjYxDzANBgNVBAQMBk1FVFNNQTENMAsGA1UEKgwEUkFVTDEUMBIGA1UEBRMLMzgyMDcxNjI3NjYwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDd0/hYxd5n7btosKUC8d4F63Gj1jfoqL6bzwlVfe2kvQZT6LCwtDsG8S3Q3sHaWIRCHXFejysqo67iU+K+UO+TdJw7dcG9bZIt2vwMWPjdTSp7hHnhfJHl0F9Q/sK/cWHRT3UIgV84dT0FIxyj7br9hxPv2dy5zRp+8PXtnVnXItCX9b2pqk3sErp5EwQy9EhWtMCJaZLiscy40ZbB5slb8XEma4pDhJVoabb/I/IhecQ5hisb7qLANmuyFlRWC8wVNpi1hnkCG4WIdwQpOS5EMC7E9Onzq+1eIED8JYp8+2Vhah8inNuQruT7adTWdKam6Jgod2JDNH848cijlmr9AgMBAAGjggEYMIIBFDAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIGQDBRBgNVHSAESjBIMEYGCysGAQQBzh8BAQMDMDcwEgYIKwYBBQUHAgIwBhoEbm9uZTAhBggrBgEFBQcCARYVaHR0cDovL3d3dy5zay5lZS9jcHMvMB0GA1UdDgQWBBQ+PMqzjNDupOQ3R2ZT9b/UB1cZOTAiBggrBgEFBQcBAwQWMBQwCAYGBACORgEBMAgGBgQAjkYBBDAfBgNVHSMEGDAWgBR7avJVUFy42XoIh0Gu+qIrPVtXdjBABgNVHR8EOTA3MDWgM6Axhi9odHRwOi8vd3d3LnNrLmVlL3JlcG9zaXRvcnkvY3Jscy9lc3RlaWQyMDExLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAai4oTNu/YxRUx1v8a39iTME6ZtErgwKZ3UTgdnrVx/n5CAL/E6gi2bFyCqYVLO8A4Fuw6Czvw1RiQ8UPEz5wRHy91lQPRQGWkeD8xF0ihLUONRd9PWmwreQesfS9t0aGEJbwxWt4my3/Yg9XGGU4qMJqP6DkeM31AQSq97+FfioSBMMrVbGJZb/YbY7nG16gx12w0GcynQS1l+ITmwT9A5IOIrYIeHqV54oDkMXx/EbLQp1eINlwggV1ghWBevejqWg9+nnghFDbYDATk/dWtQJLnIAreo3ZBay0WPzSJ4qJbiDWRpp5oSQQ8hjaPKqzgitpqTAb/E6T15cb744BnQ==",
+              "issuer": {
+                "commonName": "ESTEID-SK 2011",
+                "content": "MIIFBTCCA+2gAwIBAgIQKVKTqv2MxtRNgzCjwmRRDTANBgkqhkiG9w0BAQUFADB1MQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEoMCYGA1UEAwwfRUUgQ2VydGlmaWNhdGlvbiBDZW50cmUgUm9vdCBDQTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMB4XDTExMDMxODEwMTQ1OVoXDTI0MDMxODEwMTQ1OVowZDELMAkGA1UEBhMCRUUxIjAgBgNVBAoMGUFTIFNlcnRpZml0c2VlcmltaXNrZXNrdXMxFzAVBgNVBAMMDkVTVEVJRC1TSyAyMDExMRgwFgYJKoZIhvcNAQkBFglwa2lAc2suZWUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCz6XxsZh6r/aXcNe3kSpNMOqmQoAXUpzzcr4ZSaGZh/7JHIiplvNi6tbW/lK7sAiRsb65KzMWROEauld66ggbDPga6kU97C+AXGu7+DROXstjUOv6VlrHZVAnLmIOkycpWaxjM+EfQPZuDxEbkw96B3/fG69Zbp3s9y6WEhwU5Y9IiQl8YTkGnNUxidQbON1BGQm+HVEsgTf22J6r6G3FsE07rnMNskNC3DjuLSCUKF4kH0rVGVK9BdiCdFaZjHEykjwjIGzqnyxyRKe4YbJ6B9ABm95eSFgMBHtZEYU+q0VUIQGhAGAurOTXjWi1TssA42mnLGQZEI5GXMXtabp51AgMBAAGjggGgMIIBnDASBgNVHRMBAf8ECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBBjCB9gYDVR0gBIHuMIHrMIHoBgsrBgEEAc4fZAEBATCB2DCBsgYIKwYBBQUHAgIwgaUegaIASwBhAHMAdQB0AGEAdABhAGsAcwBlACAAaQBzAGkAawB1AHQAdAD1AGUAbgBkAGEAdgBhAGwAZQAgAGQAbwBrAHUAbQBlAG4AZABpAGwAZQAgAGsAYQBuAHQAYQB2AGEAdABlACAAcwBlAHIAdABpAGYAaQBrAGEAYQB0AGkAZABlACAAdgDkAGwAagBhAHMAdABhAG0AaQBzAGUAawBzAC4wIQYIKwYBBQUHAgEWFWh0dHBzOi8vd3d3LnNrLmVlL0NQUzAdBgNVHQ4EFgQUe2ryVVBcuNl6CIdBrvqiKz1bV3YwHwYDVR0jBBgwFoAUEvJaPupWHL/NBqzx8SXJqUvUFJkwPQYDVR0fBDYwNDAyoDCgLoYsaHR0cDovL3d3dy5zay5lZS9yZXBvc2l0b3J5L2NybHMvZWVjY3JjYS5jcmwwDQYJKoZIhvcNAQEFBQADggEBAKC4IN3FC2gVDIH05TNMgFrQOCGSnXhzoJclRLoQ81BCOXTZI4qn7N74FHEnrAy6uNG7SS5qANqSaPIL8dp63jg/L4qn4iWaB5q5GGJOV07SnTHS7gUrqChGClnUeHxiZbL13PkP37Lnc+TKl1SKfgtn5FbH5cqrhvbA/VF3Yzlimu+L7EVohW9HKxZ//z8kDn6ieiPFfZdTOov/0eXVLlxqklybUuS6LYRRDiqQupgBKQBTwNbC8x0UHX00HokW+dCVcQvsUbv4xLhRq/MvyTthE+RdbkrV0JuzbfZvADfj75nA3+ZAzFYS5ZpMOjZ9p4rQVKpzQTklrF0m6mkdcEo="
+              }
+            },
+            {
+              "commonName": "SK OCSP RESPONDER 2011",
+              "type": "REVOCATION",
+              "content": "MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhkiG9w0BAQUFADB1MQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEoMCYGA1UEAwwfRUUgQ2VydGlmaWNhdGlvbiBDZW50cmUgUm9vdCBDQTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMB4XDTExMDMxODEwMjE0M1oXDTI0MDMxODEwMjE0M1owgZ0xCzAJBgNVBAYTAkVFMQ4wDAYDVQQIEwVIYXJqdTEQMA4GA1UEBxMHVGFsbGlubjEiMCAGA1UEChMZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czENMAsGA1UECxMET0NTUDEfMB0GA1UEAxMWU0sgT0NTUCBSRVNQT05ERVIgMjAxMTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAihvGyhMVrgReHluKln1za6gvCE/mlSREmWjJFpL9llvuEUZoPFIypYA8g5u1VfgkeW5gDq25jAOq4FyXeDGIa+pJn2h0o2Wc2aeppVG/emfGm/jA8jjeyMrwH8fAJrqVQ7c9X2xSwJEch/P2d8CfMZt5YF6gqLtPvG1b+n6otBZA5wjIFfJ/inJBMUvqHSz3+PLfxO2/T3Wyk/c8M9HIMqTelqyiMGRgWehiU1OsL9armv3dQrHs1wm6vHaxfpfWB9YAFpeo9aYqhPCxVt/zo2NQB6vxyZS0hsOrXL7SxRToOJaqsnvlbf0erPPFtRHUvbojYYgl+fzlz0Jt6QJoNwIDAQABo4IBHTCCARkwEwYDVR0lBAwwCgYIKwYBBQUHAwkwHQYDVR0OBBYEFKWhSGFt537NmJ50nCm7vYrecgxZMIGCBgNVHSAEezB5MHcGCisGAQQBzh8EAQIwaTA+BggrBgEFBQcCAjAyHjAAUwBLACAAdABpAG0AZQAgAHMAdABhAG0AcABpAG4AZwAgAHAAbwBsAGkAYwB5AC4wJwYIKwYBBQUHAgEWG2h0dHBzOi8vd3d3LnNrLmVlL2FqYXRlbXBlbDAfBgNVHSMEGDAWgBQS8lo+6lYcv80GrPHxJcmpS9QUmTA9BgNVHR8ENjA0MDKgMKAuhixodHRwOi8vd3d3LnNrLmVlL3JlcG9zaXRvcnkvY3Jscy9lZWNjcmNhLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAw2sKwvTHtYGtD8Jw9mNUuj/mWiBSBEBeY2LhW8V6tjBPAPp3s6iWOh0FbVR2LUyrqRwgT3fyWiGsiDm/6cIqM+IblLp/8ztfRQjquhW6XCD9SK02OQ9ZSdBwcmoAApZLGXQC34wdgmV/hLTTNxONnDACBKz9U+Dy9a4ZT4tpNkbH8jq/BMne8FzbvRt1bjpXBP7gjLX+zdx8/hp0Wq4tD+f9NVX0+vm9ahEKuzx4QzPnSB7hhWM9OnLZT7noRQa+KWk5c+e5VoR5R2t7MjVl8Cd+2llxiSxqMSbU5/23BzAKgN+NQdrBZAzpZ7lfaAuLFaICP+bAm6uW2JUrM6abOw=="
+            }
+          ],
+          "claimedSigningTime": "2014-10-30T18:50:33Z",
+          "signatureLevel": "INDETERMINATE_ADESIG",
+          "signatureScopes": [
+            {
+              "scope": "FULL",
+              "name": "test.txt",
+              "content": "Full document"
+            }
+          ],
+          "id": "S0",
+          "indication": "INDETERMINATE",
+          "errors": [
+            {
+              "content": "The certificate validation is not conclusive!"
+            },
+            {
+              "content": "The current time is not in the validity range of the signer's certificate!"
+            },
+            {
+              "content": "The best-signature-time is not before the expiration date of the signing certificate!"
+            },
+            {
+              "content": "The past signature validation is not conclusive!"
+            },
+            {
+              "content": "The certificate is not related to a qualified certificate issuing trust service with valid status!"
+            },
+            {
+              "content": "The trust service(s) related to the time-stamp does not have the expected type identifier!"
+            },
+            {
+              "content": "The certificate is not related to a granted status at time-stamp generation time!"
+            },
+            {
+              "content": "The trust service(s) related to the time-stamp does not have the expected type identifier!"
+            },
+            {
+              "content": "The certificate is not related to a granted status at time-stamp generation time!"
+            }
+          ],
+          "info": {
+            "timestampCreationTime": "2014-10-30T18:50:35Z",
+            "timeAssertionMessageImprint": "MDEwDQYJYIZIAWUDBAIBBQAEIFCDm4a2dlvKXMSGtTC2l0wh3JzDCIJ4mYugIJeOEUEC",
+            "bestSignatureTime": "2014-10-30T18:50:35Z",
+            "archiveTimeStamps": [
+              {
+                "signedTime": "2014-10-30T18:51:00Z",
+                "country": "LT",
+                "signedBy": "BalTstamp QTSA TSU2",
+                "indication": "INDETERMINATE",
+                "subIndication": "NO_CERTIFICATE_CHAIN_FOUND",
+                "content": "MIIN7AYJKoZIhvcNAQcCoIIN3TCCDdkCAQMxDzANBglghkgBZQMEAgEFADCB6gYLKoZIhvcNAQkQAQSggdoEgdcwgdQCAQEGCysGAQQBgqwYAQMBMDEwDQYJYIZIAWUDBAIBBQAEINWR2MQOyqK1BRN496CBjnGm7FyVfxVS/XUKxlwRIgpUAgMQc28YEzIwMTQxMDMwMTg1MTAwLjMyOVowBIACAMgCFCx6UjEslCiSHnIMf2PjTa9TnTp5oFmkVzBVMQswCQYDVQQGEwJMVDEQMA4GA1UEBxMHVmlsbml1czEWMBQGA1UEChMNQmFsVHN0YW1wIFVBQjEcMBoGA1UEAxMTQmFsVHN0YW1wIFFUU0EgVFNVMqCCCnwwggS3MIIDn6ADAgECAgoWDk01AAAAAAOHMA0GCSqGSIb3DQEBBQUAMH8xCzAJBgNVBAYTAkxUMSswKQYDVQQKEyJTa2FpdG1lbmluaW8gc2VydGlmaWthdmltbyBjZW50cmFzMSAwHgYDVQQLExdDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTEhMB8GA1UEAxMYU1NDIFF1YWxpZmllZCBDbGFzcyAzIENBMB4XDTEyMDUxNTExMzQ1NFoXDTIyMDUxNTExMzQ1NFowVTELMAkGA1UEBhMCTFQxEDAOBgNVBAcTB1ZpbG5pdXMxFjAUBgNVBAoTDUJhbFRzdGFtcCBVQUIxHDAaBgNVBAMTE0JhbFRzdGFtcCBRVFNBIFRTVTIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCCHE+gUsVamQtrYuXVkFS16wi3MkxrbCkEgHCpMd1YyQ4z2S/e1IrTnGl8IwqFTte32TA/OoNekiDk9O4NYteNZ1uOSnXit+9RPJtH8h8457zNJCjMiOgRbcQjMOJGSyBRjGjYUIgeoutG7eUrOJavISg5fwfq8aJ7XxrpVRVX7xCqbyxW5cJlpLRDpHA4jXW9mCfrT2IUq1ItAVlU8/QyW6r9yw9/OUB6V6wfDC1GxMulaO0aW5l7WQ0GTL4k/WxVwdtti4dOSUJcYafaMJlvGD9Njy8CedK4h1/y5/Hke05J3NbdyIaqfczPBNSAZ01lIO1xkOh54bZKBGxVnaoNAgMBAAGjggFdMIIBWTAdBgNVHQ4EFgQUUfSxbU5VDt+Tl1yDI2UTcH32rz8wHwYDVR0jBBgwFoAUCMlB/+ebVjPa8NezYbRIXBWjG1owNwYDVR0fBDAwLjAsoCqgKIYmaHR0cDovL25jcmwuc3NjLmx0L2NsYXNzM25xYy9jYWNybC5jcmwwbAYIKwYBBQUHAQEEYDBeMDYGCCsGAQUFBzAChipodHRwOi8vd3d3LnNzYy5sdC9jYWNlcnQvc3NjX2NsYXNzM25xYy5jcnQwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLTNucWMuc3NjLmx0LzAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIGQDAWBgNVHSUBAf8EDDAKBggrBgEFBQcDCDA9BgNVHSAENjA0MDIGCysGAQQBga9lAQIAMCMwIQYIKwYBBQUHAgEWFWh0dHA6Ly93d3cuc3NjLmx0L2NwczANBgkqhkiG9w0BAQUFAAOCAQEAOrsX26rtE4gWvZXer56pVV0PapNnjfvAkrOJpiGjTn2HVWqDkIyhjoOK7omyiwSRigixXf0tof49T9qe/KwyIPS1pWJZH6nk7VlNRePKTsKPXq2At5caixCUkRB7FLRYjIxMLgX/1m/RT3kfAAudqskuHYq9awZFwNeweYrcFXJuzzv8ICBW43XR3nTEJxIW10WGp72nJmxqpmec0pdz15G5/xCukkZMjfxSV0D6/aTkDS0Gesk4Ve+63EYV1JX7lah8ZgZZ/sdRhcnvWZusJ3u5069ZItRriYDISUn9igSzd9lT/TR4F25QnIvAEsADugDRHyfiB1XcnKeuGCEb2jCCBb0wggOloAMCAQICEFiRZpzACMolQHCzJ/+cBp4wDQYJKoZIhvcNAQEFBQAwdDELMAkGA1UEBhMCTFQxKzApBgNVBAoTIlNrYWl0bWVuaW5pbyBzZXJ0aWZpa2F2aW1vIGNlbnRyYXMxIDAeBgNVBAsTF0NlcnRpZmljYXRpb24gQXV0aG9yaXR5MRYwFAYDVQQDEw1TU0MgUm9vdCBDQSBBMB4XDTEyMDMwMzExMDAxN1oXDTI2MTAyNTEyMDUwMFowfzELMAkGA1UEBhMCTFQxKzApBgNVBAoTIlNrYWl0bWVuaW5pbyBzZXJ0aWZpa2F2aW1vIGNlbnRyYXMxIDAeBgNVBAsTF0NlcnRpZmljYXRpb24gQXV0aG9yaXR5MSEwHwYDVQQDExhTU0MgUXVhbGlmaWVkIENsYXNzIDMgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCd9SeE5k+lk+3s2K2Uw921A+WKbnCUaKYYWlRhXjFT9IeVMFfbmLNzXvnhbm5OXmPnYAXLyteNgrnRhMTI2xWqfIpfyJPDxbC1uQyi7HKG5SCrgEeNrvU4GEb/Zpn12UBMLFFJQt2owrG6pFVds3ZfOJKSV9i9qSsveI9vBieHs0ojh4/xtmX01ALt/JP7CJR/zIOJvSiWMLYc4P9qSeIM1khrajhl/PxTTgE95+zN3bZWWUrWiDzuInMkjKRkReph+ZM/aXknUq/9csGJz0JNMtZ2Y1Hnmhp2jOyJPHs9hvId5IEVblGciyxCbU2cDDeR8CqTSD08rMPmEca4BufTAgMBAAGjggE+MIIBOjBkBggrBgEFBQcBAQRYMFYwMwYIKwYBBQUHMAKGJ2h0dHA6Ly93d3cuc3NjLmx0L2NhY2VydC9zc2Nfcm9vdF9hLmNydDAfBggrBgEFBQcwAYYTaHR0cDovL29jc3AyLnNzYy5sdDAfBgNVHSMEGDAWgBTMv96nkHdiah14aS4KOJt3UVMD8DAMBgNVHRMEBTADAQH/MD0GA1UdIAQ2MDQwMgYLKwYBBAGBr2UBAgAwIzAhBggrBgEFBQcCARYVaHR0cDovL3d3dy5zc2MubHQvY3BzMDUGA1UdHwQuMCwwKqAooCaGJGh0dHA6Ly93d3cuc3NjLmx0L2NybC9zc2Nfcm9vdF9hLmNybDAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0OBBYEFAjJQf/nm1Yz2vDXs2G0SFwVoxtaMA0GCSqGSIb3DQEBBQUAA4ICAQBcA13nb4j/ZUk/5iIXccFJIjAf+6138J13yBVbq/P8Js3r6ick1PejpmMNo5A0JswgHSP/Mo/ECnpKdGPMcrJSbul9TDYYJlJmI2gNw7eUD1Ra+SPGPb0xlHkphq14Un1gnHzdA6VlfeodTx6Wy13QIdXJeC4pKGrFa1sQ7EGbkOxcQpFzJk2M8UM8tQB1Pt86uTZoAW91ncKioUcfSR6W/MYUgqityv0RrIlRAWJ8lYU2LiuYreTB4BUgOuoDw3d2GM3VaeSmbMQVpInZz8Rii7JJgMnwMY65h3bKyp2cCui/koixoE83nbyivgFccXBvFrXpBTHOM1Fl3vO1NpdzcnYB5AmsNb0gVzWRwMRITf+uOaKNqDZDMgZRG71MNdpUGC2uYy5XxH0T7wdaoQk37z/cW0r4H+sgAayzROcd98AK/HkyLt+/CLiIolM83wwH5Q0/kBh9o/SfFwMrHFUsgFYHOTHRibHUkE7mNzM3c0URpvfmoWll0gjrfgS9lF0Q1NXB2JSXYM9ZEezs33ZH+Am958Mcc2B/84bVBrHWwKboJY9NaarjfJOBC6CVhpCV1S/dPlJZPko37wZ8QqUcrH54G6YAD8UlcAF0M89rEAjhyzEPOh7geNIREQcXj6M33IhM0VuQ61WKT7v2pottKVTC85BaOAES11XXiuboKTGCAlQwggJQAgEBMIGNMH8xCzAJBgNVBAYTAkxUMSswKQYDVQQKEyJTa2FpdG1lbmluaW8gc2VydGlmaWthdmltbyBjZW50cmFzMSAwHgYDVQQLExdDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTEhMB8GA1UEAxMYU1NDIFF1YWxpZmllZCBDbGFzcyAzIENBAgoWDk01AAAAAAOHMA0GCWCGSAFlAwQCAQUAoIGYMBoGCSqGSIb3DQEJAzENBgsqhkiG9w0BCRABBDAcBgkqhkiG9w0BCQUxDxcNMTQxMDMwMTg1MTAwWjArBgsqhkiG9w0BCRACDDEcMBowGDAWBBQgo1Lizi5zBwuzz53eik7+8PCjWzAvBgkqhkiG9w0BCQQxIgQgEfnXuBICelgR7L8aLPICZWHYO2CIxzxgUcJ9F1hqvdQwDQYJKoZIhvcNAQEBBQAEggEAaf/YRiqSTd17QT8jK6OhgNv/R46DRTxJf/eAt58Whl2kDIuiAAoJBWAgGTvXTY/aAiQUY8qLszOz2/GaTye5knprUui/Y9UZdbF48u+bgfMf+B0x8eMGpsii8cIJG88o7GqhswmeUyK5fw2hYGVa9HQrQc/YuIqA4mq9LLoWtMqc27LsdsQzVw/vYk0FqWts4uyCf8+kwz7MskHoqYQrugkDcYQ7/l6DRkvCu96+1D0uzCBnQxwZcoXh0T6ihWpPkbLNY1VpUo8tB9/N7GwYr5CFXAIc9o2FBTuwpZchvKWW5BSZ3i+RfyYyRsRU9Yp73arraPykTVBhp5kjfz5XGQ=="
+              }
+            ],
+            "ocspResponseCreationTime": "2014-10-30T18:50:36Z"
+          }
+        }
+      ],
+      "policy": {
+        "policyDescription": "Policy according most common requirements of Estonian Public Administration, to validate Qualified Electronic Signatures and Electronic Seals with Qualified Certificates (according to Regulation (EU) No 910/2014, aka eIDAS). I.e. signatures that have been recognized as Advanced electronic Signatures (AdES) and AdES supported by a Qualified Certificate (AdES/QC) do not produce a positive validation result, with exception for seals, where AdES/QC and above will produce positive result. Signatures and Seals which are not compliant with ETSI standards (referred by eIDAS) may produce unknown or invalid validation result. Validation process is based on eIDAS Article 32 and referred ETSI standards.",
+        "policyUrl": "http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4",
+        "policyName": "POLv4"
+      },
+      "signatureForm": "ASiC-E"
+    }
+  }
+}

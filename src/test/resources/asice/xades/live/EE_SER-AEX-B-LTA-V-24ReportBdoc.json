@@ -1,0 +1,120 @@
+{
+  "validationReport": {
+    "validationConclusion": {
+      "validationTime": "${json-unit.ignore}",
+      "validationWarnings": [
+        {
+          "content": "This is validation service demo. Use it for testing purposes only"
+        }
+      ],
+      "signaturesCount": 1,
+      "validatedDocument": {
+        "filename": "EE_SER-AEX-B-LTA-V-24.bdoc"
+      },
+      "validSignaturesCount": 0,
+      "signatures": [
+        {
+          "signatureFormat": "XAdES_BASELINE_LTA",
+          "subjectDistinguishedName": {
+            "commonName": "METSMA,RAUL,38207162766",
+            "serialNumber": "38207162766",
+            "surname": "METSMA",
+            "givenName": "RAUL"
+          },
+          "signedBy": "METSMA,RAUL,38207162766",
+          "warnings": [
+            {
+              "content": "The signature/seal is an INDETERMINATE AdES digital signature!"
+            },
+            {
+              "content": "The certificate is not qualified at (best) signing time!"
+            },
+            {
+              "content": "The private key does not reside in a QSCD at (best) signing time!"
+            },
+            {
+              "content": "The certificate is related to a trust service entry with status 'withdrawn'!"
+            }
+          ],
+          "signatureMethod": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+          "subIndication": "OUT_OF_BOUNDS_NOT_REVOKED",
+          "certificates": [
+            {
+              "commonName": "SK OCSP RESPONDER 2011",
+              "type": "REVOCATION",
+              "content": "MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhkiG9w0BAQUFADB1MQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEoMCYGA1UEAwwfRUUgQ2VydGlmaWNhdGlvbiBDZW50cmUgUm9vdCBDQTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMB4XDTExMDMxODEwMjE0M1oXDTI0MDMxODEwMjE0M1owgZ0xCzAJBgNVBAYTAkVFMQ4wDAYDVQQIEwVIYXJqdTEQMA4GA1UEBxMHVGFsbGlubjEiMCAGA1UEChMZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czENMAsGA1UECxMET0NTUDEfMB0GA1UEAxMWU0sgT0NTUCBSRVNQT05ERVIgMjAxMTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAihvGyhMVrgReHluKln1za6gvCE/mlSREmWjJFpL9llvuEUZoPFIypYA8g5u1VfgkeW5gDq25jAOq4FyXeDGIa+pJn2h0o2Wc2aeppVG/emfGm/jA8jjeyMrwH8fAJrqVQ7c9X2xSwJEch/P2d8CfMZt5YF6gqLtPvG1b+n6otBZA5wjIFfJ/inJBMUvqHSz3+PLfxO2/T3Wyk/c8M9HIMqTelqyiMGRgWehiU1OsL9armv3dQrHs1wm6vHaxfpfWB9YAFpeo9aYqhPCxVt/zo2NQB6vxyZS0hsOrXL7SxRToOJaqsnvlbf0erPPFtRHUvbojYYgl+fzlz0Jt6QJoNwIDAQABo4IBHTCCARkwEwYDVR0lBAwwCgYIKwYBBQUHAwkwHQYDVR0OBBYEFKWhSGFt537NmJ50nCm7vYrecgxZMIGCBgNVHSAEezB5MHcGCisGAQQBzh8EAQIwaTA+BggrBgEFBQcCAjAyHjAAUwBLACAAdABpAG0AZQAgAHMAdABhAG0AcABpAG4AZwAgAHAAbwBsAGkAYwB5AC4wJwYIKwYBBQUHAgEWG2h0dHBzOi8vd3d3LnNrLmVlL2FqYXRlbXBlbDAfBgNVHSMEGDAWgBQS8lo+6lYcv80GrPHxJcmpS9QUmTA9BgNVHR8ENjA0MDKgMKAuhixodHRwOi8vd3d3LnNrLmVlL3JlcG9zaXRvcnkvY3Jscy9lZWNjcmNhLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAw2sKwvTHtYGtD8Jw9mNUuj/mWiBSBEBeY2LhW8V6tjBPAPp3s6iWOh0FbVR2LUyrqRwgT3fyWiGsiDm/6cIqM+IblLp/8ztfRQjquhW6XCD9SK02OQ9ZSdBwcmoAApZLGXQC34wdgmV/hLTTNxONnDACBKz9U+Dy9a4ZT4tpNkbH8jq/BMne8FzbvRt1bjpXBP7gjLX+zdx8/hp0Wq4tD+f9NVX0+vm9ahEKuzx4QzPnSB7hhWM9OnLZT7noRQa+KWk5c+e5VoR5R2t7MjVl8Cd+2llxiSxqMSbU5/23BzAKgN+NQdrBZAzpZ7lfaAuLFaICP+bAm6uW2JUrM6abOw=="
+            },
+            {
+              "commonName": "METSMA,RAUL,38207162766",
+              "type": "SIGNING",
+              "content": "MIIEmzCCA4OgAwIBAgIQFQe7NKtE06tRSY1vHfPijjANBgkqhkiG9w0BAQUFADBkMQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEXMBUGA1UEAwwORVNURUlELVNLIDIwMTExGDAWBgkqhkiG9w0BCQEWCXBraUBzay5lZTAeFw0xMzAzMjAxMDIwMzFaFw0xNjExMjEyMTU5NTlaMIGSMQswCQYDVQQGEwJFRTEPMA0GA1UECgwGRVNURUlEMRowGAYDVQQLDBFkaWdpdGFsIHNpZ25hdHVyZTEgMB4GA1UEAwwXTUVUU01BLFJBVUwsMzgyMDcxNjI3NjYxDzANBgNVBAQMBk1FVFNNQTENMAsGA1UEKgwEUkFVTDEUMBIGA1UEBRMLMzgyMDcxNjI3NjYwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDd0/hYxd5n7btosKUC8d4F63Gj1jfoqL6bzwlVfe2kvQZT6LCwtDsG8S3Q3sHaWIRCHXFejysqo67iU+K+UO+TdJw7dcG9bZIt2vwMWPjdTSp7hHnhfJHl0F9Q/sK/cWHRT3UIgV84dT0FIxyj7br9hxPv2dy5zRp+8PXtnVnXItCX9b2pqk3sErp5EwQy9EhWtMCJaZLiscy40ZbB5slb8XEma4pDhJVoabb/I/IhecQ5hisb7qLANmuyFlRWC8wVNpi1hnkCG4WIdwQpOS5EMC7E9Onzq+1eIED8JYp8+2Vhah8inNuQruT7adTWdKam6Jgod2JDNH848cijlmr9AgMBAAGjggEYMIIBFDAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIGQDBRBgNVHSAESjBIMEYGCysGAQQBzh8BAQMDMDcwEgYIKwYBBQUHAgIwBhoEbm9uZTAhBggrBgEFBQcCARYVaHR0cDovL3d3dy5zay5lZS9jcHMvMB0GA1UdDgQWBBQ+PMqzjNDupOQ3R2ZT9b/UB1cZOTAiBggrBgEFBQcBAwQWMBQwCAYGBACORgEBMAgGBgQAjkYBBDAfBgNVHSMEGDAWgBR7avJVUFy42XoIh0Gu+qIrPVtXdjBABgNVHR8EOTA3MDWgM6Axhi9odHRwOi8vd3d3LnNrLmVlL3JlcG9zaXRvcnkvY3Jscy9lc3RlaWQyMDExLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAai4oTNu/YxRUx1v8a39iTME6ZtErgwKZ3UTgdnrVx/n5CAL/E6gi2bFyCqYVLO8A4Fuw6Czvw1RiQ8UPEz5wRHy91lQPRQGWkeD8xF0ihLUONRd9PWmwreQesfS9t0aGEJbwxWt4my3/Yg9XGGU4qMJqP6DkeM31AQSq97+FfioSBMMrVbGJZb/YbY7nG16gx12w0GcynQS1l+ITmwT9A5IOIrYIeHqV54oDkMXx/EbLQp1eINlwggV1ghWBevejqWg9+nnghFDbYDATk/dWtQJLnIAreo3ZBay0WPzSJ4qJbiDWRpp5oSQQ8hjaPKqzgitpqTAb/E6T15cb744BnQ=="
+            },
+            {
+              "commonName": "BalTstamp QTSA TSU2",
+              "type": "SIGNATURE_TIMESTAMP",
+              "content": "MIIEtzCCA5+gAwIBAgIKFg5NNQAAAAADhzANBgkqhkiG9w0BAQUFADB/MQswCQYDVQQGEwJMVDErMCkGA1UEChMiU2thaXRtZW5pbmlvIHNlcnRpZmlrYXZpbW8gY2VudHJhczEgMB4GA1UECxMXQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxITAfBgNVBAMTGFNTQyBRdWFsaWZpZWQgQ2xhc3MgMyBDQTAeFw0xMjA1MTUxMTM0NTRaFw0yMjA1MTUxMTM0NTRaMFUxCzAJBgNVBAYTAkxUMRAwDgYDVQQHEwdWaWxuaXVzMRYwFAYDVQQKEw1CYWxUc3RhbXAgVUFCMRwwGgYDVQQDExNCYWxUc3RhbXAgUVRTQSBUU1UyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAghxPoFLFWpkLa2Ll1ZBUtesItzJMa2wpBIBwqTHdWMkOM9kv3tSK05xpfCMKhU7Xt9kwPzqDXpIg5PTuDWLXjWdbjkp14rfvUTybR/IfOOe8zSQozIjoEW3EIzDiRksgUYxo2FCIHqLrRu3lKziWryEoOX8H6vGie18a6VUVV+8Qqm8sVuXCZaS0Q6RwOI11vZgn609iFKtSLQFZVPP0Mluq/csPfzlAelesHwwtRsTLpWjtGluZe1kNBky+JP1sVcHbbYuHTklCXGGn2jCZbxg/TY8vAnnSuIdf8ufx5HtOSdzW3ciGqn3MzwTUgGdNZSDtcZDoeeG2SgRsVZ2qDQIDAQABo4IBXTCCAVkwHQYDVR0OBBYEFFH0sW1OVQ7fk5dcgyNlE3B99q8/MB8GA1UdIwQYMBaAFAjJQf/nm1Yz2vDXs2G0SFwVoxtaMDcGA1UdHwQwMC4wLKAqoCiGJmh0dHA6Ly9uY3JsLnNzYy5sdC9jbGFzczNucWMvY2FjcmwuY3JsMGwGCCsGAQUFBwEBBGAwXjA2BggrBgEFBQcwAoYqaHR0cDovL3d3dy5zc2MubHQvY2FjZXJ0L3NzY19jbGFzczNucWMuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC0zbnFjLnNzYy5sdC8wCQYDVR0TBAIwADAOBgNVHQ8BAf8EBAMCBkAwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwgwPQYDVR0gBDYwNDAyBgsrBgEEAYGvZQECADAjMCEGCCsGAQUFBwIBFhVodHRwOi8vd3d3LnNzYy5sdC9jcHMwDQYJKoZIhvcNAQEFBQADggEBADq7F9uq7ROIFr2V3q+eqVVdD2qTZ437wJKziaYho059h1Vqg5CMoY6Diu6JsosEkYoIsV39LaH+PU/anvysMiD0taViWR+p5O1ZTUXjyk7Cj16tgLeXGosQlJEQexS0WIyMTC4F/9Zv0U95HwALnarJLh2KvWsGRcDXsHmK3BVybs87/CAgVuN10d50xCcSFtdFhqe9pyZsaqZnnNKXc9eRuf8QrpJGTI38UldA+v2k5A0tBnrJOFXvutxGFdSV+5WofGYGWf7HUYXJ71mbrCd7udOvWSLUa4mAyElJ/YoEs3fZU/00eBduUJyLwBLAA7oA0R8n4gdV3JynrhghG9o="
+            }
+          ],
+          "claimedSigningTime": "2014-10-30T18:50:33Z",
+          "signatureLevel": "INDETERMINATE_ADESIG",
+          "signatureScopes": [
+            {
+              "scope": "FullSignatureScope",
+              "name": "test.txt",
+              "content": "Digest of the document content"
+            }
+          ],
+          "id": "S0",
+          "indication": "INDETERMINATE",
+          "errors": [
+            {
+              "content": "The certificate validation is not conclusive!"
+            },
+            {
+              "content": "The current time is not in the validity range of the signer's certificate!"
+            },
+            {
+              "content": "The best-signature-time is not before the expiration date of the signing certificate!"
+            },
+            {
+              "content": "The past signature validation is not conclusive!"
+            },
+            {
+              "content": "The certificate is not related to a qualified certificate issuing trust service with valid status!"
+            },
+            {
+              "content": "The trust service(s) related to the time-stamp does not have the expected type identifier!"
+            },
+            {
+              "content": "The certificate is not related to a granted status at time-stamp generation time!"
+            },
+            {
+              "content": "Signature has an invalid timestamp"
+            }
+          ],
+          "info": {
+            "timestampCreationTime": "2014-10-30T18:50:35Z",
+            "timeAssertionMessageImprint": "MDEwDQYJYIZIAWUDBAIBBQAEIFCDm4a2dlvKXMSGtTC2l0wh3JzDCIJ4mYugIJeOEUEC",
+            "bestSignatureTime": "2014-10-30T18:50:35Z",
+            "archiveTimeStamps": [
+              {
+                "signedTime": "2014-10-30T18:51:00Z",
+                "country": "LT",
+                "signedBy": "BalTstamp QTSA TSU2",
+                "indication": "INDETERMINATE",
+                "subIndication": "NO_CERTIFICATE_CHAIN_FOUND"
+              }
+            ],
+            "ocspResponseCreationTime": "2014-10-30T18:50:36Z"
+          }
+        }
+      ],
+      "policy": {
+        "policyDescription": "Policy according most common requirements of Estonian Public Administration, to validate Qualified Electronic Signatures and Electronic Seals with Qualified Certificates (according to Regulation (EU) No 910/2014, aka eIDAS). I.e. signatures that have been recognized as Advanced electronic Signatures (AdES) and AdES supported by a Qualified Certificate (AdES/QC) do not produce a positive validation result, with exception for seals, where AdES/QC and above will produce positive result. Signatures and Seals which are not compliant with ETSI standards (referred by eIDAS) may produce unknown or invalid validation result. Validation process is based on eIDAS Article 32 and referred ETSI standards.",
+        "policyUrl": "http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4",
+        "policyName": "POLv4"
+      },
+      "signatureForm": "ASiC-E"
+    }
+  }
+}

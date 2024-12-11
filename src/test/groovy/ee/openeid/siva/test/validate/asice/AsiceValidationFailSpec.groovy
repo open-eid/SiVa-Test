@@ -483,35 +483,4 @@ class AsiceValidationFailSpec extends GenericSpecification {
         "batchsignature" | "xroad-batchsignature.asice"
         "attachment"     | "xroad-attachment.asice"
     }
-
-    @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
-    @Description("Asice Baseline-LTA file")
-    def "asiceBaselineLtaProfileInvalidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LTA-V-24.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
-                .body("signatures[0].info.bestSignatureTime", Matchers.is("2014-10-30T18:50:35Z"))
-                .body("signatures[0].signedBy", Matchers.is("METSMA,RAUL,38207162766"))
-                .body("signatures[0].errors.content", Matchers.contains(VALID_VALIDATION_PROCESS_ERROR_VALUE_11, VALID_VALIDATION_PROCESS_ERROR_VALUE_11))
-                .body("signatures[0].certificates.size()", Matchers.is(4))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("METSMA,RAUL,38207162766"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIIEmzCCA4OgAwIBAgIQFQe7NKtE06tRSY1vHfPijjANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", Matchers.startsWith("ESTEID-SK 2011"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.content", Matchers.startsWith("MIIFBTCCA+2gAwIBAgIQKVKTqv2MxtRNgzCjwmRRDTANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].commonName", Matchers.is("BalTstamp QTSA TSU2"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].content", Matchers.startsWith("MIIEtzCCA5+gAwIBAgIKFg5NNQAAAAADhzANBgkqhkiG9w0BAQ"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].issuer.commonName", Matchers.startsWith("SSC Qualified Class 3 CA"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].issuer.content", Matchers.startsWith("MIIFvTCCA6WgAwIBAgIQWJFmnMAIyiVAcLMn/5wGnjANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'ARCHIVE_TIMESTAMP'}[0].commonName", Matchers.is("BalTstamp QTSA TSU2"))
-                .body("signatures[0].certificates.findAll{it.type == 'ARCHIVE_TIMESTAMP'}[0].content", Matchers.startsWith("MIIEtzCCA5+gAwIBAgIKFg5NNQAAAAADhzANBgkqhkiG9w0BAQ"))
-                .body("signatures[0].certificates.findAll{it.type == 'ARCHIVE_TIMESTAMP'}[0].issuer.commonName", Matchers.startsWith("SSC Qualified Class 3 CA"))
-                .body("signatures[0].certificates.findAll{it.type == 'ARCHIVE_TIMESTAMP'}[0].issuer.content", Matchers.startsWith("MIIFvTCCA6WgAwIBAgIQWJFmnMAIyiVAcLMn/5wGnjANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("SK OCSP RESPONDER 2011"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhk"))
-                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("validSignaturesCount", Matchers.is(0))
-    }
 }

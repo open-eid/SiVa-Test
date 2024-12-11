@@ -22,12 +22,14 @@ import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestErrorValidator
+import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 
+import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals
 import static org.hamcrest.Matchers.emptyOrNullString
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
@@ -435,23 +437,14 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
     @Description("Asice Baseline-LTA file")
-    def "bdocBaselineLtaProfileValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LTA-V-24.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].info.bestSignatureTime", Matchers.is("2014-10-30T18:50:35Z"))
-                .body("signatures[0].signedBy", Matchers.is("METSMA,RAUL,38207162766"))
-                .body("signatures[0].certificates.size()", Matchers.is(3))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", Matchers.is("METSMA,RAUL,38207162766"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", Matchers.startsWith("MIIEmzCCA4OgAwIBAgIQFQe7NKtE06tRSY1vHfPijjANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].commonName", Matchers.is("BalTstamp QTSA TSU2"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].content", Matchers.startsWith("MIIEtzCCA5+gAwIBAgIKFg5NNQAAAAADhzANBgkqhkiG9w0BAQ"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", Matchers.is("SK OCSP RESPONDER 2011"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhk"))
-                .body("validSignaturesCount", Matchers.is(0))
+    def "Given invalid XAdES LTA signature with non-qualified timestamp present, then simple report has correct warnings/errors"() {
+        when: "report is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LTA-V-24.asice"))
+
+        then: "report matches expectation"
+        String expected = new String(Utils.readFileFromResources("EE_SER-AEX-B-LTA-V-24ReportBdoc.json"))
+        String actual = response.then().extract().asString()
+        assertJsonEquals(expected, actual)
     }
 
     @Description("Signature with BDOC policy should fail validation when extended to LT or LTA profile")
