@@ -25,9 +25,11 @@ import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
-import org.hamcrest.Matchers
 import spock.lang.Ignore
 import spock.lang.Tag
+
+import static org.hamcrest.Matchers.hasSize
+import static org.hamcrest.Matchers.is
 
 @Ignore("SIVA-469")
 // Requires new test files and a special mechanism to retrieve them.
@@ -40,11 +42,11 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-A-LT_MIT-1.asice"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation multiple of Lithuania adoc-v2.0 signatures")
@@ -52,14 +54,14 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-A-LT_MIT-2.asice"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[1].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[1].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(2))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(2))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[1].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[1].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(2))
+                .body("validationReport.validationConclusion.signaturesCount", is(2))
     }
 
     @Description("Validation of Lithuania adoc-v2.0 signature with warning")
@@ -67,11 +69,11 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-A-LT_MIT-5.asice"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Latvian edoc-v2.0 signature")
@@ -79,11 +81,11 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-A-LV_EUSO-1.asice"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-T")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-T")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     //TODO: this file is actually identical to the Signature-A-LV_EUSO-1.asice
@@ -92,9 +94,9 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-A-LV_EUSO-2.asice"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-T")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is("QES"))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-T")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is("QES"))
     }
 
     @Description("Validation of Polish Asic-s with CAdES signature")
@@ -102,12 +104,12 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-A-PL_KIR-1.asics"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is("QES"))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The certificate is not for eSig at signing time!"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is("QES"))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The certificate is not for eSig at signing time!"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Polish Asic-s with XAdES signature")
@@ -115,12 +117,12 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-A-PL_KIR-2.asics"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is("QES"))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The certificate is not for eSig at signing time!"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is("QES"))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The certificate is not for eSig at signing time!"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
     //The file is not valid, revocation outside of 24h timeframe
     @Description("Validation of Slovakia Asic-e with XAdES signature")
@@ -128,13 +130,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-A-SK_DIT-3.asice"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LTA))
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-05-02T09:16:58Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-05-02T09:35:58Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LTA))
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-05-02T09:16:58Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-05-02T09:35:58Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("")
@@ -142,13 +144,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-C-AT_SIT-1.p7m"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-03-31T14:41:57Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The 'issuer-serial' attribute is absent or does not match!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-03-31T14:41:57Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of German CAdES signature")
@@ -156,13 +158,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-C-DE_SCI-1.p7m"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-03-31T14:41:57Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The 'issuer-serial' attribute is absent or does not match!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-03-31T14:41:57Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("")
@@ -170,13 +172,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-C-ES_MIN-1.p7m"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-B"))
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-11T07:30:26Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-B"))
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The 'issuer-serial' attribute is absent or does not match!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-11T07:30:26Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("")
@@ -184,14 +186,14 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-C-ES_MIN-2.p7m"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-T")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-11T07:30:27Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-11T07:30:29Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-T")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The 'issuer-serial' attribute is absent or does not match!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-11T07:30:27Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-11T07:30:29Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Italian Cades signatures")
@@ -199,17 +201,17 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-C-IT_BIT-5.p7m"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-22T14:07:35Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is(""))
-                .body("validationReport.validationConclusion.signatures[1].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[1].signatureFormat", Matchers.is("CAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[1].signatureLevel", Matchers.is(SignatureLevel.NA))
-                .body("validationReport.validationConclusion.signatures[1].claimedSigningTime", Matchers.is("2016-04-22T14:08:35Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(2))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(2))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-22T14:07:35Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is(""))
+                .body("validationReport.validationConclusion.signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[1].signatureFormat", is("CAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[1].signatureLevel", is(SignatureLevel.NA))
+                .body("validationReport.validationConclusion.signatures[1].claimedSigningTime", is("2016-04-22T14:08:35Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(2))
+                .body("validationReport.validationConclusion.signaturesCount", is(2))
     }
 
     @Description("Validation of Poland CAdES B signature")
@@ -217,14 +219,14 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-C-PL_ADS-4.p7m"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.ADESIG_QC))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The signature/seal is not created by a QSCD!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-08T12:09:38Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is(""))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.ADESIG_QC))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The signature/seal is not created by a QSCD!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-08T12:09:38Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is(""))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Poland CAdES T signature")
@@ -232,13 +234,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-C-PL_ADS-7.p7m"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("CAdES-BASELINE-T")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-08T08:41:09Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-08T08:41:19Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("CAdES-BASELINE-T")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-08T08:41:09Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-08T08:41:19Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Belgium PAdES B signature")
@@ -246,13 +248,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-BE_CONN-1.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.ADESIG_QC))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The signature/seal is not created by a QSCD!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-14T13:28:54Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("PAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.ADESIG_QC))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The signature/seal is not created by a QSCD!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-14T13:28:54Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Belgian PAdES LTA signature")
@@ -260,15 +262,15 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-BE_CONN-7.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES_BASELINE-LTA")) //No acceptable revocation data
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.ADESIG_QC))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The signature/seal is not created by a QSCD!"))
-                .body("validationReport.validationConclusion.signatures[0].warnings[1].content", Matchers.is("The trust service of the timestamp has not expected type identifier!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-14T14:03:00Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-14T14:03:24Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("PAdES_BASELINE-LTA")) //No acceptable revocation data
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.ADESIG_QC))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The signature/seal is not created by a QSCD!"))
+                .body("validationReport.validationConclusion.signatures[0].warnings[1].content", is("The trust service of the timestamp has not expected type identifier!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-14T14:03:00Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-14T14:03:24Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of German PAdES signature")
@@ -276,13 +278,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-DE_SCI-2.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].errors[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-03-31T14:49:57Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("PAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].errors[0].content", is("The 'issuer-serial' attribute is absent or does not match!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-03-31T14:49:57Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Italian PAdES signature")
@@ -290,12 +292,12 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-IT_MID-1.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-05T08:25:27Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("PAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-05T08:25:27Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Lithuanian PAdES signature")
@@ -303,13 +305,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-LT_MIT-1.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES-BASELINE-T")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-08T10:16:06Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-08T10:16:20Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("PAdES-BASELINE-T")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-08T10:16:06Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-08T10:16:20Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Lithuanian PAdES signature 2")
@@ -317,13 +319,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-LT_MIT-2.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("PAdES-BASELINE-T")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-08T10:14:19Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-08T10:14:45Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("PAdES-BASELINE-T")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-08T10:14:19Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-08T10:14:45Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("Validation of Latvian PAdES signature")
@@ -331,13 +333,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-LV_EUSO-1.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-11T13:33:37Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-11T13:33:49Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-11T13:33:37Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-11T13:33:49Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     //TODO: this file is identical to Signature-P-LV_EUSO-1.pdf
@@ -346,16 +348,16 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-LV_EUSO-2.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].warnings", Matchers.hasSize(0))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-11T13:33:37Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-11T13:33:49Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings[0].content", Matchers.is(TestData.TEST_ENV_VALIDATION_WARNING))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].warnings", hasSize(0))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-11T13:33:37Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-11T13:33:49Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     //The file should not be valid
@@ -364,14 +366,14 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-PL_ADS-6.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.ADESIG_QC))
-                .body("validationReport.validationConclusion.signatures[0].errors[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-08T12:56:31Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-08T12:56:42Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.ADESIG_QC))
+                .body("validationReport.validationConclusion.signatures[0].errors[0].content", is("The 'issuer-serial' attribute is absent or does not match!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-08T12:56:31Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-08T12:56:42Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
 
     }
 
@@ -381,14 +383,14 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-P-PL_ADS-8.pdf"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("validationReport.validationConclusion.signatures[0].Errors[0].content", Matchers.is("The 'issuer-serial' attribute is absent or does not match!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-08T08:47:28Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is("2016-04-08T08:47:38Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("validationReport.validationConclusion.signatures[0].Errors[0].content", is("The 'issuer-serial' attribute is absent or does not match!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-08T08:47:28Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is("2016-04-08T08:47:38Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("")
@@ -396,9 +398,9 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-X-AT_SIT-1.xml"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.NA))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.NA))
     }
 
     @Description("")
@@ -406,9 +408,9 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-X-AT_SIT-21.xml"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.NA))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.NA))
     }
 
     @Description("Validation of Belgian XAdES signature")
@@ -416,13 +418,13 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-X-BE_CONN-1.xml"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.ADESIG_QC))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The signature/seal is not created by a QSCD!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-18T11:02:37Z"))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.ADESIG_QC))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The signature/seal is not created by a QSCD!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-18T11:02:37Z"))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     @Description("")
@@ -430,14 +432,14 @@ class EuPlugValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(validationRequestForEu("Signature-X-BE_CONN-21.xml"))
                 .then()
-                .body("validationReport.validationConclusion.signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationReport.validationConclusion.signatures[0].signatureFormat", Matchers.is("XAdES-BASELINE-B")) //Minimal LT required
-                .body("validationReport.validationConclusion.signatures[0].signatureLevel", Matchers.is(SignatureLevel.ADESIG_QC))
-                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", Matchers.is("The signature/seal is not created by a QSCD!"))
-                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", Matchers.is("2016-04-18T11:03:29Z"))
-                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", Matchers.is(""))
-                .body("validationReport.validationConclusion.validSignaturesCount", Matchers.is(1))
-                .body("validationReport.validationConclusion.signaturesCount", Matchers.is(1))
+                .body("validationReport.validationConclusion.signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationReport.validationConclusion.signatures[0].signatureFormat", is("XAdES-BASELINE-B")) //Minimal LT required
+                .body("validationReport.validationConclusion.signatures[0].signatureLevel", is(SignatureLevel.ADESIG_QC))
+                .body("validationReport.validationConclusion.signatures[0].warnings[0].content", is("The signature/seal is not created by a QSCD!"))
+                .body("validationReport.validationConclusion.signatures[0].claimedSigningTime", is("2016-04-18T11:03:29Z"))
+                .body("validationReport.validationConclusion.signatures[0].info.bestSignatureTime", is(""))
+                .body("validationReport.validationConclusion.validSignaturesCount", is(1))
+                .body("validationReport.validationConclusion.signaturesCount", is(1))
     }
 
     private static Map validationRequestForEu(String file) {

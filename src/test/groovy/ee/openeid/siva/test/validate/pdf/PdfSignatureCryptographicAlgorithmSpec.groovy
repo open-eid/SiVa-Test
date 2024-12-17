@@ -25,9 +25,9 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.hamcrest.Matchers
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
@@ -37,11 +37,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha512.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
     }
 
     @Description("SHA1 algorithms (PAdES Baseline LT)")
@@ -49,13 +49,13 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha1.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("signatures[0].warnings", Matchers.emptyOrNullString())
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("signatures[0].errors", emptyOrNullString())
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
 
     }
 
@@ -64,12 +64,12 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec224.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_QESIG))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].errors.content", Matchers.hasItem("The algorithm ECDSA with key size 224 is too small for signature creation!"))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))
+                .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
+                .body("signatures[0].errors.content", hasItem("The algorithm ECDSA with key size 224 is too small for signature creation!"))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
     }
 
     @Description("ECDSA256 algorithms (PAdES Baseline LT)")
@@ -77,11 +77,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec256.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
     }
 
     @Description("RSA1024 algorithms (PAdES Baseline LT)")
@@ -89,12 +89,12 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024.pdf", SignaturePolicy.POLICY_3))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("signatures[0].errors", emptyOrNullString())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
     }
 
     @Description("RSA1023 algorithms (PAdES Baseline LT)")
@@ -102,9 +102,9 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1023.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].subIndication", Matchers.is("CRYPTO_CONSTRAINTS_FAILURE_NO_POE"))
-                .body("signatures[0].errors.content", Matchers.hasItem("The past signature validation is not conclusive!"))
+                .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
+                .body("signatures[0].subIndication", is("CRYPTO_CONSTRAINTS_FAILURE_NO_POE"))
+                .body("signatures[0].errors.content", hasItem("The past signature validation is not conclusive!"))
     }
 
     @Description("RSA2047 algorithms (PAdES Baseline LT)")
@@ -112,11 +112,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2047.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
 
     }
 
@@ -125,10 +125,10 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
     }
 }

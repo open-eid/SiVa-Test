@@ -29,7 +29,6 @@ import io.restassured.response.Response
 import io.restassured.response.ValidatableResponse
 import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpStatus
-import org.hamcrest.Matchers
 import org.w3c.dom.Document
 import org.w3c.dom.NodeList
 import spock.lang.Ignore
@@ -325,7 +324,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(requestData)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validSignaturesCount", Matchers.is(5))
+                .body("validSignaturesCount", is(5))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
                 .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA384))
                 .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
@@ -343,7 +342,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(requestDataWithDatafiles)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validSignaturesCount", Matchers.is(5))
+                .body("validSignaturesCount", is(5))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
                 .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA384))
                 .body("signatures.find {signatures -> signatures.signedBy == 'ŽAIKOVSKI,IGOR,37101010021'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
@@ -362,7 +361,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(requestDataWithDatafiles)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validSignaturesCount", Matchers.is(4))
+                .body("validSignaturesCount", is(4))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.indication", is("TOTAL-FAILED"))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
                 .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA384))
@@ -396,9 +395,9 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .body("signatures[0].signatureLevel", is(SignatureLevel.ADESEAL_QC))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings.size()", Matchers.is(2))
-                .body("signatures[0].warnings[0].content", Matchers.is("The private key does not reside in a QSCD at (best) signing time!"))
-                .body("signatures[0].warnings[1].content", Matchers.is("The signature level has been re-evaluated from initial UNKNOWN_QC to ADESEAL_QC by SiVa validation policy!"))
+                .body("signatures[0].warnings.size()", is(2))
+                .body("signatures[0].warnings[0].content", is("The private key does not reside in a QSCD at (best) signing time!"))
+                .body("signatures[0].warnings[1].content", is("The signature level has been re-evaluated from initial UNKNOWN_QC to ADESEAL_QC by SiVa validation policy!"))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
     }
@@ -419,8 +418,8 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .body("signatures[0].signatureLevel", is(SignatureLevel.UNKNOWN_QC))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings.size()", Matchers.is(1))
-                .body("signatures[0].warnings[0].content", Matchers.is("The private key does not reside in a QSCD at (best) signing time!"))
+                .body("signatures[0].warnings.size()", is(1))
+                .body("signatures[0].warnings[0].content", is("The private key does not reside in a QSCD at (best) signing time!"))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
     }

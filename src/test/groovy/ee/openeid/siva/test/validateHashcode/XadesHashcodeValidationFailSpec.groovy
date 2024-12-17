@@ -24,9 +24,10 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.hamcrest.Matchers
 
 import static ee.openeid.siva.test.TestData.*
+import static org.hamcrest.Matchers.hasItem
+import static org.hamcrest.Matchers.is
 
 class XadesHashcodeValidationFailSpec extends GenericSpecification {
 
@@ -36,16 +37,16 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA512, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].subIndication", Matchers.is("SIGNED_DATA_NOT_FOUND"))
-                .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_FOUND))
-                .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
-                .body("signatures[0].signedBy", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
-                .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
-                .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
-                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("validSignaturesCount", Matchers.is(0))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
+                .body("signatures[0].subIndication", is("SIGNED_DATA_NOT_FOUND"))
+                .body("signatures[0].errors.content", hasItem(REFERENCE_DATA_NOT_FOUND))
+                .body("signatures[0].info.bestSignatureTime", is("2019-02-05T13:36:23Z"))
+                .body("signatures[0].signedBy", is("MÄNNIK,MARI-LIIS,47101010033"))
+                .body("signatures[0].subjectDistinguishedName.serialNumber", is("47101010033"))
+                .body("signatures[0].subjectDistinguishedName.commonName", is("MÄNNIK,MARI-LIIS,47101010033"))
+                .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("validSignaturesCount", is(0))
     }
 
     @Description("Hashes do not match")
@@ -54,13 +55,13 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "kl2ZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].subIndication", Matchers.is("HASH_FAILURE"))
-                .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_INTACT))
-                .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
-                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("validSignaturesCount", Matchers.is(0))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", is("TOTAL-FAILED"))
+                .body("signatures[0].subIndication", is("HASH_FAILURE"))
+                .body("signatures[0].errors.content", hasItem(REFERENCE_DATA_NOT_INTACT))
+                .body("signatures[0].info.bestSignatureTime", is("2019-02-05T13:36:23Z"))
+                .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("validSignaturesCount", is(0))
     }
 
     @Description("Wrong data file name is used")
@@ -69,15 +70,15 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null, "wrongDataFileName.jpg", HashAlgo.SHA256, "Sj/WcgsM57hpCiR5E8OycJ4jioYwdHzz3s4e5LXditA="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].subIndication", Matchers.is("SIGNED_DATA_NOT_FOUND"))
-                .body("signatures[0].errors.content", Matchers.hasItem(REFERENCE_DATA_NOT_FOUND))
-                .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:27:24Z"))
-                .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("47101010033"))
-                .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("MÄNNIK,MARI-LIIS,47101010033"))
-                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("validSignaturesCount", Matchers.is(0))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
+                .body("signatures[0].subIndication", is("SIGNED_DATA_NOT_FOUND"))
+                .body("signatures[0].errors.content", hasItem(REFERENCE_DATA_NOT_FOUND))
+                .body("signatures[0].info.bestSignatureTime", is("2019-02-05T13:27:24Z"))
+                .body("signatures[0].subjectDistinguishedName.serialNumber", is("47101010033"))
+                .body("signatures[0].subjectDistinguishedName.commonName", is("MÄNNIK,MARI-LIIS,47101010033"))
+                .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("validSignaturesCount", is(0))
     }
 
     @Description("Invalid signature in XAdES")
@@ -86,13 +87,13 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Invalid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].subIndication", Matchers.is("SIG_CRYPTO_FAILURE"))
-                .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_9))
-                .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
-                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("validSignaturesCount", Matchers.is(0))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", is("TOTAL-FAILED"))
+                .body("signatures[0].subIndication", is("SIG_CRYPTO_FAILURE"))
+                .body("signatures[0].errors.content", hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_9))
+                .body("signatures[0].info.bestSignatureTime", is("2019-02-05T13:36:23Z"))
+                .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("validSignaturesCount", is(0))
     }
 
     @Description("Invalid signature in XAdES")
@@ -101,12 +102,12 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Invalid_base64_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].subIndication", Matchers.is("SIG_CRYPTO_FAILURE"))
-                .body("signatures[0].errors.content", Matchers.hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_9))
-                .body("signatures[0].info.bestSignatureTime", Matchers.is("2019-02-05T13:36:23Z"))
-                .body("validationLevel", Matchers.is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("validSignaturesCount", Matchers.is(0))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", is("TOTAL-FAILED"))
+                .body("signatures[0].subIndication", is("SIG_CRYPTO_FAILURE"))
+                .body("signatures[0].errors.content", hasItem(VALID_VALIDATION_PROCESS_ERROR_VALUE_9))
+                .body("signatures[0].info.bestSignatureTime", is("2019-02-05T13:36:23Z"))
+                .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("validSignaturesCount", is(0))
     }
 }

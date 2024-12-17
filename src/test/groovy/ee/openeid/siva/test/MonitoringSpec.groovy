@@ -16,14 +16,13 @@
 
 package ee.openeid.siva.test
 
-
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.hamcrest.Matchers
 import spock.lang.Tag
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
+import static org.hamcrest.Matchers.is
 
 @Tag("Allure")
 class MonitoringSpec extends GenericSpecification {
@@ -38,8 +37,8 @@ class MonitoringSpec extends GenericSpecification {
         and: "statuses to be UP"
         SivaRequests.getMonitoringHealth()
                 .then()
-                .body("status", Matchers.is("UP"))
-                .body("components.health.status", Matchers.is("UP"))
+                .body("status", is("UP"))
+                .body("components.health.status", is("UP"))
     }
 
     @Description("Heartbeat monitor response structure")
@@ -52,7 +51,7 @@ class MonitoringSpec extends GenericSpecification {
         and: "status to be UP"
         SivaRequests.getMonitoringHealth()
                 .then()
-                .body("status", Matchers.is("UP"))
+                .body("status", is("UP"))
     }
 
     @Description("Version monitor response structure")

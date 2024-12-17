@@ -24,10 +24,10 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.hamcrest.Matchers
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class DocumentFormatSpec extends GenericSpecification {
@@ -37,12 +37,12 @@ class DocumentFormatSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("signatures[0].warnings", Matchers.emptyOrNullString())
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].errors", emptyOrNullString())
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
     }
 
     @Description("Validation of bdoc document acceptance")
@@ -50,14 +50,14 @@ class DocumentFormatSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("signatures[0].warnings", Matchers.hasSize(1))
-                .body("signatures[0].warnings[0].content", Matchers.is("Data file 'Proov (2).txt' is empty"))
-                .body("signaturesCount", Matchers.is(2))
-                .body("validSignaturesCount", Matchers.is(2))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].errors", emptyOrNullString())
+                .body("signatures[0].warnings", hasSize(1))
+                .body("signatures[0].warnings[0].content", is("Data file 'Proov (2).txt' is empty"))
+                .body("signaturesCount", is(2))
+                .body("validSignaturesCount", is(2))
     }
 
     @Description("Validation of asice document acceptance")
@@ -65,13 +65,13 @@ class DocumentFormatSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("bdoc21-TS.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("signatures[0].warnings", Matchers.emptyOrNullString())
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].errors", emptyOrNullString())
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
     }
 
     @Ignore("SIVA-748 needs a new container")
@@ -80,13 +80,13 @@ class DocumentFormatSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("signatures[0].warnings", Matchers.emptyOrNullString())
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].errors", emptyOrNullString())
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
     }
 
     @Ignore
@@ -96,12 +96,12 @@ class DocumentFormatSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest(""))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.CAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].errors", Matchers.emptyOrNullString())
-                .body("signatures[0].warnings", Matchers.emptyOrNullString())
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.CAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].errors", emptyOrNullString())
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
     }
 }

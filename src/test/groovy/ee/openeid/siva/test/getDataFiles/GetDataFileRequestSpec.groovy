@@ -24,7 +24,8 @@ import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.restassured.response.Response
-import org.hamcrest.Matchers
+
+import static org.hamcrest.Matchers.is
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#data-files-request-interface")
 class GetDataFileRequestSpec extends GenericSpecification {
@@ -56,10 +57,10 @@ class GetDataFileRequestSpec extends GenericSpecification {
         expect:
         SivaRequests.getDataFiles(reversedRequestData)
                 .then()
-                .body("dataFiles[0].filename", Matchers.is("test.txt"))
-                .body("dataFiles[0].mimeType", Matchers.is("application/octet-stream"))
-                .body("dataFiles[0].base64", Matchers.is("VGVzdCBhbmQgc29tZSBvdGhlciB0ZXN0"))
-                .body("dataFiles[0].size", Matchers.is(24))
+                .body("dataFiles[0].filename", is("test.txt"))
+                .body("dataFiles[0].mimeType", is("application/octet-stream"))
+                .body("dataFiles[0].base64", is("VGVzdCBhbmQgc29tZSBvdGhlciB0ZXN0"))
+                .body("dataFiles[0].size", is(24))
     }
 
     @Description("Extra request parameters are ignored")
@@ -71,8 +72,8 @@ class GetDataFileRequestSpec extends GenericSpecification {
         expect:
         SivaRequests.getDataFiles(requestData)
                 .then()
-                .body("dataFiles[0].size", Matchers.is(24))
-                .body("dataFiles[0].base64", Matchers.is("VGVzdCBhbmQgc29tZSBvdGhlciB0ZXN0"))
+                .body("dataFiles[0].size", is(24))
+                .body("dataFiles[0].base64", is("VGVzdCBhbmQgc29tZSBvdGhlciB0ZXN0"))
     }
 
     @Description("Requesting data files with missing mandatory body element results in error")
@@ -140,6 +141,6 @@ class GetDataFileRequestSpec extends GenericSpecification {
         SivaRequests.getDataFiles(RequestData.requestWithFixedBodyLength(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"), conf.sivaRequestSizeLimit()))
                 .then()
                 .statusCode(200)
-                .body("dataFiles[0].filename", Matchers.is("test.txt"))
+                .body("dataFiles[0].filename", is("test.txt"))
     }
 }

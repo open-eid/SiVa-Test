@@ -25,10 +25,11 @@ import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.restassured.response.Response
 import org.apache.http.HttpStatus
-import org.hamcrest.Matchers
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static org.hamcrest.Matchers.is
+import static org.hamcrest.Matchers.startsWith
 
 class AsicsValidationFailSpec extends GenericSpecification {
 
@@ -37,8 +38,8 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.tryValidate(RequestData.validationRequest("TwoDataFilesAsics.asics"))
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document does not meet the requirements"))
+                .body("requestErrors[0].key", is("document"))
+                .body("requestErrors[0].message", is("Document does not meet the requirements"))
     }
 
     @Description("No data file in ASIC-s")
@@ -46,8 +47,8 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.tryValidate(RequestData.validationRequest("DataFileMissingAsics.asics"))
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document does not meet the requirements"))
+                .body("requestErrors[0].key", is("document"))
+                .body("requestErrors[0].message", is("Document does not meet the requirements"))
     }
 
     @Description("more folders that META-INF in ASIC-s")
@@ -55,8 +56,8 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.tryValidate(RequestData.validationRequest("FoldersInAsics.asics"))
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document does not meet the requirements"))
+                .body("requestErrors[0].key", is("document"))
+                .body("requestErrors[0].message", is("Document does not meet the requirements"))
     }
 
     @Description("META-INF folder not in root of container")
@@ -64,8 +65,8 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.tryValidate(RequestData.validationRequest("MetaInfNotInRoot.asics"))
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document does not meet the requirements"))
+                .body("requestErrors[0].key", is("document"))
+                .body("requestErrors[0].message", is("Document does not meet the requirements"))
     }
 
     @Description("Not allowed files in META-INF folder")
@@ -73,8 +74,8 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.tryValidate(RequestData.validationRequest("signatureMixedWithTST.asics"))
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document does not meet the requirements"))
+                .body("requestErrors[0].key", is("document"))
+                .body("requestErrors[0].message", is("Document does not meet the requirements"))
     }
 
     @Ignore("SIVA-748 needs a new container")
@@ -83,11 +84,11 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsTSTsignatureModified.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("validatedDocument.filename", Matchers.is("AsicsTSTsignatureModified.asics"))
-                .body("timeStampTokens[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("timeStampTokens[0].error[0].content", Matchers.is("Signature not intact"))
-                .body("timeStampTokens[0].signedTime", Matchers.is("2017-08-10T12:40:40Z"))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("validatedDocument.filename", is("AsicsTSTsignatureModified.asics"))
+                .body("timeStampTokens[0].indication", is("TOTAL-FAILED"))
+                .body("timeStampTokens[0].error[0].content", is("Signature not intact"))
+                .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
     }
 
     @Description("TST has been corrupted")
@@ -105,13 +106,13 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("DatafileAlteredButStillValid.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("validatedDocument.filename", Matchers.is("DatafileAlteredButStillValid.asics"))
-                .body("timeStampTokens[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("timeStampTokens[0].error[0].content", Matchers.is("Signature not intact"))
-                .body("timeStampTokens[0].certificates[0].commonName", Matchers.is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].certificates[0].type", Matchers.is("CONTENT_TIMESTAMP"))
-                .body("timeStampTokens[0].certificates[0].content", Matchers.startsWith("MIIEDTCCAvWgAwIBAgIQJK/s6xJo0AJUF/eG7W8BWTANBgkqhk"))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("validatedDocument.filename", is("DatafileAlteredButStillValid.asics"))
+                .body("timeStampTokens[0].indication", is("TOTAL-FAILED"))
+                .body("timeStampTokens[0].error[0].content", is("Signature not intact"))
+                .body("timeStampTokens[0].certificates[0].commonName", is("SK TIMESTAMPING AUTHORITY"))
+                .body("timeStampTokens[0].certificates[0].type", is("CONTENT_TIMESTAMP"))
+                .body("timeStampTokens[0].certificates[0].content", startsWith("MIIEDTCCAvWgAwIBAgIQJK/s6xJo0AJUF/eG7W8BWTANBgkqhk"))
     }
 
     @Description("Exluding files in META-INF folder together with TST")
@@ -119,8 +120,8 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.tryValidate(RequestData.validationRequest("evidencerecordMixedWithTST.asics"))
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document does not meet the requirements"))
+                .body("requestErrors[0].key", is("document"))
+                .body("requestErrors[0].message", is("Document does not meet the requirements"))
     }
 
 
@@ -131,8 +132,8 @@ class AsicsValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.tryValidate(RequestData.validationRequest(filename))
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", Matchers.is("document"))
-                .body("requestErrors[0].message", Matchers.is("Document does not meet the requirements"))
+                .body("requestErrors[0].key", is("document"))
+                .body("requestErrors[0].message", is("Document does not meet the requirements"))
 
         where:
         filename                           | description

@@ -28,10 +28,10 @@ import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.restassured.response.Response
-import org.hamcrest.Matchers
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/overview/#main-features-of-siva-validation-service")
 class MimetypeValidationSpec extends GenericSpecification {
@@ -41,13 +41,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerValidMimetype.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Invalid ASICe container with mimetype as last in cointainer.")
@@ -55,13 +55,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeAsLast.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICe container with deflated mimetype.")
@@ -69,13 +69,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeIsDeflated.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
     @Description("Invalid ASICe container without mimetype.")
@@ -83,13 +83,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerNoMimetype.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICe container mimetype filename with capital letter (Mimetype).")
@@ -97,13 +97,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeWithCapitalLetter.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(0))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICe container, where mimetype filename is with extra space in the end (\"mimetype \").")
@@ -111,13 +111,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeFilenameWithExtraSpace.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(0))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICe container with extra byte in the beginning of the container.")
@@ -125,13 +125,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeWithCapitalLetter.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_FAILED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(0))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("ASICe container with invalid mimetype as \"text/plain\".")
@@ -139,13 +139,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsiceInvalidMimetypeAsText.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_INVALID_TYPE))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_INVALID_TYPE))
     }
 
     @Description("BDOC container with valid mimetype.")
@@ -153,13 +153,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocContainerValidMimetype.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Invalid BDOC container with mimetype as last.")
@@ -167,13 +167,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocContainerMimetypeAsLast.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid BDOC container with deflated mimetype.")
@@ -181,13 +181,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("BdocContainerMimetypeIsDeflated.bdoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
     @Description("Invalid BDOC container without mimetype.")
@@ -222,13 +222,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerValidMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Ignore("SIVA-748 needs a new container")
@@ -237,13 +237,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerValidMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Invalid ASICs container with mimetype as last and Tmp file inside.")
@@ -251,13 +251,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeAsLast.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Ignore("SIVA-748 needs a new container")
@@ -266,13 +266,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerMimetypeAsLast.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICs container with deflated mimetype and Tmp file inside.")
@@ -280,13 +280,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeIsDeflated.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
     @Ignore("SIVA-748 needs a new container")
@@ -295,13 +295,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerMimetypeIsDeflated.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
     @Description("Invalid ASICs container without mimetype and Tmp file inside.")
@@ -309,13 +309,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerNoMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Ignore("SIVA-748 needs a new container")
@@ -324,13 +324,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerNoMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.DIGIDOC_XML_1_3))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid ASICs container, where mimetype filename is with extra space in the end (\"mimetype \").")
@@ -338,14 +338,14 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeFilenameWithExtraSpace.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
-                .body("signatures[0].errors.content", Matchers.hasItem("The manifest file is absent!"))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is("TOTAL-FAILED"))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(0))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatures[0].errors.content", hasItem("The manifest file is absent!"))
     }
 
     @Description("ASICs container with invalid mimetype as \"application/xml\".")
@@ -353,13 +353,13 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsInvalidMimetypeAsXml.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.XAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_INVALID_TYPE))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_INVALID_TYPE))
     }
 
     @Description("Valid EDOC container with valid.")
@@ -367,12 +367,12 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EdocContainerValidMimetype.edoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validationWarnings", Matchers.hasSize(1))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Invalid EDOC container with mimetype as last in cointainer.")
@@ -380,12 +380,12 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EdocContainerValidMimetypeAsLast.edoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_E))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signatures[0].indication", Matchers.is("TOTAL-PASSED"))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Invalid EDOC container without mimetype.")
@@ -393,12 +393,12 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("EdocContainerNoMimetype.edoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
     @Description("Valid ADOC container with mimetype.")
@@ -406,11 +406,11 @@ class MimetypeValidationSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AdocContainerMimetypeWithExtraFields.adoc"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.is(ContainerFormat.ASiC_S))
-                .body("signaturesCount", Matchers.is(1))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("validationWarnings", Matchers.hasSize(2))
-                .body("validationWarnings.content", Matchers.hasItem(TestData.MIMETYPE_EXTRA_FIELDS_WARNING))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(0))
+                .body("signatures[0].indication", is("TOTAL-FAILED"))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_EXTRA_FIELDS_WARNING))
     }
 }

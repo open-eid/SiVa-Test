@@ -25,10 +25,10 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.hamcrest.Matchers
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.*
+import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class PdfValidationFailSpec extends GenericSpecification {
@@ -38,14 +38,14 @@ class PdfValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-rsa1024-sha1-expired.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_T))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_UNKNOWN))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].errors.content", Matchers.hasItem(CERT_VALIDATION_NOT_CONCLUSIVE))
-                .body("signatures[0].warnings.content[0]", Matchers.is("The signature/seal is an INDETERMINATE AdES digital signature!"))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_T))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_UNKNOWN))
+                .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
+                .body("signatures[0].errors.content", hasItem(CERT_VALIDATION_NOT_CONCLUSIVE))
+                .body("signatures[0].warnings.content[0]", is("The signature/seal is an INDETERMINATE AdES digital signature!"))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
     }
 
     @Description("The PDF-file has been signed with revoked certificate (PAdES Baseline LT)")
@@ -53,17 +53,17 @@ class PdfValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("pades_lt_revoked.pdf", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_QESIG))
-                .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].subIndication", Matchers.is("REVOKED_NO_POE"))
-                .body("signatures[0].errors.content", Matchers.hasItem("The past signature validation is not conclusive!"))
-                .body("signatures[0].claimedSigningTime", Matchers.is("2016-06-29T08:38:31Z"))
-                .body("signatures[0].warnings[0].content", Matchers.is("The signature/seal is an INDETERMINATE AdES digital signature!"))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))
+                .body("signatures[0].signedBy", is("NURM,AARE,38211015222"))
+                .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
+                .body("signatures[0].subIndication", is("REVOKED_NO_POE"))
+                .body("signatures[0].errors.content", hasItem("The past signature validation is not conclusive!"))
+                .body("signatures[0].claimedSigningTime", is("2016-06-29T08:38:31Z"))
+                .body("signatures[0].warnings[0].content", is("The signature/seal is an INDETERMINATE AdES digital signature!"))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
     }
 
     //TODO SIVA-349 needs investigation why the signature level is determined as INDETERMINATE_ADESIG not as INDETERMINATE_QESIG
@@ -72,20 +72,20 @@ class PdfValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-auth.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-        //.body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.INDETERMINATE_QESIG))
-                .body("signatures[0].signedBy", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.is("36706020210"))
-                .body("signatures[0].subjectDistinguishedName.commonName", Matchers.is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].subIndication", Matchers.is("CHAIN_CONSTRAINTS_FAILURE"))
-                .body("signatures[0].errors.content", Matchers.contains(
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+        //.body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))
+                .body("signatures[0].signedBy", is("SINIVEE,VEIKO,36706020210"))
+                .body("signatures[0].subjectDistinguishedName.serialNumber", is("36706020210"))
+                .body("signatures[0].subjectDistinguishedName.commonName", is("SINIVEE,VEIKO,36706020210"))
+                .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
+                .body("signatures[0].subIndication", is("CHAIN_CONSTRAINTS_FAILURE"))
+                .body("signatures[0].errors.content", contains(
                         CERT_VALIDATION_NOT_CONCLUSIVE,
                         NOT_EXPECTED_KEY_USAGE,
                         CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
     }
 
     @Ignore
@@ -95,15 +95,15 @@ class PdfValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-expired.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].subIndication", Matchers.is("NO_POE"))
-                .body("signatures[0].errors.content", Matchers.hasItem("The past signature validation is not conclusive!"))
-                .body("signatures[0].warnings", Matchers.hasSize(0))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
+                .body("signatures[0].subIndication", is("NO_POE"))
+                .body("signatures[0].errors.content", hasItem("The past signature validation is not conclusive!"))
+                .body("signatures[0].warnings", hasSize(0))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
     }
 
     @Ignore
@@ -113,10 +113,10 @@ class PdfValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024-expired2.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
     }
 
     @Description("OCSP is taken more than 24h after TS")
@@ -124,10 +124,10 @@ class PdfValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ocsp-28h.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
     }
 
     @Description("The PDF-file has OCSP almost 24h before TS")
@@ -136,11 +136,11 @@ class PdfValidationFailSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-ocsp-before-ts.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].indication", Matchers.is("TOTAL-FAILED"))
-                .body("signatures[0].errors[0].content", Matchers.is("OCSP response production time is before timestamp time"))
-                .body("validSignaturesCount", Matchers.is(0))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].indication", is("TOTAL-FAILED"))
+                .body("signatures[0].errors[0].content", is("OCSP response production time is before timestamp time"))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
     }
 }

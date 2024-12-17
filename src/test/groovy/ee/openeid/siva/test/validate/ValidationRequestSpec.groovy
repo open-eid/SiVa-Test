@@ -27,7 +27,6 @@ import io.qameta.allure.Link
 import io.restassured.response.Response
 import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpStatus
-import org.hamcrest.Matchers
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
@@ -65,7 +64,7 @@ class ValidationRequestSpec extends GenericSpecification {
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(container))
                 .body("validatedDocument.filename", equalTo(file))
-                .body("signatures[0].signatureFormat", Matchers.is(profile))
+                .body("signatures[0].signatureFormat", is(profile))
 
         where:
         container                       | profile                               | file
@@ -104,7 +103,7 @@ class ValidationRequestSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest(file))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validatedDocument.filename", equalTo(file))
-                .body("signatures[0].signatureFormat", Matchers.is(profile))
+                .body("signatures[0].signatureFormat", is(profile))
 
         where:
         profile                            | packaging    | file
@@ -389,7 +388,7 @@ class ValidationRequestSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(requestData)
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validSignaturesCount", Matchers.is(1))
+                .body("validSignaturesCount", is(1))
     }
 
     @Description("Input random base64 string as document")
@@ -439,7 +438,7 @@ class ValidationRequestSpec extends GenericSpecification {
                         conf.sivaRequestSizeLimit() + 1))
                 .then()
                 .statusCode(400)
-                .body("requestErrors[0].key", Matchers.is("request"))
-                .body("requestErrors[0].message", Matchers.is(errorMessage))
+                .body("requestErrors[0].key", is("request"))
+                .body("requestErrors[0].message", is(errorMessage))
     }
 }

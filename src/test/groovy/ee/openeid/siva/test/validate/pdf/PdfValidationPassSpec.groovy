@@ -25,9 +25,9 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
-import org.hamcrest.Matchers
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
 class PdfValidationPassSpec extends GenericSpecification {
@@ -37,13 +37,13 @@ class PdfValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024-not-expired.pdf", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].signedBy", Matchers.is("Veiko Sinivee"))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].signedBy", is("Veiko Sinivee"))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
 
     }
 
@@ -52,12 +52,12 @@ class PdfValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-7d.pdf", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
 
     }
 
@@ -66,16 +66,16 @@ class PdfValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings", Matchers.emptyOrNullString())
-                .body("signatures[0].signedBy", Matchers.is("NURM,AARE,38211015222"))
-                .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
-                .body("signatures[0].subjectDistinguishedName.commonName", Matchers.notNullValue())
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].signedBy", is("NURM,AARE,38211015222"))
+                .body("signatures[0].subjectDistinguishedName.serialNumber", notNullValue())
+                .body("signatures[0].subjectDistinguishedName.commonName", notNullValue())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
     }
 
     @Description("The PDF-file has OCSP more than 15 minutes after TS but earlier than 24h")
@@ -83,15 +83,15 @@ class PdfValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ocsp-15min1s.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-                .body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings[0].content", Matchers.is("The revocation information is not considered as 'fresh'."))
-                .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
-                .body("signatures[0].subjectDistinguishedName.commonName", Matchers.notNullValue())
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings[0].content", is("The revocation information is not considered as 'fresh'."))
+                .body("signatures[0].subjectDistinguishedName.serialNumber", notNullValue())
+                .body("signatures[0].subjectDistinguishedName.commonName", notNullValue())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
     }
 
     //TODO SIVA-349 needs investigation why the signature is determined as PAdES_BASELINE_LTA not as PAdES_BASELINE_LT
@@ -101,13 +101,13 @@ class PdfValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("pades-lt-CRL-taken-days-later.pdf"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", Matchers.emptyOrNullString())
-        //.body("signatures[0].signatureFormat", Matchers.is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", Matchers.is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", Matchers.is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].subjectDistinguishedName.serialNumber", Matchers.notNullValue())
-                .body("signatures[0].subjectDistinguishedName.commonName", Matchers.notNullValue())
-                .body("validSignaturesCount", Matchers.is(1))
-                .body("signaturesCount", Matchers.is(1))
+                .body("signatureForm", emptyOrNullString())
+        //.body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].subjectDistinguishedName.serialNumber", notNullValue())
+                .body("signatures[0].subjectDistinguishedName.commonName", notNullValue())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
     }
 }
