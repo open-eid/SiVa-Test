@@ -25,10 +25,13 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.qameta.allure.Story
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 
 import static ee.openeid.siva.test.TestData.*
+import static org.hamcrest.Matchers.emptyOrNullString
+import static org.hamcrest.Matchers.equalTo
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy")
 class AsiceValidationPassSpec extends GenericSpecification {
@@ -384,5 +387,24 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("signatures[1].certificates.findAll{it.type == 'REVOCATION'}[0].content", Matchers.startsWith("MIIFQDCCAyigAwIBAgIQSKlAnTgs72Ra5xCvMScb/jANBgkqhk"))
                 .body("signaturesCount", Matchers.is(2))
                 .body("validSignaturesCount", Matchers.is(2))
+    }
+
+    @Story("Only QTST timestamp allowed")
+    @Description("Asice LT signature passes without warnings/errors, when timestamp level was during signing QTST")
+    def "Asice LT signature with QTST timestamp passes: #description"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(testfile))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validSignaturesCount", equalTo(1))
+                .body("signaturesCount", equalTo(1))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].commonName", Matchers.is(timestamp))
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].errors", emptyOrNullString())
+
+        where:
+        description                                          | testfile                       | timestamp
+        "QTST level present in TSL before eIDAS"             | "singleValidSignatureTS.asice" | "DEMO of SK TSA 2014"
+        "QTST level, but withdrawn during validation in TSL" | "EE_SER-AEX-B-LT-V-30.asice"   | "SK TIMESTAMPING AUTHORITY"
+//TODO: SIVA-796 "QTST level during signing, before was non-qualified in TSL" | "< testfile needed >"          | ""
     }
 }

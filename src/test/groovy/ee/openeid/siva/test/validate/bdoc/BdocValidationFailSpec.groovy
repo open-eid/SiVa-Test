@@ -25,6 +25,7 @@ import ee.openeid.siva.test.util.RequestErrorValidator
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.qameta.allure.Story
 import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
@@ -435,9 +436,10 @@ class BdocValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", Matchers.is(0))
     }
 
+    @Story("Only QTST timestamp allowed")
     @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
-    @Description("Asice Baseline-LTA file")
-    def "Given invalid XAdES LTA signature with non-qualified timestamp present, then simple report has correct warnings/errors"() {
+    @Description("Bdoc XAdES LTA signature with non-qualified timestamp not allowed")
+    def "Bdoc LTA signature with non-qualified timestamps produces correct errors in simple report"() {
         when: "report is requested"
         Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LTA-V-24.asice"))
 
