@@ -17,16 +17,16 @@
 package ee.openeid.siva.test
 
 import io.qameta.allure.Link
+import org.apache.http.HttpStatus
 
 import static io.restassured.RestAssured.given
 
 class SoapEndpointsDeprecatedSpec extends GenericSpecification {
 
+    String sivaServiceUrl = "${conf.sivaProtocol()}://${conf.sivaHostname()}:${conf.sivaPort()}${conf.sivaContextPath()}"
+
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces")
     def "Soap #endpoint endpoint deprecated"() {
-        given:
-        String sivaServiceUrl = "${conf.sivaProtocol()}://${conf.sivaHostname()}:${conf.sivaPort()}${conf.sivaContextPath()}"
-
         expect:
         given()
                 .contentType("text/xml;charset=UTF-8")
@@ -41,5 +41,19 @@ class SoapEndpointsDeprecatedSpec extends GenericSpecification {
         "validationWebService"         | _
         "hashcodeValidationWebService" | _
         "dataFilesWebService"          | _
+    }
+
+    def "#endpoint endpoint not allowed"() {
+        expect:
+        given()
+                .when()
+                .get(sivaServiceUrl + endpoint)
+                .then()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
+
+        where:
+        endpoint          | _
+        "/error"          | _
+        "/actuator/error" | _
     }
 }
