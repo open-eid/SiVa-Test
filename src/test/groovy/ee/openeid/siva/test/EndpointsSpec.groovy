@@ -21,7 +21,7 @@ import org.apache.http.HttpStatus
 
 import static io.restassured.RestAssured.given
 
-class SoapEndpointsDeprecatedSpec extends GenericSpecification {
+class EndpointsSpec extends GenericSpecification {
 
     String sivaServiceUrl = "${conf.sivaProtocol()}://${conf.sivaHostname()}:${conf.sivaPort()}${conf.sivaContextPath()}"
 
