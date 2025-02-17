@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 - 2024 Riigi Infosüsteemi Amet
+ * Copyright 2024 - 2025 Riigi Infosüsteemi Amet
  *
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence")
@@ -37,7 +37,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
     @Description("Asice with single valid signature")
     def "Given ASiC-E with single valid signature, then successful validation"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"))
+        SivaRequests.validate(RequestData.validationRequest("asice-200-datafiles-hashcode-signed.asice"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validationWarnings", hasSize(1))
                 .body("validationWarnings.content", hasItem(TEST_ENV_VALIDATION_WARNING))
