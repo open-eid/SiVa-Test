@@ -23,11 +23,9 @@ import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
-import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
-import static org.hamcrest.Matchers.is
-import static org.hamcrest.Matchers.startsWith
+import static org.hamcrest.Matchers.*
 
 class AsicsValidationPassSpec extends GenericSpecification {
 
@@ -62,7 +60,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(3))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container (with SCS extension, but check the nested container type relevance)
     @Description("Validation of ASICs with DDOC inside SCS extension")
     def "validDdocInsideValidAsicsScsExtension"() {
         expect:
@@ -83,7 +81,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(1))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container (with signerRole and signatureProductionPlace info?)
     @Description("Validation of ASICs with BDOC inside")
     def "validBdocInsideValidAsics"() {
         expect:
@@ -113,7 +111,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(2))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container
     @Description("Validation of ASICs with text document inside")
     def "textInsideValidAsics"() {
         expect:
@@ -128,7 +126,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", is("TXTinsideAsics.asics"))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container
     @Description("Validation of ASICs with ASICs inside")
     def "asicsInsideValidAsics"() {
         expect:
@@ -141,7 +139,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", is("ValidASICSinsideAsics.asics"))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container (with ZIP extension, but check the nested container type relevance)
     @Description("Validation of ASICs with DDOC inside ZIP extension")
     def "ValidDdocInsideValidAsicsZipExtension"() {
         expect:
@@ -160,7 +158,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validatedDocument.filename", is("ValidDDOCinsideAsics.zip"))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container (with wrong mimetype - consider relocating under MimetypeValidationSpec
     @Description("Validation of ASICs with wrong mimetype with DDOC inside")
     def "ValidDdocInsideValidAsicsWrongMimeType"() {
         expect:
@@ -177,5 +175,69 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
+    }
+
+    @Description("Validation of ASiC-S with timestamp not covering datafile")
+    def "Validating ASiC-S with timestamp not covering datafile, then warning is returned"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondNotCoveringDatafile.asics"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", is("2xTstFirstInvalidSecondNotCoveringDatafile.asics"))
+                .body("timeStampTokens[1].warning.size()", is(1))
+                .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
+    }
+
+    @Description("Validation of composite ASiC-S with timestamp not covering nested container")
+    def "Validating composite ASiC-S with timestamp not covering nested container, then nested container is not validated"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondNotCoveringNestedContainer.asics"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", is("2xTstFirstInvalidSecondNotCoveringNestedContainer.asics"))
+                .body("signaturesCount", is(0))
+                .body("timeStampTokens[1].warning.size()", is(1))
+                .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
+                .body('$', not(hasKey("signatures")))
+                .body("timeStampTokens.collectMany{it.timestampScopes.findAll{it.scope=='ARCHIVED'}.name}", is(empty()))
+    }
+
+    @Description("Validation of composite ASiC-S with at least one valid covering timestamp")
+    def "Validating composite ASiC-S with one valid covering timestamp, then nested timestamped container is validated"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondCoveringNestedContainer.asics"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", is("2xTstFirstInvalidSecondCoveringNestedContainer.asics".toString()))
+                .body("signaturesCount", is(0))
+                .body("timeStampTokens[0].timestampScopes.findAll{it.scope=='ARCHIVED'}.name", is(empty()))
+                .body("timeStampTokens[1].timestampScopes.findAll{it.scope=='ARCHIVED'}.name",
+                        is(["mimetype", "META-INF/manifest.xml", "test.txt", "META-INF/timestamp.tst"]))
+    }
+
+    @Description("Validation of composite ASiC-S with at least one valid covering timestamp")
+    def "Validating composite ASiC-S with at least one valid covering timestamp, then nested timestamped container is validated"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("2xTstFirstValidSecondNotCoveringNestedContainer.asics"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", is("2xTstFirstValidSecondNotCoveringNestedContainer.asics".toString()))
+                .body("signaturesCount", is(0))
+                .body("timeStampTokens[0].timestampScopes.findAll{it.scope=='ARCHIVED'}.name",
+                        is(["mimetype", "META-INF/manifest.xml", "test.txt", "META-INF/timestamp.tst"]))
+                .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
+                .body("timeStampTokens[1].timestampScopes.findAll{it.scope=='ARCHIVED'}.name", is(empty()))
+    }
+
+    @Description("Validation of composite ASiC-S with at least one valid covering timestamp")
+    def "Validating composite ASiC-S with at least one valid covering timestamp, then nested signed container is validated"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("3xTST-valid-bdoc-data-file-1st-tst-invalid-2nd-tst-no-coverage-3rd-tst-valid.asics"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", is("3xTST-valid-bdoc-data-file-1st-tst-invalid-2nd-tst-no-coverage-3rd-tst-valid.asics"))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("timeStampTokens[1].warning.size()", is(1))
+                .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("timeStampTokens[1].timestampScopes.findAll{it.scope=='ARCHIVED'}.name", is(empty()))
+                .body("timeStampTokens[2].timestampScopes.findAll{it.scope=='ARCHIVED'}.name",
+                        is(["mimetype", "META-INF/manifest.xml", "test.txt", "META-INF/signatures0.xml"]))
     }
 }

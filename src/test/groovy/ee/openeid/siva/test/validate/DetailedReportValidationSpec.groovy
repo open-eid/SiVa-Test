@@ -334,7 +334,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("validationProcessLongTermData.conclusion.errors.find { it.key == 'BBB_XCV_ICTIVRSC_ANS' }.value", equalTo(DssMessage.BBB_XCV_ICTIVRSC_ANS.message))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container
     @Description("Wrong data file in manifest")
     def "Given wrong datafile in manifest, then detailed report"() {
         expect:

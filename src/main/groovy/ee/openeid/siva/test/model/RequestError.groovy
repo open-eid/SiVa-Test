@@ -38,6 +38,7 @@ enum RequestError {
     DOCUMENT_BLANK("document", CommonError.MUST_NOT_BE_BLANK),
     DOCUMENT_INVALID_BASE_64("document", "Document is not encoded in a valid base64 string"),
     DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE("document", "Document malformed or not matching documentType"),
+    DOCUMENT_DOES_NOT_MEET_THE_REQUIREMENTS("document", "Document does not meet the requirements"),
 
     DOCUMENT_TYPE_INVALID("documentType", "documentType is not a valid request parameter"),
 

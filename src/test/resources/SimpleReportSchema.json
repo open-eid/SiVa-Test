@@ -261,7 +261,6 @@
               "certificates",
               "signedBy",
               "indication",
-              "timestampScopes",
               "timestampLevel"
             ]
           }

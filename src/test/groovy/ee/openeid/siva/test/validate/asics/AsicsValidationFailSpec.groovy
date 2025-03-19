@@ -24,7 +24,6 @@ import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.restassured.response.Response
-import org.apache.http.HttpStatus
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
@@ -32,51 +31,6 @@ import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.startsWith
 
 class AsicsValidationFailSpec extends GenericSpecification {
-
-    @Description("Only one datafile is allowed in ASIC-s")
-    def "moreThanOneDataFileInAsicsShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("TwoDataFilesAsics.asics"))
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", is("document"))
-                .body("requestErrors[0].message", is("Document does not meet the requirements"))
-    }
-
-    @Description("No data file in ASIC-s")
-    def "noDataFileInAsicsShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("DataFileMissingAsics.asics"))
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", is("document"))
-                .body("requestErrors[0].message", is("Document does not meet the requirements"))
-    }
-
-    @Description("more folders that META-INF in ASIC-s")
-    def "additionalFoldersInAsicsShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("FoldersInAsics.asics"))
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", is("document"))
-                .body("requestErrors[0].message", is("Document does not meet the requirements"))
-    }
-
-    @Description("META-INF folder not in root of container")
-    def "metaInfFolderNotInRootAsicsShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("MetaInfNotInRoot.asics"))
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", is("document"))
-                .body("requestErrors[0].message", is("Document does not meet the requirements"))
-    }
-
-    @Description("Not allowed files in META-INF folder")
-    def "signatureFilesInAddtionToTstAsicsShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("signatureMixedWithTST.asics"))
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", is("document"))
-                .body("requestErrors[0].message", is("Document does not meet the requirements"))
-    }
 
     @Ignore("SIVA-748 needs a new container")
     @Description("TST not intact")
@@ -115,33 +69,23 @@ class AsicsValidationFailSpec extends GenericSpecification {
                 .body("timeStampTokens[0].certificates[0].content", startsWith("MIIEDTCCAvWgAwIBAgIQJK/s6xJo0AJUF/eG7W8BWTANBgkqhk"))
     }
 
-    @Description("Exluding files in META-INF folder together with TST")
-    def "evidencereecordFilesInAddtionToTstAsicsShouldFail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("evidencerecordMixedWithTST.asics"))
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", is("document"))
-                .body("requestErrors[0].message", is("Document does not meet the requirements"))
-    }
-
-
-    // TODO: test that replaces most tests above
-    //  set name and make all readable
-    @Description("")
+    @Description("Document does not meet the requirements")
     def "Asics with #description should fail"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest(filename))
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("requestErrors[0].key", is("document"))
-                .body("requestErrors[0].message", is("Document does not meet the requirements"))
+        when:
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest(filename))
+
+        then:
+        RequestErrorValidator.validate(response, RequestError.DOCUMENT_DOES_NOT_MEET_THE_REQUIREMENTS)
 
         where:
-        filename                           | description
-        "TwoDataFilesAsics.asics"          | "more than one data file"
-        "DataFileMissingAsics.asics"       | "no data file"
-        "FoldersInAsics.asics"             | "additional folders"
-        "MetaInfNotInRoot.asics"           | "META-INF folder not in root"
-        "signatureMixedWithTST.asics"      | "signature files in addition to TST"
-        "evidencerecordMixedWithTST.asics" | "evidence record files in addition to TST"
+        filename                              | description
+        "TwoDataFilesAsics.asics"             | "more than one data file"
+        "DataFileMissingAsics.asics"          | "no data file"
+        "FoldersInAsics.asics"                | "additional folders"
+        "MetaInfNotInRoot.asics"              | "META-INF folder not in root"
+        "signatureMixedWithTST.asics"         | "signatures.xml files in addition to TST"
+        "p7sMixedWithTST.asics"               | "signature.p7s files in addition to TST"
+        "evidencerecordXmlMixedWithTST.asics" | "evidence record xml files in addition to TST"
+        "evidencerecordErsMixedWithTST.asics" | "evidence record ers files in addition to TST"
     }
 }

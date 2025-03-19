@@ -231,7 +231,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container
     @Description("ASICs container with valid mimetype and DDOC inside.")
     def "asicsValidMimetypeWithDdocContainer"() {
         expect:
@@ -242,7 +242,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
-                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings", hasSize(2)) // SIVA-761: 2->1
                 .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
@@ -260,7 +260,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container
     @Description("Invalid ASICs container with mimetype as last and DDOC inside.")
     def "asicsInvalidMimetypeLocationAsLastWithDdoc"() {
         expect:
@@ -271,7 +271,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
-                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings", hasSize(3)) // SIVA-761: 3->2
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
@@ -289,7 +289,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container
     @Description("Invalid ASICs container with deflated mimetype and DDOC inside.")
     def "asicsInvalidMimetypeCompressionAsDeflatedWithDdoc"() {
         expect:
@@ -300,7 +300,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
-                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings", hasSize(3)) // SIVA-761: 3->2
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
@@ -318,7 +318,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
-    @Ignore("SIVA-748 needs a new container")
+    // SIVA-761 needs a new container
     @Description("Invalid ASICs container without mimetype and DDOC inside.")
     def "asicsContainingDdocContainerWithNoMimetype"() {
         expect:
@@ -329,7 +329,7 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
-                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings", hasSize(3)) // SIVA-761: 3->2
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
