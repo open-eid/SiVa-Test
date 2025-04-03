@@ -57,46 +57,6 @@ class ValidationRequestSpec extends GenericSpecification {
         "p7s"     | "TEST_ESTEID2018_CAdES_LT_detached.p7s"
     }
 
-    @Description("All signature profiles in container are validated")
-    def "Given validation request with #container #profile signature, then validation report is returned"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", equalTo(container))
-                .body("validatedDocument.filename", equalTo(file))
-                .body("signatures[0].signatureFormat", is(profile))
-
-        where:
-        container                       | profile                               | file
-        // ASiC-S
-        ContainerFormat.ASiC_S          | SignatureFormat.CAdES_BASELINE_B      | "TEST_ESTEID2018_ASiC-S_CAdES_B.scs"
-        ContainerFormat.ASiC_S          | SignatureFormat.CAdES_BASELINE_T      | "TEST_ESTEID2018_ASiC-S_CAdES_T.scs"
-        ContainerFormat.ASiC_S          | SignatureFormat.CAdES_BASELINE_LT     | "TEST_ESTEID2018_ASiC-S_CAdES_LT.scs"
-        ContainerFormat.ASiC_S          | SignatureFormat.CAdES_BASELINE_LTA    | "TEST_ESTEID2018_ASiC-S_CAdES_LTA.scs"
-        ContainerFormat.ASiC_S          | SignatureFormat.XAdES_BASELINE_B      | "TEST_ESTEID2018_ASiC-S_XAdES_B.scs"
-        ContainerFormat.ASiC_S          | SignatureFormat.XAdES_BASELINE_T      | "TEST_ESTEID2018_ASiC-S_XAdES_T.scs"
-        ContainerFormat.ASiC_S          | SignatureFormat.XAdES_BASELINE_LT     | "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"
-        ContainerFormat.ASiC_S          | SignatureFormat.XAdES_BASELINE_LTA    | "TEST_ESTEID2018_ASiC-S_XAdES_LTA.scs"
-        // ASiC-E
-        ContainerFormat.ASiC_E          | SignatureFormat.CAdES_BASELINE_B      | "TEST_ESTEID2018_ASiC-E_CAdES_B.sce"
-        ContainerFormat.ASiC_E          | SignatureFormat.CAdES_BASELINE_T      | "TEST_ESTEID2018_ASiC-E_CAdES_T.sce"
-        ContainerFormat.ASiC_E          | SignatureFormat.CAdES_BASELINE_LT     | "TEST_ESTEID2018_ASiC-E_CAdES_LT.sce"
-        ContainerFormat.ASiC_E          | SignatureFormat.CAdES_BASELINE_LTA    | "TEST_ESTEID2018_ASiC-E_CAdES_LTA.sce"
-        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_B      | "TEST_ESTEID2018_ASiC-E_XAdES_B.sce"
-        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_T      | "TEST_ESTEID2018_ASiC-E_XAdES_T.sce"
-        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_LT     | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"
-        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_LTA    | "TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce"
-        // BDOC
-        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_LT_TM  | "TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc"
-        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_B_BES  | "TEST_ESTEID2018_ASiC-E_XAdES_B_BES.bdoc"
-        ContainerFormat.ASiC_E          | SignatureFormat.XAdES_BASELINE_B_EPES | "TEST_ESTEID2018_ASiC-E_XAdES_B_EPES.bdoc"
-        // DDOC
-        // TODO: missing test files
-//        ContainerFormat.DIGIDOC_XML_1_1 | SignatureFormat.DIGIDOC_XML_1_1       | ""
-//        ContainerFormat.DIGIDOC_XML_1_2 | SignatureFormat.DIGIDOC_XML_1_2       | ""
-        ContainerFormat.DIGIDOC_XML_1_3 | SignatureFormat.DIGIDOC_XML_1_3       | "valid_XML1_3.ddoc"
-    }
-
     @Description("All standalone signature profiles are validated")
     def "Given validation request with #profile #packaging signature, then validation report is returned"() {
         expect:

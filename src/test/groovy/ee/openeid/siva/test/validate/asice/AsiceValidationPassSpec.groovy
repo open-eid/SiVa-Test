@@ -34,6 +34,27 @@ import static org.hamcrest.Matchers.*
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy")
 class AsiceValidationPassSpec extends GenericSpecification {
 
+    @Description("All signature profiles in container are validated")
+    def "Given validation request with ASiC-E #profile signature, then validation report is returned"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(file))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
+                .body("validatedDocument.filename", equalTo(file))
+                .body("signatures[0].signatureFormat", is(profile))
+
+        where:
+        profile                            | file
+        SignatureFormat.CAdES_BASELINE_B   | "TEST_ESTEID2018_ASiC-E_CAdES_B.sce"
+        SignatureFormat.CAdES_BASELINE_T   | "TEST_ESTEID2018_ASiC-E_CAdES_T.sce"
+        SignatureFormat.CAdES_BASELINE_LT  | "TEST_ESTEID2018_ASiC-E_CAdES_LT.sce"
+        SignatureFormat.CAdES_BASELINE_LTA | "TEST_ESTEID2018_ASiC-E_CAdES_LTA.sce"
+        SignatureFormat.XAdES_BASELINE_B   | "TEST_ESTEID2018_ASiC-E_XAdES_B.sce"
+        SignatureFormat.XAdES_BASELINE_T   | "TEST_ESTEID2018_ASiC-E_XAdES_T.sce"
+        SignatureFormat.XAdES_BASELINE_LT  | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"
+        SignatureFormat.XAdES_BASELINE_LTA | "TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce"
+    }
+
     @Description("Asice with single valid signature")
     def "Given ASiC-E with single valid signature, then successful validation"() {
         expect:

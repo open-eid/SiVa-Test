@@ -87,5 +87,8 @@ class AsicsValidationFailSpec extends GenericSpecification {
         "p7sMixedWithTST.asics"               | "signature.p7s files in addition to TST"
         "evidencerecordXmlMixedWithTST.asics" | "evidence record xml files in addition to TST"
         "evidencerecordErsMixedWithTST.asics" | "evidence record ers files in addition to TST"
+        // TODO: SIVA-840 / DSS-3589 (might require separate test, TBD by DSS-3589)
+//        "TimestampNameWithPrefix.asics"       | "timestamp name containing prefix"
+//        "TimestampNameWithSuffix.asics"       | "timestamp name containing suffix"
     }
 }

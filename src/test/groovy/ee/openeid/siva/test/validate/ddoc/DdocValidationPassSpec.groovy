@@ -28,11 +28,27 @@ import io.qameta.allure.Description
 import io.qameta.allure.Link
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
-import static org.hamcrest.Matchers.emptyOrNullString
-import static org.hamcrest.Matchers.is
+import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy")
 class DdocValidationPassSpec extends GenericSpecification {
+
+    @Description("All signature profiles in container are validated")
+    def "Given validation request with #container #profile signature, then validation report is returned"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(file))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", equalTo(container))
+                .body("validatedDocument.filename", equalTo(file))
+                .body("signatures[0].signatureFormat", is(profile))
+
+        where:
+        container                       | profile                         | file
+        // TODO: missing test files
+//        ContainerFormat.DIGIDOC_XML_1_1 | SignatureFormat.DIGIDOC_XML_1_1       | ""
+//        ContainerFormat.DIGIDOC_XML_1_2 | SignatureFormat.DIGIDOC_XML_1_2       | ""
+        ContainerFormat.DIGIDOC_XML_1_3 | SignatureFormat.DIGIDOC_XML_1_3 | "valid_XML1_3.ddoc"
+    }
 
     @Description("Ddoc v1.0 with valid signatures")
     def "ddocValidMultipleSignaturesV1_0"() {

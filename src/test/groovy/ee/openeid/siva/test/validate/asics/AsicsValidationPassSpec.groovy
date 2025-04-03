@@ -177,27 +177,62 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(1))
     }
 
-    @Description("Validation of ASiC-S with timestamp not covering datafile")
-    def "Validating ASiC-S with timestamp not covering datafile, then warning is returned"() {
+    static def sk = [name: "SK", indication: SignatureIndication.TOTAL_PASSED, signedBy  : "DEMO SK TIMESTAMPING UNIT 2025E"]
+    static def baltstamp = [name: "Baltstamp", indication: SignatureIndication.TOTAL_PASSED, signedBy  : "BalTstamp QTSA TSU1"]
+    static def entrust = [name: "Entrust", indication: SignatureIndication.TOTAL_FAILED, signedBy  : "Entrust Timestamp Authority - TSA1"]
+
+    @Description("Validation of ASiC-S timestamped with different timestamps")
+    def "Validating ASiC-S timestamped first with #first and then with #second"() {
+        given:
+        String fileName = "2xTst-${first.name}+${second.name}.asics"
         expect:
-        SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondNotCoveringDatafile.asics"))
+        SivaRequests.validate(RequestData.validationRequest(fileName))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validatedDocument.filename", is("2xTstFirstInvalidSecondNotCoveringDatafile.asics"))
-                .body("timeStampTokens[1].warning.size()", is(1))
-                .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("validatedDocument.filename", is(fileName))
+                .body("signaturesCount", is(0))
+
+                .body("timeStampTokens[0].indication", is(first.indication))
+                .body("timeStampTokens[0].signedBy", is(first.signedBy))
+                .body("timeStampTokens[0].timestampScopes.findAll{it.scope=='FULL'}.name", is(["test.txt"]))
+                .body("timeStampTokens[0].timestampScopes.findAll{it.scope=='ARCHIVED'}.name", is(empty()))
+
+                .body("timeStampTokens[1].indication", is(second.indication))
+                .body("timeStampTokens[1].signedBy", is(second.signedBy))
+                .body("timeStampTokens[1].timestampScopes.findAll{it.scope=='FULL'}.name",
+                        is(["META-INF/ASiCArchiveManifest.xml", "META-INF/timestamp.tst", "test.txt"]))
+                .body("timeStampTokens[0].timestampScopes.findAll{it.scope=='ARCHIVED'}.name", is(empty()))
+
+        where:
+        first     | second
+        sk        | baltstamp
+        sk        | entrust
+        baltstamp | sk
+        baltstamp | baltstamp
+        entrust   | sk
     }
 
-    @Description("Validation of composite ASiC-S with timestamp not covering nested container")
-    def "Validating composite ASiC-S with timestamp not covering nested container, then nested container is not validated"() {
+    @Description("Validation of ASiC-S with timestamp not covering datafile/nested container")
+    def "Validating ASiC-S with timestamp not covering #targetFile, then warning is returned#comment"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondNotCoveringNestedContainer.asics"))
+        SivaRequests.validate(RequestData.validationRequest(fileName))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validatedDocument.filename", is("2xTstFirstInvalidSecondNotCoveringNestedContainer.asics"))
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("validatedDocument.filename", is(fileName))
                 .body("signaturesCount", is(0))
+                .body("timeStampTokens[0].indication", is(SignatureIndication.TOTAL_FAILED))
+                .body("timeStampTokens[1].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("timeStampTokens[1].warning.size()", is(1))
                 .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
                 .body('$', not(hasKey("signatures")))
                 .body("timeStampTokens.collectMany{it.timestampScopes.findAll{it.scope=='ARCHIVED'}.name}", is(empty()))
+
+        where:
+        fileName                                                         | targetFile                 || comment
+        "2xTstFirstInvalidSecondNotCoveringDatafile.asics"               | "datafile"                 || ""
+        "2xTstFirstInvalidSecondNotCoveringNestedTimestampedAsics.asics" | "nested timestamped asics" || " and nested container is not validated"
+        "2xTstFirstInvalidSecondNotCoveringNestedSignedAsics.asics"      | "nested signed asics"      || " and nested container is not validated"
+        "2xTstFirstInvalidSecondNotCoveringNestedSignedAsice.asics"      | "nested signed asice"      || " and nested container is not validated"
     }
 
     @Description("Validation of composite ASiC-S with at least one valid covering timestamp")
@@ -205,9 +240,17 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondCoveringNestedContainer.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("2xTstFirstInvalidSecondCoveringNestedContainer.asics".toString()))
                 .body("signaturesCount", is(0))
+                .body("timeStampTokens[0].indication", is(SignatureIndication.TOTAL_FAILED))
                 .body("timeStampTokens[0].timestampScopes.findAll{it.scope=='ARCHIVED'}.name", is(empty()))
+
+                .body("timeStampTokens[1].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("timeStampTokens[1].warning", emptyOrNullString())
+                .body("timeStampTokens[1].timestampScopes.findAll{it.scope=='FULL'}.name",
+                        is(["META-INF/ASiCArchiveManifest.xml", "META-INF/timestamp.tst", "ValidAsics.asics"]))
+
                 .body("timeStampTokens[1].timestampScopes.findAll{it.scope=='ARCHIVED'}.name",
                         is(["mimetype", "META-INF/manifest.xml", "test.txt", "META-INF/timestamp.tst"]))
     }
@@ -217,10 +260,15 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("2xTstFirstValidSecondNotCoveringNestedContainer.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("2xTstFirstValidSecondNotCoveringNestedContainer.asics".toString()))
                 .body("signaturesCount", is(0))
+                .body("timeStampTokens[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("timeStampTokens[1].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("timeStampTokens[0].warning", emptyOrNullString())
                 .body("timeStampTokens[0].timestampScopes.findAll{it.scope=='ARCHIVED'}.name",
                         is(["mimetype", "META-INF/manifest.xml", "test.txt", "META-INF/timestamp.tst"]))
+                .body("timeStampTokens[1].warning.size()", is(1))
                 .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
                 .body("timeStampTokens[1].timestampScopes.findAll{it.scope=='ARCHIVED'}.name", is(empty()))
     }
@@ -230,14 +278,40 @@ class AsicsValidationPassSpec extends GenericSpecification {
         expect:
         SivaRequests.validate(RequestData.validationRequest("3xTST-valid-bdoc-data-file-1st-tst-invalid-2nd-tst-no-coverage-3rd-tst-valid.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("3xTST-valid-bdoc-data-file-1st-tst-invalid-2nd-tst-no-coverage-3rd-tst-valid.asics"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
+                .body("timeStampTokens[0].indication", is(SignatureIndication.TOTAL_FAILED))
+                .body("timeStampTokens[1].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("timeStampTokens[2].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("timeStampTokens[0].warning", emptyOrNullString())
                 .body("timeStampTokens[1].warning.size()", is(1))
                 .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("timeStampTokens[1].timestampScopes.findAll{it.scope=='ARCHIVED'}.name", is(empty()))
+                .body("timeStampTokens[2].warning", emptyOrNullString())
                 .body("timeStampTokens[2].timestampScopes.findAll{it.scope=='ARCHIVED'}.name",
                         is(["mimetype", "META-INF/manifest.xml", "test.txt", "META-INF/signatures0.xml"]))
+    }
+
+    @Description("All signature profiles in container are validated")
+    def "Given validation request with ASiC-S #profile signature, then validation report is returned"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(file))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", equalTo(ContainerFormat.ASiC_S))
+                .body("validatedDocument.filename", equalTo(file))
+                .body("signatures[0].signatureFormat", is(profile))
+
+        where:
+        profile                            | file
+        SignatureFormat.CAdES_BASELINE_B   | "TEST_ESTEID2018_ASiC-S_CAdES_B.scs"
+        SignatureFormat.CAdES_BASELINE_T   | "TEST_ESTEID2018_ASiC-S_CAdES_T.scs"
+        SignatureFormat.CAdES_BASELINE_LT  | "TEST_ESTEID2018_ASiC-S_CAdES_LT.scs"
+        SignatureFormat.CAdES_BASELINE_LTA | "TEST_ESTEID2018_ASiC-S_CAdES_LTA.scs"
+        SignatureFormat.XAdES_BASELINE_B   | "TEST_ESTEID2018_ASiC-S_XAdES_B.scs"
+        SignatureFormat.XAdES_BASELINE_T   | "TEST_ESTEID2018_ASiC-S_XAdES_T.scs"
+        SignatureFormat.XAdES_BASELINE_LT  | "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"
+        SignatureFormat.XAdES_BASELINE_LTA | "TEST_ESTEID2018_ASiC-S_XAdES_LTA.scs"
     }
 }

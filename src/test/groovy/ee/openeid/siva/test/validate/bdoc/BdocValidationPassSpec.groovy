@@ -27,9 +27,26 @@ import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import spock.lang.Ignore
 
+import static ee.openeid.siva.test.TestData.getVALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
 
 class BdocValidationPassSpec extends GenericSpecification {
+
+    @Description("All signature profiles in container are validated")
+    def "Given validation request with BDOC #profile signature, then validation report is returned"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(file))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
+                .body("validatedDocument.filename", equalTo(file))
+                .body("signatures[0].signatureFormat", is(profile))
+
+        where:
+        profile                               | file
+        SignatureFormat.XAdES_BASELINE_LT_TM  | "TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc"
+        SignatureFormat.XAdES_BASELINE_B_BES  | "TEST_ESTEID2018_ASiC-E_XAdES_B_BES.bdoc"
+        SignatureFormat.XAdES_BASELINE_B_EPES | "TEST_ESTEID2018_ASiC-E_XAdES_B_EPES.bdoc"
+    }
 
     @Description("Bdoc with single valid signature")
     def "Given BDOC with single valid signature, then successful validation"() {
