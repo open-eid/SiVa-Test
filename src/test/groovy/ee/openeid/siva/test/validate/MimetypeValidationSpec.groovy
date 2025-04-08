@@ -28,7 +28,6 @@ import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.restassured.response.Response
-import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
@@ -231,18 +230,17 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
-    // SIVA-761 needs a new container
     @Description("ASICs container with valid mimetype and DDOC inside.")
     def "asicsValidMimetypeWithDdocContainer"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerValidMimetype.asics"))
+        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
-                .body("validationWarnings", hasSize(2)) // SIVA-761: 2->1
+                .body("validationWarnings", hasSize(1))
                 .body("validationWarnings.content", hasItem(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
@@ -260,18 +258,17 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
-    // SIVA-761 needs a new container
-    @Description("Invalid ASICs container with mimetype as last and DDOC inside.")
-    def "asicsInvalidMimetypeLocationAsLastWithDdoc"() {
+    @Description("Invalid ASICs container with mimetype as not first and DDOC inside.")
+    def "asicsInvalidMimetypeLocationAsNotFirstWithDdoc"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerMimetypeAsLast.asics"))
+        SivaRequests.validate(RequestData.validationRequest("DdocInAsicsMimetypeNotFirst.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
-                .body("validationWarnings", hasSize(3)) // SIVA-761: 3->2
+                .body("validationWarnings", hasSize(2))
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
@@ -289,18 +286,17 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
-    // SIVA-761 needs a new container
     @Description("Invalid ASICs container with deflated mimetype and DDOC inside.")
     def "asicsInvalidMimetypeCompressionAsDeflatedWithDdoc"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerMimetypeIsDeflated.asics"))
+        SivaRequests.validate(RequestData.validationRequest("DdocInAsicsMimetypeDeflated.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
-                .body("validationWarnings", hasSize(3)) // SIVA-761: 3->2
+                .body("validationWarnings", hasSize(2))
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_COMPRESSED_WARNING))
     }
 
@@ -318,18 +314,17 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
-    // SIVA-761 needs a new container
     @Description("Invalid ASICs container without mimetype and DDOC inside.")
     def "asicsContainingDdocContainerWithNoMimetype"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("Ddoc_as_AsicsContainerNoMimetype.asics"))
+        SivaRequests.validate(RequestData.validationRequest("DdocInAsicsNoMimetype.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
-                .body("validationWarnings", hasSize(3)) // SIVA-761: 3->2
+                .body("validationWarnings", hasSize(2))
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_NOT_FIRST_WARNING))
     }
 
@@ -412,5 +407,25 @@ class MimetypeValidationSpec extends GenericSpecification {
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("validationWarnings", hasSize(2))
                 .body("validationWarnings.content", hasItem(TestData.MIMETYPE_EXTRA_FIELDS_WARNING))
+    }
+
+    @Description("Validation of ASICs with wrong mimetype with DDOC inside")
+    def "ValidDdocInsideValidAsicsWrongMimeType"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsicsWrongMime.asics"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", is(ContainerFormat.ASiC_S))
+                .body("validatedDocument.filename", is("ValidDDOCinsideAsicsWrongMime.asics"))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].claimedSigningTime", is("2020-05-29T12:37:18Z"))
+                .body("signatures[0].info.bestSignatureTime", is("2020-05-29T12:37:19Z"))
+                .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
+                .body("timeStampTokens[0].signedBy", is("DEMO SK TIMESTAMPING UNIT 2025E"))
+                .body("timeStampTokens[0].signedTime", is("2025-04-04T08:23:44Z"))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(2))
+                .body("validationWarnings.content", hasItem(TestData.MIMETYPE_INVALID_TYPE))
     }
 }

@@ -18,35 +18,37 @@ package ee.openeid.siva.test.validate.asics
 
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.ContainerFormat
+import ee.openeid.siva.test.model.DssMessage
 import ee.openeid.siva.test.model.RequestError
+import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.restassured.response.Response
-import spock.lang.Ignore
 
+import static ee.openeid.siva.test.TestData.SUB_INDICATION_SIG_CRYPTO_FAILURE
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
-import static org.hamcrest.Matchers.is
-import static org.hamcrest.Matchers.startsWith
+import static org.hamcrest.Matchers.*
 
 class AsicsValidationFailSpec extends GenericSpecification {
 
-    @Ignore("SIVA-748 needs a new container")
-    @Description("TST not intact")
-    def "modifiedTstShouldFail"() {
+    @Description("TST signature not intact")
+    def "Given ASiC-S with timestamp with modified signature, then validation should fail"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("AsicsTSTsignatureModified.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("AsicsTSTsignatureModified.asics"))
-                .body("timeStampTokens[0].indication", is("TOTAL-FAILED"))
-                .body("timeStampTokens[0].error[0].content", is("Signature not intact"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
+                .body("timeStampTokens[0].indication", equalTo(SignatureIndication.TOTAL_FAILED))
+                .body("timeStampTokens[0].subIndication", equalTo(SUB_INDICATION_SIG_CRYPTO_FAILURE))
+                .body("timeStampTokens[0].error.findAll{it.content}.content", containsInAnyOrder(
+                        DssMessage.BBB_CV_ISI_ANS.message,
+                        DssMessage.ASCCM_EAA_ANS.getMessage("?", "time-stamp signature")))
     }
 
     @Description("TST has been corrupted")
-    def "brokenTstAsicsShouldFail"() {
+    def "Given ASiC-S with broken TST, then validation should fail"() {
         when:
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("AsicsTSTsignatureBroken.asics"))
 
@@ -54,19 +56,15 @@ class AsicsValidationFailSpec extends GenericSpecification {
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
-    @Ignore("SIVA-748 needs a new container")
     @Description("Data file changed")
-    def "dataFileChangedAsicsShouldFail"() {
+    def "Given ASiC-S with altered datafile, then validation should fail"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("DatafileAlteredButStillValid.asics"))
+        SivaRequests.validate(RequestData.validationRequest("AsicsWithAlteredDatafile.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
-                .body("validatedDocument.filename", is("DatafileAlteredButStillValid.asics"))
-                .body("timeStampTokens[0].indication", is("TOTAL-FAILED"))
-                .body("timeStampTokens[0].error[0].content", is("Signature not intact"))
-                .body("timeStampTokens[0].certificates[0].commonName", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].certificates[0].type", is("CONTENT_TIMESTAMP"))
-                .body("timeStampTokens[0].certificates[0].content", startsWith("MIIEDTCCAvWgAwIBAgIQJK/s6xJo0AJUF/eG7W8BWTANBgkqhk"))
+                .body("validatedDocument.filename", is("AsicsWithAlteredDatafile.asics"))
+                .body("timeStampTokens[0].indication", equalTo(SignatureIndication.TOTAL_FAILED))
+                .body("timeStampTokens[0].error[0].content", is(DssMessage.BBB_CV_TSP_IRDOI_ANS.message))
     }
 
     @Description("Document does not meet the requirements")

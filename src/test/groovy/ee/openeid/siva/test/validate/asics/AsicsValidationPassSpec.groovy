@@ -17,6 +17,7 @@
 package ee.openeid.siva.test.validate.asics
 
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureIndication
@@ -60,7 +61,6 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(3))
     }
 
-    // SIVA-761 needs a new container (with SCS extension, but check the nested container type relevance)
     @Description("Validation of ASICs with DDOC inside SCS extension")
     def "validDdocInsideValidAsicsScsExtension"() {
         expect:
@@ -71,75 +71,62 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureMethod", is("http://www.w3.org/2000/09/xmldsig#rsa-sha1"))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].claimedSigningTime", is("2012-10-03T07:46:31Z"))
-                .body("signatures[0].info.bestSignatureTime", is("2012-10-03T07:46:51Z"))
-                .body("signatures[0].signedBy", is("LUKIN,LIISA,47710110274"))
+                .body("signatures[0].claimedSigningTime", is("2020-05-29T12:37:18Z"))
+                .body("signatures[0].info.bestSignatureTime", is("2020-05-29T12:37:19Z"))
+                .body("signatures[0].signedBy", is("Nortal AS - eID Test seal"))
                 .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
-                .body("timeStampTokens[0].signedBy", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
+                .body("timeStampTokens[0].signedBy", is("DEMO SK TIMESTAMPING UNIT 2025E"))
+                .body("timeStampTokens[0].signedTime", is("2025-04-04T08:23:44Z"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
     }
 
-    // SIVA-761 needs a new container (with signerRole and signatureProductionPlace info?)
     @Description("Validation of ASICs with BDOC inside")
     def "validBdocInsideValidAsics"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidBDOCinsideAsics.asics"))
+        SivaRequests.validate(RequestData.validationRequest("valid-bdoc-tm-in-asics.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
-                .body("validatedDocument.filename", is("ValidBDOCinsideAsics.asics"))
+                .body("validatedDocument.filename", is("valid-bdoc-tm-in-asics.asics"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].signatureMethod", is("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"))
+                .body("signatures[0].signatureMethod", is("http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].info.bestSignatureTime", is("2016-05-11T10:18:06Z"))
-                .body("signatures[0].info.signerRole[0].claimedRole", is("Signer / Proper signature"))
-                .body("signatures[0].info.signatureProductionPlace.countryName", is("Estonia"))
-                .body("signatures[0].info.signatureProductionPlace.stateOrProvince", is("Harju"))
-                .body("signatures[0].info.signatureProductionPlace.city", is("Tallinn"))
-                .body("signatures[0].info.signatureProductionPlace.postalCode", is("22333"))
-                .body("signatures[0].signedBy", is("NURM,AARE,38211015222"))
-                .body("signatures[0].subjectDistinguishedName.serialNumber", is("38211015222"))
-                .body("signatures[0].subjectDistinguishedName.commonName", is("NURM,AARE,38211015222"))
-                .body("signatures[1].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[1].info.bestSignatureTime", is("2016-05-11T10:19:38Z"))
-                .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
-                .body("timeStampTokens[0].signedBy", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
-                .body("signaturesCount", is(2))
-                .body("validSignaturesCount", is(2))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
-    // SIVA-761 needs a new container
     @Description("Validation of ASICs with text document inside")
     def "textInsideValidAsics"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("TXTinsideAsics.asics"))
+        SivaRequests.validate(RequestData.validationRequest("ValidAsics.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
-                .body("timeStampTokens[0].signedBy", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-25T09:56:33Z"))
+                .body("timeStampTokens[0].signedBy", is("DEMO SK TIMESTAMPING AUTHORITY 2023E"))
+                .body("timeStampTokens[0].signedTime", is("2024-10-24T08:28:08Z"))
                 .body("validSignaturesCount", is(0))
                 .body("signaturesCount", is(0))
-                .body("validatedDocument.filename", is("TXTinsideAsics.asics"))
+                .body("validatedDocument.filename", is("ValidAsics.asics"))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
-    // SIVA-761 needs a new container
     @Description("Validation of ASICs with ASICs inside")
     def "asicsInsideValidAsics"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidASICSinsideAsics.asics"))
+        SivaRequests.validate(RequestData.validationRequest("ValidAsiceInAsics.asics"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
-                .body("timeStampTokens[0].signedBy", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-25T11:24:01Z"))
-                .body("validatedDocument.filename", is("ValidASICSinsideAsics.asics"))
+                .body("timeStampTokens[0].signedBy", is("DEMO SK TIMESTAMPING AUTHORITY 2023E"))
+                .body("timeStampTokens[0].signedTime", is("2024-12-03T14:35:22Z"))
+                .body("validatedDocument.filename", is("ValidAsiceInAsics.asics"))
+                .body("validationWarnings", hasSize(1))
+                .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
     }
 
-    // SIVA-761 needs a new container (with ZIP extension, but check the nested container type relevance)
     @Description("Validation of ASICs with DDOC inside ZIP extension")
     def "ValidDdocInsideValidAsicsZipExtension"() {
         expect:
@@ -148,38 +135,19 @@ class AsicsValidationPassSpec extends GenericSpecification {
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].claimedSigningTime", is("2012-10-03T07:46:31Z"))
-                .body("signatures[0].info.bestSignatureTime", is("2012-10-03T07:46:51Z"))
+                .body("signatures[0].claimedSigningTime", is("2020-05-29T12:37:18Z"))
+                .body("signatures[0].info.bestSignatureTime", is("2020-05-29T12:37:19Z"))
                 .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
-                .body("timeStampTokens[0].signedBy", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
+                .body("timeStampTokens[0].signedBy", is("DEMO SK TIMESTAMPING UNIT 2025E"))
+                .body("timeStampTokens[0].signedTime", is("2025-04-04T08:23:44Z"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
                 .body("validatedDocument.filename", is("ValidDDOCinsideAsics.zip"))
     }
 
-    // SIVA-761 needs a new container (with wrong mimetype - consider relocating under MimetypeValidationSpec
-    @Description("Validation of ASICs with wrong mimetype with DDOC inside")
-    def "ValidDdocInsideValidAsicsWrongMimeType"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsicsWrongMime.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", is(ContainerFormat.ASiC_S))
-                .body("validatedDocument.filename", is("ValidDDOCinsideAsicsWrongMime.asics"))
-                .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].claimedSigningTime", is("2012-10-03T07:46:31Z"))
-                .body("signatures[0].info.bestSignatureTime", is("2012-10-03T07:46:51Z"))
-                .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
-                .body("timeStampTokens[0].signedBy", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
-                .body("signaturesCount", is(1))
-                .body("validSignaturesCount", is(1))
-    }
-
-    static def sk = [name: "SK", indication: SignatureIndication.TOTAL_PASSED, signedBy  : "DEMO SK TIMESTAMPING UNIT 2025E"]
-    static def baltstamp = [name: "Baltstamp", indication: SignatureIndication.TOTAL_PASSED, signedBy  : "BalTstamp QTSA TSU1"]
-    static def entrust = [name: "Entrust", indication: SignatureIndication.TOTAL_FAILED, signedBy  : "Entrust Timestamp Authority - TSA1"]
+    static def sk = [name: "SK", indication: SignatureIndication.TOTAL_PASSED, signedBy: "DEMO SK TIMESTAMPING UNIT 2025E"]
+    static def baltstamp = [name: "Baltstamp", indication: SignatureIndication.TOTAL_PASSED, signedBy: "BalTstamp QTSA TSU1"]
+    static def entrust = [name: "Entrust", indication: SignatureIndication.TOTAL_FAILED, signedBy: "Entrust Timestamp Authority - TSA1"]
 
     @Description("Validation of ASiC-S timestamped with different timestamps")
     def "Validating ASiC-S timestamped first with #first and then with #second"() {

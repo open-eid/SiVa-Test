@@ -52,6 +52,8 @@ enum DssMessage {
     LTV_ABSV_ANS("LTV_ABSV_ANS", "The result of the Basic validation process is not acceptable to continue the process!"),
 
     ACCM("ACCM", "Are cryptographic constraints met for the {0}?"),
+    ASCCM_EAA_ANS("ASCCM_EAA_ANS", "The encryption algorithm {0} is not authorised for {1}!"),
+
 
     ADEST_RORPIIC("ADEST_RORPIIC", "Is the result of the revocation data basic validation process acceptable?"),
     ADEST_IBSVPTC("ADEST_IBSVPTC", "Is the result of basic time-stamp validation process conclusive?"),
@@ -71,5 +73,13 @@ enum DssMessage {
     DssMessage(String key, String message) {
         this.key = key
         this.message = message
+    }
+
+    String getMessage(Object... args) {
+        if (args.length == 0) {
+            return message
+        } else {
+            return message.replaceAll(/\{(\d+)\}/) { match, index -> args[index as int] }
+        }
     }
 }
