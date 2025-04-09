@@ -88,12 +88,10 @@ class DocumentFormatSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(1))
     }
 
-    @Ignore
-    //TODO: Test file needed
     @Description("Validation of cades acceptance")
     def "cadesDocumentShouldPass"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest(""))
+        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_CAdES_LT.sce"))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.CAdES_BASELINE_LT))
