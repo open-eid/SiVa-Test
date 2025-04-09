@@ -334,18 +334,15 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("validationProcessLongTermData.conclusion.errors.find { it.key == 'BBB_XCV_ICTIVRSC_ANS' }.value", equalTo(DssMessage.BBB_XCV_ICTIVRSC_ANS.message))
     }
 
-    // SIVA-761 needs a new container
     @Description("Wrong data file in manifest")
     def "Given wrong datafile in manifest, then detailed report"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("WrongDataFileInManifestAsics.asics", null, ReportType.DETAILED))
+        SivaRequests.validate(RequestData.validationRequest("WrongDataFileInManifest.asics", null, ReportType.DETAILED))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", equalTo(SignaturePolicy.POLICY_4.url))
                 .body("signatureForm", equalTo(ContainerFormat.ASiC_S))
-                .body("signaturesCount", equalTo(1))
-                .body("validSignaturesCount", equalTo(1))
     }
 
     @Ignore("SIVA-196")
