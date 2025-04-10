@@ -37,8 +37,8 @@ class BeforeAll {
         // Relax validation
         RestAssured.useRelaxedHTTPSValidation()
         // Log requests and responses to console for debugging
-        // Enabled when not running in docker (i.e. running locally) or when toggled in configuration
-        if (Utils.isLocal() || conf.restAssuredConsoleLogging()) {
+        // Enabled when toggled in conf. If not configured, enabled when not running in docker (i.e. running locally).
+        if (conf.restAssuredConsoleLogging() != null ? conf.restAssuredConsoleLogging() : Utils.isLocal()) {
 //            RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter())
 //             Temporary solution to prevent log duplication in Allure report. TODO: remove once JUnit tests are removed.
             addRestAssuredFilterSafely(new RequestLoggingFilter())

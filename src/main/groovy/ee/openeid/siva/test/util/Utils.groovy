@@ -18,6 +18,7 @@ package ee.openeid.siva.test.util
 
 import ee.openeid.siva.test.ConfigHolder
 import ee.openeid.siva.test.TestConfig
+import org.apache.commons.lang3.StringUtils
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -28,11 +29,15 @@ class Utils {
     static TestConfig conf = ConfigHolder.getConf()
 
     static boolean isRunningInDocker() {
-        def cgroupFile = new File('/proc/1/cgroup')
-        // Check if the OS is Linux and /proc/1/cgroup exists
-        if (System.getProperty('os.name').toLowerCase().contains('linux') && cgroupFile.exists()) {
-            // Check if /proc/1/cgroup contents contain the string "docker"
-            return cgroupFile.text.contains('docker')
+        if (StringUtils.containsIgnoreCase(System.getProperty('os.name'), 'linux')) {
+            def cgroupFile = new File('/proc/1/cgroup')
+            if (cgroupFile.exists() && cgroupFile.text.contains('docker')) {
+                return true
+            }
+            def cgroupV2File = new File('/proc/1/mountinfo')
+            if (cgroupV2File.exists() && cgroupV2File.text.contains('docker')) {
+                return true
+            }
         }
         return false
     }
