@@ -240,4 +240,6 @@ class TestData {
     static final String NOT_EXPECTED_KEY_USAGE = "The signing-certificate of signature does not have an expected key-usage!"
     static final String SIG_QUALIFYING_PROPERTY_MISSING = "The signed qualifying property: neither 'message-digest' nor 'SignedProperties' is present!"
 
+    static final String NOT_GRANTED_CONTAINER_WARNING = "Found a timestamp token not related to granted status. If not yet covered with a fresh timestamp token, this container might become invalid in the future."
+
 }

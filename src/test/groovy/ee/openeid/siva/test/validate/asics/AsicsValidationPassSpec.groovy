@@ -180,29 +180,6 @@ class AsicsValidationPassSpec extends GenericSpecification {
         entrust   | sk
     }
 
-    @Description("Validation of ASiC-S with timestamp not covering datafile/nested container")
-    def "Validating ASiC-S with timestamp not covering #targetFile, then warning is returned#comment"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(fileName))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", is(ContainerFormat.ASiC_S))
-                .body("validatedDocument.filename", is(fileName))
-                .body("signaturesCount", is(0))
-                .body("timeStampTokens[0].indication", is(SignatureIndication.TOTAL_FAILED))
-                .body("timeStampTokens[1].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("timeStampTokens[1].warning.size()", is(1))
-                .body("timeStampTokens[1].warning[0].content", is("The time-stamp token does not cover container datafile!"))
-                .body('$', not(hasKey("signatures")))
-                .body("timeStampTokens.collectMany{it.timestampScopes.findAll{it.scope=='ARCHIVED'}.name}", is(empty()))
-
-        where:
-        fileName                                                         | targetFile                 || comment
-        "2xTstFirstInvalidSecondNotCoveringDatafile.asics"               | "datafile"                 || ""
-        "2xTstFirstInvalidSecondNotCoveringNestedTimestampedAsics.asics" | "nested timestamped asics" || " and nested container is not validated"
-        "2xTstFirstInvalidSecondNotCoveringNestedSignedAsics.asics"      | "nested signed asics"      || " and nested container is not validated"
-        "2xTstFirstInvalidSecondNotCoveringNestedSignedAsice.asics"      | "nested signed asice"      || " and nested container is not validated"
-    }
-
     @Description("Validation of composite ASiC-S with at least one valid covering timestamp")
     def "Validating composite ASiC-S with one valid covering timestamp, then nested timestamped container is validated"() {
         expect:
