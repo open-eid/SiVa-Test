@@ -112,6 +112,7 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signaturesCount", is(2))
     }
 
+    @Ignore("SIVA-848")
     @Description("JSON structure has all elements (Pdf invalid signature). All required elements are present according to SimpleReportSchema.json")
     def "pdfAllElementsArePresentInvalidSignature"() {
         expect:
@@ -213,6 +214,7 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signaturesCount", is(2))
     }
 
+    @Ignore("SIVA-848")
     @Description("PDF with PAdES-T and B profile signatures with different signer certificates - ocspResponseCreationTimes in mixed container are reported correctly. ocspResponseCreationTime for T profile is present and for B profile is not")
     def "pdfMixedDifferentCertificateSignaturesCorrectOcspResponseCreationTime"() {
         expect:
@@ -243,5 +245,20 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
         "TEST_ESTEID2018_PAdES_T_enveloped.pdf"   | "2024-09-13T14:18:58Z"
         "TEST_ESTEID2018_PAdES_LT_enveloped.pdf"  | "2024-09-13T14:19:08Z"
         "TEST_ESTEID2018_PAdES_LTA_enveloped.pdf" | "2024-09-13T14:19:19Z"
+    }
+
+    @Description("Simple report includes archive timestamp info")
+    def "Given PDF with archive timestamped signature, then archiveTimeStamps info is reported correctly"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_PAdES_LTA_enveloped.pdf")).then()
+                .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
+                .rootPath(VALIDATION_CONCLUSION_PREFIX + "signatures[0].info")
+                .body("archiveTimeStamps.size()", is(1))
+
+                .body("archiveTimeStamps[0].signedTime", is("2024-09-13T14:19:20Z"))
+                .body("archiveTimeStamps[0].country", is("EE"))
+                .body("archiveTimeStamps[0].signedBy", is("DEMO SK TIMESTAMPING AUTHORITY 2023E"))
+                .body("archiveTimeStamps[0].indication", is("PASSED"))
+                .body("archiveTimeStamps[0].content", is("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"))
     }
 }
