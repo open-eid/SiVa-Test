@@ -230,4 +230,18 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(2))
     }
+
+    @Description("Simple report includes timestamp creation time for timestamped signature")
+    def "Given PDF with timestamped signature, then validation report includes timestampCreationTime field"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(file))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].info.timestampCreationTime", is(timestampCreationTime))
+
+        where:
+        file                                      | timestampCreationTime
+        "TEST_ESTEID2018_PAdES_T_enveloped.pdf"   | "2024-09-13T14:18:58Z"
+        "TEST_ESTEID2018_PAdES_LT_enveloped.pdf"  | "2024-09-13T14:19:08Z"
+        "TEST_ESTEID2018_PAdES_LTA_enveloped.pdf" | "2024-09-13T14:19:19Z"
+    }
 }

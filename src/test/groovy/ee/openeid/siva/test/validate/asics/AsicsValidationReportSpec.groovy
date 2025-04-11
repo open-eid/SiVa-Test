@@ -1,6 +1,7 @@
 package ee.openeid.siva.test.validate.asics
 
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.model.ContainerFormat
 import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
@@ -16,6 +17,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals
 import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.is
 
 class AsicsValidationReportSpec extends GenericSpecification {
 
@@ -73,5 +75,23 @@ class AsicsValidationReportSpec extends GenericSpecification {
                 .body("timeStampTokens[0].error.findAll{it.content}.content", containsInAnyOrder(
                         "The signature is not intact!",
                         "The encryption algorithm ? is not authorised for time-stamp signature!"))
+    }
+
+    @Description("Simple report includes timestamp creation time for timestamped signature")
+    def "Given ASiC-S with timestamped signature, then validation report includes timestampCreationTime field"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest(file))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", equalTo(ContainerFormat.ASiC_S))
+                .body("signatures[0].info.timestampCreationTime", is(timestampCreationTime))
+
+        where:
+        file                                   | timestampCreationTime
+        "TEST_ESTEID2018_ASiC-S_XAdES_T.scs"   | "2024-09-13T14:11:57Z"
+        "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"  | "2024-09-13T14:12:12Z"
+        "TEST_ESTEID2018_ASiC-S_XAdES_LTA.scs" | "2024-09-13T14:12:25Z"
+        "TEST_ESTEID2018_ASiC-S_CAdES_T.scs"   | "2024-09-13T14:12:55Z"
+        "TEST_ESTEID2018_ASiC-S_CAdES_LT.scs"  | "2024-09-13T14:13:06Z"
+        "TEST_ESTEID2018_ASiC-S_CAdES_LTA.scs" | "2024-09-13T14:13:19Z"
     }
 }

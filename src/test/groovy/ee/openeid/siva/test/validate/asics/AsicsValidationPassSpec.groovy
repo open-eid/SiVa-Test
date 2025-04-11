@@ -259,22 +259,4 @@ class AsicsValidationPassSpec extends GenericSpecification {
         SignatureFormat.XAdES_BASELINE_LT  | "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"
         SignatureFormat.XAdES_BASELINE_LTA | "TEST_ESTEID2018_ASiC-S_XAdES_LTA.scs"
     }
-
-    @Description("Simple report includes timestamp creation time for timestamped signature")
-    def "Given ASiC-S with timestamped signature, then validation report includes timestampCreationTime field"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", equalTo(ContainerFormat.ASiC_S))
-                .body("signatures[0].info.timestampCreationTime", is(timestampCreationTime))
-
-        where:
-        file                                   | timestampCreationTime
-        "TEST_ESTEID2018_ASiC-S_XAdES_T.scs"   | "2024-09-13T14:11:57Z"
-        "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"  | "2024-09-13T14:12:12Z"
-        "TEST_ESTEID2018_ASiC-S_XAdES_LTA.scs" | "2024-09-13T14:12:25Z"
-        "TEST_ESTEID2018_ASiC-S_CAdES_T.scs"   | "2024-09-13T14:12:55Z"
-        "TEST_ESTEID2018_ASiC-S_CAdES_LT.scs"  | "2024-09-13T14:13:06Z"
-        "TEST_ESTEID2018_ASiC-S_CAdES_LTA.scs" | "2024-09-13T14:13:19Z"
-    }
 }

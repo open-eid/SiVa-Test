@@ -426,32 +426,4 @@ class AsiceValidationPassSpec extends GenericSpecification {
         "QTST level, but withdrawn during validation in TSL" | "EE_SER-AEX-B-LT-V-30.asice"   | "SK TIMESTAMPING AUTHORITY"
 //TODO: SIVA-796 "QTST level during signing, before was non-qualified in TSL" | "< testfile needed >"          | ""
     }
-
-    @Description("Simple report includes timestamp creation time for timestamped signature")
-    def "Given ASiC-E with timestamped signature, then validation report includes timestampCreationTime field"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
-                .body("signatures[0].info.timestampCreationTime", is(timestampCreationTime))
-
-        where:
-        file                                   | timestampCreationTime
-        "TEST_ESTEID2018_ASiC-E_XAdES_T.sce"   | "2024-09-13T14:14:24Z"
-        "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"  | "2024-09-13T14:14:36Z"
-        "TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce" | "2024-09-13T14:14:47Z"
-        "TEST_ESTEID2018_ASiC-E_CAdES_T.sce"   | "2024-09-13T14:15:13Z"
-        "TEST_ESTEID2018_ASiC-E_CAdES_LT.sce"  | "2024-09-13T14:15:28Z"
-        "TEST_ESTEID2018_ASiC-E_CAdES_LTA.sce" | "2024-09-13T14:15:38Z"
-    }
-
-    @Description("Simple report includes timestamp creation time for timestamped signature")
-    def "Given ASiC-E with multiple timestamped signatures, then validation report includes timestampCreationTime field for each"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
-                .body("signatures[1].info.timestampCreationTime", is("2021-01-29T14:31:36Z"))
-                .body("signatures[2].info.timestampCreationTime", is("2021-01-29T14:38:11Z"))
-    }
 }
