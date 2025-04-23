@@ -470,6 +470,32 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         Method.PATCH   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
     }
 
+    @Description("Hashcode validation endpoint unsupported content type")
+    def "Hashcode validation request with unsupported content type '#type'"() {
+        given:
+        RequestSpecification request = given()
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(validRequestBody())
+                .contentType(type)
+                .baseUri(SivaRequests.sivaServiceUrl)
+                .basePath("/validateHashcode")
+
+        when:
+        Response response = request.post()
+
+        then:
+        response.then().statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE)
+                .body("requestErrors", hasSize(1))
+                .body("requestErrors.findAll { requestError -> " +
+                        "requestError.key == 'contentTypeNotSupported' && " +
+                        "requestError.message == 'Only the following content types are supported: application/json, application/*+json' }",
+                        hasSize(1)
+                )
+
+        where:
+        type << [ContentType.TEXT, ContentType.XML, ContentType.HTML, ContentType.URLENC]
+    }
+
     List<String> returnFiles(String filesLocation) {
 
         List<String> files = []

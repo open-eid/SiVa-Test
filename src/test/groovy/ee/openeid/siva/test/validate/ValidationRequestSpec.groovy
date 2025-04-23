@@ -446,4 +446,30 @@ class ValidationRequestSpec extends GenericSpecification {
         Method.OPTIONS || HttpStatus.SC_OK                 | "allowed"
         Method.PATCH   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
     }
+
+    @Description("Validation endpoint unsupported content type")
+    def "Validation request with unsupported content type '#type'"() {
+        given:
+        RequestSpecification request = given()
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(RequestData.validationRequest("singleValidSignatureTM.bdoc"))
+                .contentType(type)
+                .baseUri(SivaRequests.sivaServiceUrl)
+                .basePath("/validate")
+
+        when:
+        Response response = request.post()
+
+        then:
+        response.then().statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE)
+                .body("requestErrors", hasSize(1))
+                .body("requestErrors.findAll { requestError -> " +
+                        "requestError.key == 'contentTypeNotSupported' && " +
+                        "requestError.message == 'Only the following content types are supported: application/json, application/*+json' }",
+                        hasSize(1)
+                )
+
+        where:
+        type << [ContentType.TEXT, ContentType.XML, ContentType.HTML, ContentType.URLENC]
+    }
 }

@@ -32,6 +32,7 @@ import org.apache.http.HttpStatus
 
 import static io.restassured.RestAssured.given
 import static io.restassured.config.EncoderConfig.encoderConfig
+import static org.hamcrest.Matchers.hasSize
 import static org.hamcrest.Matchers.is
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#data-files-request-interface")
@@ -185,5 +186,31 @@ class GetDataFileRequestSpec extends GenericSpecification {
         Method.TRACE   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
         Method.OPTIONS || HttpStatus.SC_OK                 | "allowed"
         Method.PATCH   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+    }
+
+    @Description("Datafile endpoint unsupported content type")
+    def "Datafile request with unsupported content type '#type'"() {
+        given:
+        RequestSpecification request = given()
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
+                .contentType(type)
+                .baseUri(SivaRequests.sivaServiceUrl)
+                .basePath("/getDataFiles")
+
+        when:
+        Response response = request.post()
+
+        then:
+        response.then().statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE)
+                .body("requestErrors", hasSize(1))
+                .body("requestErrors.findAll { requestError -> " +
+                        "requestError.key == 'contentTypeNotSupported' && " +
+                        "requestError.message == 'Only the following content types are supported: application/json, application/*+json' }",
+                        hasSize(1)
+                )
+
+        where:
+        type << [ContentType.TEXT, ContentType.XML, ContentType.HTML, ContentType.URLENC]
     }
 }
