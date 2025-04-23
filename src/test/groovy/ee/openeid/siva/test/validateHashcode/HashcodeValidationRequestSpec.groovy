@@ -25,8 +25,12 @@ import ee.openeid.siva.test.util.RequestErrorValidator
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.RestAssured
+import io.restassured.http.ContentType
+import io.restassured.http.Method
 import io.restassured.response.Response
 import io.restassured.response.ValidatableResponse
+import io.restassured.specification.RequestSpecification
 import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpStatus
 import org.w3c.dom.Document
@@ -40,6 +44,8 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 import static ee.openeid.siva.test.TestData.*
+import static io.restassured.RestAssured.given
+import static io.restassured.config.EncoderConfig.encoderConfig
 import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")
@@ -115,6 +121,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                         "requestError.message == 'Invalid signature policy: POLv2; Available abstractPolicies: [POLv3, POLv4]' }",
                         hasSize(1)
                 )
+                .header("Content-Disposition", is("attachment; filename=\"api.json\""))
     }
 
     @Description("Invalid input")
@@ -172,6 +179,9 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         expect:
         Response response = SivaRequests.tryValidateHashcode(requestData)
         RequestErrorValidator.validate(response, error)
+        if (error == RequestError.SIGNATURE_FILE_MALFORMED) {
+            response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
+        }
 
         where:
         value | comment                                                                      | error
@@ -422,6 +432,42 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
                 .body("signatures[0].warnings[0].content", is("The private key does not reside in a QSCD at (best) signing time!"))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
+    }
+
+    @Description("Hashcode validation response includes Content-Disposition header")
+    def "Given validateHashcode request, then response includes Content-Disposition header"() {
+        expect:
+        SivaRequests.validateHashcode(validRequestBody())
+                .then()
+                .header("Content-Disposition", is("attachment; filename=\"api.json\""))
+    }
+
+    @Description("Hashcode validation endpoint checks")
+    def "Hashcode validation request with method #method is #result"() {
+        given:
+        RequestSpecification request = given()
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(validRequestBody())
+                .contentType(ContentType.JSON)
+                .baseUri(SivaRequests.sivaServiceUrl)
+                .basePath("/validateHashcode")
+
+        when:
+        Response response = request.request(method)
+
+        then:
+        response.then().statusCode(httpStatus)
+
+        where:
+        method         || httpStatus                       | result
+        Method.GET     || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.PUT     || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.POST    || HttpStatus.SC_OK                 | "allowed"
+        Method.DELETE  || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.HEAD    || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.TRACE   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.OPTIONS || HttpStatus.SC_OK                 | "allowed"
+        Method.PATCH   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
     }
 
     List<String> returnFiles(String filesLocation) {

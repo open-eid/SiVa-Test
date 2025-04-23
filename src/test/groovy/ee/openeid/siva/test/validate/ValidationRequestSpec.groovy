@@ -24,12 +24,18 @@ import ee.openeid.siva.test.util.RequestErrorValidator
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.RestAssured
+import io.restassured.http.ContentType
+import io.restassured.http.Method
 import io.restassured.response.Response
+import io.restassured.specification.RequestSpecification
 import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpStatus
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static io.restassured.RestAssured.given
+import static io.restassured.config.EncoderConfig.encoderConfig
 import static org.hamcrest.Matchers.*
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")
@@ -220,6 +226,7 @@ class ValidationRequestSpec extends GenericSpecification {
                         "requestError.message == 'Invalid signature policy: POLv2; Available abstractPolicies: [POLv3, POLv4]' }",
                         hasSize(1)
                 )
+                .header("Content-Disposition", is("attachment; filename=\"api.json\""))
     }
 
     @Description("Invalid signature policy")
@@ -313,6 +320,7 @@ class ValidationRequestSpec extends GenericSpecification {
 
         then:
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
+        response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
 
         where:
         document                       | filename                      | comment
@@ -364,6 +372,7 @@ class ValidationRequestSpec extends GenericSpecification {
 
         then:
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
+        response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
 
         where:
         extension | _
@@ -400,5 +409,41 @@ class ValidationRequestSpec extends GenericSpecification {
                 .statusCode(400)
                 .body("requestErrors[0].key", is("request"))
                 .body("requestErrors[0].message", is(errorMessage))
+    }
+
+    @Description("Validation response includes Content-Disposition header")
+    def "Given validate request, then response includes Content-Disposition header"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTM.bdoc"))
+                .then()
+                .header("Content-Disposition", is("attachment; filename=\"api.json\""))
+    }
+
+    @Description("Validation endpoint checks")
+    def "Validation request with method #method is #result"() {
+        given:
+        RequestSpecification request = given()
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(RequestData.validationRequest("singleValidSignatureTM.bdoc"))
+                .contentType(ContentType.JSON)
+                .baseUri(SivaRequests.sivaServiceUrl)
+                .basePath("/validate")
+
+        when:
+        Response response = request.request(method)
+
+        then:
+        response.then().statusCode(httpStatus)
+
+        where:
+        method         || httpStatus                       | result
+        Method.GET     || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.PUT     || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.POST    || HttpStatus.SC_OK                 | "allowed"
+        Method.DELETE  || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.HEAD    || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.TRACE   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.OPTIONS || HttpStatus.SC_OK                 | "allowed"
+        Method.PATCH   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
     }
 }

@@ -150,7 +150,7 @@ class AsicsValidationPassSpec extends GenericSpecification {
     static def entrust = [name: "Entrust", indication: SignatureIndication.TOTAL_FAILED, signedBy: "Entrust Timestamp Authority - TSA1"]
 
     @Description("Validation of ASiC-S timestamped with different timestamps")
-    def "Validating ASiC-S timestamped first with #first and then with #second"() {
+    def "Validating ASiC-S timestamped first with #first.name and then with #second.name"() {
         given:
         String fileName = "2xTst-${first.name}+${second.name}.asics"
         expect:

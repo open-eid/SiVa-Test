@@ -23,8 +23,15 @@ import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestErrorValidator
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.RestAssured
+import io.restassured.http.ContentType
+import io.restassured.http.Method
 import io.restassured.response.Response
+import io.restassured.specification.RequestSpecification
+import org.apache.http.HttpStatus
 
+import static io.restassured.RestAssured.given
+import static io.restassured.config.EncoderConfig.encoderConfig
 import static org.hamcrest.Matchers.is
 
 @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#data-files-request-interface")
@@ -126,6 +133,7 @@ class GetDataFileRequestSpec extends GenericSpecification {
 
         then:
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
+        response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
 
         where:
         document                      | filename                       | comment
@@ -140,7 +148,42 @@ class GetDataFileRequestSpec extends GenericSpecification {
         expect:
         SivaRequests.getDataFiles(RequestData.requestWithFixedBodyLength(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"), conf.sivaRequestSizeLimit()))
                 .then()
-                .statusCode(200)
                 .body("dataFiles[0].filename", is("test.txt"))
+    }
+
+    @Description("Datafile response includes Content-Disposition header")
+    def "Given datafile request, then response includes Content-Disposition header"() {
+        expect:
+        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
+                .then()
+                .header("Content-Disposition", is("attachment; filename=\"api.json\""))
+    }
+
+    @Description("Datafile endpoint checks")
+    def "Datafile request with method #method is #result"() {
+        given:
+        RequestSpecification request = given()
+                .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
+                .body(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
+                .contentType(ContentType.JSON)
+                .baseUri(SivaRequests.sivaServiceUrl)
+                .basePath("/getDataFiles")
+
+        when:
+        Response response = request.request(method)
+
+        then:
+        response.then().statusCode(httpStatus)
+
+        where:
+        method         || httpStatus                       | result
+        Method.GET     || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.PUT     || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.POST    || HttpStatus.SC_OK                 | "allowed"
+        Method.DELETE  || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.HEAD    || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.TRACE   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
+        Method.OPTIONS || HttpStatus.SC_OK                 | "allowed"
+        Method.PATCH   || HttpStatus.SC_METHOD_NOT_ALLOWED | "not allowed"
     }
 }

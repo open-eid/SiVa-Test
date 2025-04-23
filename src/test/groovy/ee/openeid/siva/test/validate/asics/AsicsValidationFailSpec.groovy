@@ -74,6 +74,7 @@ class AsicsValidationFailSpec extends GenericSpecification {
 
         then:
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_DOES_NOT_MEET_THE_REQUIREMENTS)
+        response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
 
         where:
         filename                              | description
