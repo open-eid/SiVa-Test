@@ -9,13 +9,13 @@ Libraries license information was obtained using the following command:
 ./mvnw license:add-third-party
 ```
 
-Lists of 11 third-party dependencies.
-
+Lists of 12 third-party dependencies.
     (Apache-2.0) Apache Commons IO (commons-io:commons-io:2.16.1 - https://commons.apache.org/proper/commons-io/)
     (The Apache License, Version 2.0) allure-rest-assured (io.qameta.allure:allure-rest-assured:2.29.0 - https://allurereport.org/)
     (The Apache License, Version 2.0) allure-spock2 (io.qameta.allure:allure-spock2:2.29.0 - https://allurereport.org/)
     (Apache 2.0) json-schema-validator (io.rest-assured:json-schema-validator:5.5.0 - https://rest-assured.io/)
     (Apache 2.0) REST Assured (io.rest-assured:rest-assured:5.5.0 - https://rest-assured.io/)
+    (The Apache Software License, Version 2.0) json-unit (net.javacrumbs.json-unit:json-unit:4.1.0 - https://github.com/lukas-krecan/JsonUnit/json-unit)
     (The BSD License) OWNER :: Core (org.aeonbits.owner:owner:1.0.12 - http://owner.aeonbits.org/owner)
     (The Apache Software License, Version 2.0) Apache Groovy (org.apache.groovy:groovy-all:4.0.22 - https://groovy-lang.org)
     (BSD License 3) Hamcrest (org.hamcrest:hamcrest:2.2 - http://hamcrest.org/JavaHamcrest/)
