@@ -62,8 +62,6 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("signatures.info.bestSignatureTime[0]", equalTo("2016-10-11T09:36:10Z"))
     }
 
-    @Ignore
-    //TODO: New test LOTL is needed with correct data
     @Description("Detailed report includes tlanalysis element and its values")
     def "Given detailed report, then it includes tlanalysis element"() {
         expect:
@@ -74,42 +72,42 @@ class DetailedReportValidationSpec extends GenericSpecification {
                 .body("tlanalysis.constraint", notNullValue())
                 .body("tlanalysis[0]", notNullValue())
                 .body("tlanalysis[0].constraint[0]", notNullValue())
-                .body("tlanalysis[0].constraint[0].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_1))
+                .body("tlanalysis[0].constraint[0].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_1))
                 .body("tlanalysis[0].constraint[0].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_1))
                 .body("tlanalysis[0].constraint[0].status", equalTo("OK"))
                 .body("tlanalysis[0]", notNullValue())
                 .body("tlanalysis[0].constraint[1]", notNullValue())
-                .body("tlanalysis[0].constraint[1].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_2))
+                .body("tlanalysis[0].constraint[1].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_2))
                 .body("tlanalysis[0].constraint[1].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_2))
                 .body("tlanalysis[0].constraint[1].status", equalTo("OK"))
                 .body("tlanalysis[0].constraint[2]", notNullValue())
-                .body("tlanalysis[0].constraint[2].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_3))
+                .body("tlanalysis[0].constraint[2].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_3))
                 .body("tlanalysis[0].constraint[2].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_3))
                 .body("tlanalysis[0].constraint[2].status", equalTo("OK"))
                 .body("tlanalysis[0].constraint[3]", notNullValue())
-                .body("tlanalysis[0].constraint[3].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_4))
+                .body("tlanalysis[0].constraint[3].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_4))
                 .body("tlanalysis[0].constraint[3].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_4))
                 .body("tlanalysis[0].constraint[3].status", equalTo("OK"))
                 .body("tlanalysis[0].conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
-                .body("tlanalysis[0].countryCode", equalTo("EU"))
+                .body("tlanalysis[0].countryCode", equalTo("EE"))
                 .body("tlanalysis[1]", notNullValue())
                 .body("tlanalysis[1].constraint[0]", notNullValue())
-                .body("tlanalysis[1].constraint[0].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_1))
+                .body("tlanalysis[1].constraint[0].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_1))
                 .body("tlanalysis[1].constraint[0].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_1))
                 .body("tlanalysis[1].constraint[0].status", equalTo("OK"))
                 .body("tlanalysis[1]", notNullValue())
                 .body("tlanalysis[1].constraint[1]", notNullValue())
-                .body("tlanalysis[1].constraint[1].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_2))
+                .body("tlanalysis[1].constraint[1].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_2))
                 .body("tlanalysis[1].constraint[1].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_2))
                 .body("tlanalysis[1].constraint[1].status", equalTo("OK"))
                 .body("tlanalysis[1]", notNullValue())
                 .body("tlanalysis[1].constraint[2]", notNullValue())
-                .body("tlanalysis[1].constraint[2].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_3))
+                .body("tlanalysis[1].constraint[2].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_3))
                 .body("tlanalysis[1].constraint[2].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_3))
                 .body("tlanalysis[1].constraint[2].status", equalTo("OK"))
                 .body("tlanalysis[1]", notNullValue())
                 .body("tlanalysis[1].constraint[3]", notNullValue())
-                .body("tlanalysis[1].constraint[3].name.nameId", equalTo(VALID_VALIDATION_PROCESS_NAMEID_4))
+                .body("tlanalysis[1].constraint[3].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_4))
                 .body("tlanalysis[1].constraint[3].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_4))
                 .body("tlanalysis[1].constraint[3].status", equalTo("OK"))
                 .body("tlanalysis[1].conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
@@ -117,12 +115,13 @@ class DetailedReportValidationSpec extends GenericSpecification {
     }
 
     @Ignore("SIVA-499")
-    //TODO: This test misses validationSignatureQualification block
+    // TODO: (Old comment) This test misses validationSignatureQualification block
+    // TODO: hellopades-lt-sha256-ec256.pdf signature is expired, file needs replacement
     @Description("Detailed report includes signatures element and its sub-elements and its values")
     def "Given detailed report, then it includes signatures element and its sub-elements"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec256.pdf", null, ReportType.DETAILED))
-                .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrCertificate[0].")
+                .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord[0].")
                 .body("validationProcessBasicSignature.constraint.name.key", hasItem(DssMessage.BSV_IFCRC.key))
                 .body("validationProcessBasicSignature.constraint.name.key", hasItem(DssMessage.BSV_IISCRC.key))
                 .body("validationProcessBasicSignature.constraint.name.key", hasItem(DssMessage.BSV_IVCIRC.key))

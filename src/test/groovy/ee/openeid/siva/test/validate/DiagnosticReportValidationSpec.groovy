@@ -22,7 +22,6 @@ import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
-import spock.lang.Ignore
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -59,7 +58,6 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
                 .body("signatures[0].info.bestSignatureTime", equalTo("2016-10-11T09:36:10Z"))
     }
 
-    @Ignore("SIVA-499")
     @Description("Diagnostic report includes tlanalysis element and its values")
     def "Given diagnostic report, then it includes tlanalysis element"() {
         expect:
@@ -84,15 +82,14 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
                 .body("signatures[0].signingCertificate.certificate", equalTo("C-F014C7DF249D8734DF273D937EE5EBF0F8166BE0775C47A80608F1A14EB23F4C"))
                 .body("signatures[0].certificateChain.certificate", hasItems("C-F014C7DF249D8734DF273D937EE5EBF0F8166BE0775C47A80608F1A14EB23F4C", "C-74D992D3910BCF7E34B8B5CD28F91EAEB4F41F3DA6394D78B8C43672D43F4F0F", "C-3E84BA4342908516E77573C0992F0979CA084E4685681FF195CCBA8A229B8A76"))
                 .body("signatures[0].certificateChain.certificate.size()", is(3))
-                .body("signatures[0].foundTimestamps.timestamp", hasItem("T-986BB33B29274A85EF94B7EC0FB89C3427910D59C40A233FD588FBCB2A0E4A84"))
-                .body("signatures[0].foundTimestamps.timestamp", hasItem("T-180665AC2889F5EEA2FB90E662532A8339672A92671219EFCC87C7C3B9885F7A"))
-                .body("signatures[0].signatureScopes[0].signerData", equalTo("D-B8D81DDB95A46D4E2FF6BB1DAA97E0728F6953FDB9BA1F7020F1CDBCEAA20575"))
+                .body("signatures[0].foundTimestamps.timestamp", hasItem("T-90F6627E5CA9C045878FDC508C92344936560ADF4850692A1B97F519814EED82"))
+                .body("signatures[0].foundTimestamps.timestamp", hasItem("T-D63AE2844FE1839C09B0A06FEEFFCA883A3FFB69E3B08CCF06A45EDB84491CE1"))
+                .body("signatures[0].signatureScopes[0].signerData", equalTo("D-D6F348B18672A1767F8BBFAF278F1E0562DED52E2D250E8A818C3484A0F71FD1"))
                 .body("signatures[0].signatureScopes[0].description", equalTo("The document ByteRange : [0, 9136, 28082, 26387]"))
                 .body("signatures[0].signatureScopes[0].name", equalTo("Partial PDF"))
                 .body("signatures[0].signatureScopes[0].scope", equalTo("PARTIAL"))
     }
 
-    @Ignore("SIVA-499")
     @Description("Diagnostic report includes used certificates element and its values")
     def "Given diagnostic report, then it includes certificates element"() {
         expect:
