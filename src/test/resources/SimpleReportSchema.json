@@ -41,10 +41,15 @@
             },
             "signatures": {
               "type": "array",
+              "minItems": 1,
               "items": {
                 "type": "object",
                 "properties": {
                   "signatureFormat": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "signatureMethod": {
                     "type": "string",
                     "minLength": 1
                   },
@@ -60,23 +65,48 @@
                     "type": "string",
                     "minLength": 1
                   },
+                  "subjectDistinguishedName": {
+                    "type": "object",
+                    "properties": {
+                      "serialNumber": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "commonName": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "givenName": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "surname": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
                   "warnings": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
+                      "type": "object",
                       "properties": {
-                        "nameId": {
-                          "type": "string"
-                        },
                         "content": {
-                          "type": "string"
+                          "type": "string",
+                          "minLength": 1
                         }
-                      }
+                      },
+                      "required": [
+                        "content"
+                      ]
                     }
                   },
                   "signatureScopes": {
                     "type": "array",
                     "minItems": 1,
                     "items": {
+                      "type": "object",
                       "properties": {
                         "name": {
                           "type": "string",
@@ -87,6 +117,14 @@
                           "minLength": 1
                         },
                         "scope": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "hashAlgo": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "hash": {
                           "type": "string",
                           "minLength": 1
                         }
@@ -106,60 +144,115 @@
                     "type": "string",
                     "minLength": 1
                   },
-                  "subindication": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "minLength": 1
-                    }
+                  "subIndication": {
+                    "type": "string",
+                    "minLength": 1
                   },
                   "errors": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
                       "type": "object",
                       "properties": {
-                        "nameId": {
-                          "type": "string",
-                          "minLength": 1
-                        },
                         "content": {
                           "type": "string",
                           "minLength": 1
                         }
-                      }
+                      },
+                      "required": [
+                        "content"
+                      ]
                     }
                   },
                   "info": {
                     "type": "object",
                     "properties": {
                       "bestSignatureTime": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "timeAssertionMessageImprint": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "ocspResponseCreationTime": {
+                        "type": "string",
+                        "minLength": 1
                       },
                       "timestampCreationTime": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "signerRole": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "claimedRole": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "signatureProductionPlace": {
+                              "type": "object",
+                              "properties": {
+                                "countryName": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "stateOrProvince": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "city": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "postalCode": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "claimedRole"
+                          ]
+                        }
+                      },
+                      "signingReason": {
+                        "type": "string",
+                        "minLength": 1
                       },
                       "archiveTimeStamps": {
                         "type": "array",
+                        "minItems": 1,
                         "items": {
                           "type": "object",
                           "properties": {
                             "signedTime": {
-                              "type": "string"
+                              "type": "string",
+                              "minLength": 1
                             },
                             "indication": {
-                              "type": "string"
+                              "type": "string",
+                              "minLength": 1
                             },
                             "subIndication": {
-                              "type": "string"
+                              "type": "string",
+                              "minLength": 1
                             },
                             "signedBy": {
-                              "type": "string"
+                              "type": "string",
+                              "minLength": 1
                             },
                             "country": {
-                              "type": "string"
+                              "type": "string",
+                              "minLength": 1
                             },
                             "content": {
-                              "type": "string"
+                              "type": "string",
+                              "minLength": 1
                             }
                           },
                           "required": [
@@ -175,10 +268,54 @@
                     "required": [
                       "bestSignatureTime"
                     ]
+                  },
+                  "certificates": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "commonName": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "type": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "content": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "issuer": {
+                          "type": "object",
+                          "properties": {
+                            "commonName": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "content": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "commonName",
+                            "content"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "commonName",
+                        "type",
+                        "content"
+                      ]
+                    }
                   }
                 },
                 "required": [
                   "signatureFormat",
+                  "signatureMethod",
                   "signedBy",
                   "claimedSigningTime",
                   "signatureScopes",
@@ -189,6 +326,7 @@
             },
             "timeStampTokens": {
               "type": "array",
+              "minItems": 1,
               "items": {
                 "type": "object",
                 "properties": {
@@ -198,6 +336,7 @@
                   },
                   "certificates": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
                       "type": "object",
                       "properties": {
@@ -231,6 +370,7 @@
                   },
                   "timestampScopes": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
                       "type": "object",
                       "properties": {
@@ -260,6 +400,7 @@
                   },
                   "error": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
                       "type": "object",
                       "properties": {
@@ -275,6 +416,7 @@
                   },
                   "warning": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
                       "type": "object",
                       "properties": {
@@ -297,8 +439,7 @@
                   "signedTime",
                   "certificates",
                   "signedBy",
-                  "indication",
-                  "timestampLevel"
+                  "indication"
                 ]
               }
             },
@@ -323,6 +464,26 @@
                 "policyUrl",
                 "policyName"
               ]
+            },
+            "validationLevel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "validationWarnings": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "content"
+                ]
+              }
             }
           },
           "required": [
@@ -332,7 +493,13 @@
             "policy"
           ]
         }
-      }
+      },
+      "required": [
+        "validationConclusion"
+      ]
     }
-  }
+  },
+  "required": [
+    "validationReport"
+  ]
 }
