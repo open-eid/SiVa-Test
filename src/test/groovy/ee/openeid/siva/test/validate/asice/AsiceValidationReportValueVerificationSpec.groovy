@@ -220,7 +220,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
     }
 
     @Ignore
-    //TODO: needs investigation why the signature is determined as XAdES_BASELINE_T not as XAdES_BASELINE_LT_TM
+    //TODO: SIVA-869 needs investigation why the signature is determined as XAdES_BASELINE_T not as XAdES_BASELINE_LT_TM
     @Description("JSON structure has all elements (Bdoc indeterminate status)")
     def "bdocAllElementsArePresentIndeterminateSignature"() {
         expect:
