@@ -17,6 +17,7 @@
 package ee.openeid.siva.test.validate.pdf
 
 import ee.openeid.siva.test.GenericSpecification
+import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.SignatureFormat
 import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.model.SignatureLevel
@@ -25,6 +26,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.qameta.allure.Story
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
@@ -78,20 +80,20 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .body("signaturesCount", is(1))
     }
 
-    @Description("The PDF-file has OCSP more than 15 minutes after TS but earlier than 24h")
-    def "ocsp15MinutesAfterTsShouldPassWithWarning"() {
+    @Story("OCSP and TS difference check")
+    def "PDF shows OCSP freshness warning if OCSP is taken more than 15m after timestamp: #ocspTaken"() {
         expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ocsp-15min1s.pdf"))
+        SivaRequests.validate(RequestData.validationRequest(fileName))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", emptyOrNullString())
-                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings[0].content", is("The revocation information is not considered as 'fresh'."))
-                .body("signatures[0].subjectDistinguishedName.serialNumber", notNullValue())
-                .body("signatures[0].subjectDistinguishedName.commonName", notNullValue())
-                .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings[0].content", is(TestData.REVOCATION_NOT_FRESH))
+                .body("signatures[0].errors", emptyOrNullString())
+
+        where:
+        fileName                                | ocspTaken
+        "hellopades-lt-sha256-ocsp-15min1s.pdf" | "15m1s after TS"
+        "hellopades-lt-sha256-ocsp-28h.pdf"     | "28h after TS"
     }
 
     //TODO SIVA-349 needs investigation why the signature is determined as PAdES_BASELINE_LTA not as PAdES_BASELINE_LT

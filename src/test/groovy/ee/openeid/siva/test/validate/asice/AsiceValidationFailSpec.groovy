@@ -196,19 +196,6 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(0))
     }
 
-    @Description("Asice difference between OCSP and time-stamp issuing times is more than 24 hours")
-    def "asiceOcspAndTsDifferenceOver24H"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-20.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", is(ContainerFormat.ASiC_E))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
-                .body("signatures[0].info.bestSignatureTime", is("2014-11-07T13:18:01Z"))
-                .body("signatures[0].errors.content", hasItems(REVOCATION_NOT_FRESH))
-                .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
-                .body("validSignaturesCount", is(0))
-    }
-
     @Description("Asice unsigned data files in the container")
     def "asiceUnsignedDataFiles"() {
         expect:

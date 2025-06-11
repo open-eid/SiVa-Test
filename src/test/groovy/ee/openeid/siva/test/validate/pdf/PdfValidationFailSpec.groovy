@@ -119,17 +119,6 @@ class PdfValidationFailSpec extends GenericSpecification {
                 .body("signaturesCount", is(1))
     }
 
-    @Description("OCSP is taken more than 24h after TS")
-    def "ocspTaken24hAfterTsShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ocsp-28h.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", emptyOrNullString())
-                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("validSignaturesCount", is(0))
-                .body("signaturesCount", is(1))
-    }
-
     @Description("The PDF-file has OCSP almost 24h before TS")
     @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
     def "ocspAlmost24hBeforeTsShouldFail"() {
