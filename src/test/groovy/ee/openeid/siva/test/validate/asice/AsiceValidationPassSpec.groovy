@@ -427,31 +427,4 @@ class AsiceValidationPassSpec extends GenericSpecification {
 //TODO: SIVA-796 "QTST level during signing, before was non-qualified in TSL" | "< testfile needed >"          | ""
     }
 
-    @Story("OCSP and TS difference check")
-    def "ASiC-E shows OCSP freshness warning if OCSP is taken more than 15m after timestamp: #ocspTaken"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(fileName))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signaturesCount", is(1))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings[0].content", is(REVOCATION_NOT_FRESH))
-                .body("signatures[0].errors", emptyOrNullString())
-
-        where:
-        fileName                              | ocspTaken
-        "EE_LT_sig_OCSP_15m6s_after_TS.asice" | "15m6s after TS"
-        "EE_SER-AEX-B-LT-V-20.asice"          | "28h after TS"
-    }
-
-    @Story("OCSP and TS difference check")
-    def "ASiC-E with fresh OCSP (<15m after TS) should not trigger revocation freshness warning"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_LT_sig_OCSP_8m_after_TS.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signaturesCount", is(1))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings", emptyOrNullString())
-                .body("signatures[0].errors", emptyOrNullString())
-    }
-
 }

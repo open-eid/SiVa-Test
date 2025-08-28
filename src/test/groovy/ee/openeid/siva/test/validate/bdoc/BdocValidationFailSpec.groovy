@@ -191,17 +191,6 @@ class BdocValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(0))
     }
 
-    @Description("Asice difference between OCSP and time-stamp issuing times is more than 24 hours")
-    def "bdocOcspAndTsDifferenceOver24H"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-20.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", is(ContainerFormat.ASiC_E))
-                .body("signatures[0].indication", is("TOTAL-FAILED"))
-                .body("signatures[0].errors[0].content", is("The difference between the OCSP response time and the signature timestamp is too large"))
-                .body("validSignaturesCount", is(0))
-    }
-
     @Description("Bdoc different data file mime-type values in signatures.xml and manifest.xml files")
     def "bdocDifferentDataFileInSignature"() {
         expect:

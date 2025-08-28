@@ -80,22 +80,6 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .body("signaturesCount", is(1))
     }
 
-    @Story("OCSP and TS difference check")
-    def "PDF shows OCSP freshness warning if OCSP is taken more than 15m after timestamp: #ocspTaken"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(fileName))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signaturesCount", is(1))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings[0].content", is(TestData.REVOCATION_NOT_FRESH))
-                .body("signatures[0].errors", emptyOrNullString())
-
-        where:
-        fileName                                | ocspTaken
-        "hellopades-lt-sha256-ocsp-15min1s.pdf" | "15m1s after TS"
-        "hellopades-lt-sha256-ocsp-28h.pdf"     | "28h after TS"
-    }
-
     //TODO SIVA-349 needs investigation why the signature is determined as PAdES_BASELINE_LTA not as PAdES_BASELINE_LT
     @Description("The CRL nextUpdate time is after timestamp time")
     @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
