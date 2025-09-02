@@ -47,7 +47,7 @@ class TsOcspTimeCheckSpec extends GenericSpecification {
     }
 
     @Story("TS and OCSP time difference greater than 15m produces warning")
-    def "OCSP freshness warning present if new OCSP is obtained for T-level signature more than 15m after TS"() {
+    def "OCSP freshness warning present if OCSP is taken during validation of T-level signature more than 15m after TS"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("lv_test_signature_new_card-T.asice"))
                 .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
