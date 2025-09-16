@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.hasItem
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class TsOcspTimeCheckSpec extends GenericSpecification {
 
-    @Issue("SIVA-907")
     @Issue("SIVA-906")
     @Story("TS and OCSP time difference greater than 15m produces warning")
     def "OCSP freshness warning present if: #containerType and OCSP #ocspTaken"() {
@@ -39,7 +38,7 @@ class TsOcspTimeCheckSpec extends GenericSpecification {
         "15m6s after TS" | "ASiC-E"      | "EE_LT_sig_OCSP_15m6s_after_TS.asice"
         "26h after TS"   | "ASiC-E"      | "EE_SER-AEX-B-LT-V-20.asice"
 
-//        "15m6s after TS" | "BDOC"        | "EE_LT_sig_OCSP_15m6s_after_TS.asice"
+        "15m6s after TS" | "BDOC"        | "EE_LT_sig_OCSP_15m6s_after_TS.asice"
 //        "26h after TS"   | "BDOC"        | "EE_SER-AEX-B-LT-V-20.asice"
 
         "15m1s after TS" | "PDF"         | "hellopades-lt-sha256-ocsp-15min1s.pdf"

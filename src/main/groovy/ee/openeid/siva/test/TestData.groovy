@@ -231,7 +231,7 @@ class TestData {
     static final String SIG_NO_CANDIDATE = "There is no candidate for the signing certificate!"
     static final String SIG_INVALID_TS = "Signature has an invalid timestamp"
     static final String CERT_PATH_NOT_TRUSTED = "Unable to build a certificate chain up to a trusted list!"
-    static final String REVOCATION_NOT_FRESH = "The revocation information is not considered as 'fresh'."
+    static final String REVOCATION_NOT_FRESH = "The time difference between the signature timestamp and the OCSP response exceeds 15 minutes, rendering the OCSP response not 'fresh'."
     static final String REVOCATION_NOT_TRUSTED = "The certificate chain for revocation data is not trusted, it does not contain a trust anchor."
     static final String REVOCATION_UNKNOWN = "The revocation status is unknown (Unknown response from OCSP)!"
     static final String REVOCATION_NOT_FOUND = "No revocation data found for the certificate!"
