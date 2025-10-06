@@ -108,6 +108,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
 //        "TEST of ESTEID-SK 2011" | ""                         | ""
         "TEST of ESTEID-SK 2015" | "TEST_ESTEID-SK2015_ASiC-E_XAdES_LT.asice" | "MIIGgzCCBWugAwIBAgIQEDb9gCZi4PdWc7IoNVIbsTANBgkqhk"
         "TEST of ESTEID2018"     | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"      | "MIIFfDCCBN2gAwIBAgIQNhjzSfd2UEpbkO14EY4ORTAKBggqhk"
+        "Test ESTEID2025"        | "TEST_ESTEID2025_ASiC-E_XAdES_LT.asice"    | "MIIDMTCCAregAwIBAgIUNtXxgsJYFy9r5Opm2j2LcsnZYtkwCg"
 
 //        "TEST of EID-SK 2016"    | ""                                         | ""
 
