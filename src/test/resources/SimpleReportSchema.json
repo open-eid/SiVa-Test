@@ -10,34 +10,62 @@
           "properties": {
             "validationTime": {
               "type": "string",
+              "format": "date-time",
               "minLength": 1
             },
             "signaturesCount": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             "signatureForm": {
-              "type": "string",
-              "minLength": 1
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "DIGIDOC_XML_1.0",
+                "DIGIDOC_XML_1.0_hashcode",
+                "DIGIDOC_XML_1.1",
+                "DIGIDOC_XML_1.1_hashcode",
+                "DIGIDOC_XML_1.2",
+                "DIGIDOC_XML_1.2_hashcode",
+                "DIGIDOC_XML_1.3",
+                "DIGIDOC_XML_1.3_hashcode",
+                "ASiC-E",
+                "ASiC-S",
+                null
+              ]
             },
             "validSignaturesCount": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             "validatedDocument": {
               "type": "object",
               "properties": {
                 "filename": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "minLength": 1
                 },
                 "fileHash": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "minLength": 1
                 },
                 "hashAlgo": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "minLength": 1
                 }
-              }
+              },
+              "additionalProperties": false
             },
             "signatures": {
               "type": "array",
@@ -47,7 +75,27 @@
                 "properties": {
                   "signatureFormat": {
                     "type": "string",
-                    "minLength": 1
+                    "enum": [
+                      "XAdES_BASELINE_B",
+                      "XAdES_BASELINE_B_BES",
+                      "XAdES_BASELINE_B_EPES",
+                      "XAdES_BASELINE_T",
+                      "XAdES_BASELINE_LT",
+                      "XAdES_BASELINE_LT_TM",
+                      "XAdES_BASELINE_LTA",
+                      "CAdES_BASELINE_B",
+                      "CAdES_BASELINE_T",
+                      "CAdES_BASELINE_LT",
+                      "CAdES_BASELINE_LTA",
+                      "PAdES_BASELINE_B",
+                      "PAdES_BASELINE_T",
+                      "PAdES_BASELINE_LT",
+                      "PAdES_BASELINE_LTA",
+                      "SK_XML_1.0",
+                      "DIGIDOC_XML_1.1",
+                      "DIGIDOC_XML_1.2",
+                      "DIGIDOC_XML_1.3"
+                    ]
                   },
                   "signatureMethod": {
                     "type": "string",
@@ -59,6 +107,7 @@
                   },
                   "claimedSigningTime": {
                     "type": "string",
+                    "format": "date-time",
                     "minLength": 1
                   },
                   "signatureLevel": {
@@ -84,7 +133,8 @@
                         "type": "string",
                         "minLength": 1
                       }
-                    }
+                    },
+                    "additionalProperties": false
                   },
                   "warnings": {
                     "type": "array",
@@ -99,7 +149,8 @@
                       },
                       "required": [
                         "content"
-                      ]
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "signatureScopes": {
@@ -133,7 +184,8 @@
                         "scope",
                         "name",
                         "content"
-                      ]
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "id": {
@@ -142,7 +194,11 @@
                   },
                   "indication": {
                     "type": "string",
-                    "minLength": 1
+                    "enum": [
+                      "TOTAL-PASSED",
+                      "TOTAL-FAILED",
+                      "INDETERMINATE"
+                    ]
                   },
                   "subIndication": {
                     "type": "string",
@@ -161,7 +217,8 @@
                       },
                       "required": [
                         "content"
-                      ]
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "info": {
@@ -169,6 +226,7 @@
                     "properties": {
                       "bestSignatureTime": {
                         "type": "string",
+                        "format": "date-time",
                         "minLength": 1
                       },
                       "timeAssertionMessageImprint": {
@@ -192,32 +250,32 @@
                             "claimedRole": {
                               "type": "string",
                               "minLength": 1
-                            },
-                            "signatureProductionPlace": {
-                              "type": "object",
-                              "properties": {
-                                "countryName": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "stateOrProvince": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "city": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "postalCode": {
-                                  "type": "string",
-                                  "minLength": 1
-                                }
-                              }
                             }
                           },
                           "required": [
                             "claimedRole"
                           ]
+                        }
+                      },
+                      "signatureProductionPlace": {
+                        "type": "object",
+                        "properties": {
+                          "countryName": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "stateOrProvince": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "city": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "postalCode": {
+                            "type": "string",
+                            "minLength": 1
+                          }
                         }
                       },
                       "signingReason": {
@@ -232,11 +290,16 @@
                           "properties": {
                             "signedTime": {
                               "type": "string",
+                              "format": "date-time",
                               "minLength": 1
                             },
                             "indication": {
                               "type": "string",
-                              "minLength": 1
+                              "enum": [
+                                "PASSED",
+                                "FAILED",
+                                "NO_SIGNATURE_FOUND"
+                              ]
                             },
                             "subIndication": {
                               "type": "string",
@@ -261,13 +324,15 @@
                             "signedBy",
                             "country",
                             "content"
-                          ]
+                          ],
+                          "additionalProperties": false
                         }
                       }
                     },
                     "required": [
                       "bestSignatureTime"
-                    ]
+                    ],
+                    "additionalProperties": false
                   },
                   "certificates": {
                     "type": "array",
@@ -281,7 +346,13 @@
                         },
                         "type": {
                           "type": "string",
-                          "minLength": 1
+                          "enum": [
+                            "SIGNING",
+                            "REVOCATION",
+                            "SIGNATURE_TIMESTAMP",
+                            "ARCHIVE_TIMESTAMP",
+                            "CONTENT_TIMESTAMP"
+                          ]
                         },
                         "content": {
                           "type": "string",
@@ -302,14 +373,16 @@
                           "required": [
                             "commonName",
                             "content"
-                          ]
+                          ],
+                          "additionalProperties": false
                         }
                       },
                       "required": [
                         "commonName",
                         "type",
                         "content"
-                      ]
+                      ],
+                      "additionalProperties": false
                     }
                   }
                 },
@@ -321,7 +394,8 @@
                   "signatureScopes",
                   "id",
                   "indication"
-                ]
+                ],
+                "additionalProperties": false
               }
             },
             "timeStampTokens": {
@@ -357,7 +431,8 @@
                         "commonName",
                         "type",
                         "content"
-                      ]
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "signedBy": {
@@ -391,7 +466,8 @@
                         "scope",
                         "name",
                         "content"
-                      ]
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "timestampLevel": {
@@ -411,7 +487,8 @@
                       },
                       "required": [
                         "content"
-                      ]
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "warning": {
@@ -427,7 +504,8 @@
                       },
                       "required": [
                         "content"
-                      ]
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "subIndication": {
@@ -440,7 +518,8 @@
                   "certificates",
                   "signedBy",
                   "indication"
-                ]
+                ],
+                "additionalProperties": false
               }
             },
             "policy": {
@@ -452,7 +531,8 @@
                 },
                 "policyUrl": {
                   "type": "string",
-                  "minLength": 1
+                  "minLength": 1,
+                  "format": "uri"
                 },
                 "policyName": {
                   "type": "string",
@@ -463,11 +543,14 @@
                 "policyDescription",
                 "policyUrl",
                 "policyName"
-              ]
+              ],
+              "additionalProperties": false
             },
             "validationLevel": {
               "type": "string",
-              "minLength": 1
+              "enum": [
+                "ARCHIVAL_DATA"
+              ]
             },
             "validationWarnings": {
               "type": "array",
@@ -482,7 +565,8 @@
                 },
                 "required": [
                   "content"
-                ]
+                ],
+                "additionalProperties": false
               }
             }
           },
@@ -496,10 +580,12 @@
       },
       "required": [
         "validationConclusion"
-      ]
+      ],
+      "additionalProperties": false
     }
   },
   "required": [
     "validationReport"
-  ]
+  ],
+  "additionalProperties": false
 }
