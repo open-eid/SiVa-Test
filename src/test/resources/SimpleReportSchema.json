@@ -425,6 +425,24 @@
                         "content": {
                           "type": "string",
                           "minLength": 1
+                        },
+                        "issuer": {
+                          "type": "object",
+                          "properties": {
+                            "commonName": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "content": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "commonName",
+                            "content"
+                          ],
+                          "additionalProperties": false
                         }
                       },
                       "required": [
