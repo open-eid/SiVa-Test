@@ -72,6 +72,18 @@ class AsicsValidationReportSpec extends GenericSpecification {
                         "The encryption algorithm ? is not authorised for time-stamp signature!"))
     }
 
+    @Description("Invalid timestamped ASiC-S report matches JSON structure and has expected values")
+    def "Given ivalid timestamped ASiC-S, then simple report has error/errors and warning/warnings values present"() {
+        expect:
+        SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondNotCoveringDatafile.asics"))
+                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
+                .body("timeStampTokens[0].error.content[0]", equalTo("The time-stamp message imprint is not intact!"))
+                .body("timeStampTokens[0].errors.content[0]", equalTo("The time-stamp message imprint is not intact!"))
+                .body("timeStampTokens[1].warning.content[0]", equalTo("The time-stamp token does not cover container datafile!"))
+                .body("timeStampTokens[1].warnings.content[0]", equalTo("The time-stamp token does not cover container datafile!"))
+    }
+
     @Description("Simple report includes timestamp creation time for timestamped signature")
     def "Given ASiC-S with timestamped signature, then validation report includes timestampCreationTime field"() {
         expect:
