@@ -298,6 +298,7 @@
                               "enum": [
                                 "PASSED",
                                 "FAILED",
+                                "INDETERMINATE",
                                 "NO_SIGNATURE_FOUND"
                               ]
                             },
