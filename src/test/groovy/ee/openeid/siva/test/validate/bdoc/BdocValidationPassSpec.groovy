@@ -80,9 +80,9 @@ class BdocValidationPassSpec extends GenericSpecification {
     }
 
     @Ignore
-    //TODO: New file needed. This one has different mimetype value in manifest.xml and signature.xml
-    @Description("Bdoc with warning on signature")
-    def "alidSignatureWithWarning"() {
+    //TODO: Needs to be developed - SIVA-812
+    @Description("Bdoc with SHA1 warning on signature")
+    def "validSignatureWithSha1Warning"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("bdoc_weak_warning_sha1.bdoc"))
                 .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
