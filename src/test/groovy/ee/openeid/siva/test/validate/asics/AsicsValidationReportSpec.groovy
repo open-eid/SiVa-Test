@@ -8,7 +8,7 @@ import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.restassured.response.Response
-import org.junit.Ignore
+import spock.lang.Ignore
 import spock.lang.Tag
 
 import static ee.openeid.siva.test.TestData.SUB_INDICATION_SIG_CRYPTO_FAILURE
