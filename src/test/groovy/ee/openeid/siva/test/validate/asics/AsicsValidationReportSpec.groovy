@@ -7,8 +7,8 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
-import io.qameta.allure.Issue
 import io.restassured.response.Response
+import spock.lang.Ignore
 import spock.lang.Tag
 
 import static ee.openeid.siva.test.TestData.SUB_INDICATION_SIG_CRYPTO_FAILURE
@@ -45,7 +45,7 @@ class AsicsValidationReportSpec extends GenericSpecification {
         "ValidDdocInAsics"             | "DDOC in timestamped ASiC-S"
     }
 
-    @Issue("SIVA-778")
+    @Ignore("SIVA-778")
     @Tag("slow")
     @Description("Timestamped ASiC-S report matches JSON structure and has expected values")
     def "Given 200x timestamped ASiC-S, then simple report has correct values present"() {

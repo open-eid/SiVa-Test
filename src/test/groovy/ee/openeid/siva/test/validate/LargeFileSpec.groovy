@@ -17,59 +17,39 @@
 package ee.openeid.siva.test.validate
 
 import ee.openeid.siva.test.GenericSpecification
-import ee.openeid.siva.test.model.RequestError
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestErrorValidator
-import io.qameta.allure.Description
-import io.qameta.allure.Link
+import io.qameta.allure.*
+import io.restassured.path.json.JsonPath
 import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.Matchers.equalTo
 
+@Feature("Large file validation")
 @Link("http://open-eid.github.io/SiVa/siva3/overview/#main-features-of-siva-validation-service")
 class LargeFileSpec extends GenericSpecification {
 
-    @Description("9MB PDF files (PAdES Baseline LT).")
-    def "pdfNineMegabyteFilesWithLtSignatureAreAccepted"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("9MB_PDF.pdf", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.PAdES_BASELINE_LT))
-                .body("validatedDocument.filename", equalTo("9MB_PDF.pdf"))
-    }
+    @Story("Validation large file containers succeeds")
+    def "Validating signed 9MB #description container is successful"() {
+        when:
+        JsonPath report = SivaRequests
+                .validate(RequestData.validationRequest(fileName, SignaturePolicy.POLICY_3)).jsonPath()
 
-    @Description("9MB ASIC-E file")
-    def "bdocTsNineMegabyteFilesValidSignatureAreAccepted"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("9MB_BDOC-TS.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_LT))
-                .body("validatedDocument.filename", equalTo("9MB_BDOC-TS.bdoc"))
-                .body("validSignaturesCount", equalTo(1))
-    }
+        then:
+        assertThat(report.getString("${VALIDATION_CONCLUSION_PREFIX}signatures[0].signatureFormat"), equalTo(signatureFormat))
+        assertThat(report.getString("${VALIDATION_CONCLUSION_PREFIX}validatedDocument.filename"), equalTo(fileName))
+        assertThat(report.getString("${VALIDATION_CONCLUSION_PREFIX}validSignaturesCount"), equalTo("1"))
 
-    @Description("9MB BDOC-TM")
-    def "bdocTmNineMegabyteFilesValidSignatureAreAccepted"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("9MB_BDOC-TM.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("validatedDocument.filename", equalTo("9MB_BDOC-TM.bdoc"))
-                .body("validSignaturesCount", equalTo(1))
-    }
-
-    @Description("9MB DDOC")
-    def "ddocTenMegabyteFilesWithValidSignatureAreAccepted"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("9MB_DDOC.ddoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", equalTo(SignatureFormat.DIGIDOC_XML_1_3))
-                .body("validatedDocument.filename", equalTo("9MB_DDOC.ddoc"))
-                .body("validSignaturesCount", equalTo(1))
+        where:
+        description | fileName           | signatureFormat
+        "PDF"       | "9MB_PDF.pdf"      | SignatureFormat.PAdES_BASELINE_LT
+        "ASiC-E"    | "9MB_BDOC-TS.bdoc" | SignatureFormat.XAdES_BASELINE_LT
+        "BDOC-TM"   | "9MB_BDOC-TM.bdoc" | SignatureFormat.XAdES_BASELINE_LT_TM
+        "DDOC"      | "9MB_DDOC.ddoc"    | SignatureFormat.DIGIDOC_XML_1_3
     }
 
     @Description("Bdoc Zip container with Bomb file")

@@ -26,7 +26,7 @@ import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.qameta.allure.Story
-import org.junit.jupiter.api.Tag
+import spock.lang.Tag
 
 import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
