@@ -24,6 +24,7 @@ import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import spock.lang.Ignore
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -74,6 +75,7 @@ class AsiceValidityConfirmationRequestSpec extends GenericSpecification {
 
     }
 
+    @Ignore("Needs a new testfile as CA certificate expired 02-03-2026 and no OCSP is taken after that")
     @Description("Requesting OCSP during validation is permitted for all countries but EE.")
     def "Given ASiC-E with expired non-EE XAdES_BASELINE_T signature, then OCSP is taken but validation fails"() {
         given:
