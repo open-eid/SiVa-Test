@@ -25,6 +25,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static ee.openeid.siva.test.TestData.VALIDATION_LEVEL_ARCHIVAL_DATA
@@ -36,9 +37,11 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of xades acceptance")
     def "xadesDocumentShouldPass"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("signatures0.xml", SignaturePolicy.POLICY_4, ReportType.SIMPLE))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("signatures0.xml", SignaturePolicy.POLICY_4, ReportType.SIMPLE))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].errors", emptyOrNullString())
@@ -63,9 +66,11 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
 
     @Description("XAdES extracted from BDOC")
     def "validXadesWithHashcodeFromBdoc"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", is("47101010033"))
@@ -114,9 +119,11 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
 
     @Description("Datafile digest in SHA1")
     def "sha1DatafileDigestSignatureShouldPass"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("sha1_TM.xml", null, null, "test.txt", HashAlgo.SHA1, "qP3CBanxnMHHUHpgxPAbE9Edf9A="))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("sha1_TM.xml", null, null, "test.txt", HashAlgo.SHA1, "qP3CBanxnMHHUHpgxPAbE9Edf9A="))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].signatureScopes[0].hashAlgo", is(HashAlgo.SHA1))

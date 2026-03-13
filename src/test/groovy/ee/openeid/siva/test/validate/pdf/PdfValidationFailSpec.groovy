@@ -25,6 +25,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.*
@@ -35,9 +36,11 @@ class PdfValidationFailSpec extends GenericSpecification {
 
     @Description("The PDF-file has been signed with expired certificate (PAdES Baseline T)")
     def "signaturesMadeWithExpiredSigningCertificatesAreInvalid"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-rsa1024-sha1-expired.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-rsa1024-sha1-expired.pdf"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_T))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_UNKNOWN))
@@ -50,9 +53,11 @@ class PdfValidationFailSpec extends GenericSpecification {
 
     @Description("The PDF-file has been signed with revoked certificate (PAdES Baseline LT)")
     def "documentSignedWithRevokedCertificateShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades_lt_revoked.pdf", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("pades_lt_revoked.pdf", SignaturePolicy.POLICY_3, null))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))

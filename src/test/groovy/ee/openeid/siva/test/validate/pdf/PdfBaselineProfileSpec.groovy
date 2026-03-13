@@ -25,6 +25,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
@@ -34,9 +35,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("The PDF has PAdES-B profile signature polv3")
     def "baselineProfileBDocumentShouldFailpolv3"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-b-sha256-auth.pdf", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-pades-b-sha256-auth.pdf", SignaturePolicy.POLICY_3))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_B))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.NOT_ADES))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -55,9 +58,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("The PDF has PAdES-T profile signature polv3")
     def "baselineProfileTDocumentShouldFailpolv3"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-t-live-aj.pdf", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("pades-baseline-t-live-aj.pdf", SignaturePolicy.POLICY_3))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_T))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
@@ -73,9 +78,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("The PDF has PAdES-LT profile signature polv3")
     def "baselineProfileLTDocumentShouldPasspolv3"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_3))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -92,9 +99,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("The PDF has PAdES-LT profile signature polv4")
     def "baselineProfileLTDocumentShouldPasspolv4"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_4))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf", SignaturePolicy.POLICY_4))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -106,9 +115,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("The PDF has PAdES-LTA profile signature polv3")
     def "baselineProfileLTADocumentShouldPasspolv3"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_3))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -126,9 +137,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("The PDF has PAdES-LTA profile signature polv4")
     def "baselineProfileLTADocumentShouldPasspolv4"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_4))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", SignaturePolicy.POLICY_4))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -146,9 +159,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("The PDF has PAdES-LT and B profile signature")
     def "documentWithBaselineProfilesBAndLTSignaturesShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-b.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-b.pdf"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -164,9 +179,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("PDF document message digest attribute value does not match calculate value")
     def "documentMessageDigestAttributeValueDoesNotMatchCalculatedValue"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt1-lt2-wrongDigestValue.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt1-lt2-wrongDigestValue.pdf"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[1].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[1].signatureLevel", is(SignatureLevel.NOT_ADES_QC))
                 .body("signatures[1].indication", is("TOTAL-FAILED"))
@@ -178,9 +195,11 @@ class PdfBaselineProfileSpec extends GenericSpecification {
 
     @Description("PDF file with a serial signature")
     def "documentSignedWithMultipleSignersSerialSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt1-lt2-Serial.pdf", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt1-lt2-Serial.pdf", SignaturePolicy.POLICY_3))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))

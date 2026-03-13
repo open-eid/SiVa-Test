@@ -25,6 +25,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.*
@@ -348,9 +349,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The bdoc is QES level")
     def "bdocDocumentQesNoTypeShouldPassWithStrictPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_4, null))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -365,9 +368,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The asice is QES level")
     def "asiceDocumentQesNoTypeShouldPassWithStrictPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice", null, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice", null, null))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -704,9 +709,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The bdoc is QES level")
     def "bdocDocumentQesNoTypeShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_3, null))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -721,9 +728,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The asice is QES level")
     def "asiceDocumentQesNoTypeShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice", SignaturePolicy.POLICY_3, null))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))

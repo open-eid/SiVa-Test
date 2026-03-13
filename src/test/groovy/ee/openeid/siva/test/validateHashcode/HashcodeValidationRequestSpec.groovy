@@ -331,9 +331,11 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         List<String> files = returnFiles("xades/container/")
         Map requestData = RequestData.hashcodeValidationRequest(files, null, null)
 
-        expect:
-        SivaRequests.validateHashcode(requestData)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(requestData)
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", is(5))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
                 .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA384))
@@ -349,9 +351,11 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         Map requestData = RequestData.hashcodeValidationRequest(files, null, null)
         Map requestDataWithDatafiles = addDatafiles(requestData)
 
-        expect:
-        SivaRequests.validateHashcode(requestDataWithDatafiles)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(requestDataWithDatafiles)
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", is(5))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))
                 .body("signatures.find {signatures -> signatures.signedBy == 'JÕEORG,JAAK-KRISTJAN,38001085718'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA384))
@@ -368,9 +372,11 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         Map requestDataWithDatafiles = addDatafiles(requestData)
         ((requestDataWithDatafiles.signatureFiles as List<Map>).get(files.indexOf("signatures0.xml")).datafiles as List<Map>).get(0).hash = "sjajsa"
 
-        expect:
-        SivaRequests.validateHashcode(requestDataWithDatafiles)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(requestDataWithDatafiles)
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", is(4))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.indication", is("TOTAL-FAILED"))
                 .body("signatures.find {signatures -> signatures.signedBy == 'MÄNNIK,MARI-LIIS,47101010033'}.signatureScopes[0].hashAlgo", is(HashAlgo.SHA256))

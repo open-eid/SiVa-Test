@@ -22,6 +22,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import spock.lang.Ignore
 
@@ -184,9 +185,11 @@ class AsiceValidationFailSpec extends GenericSpecification {
 
     @Description("Asice OCSP response status is revoked")
     def "asiceTsOcspStatusRevoked"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-R-25.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-R-25.asice"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is(SUB_INDICATION_REVOKED_NO_POE))
@@ -282,9 +285,11 @@ class AsiceValidationFailSpec extends GenericSpecification {
 
     @Description("Asice OCSP response status is revoked")
     def "asiceTmOcspStatusRevoked"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TM-15_revoked.4.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("TM-15_revoked.4.asice"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is(SUB_INDICATION_REVOKED_NO_POE))
@@ -377,10 +382,12 @@ class AsiceValidationFailSpec extends GenericSpecification {
 
     @Description("BDoc with invalid signature, no signing certificate found")
     def "asiceInvalidSignatureNoSigningCertificateFound"() {
-        expect:
+        when:
         String fileName = "TM-invalid-sig-no-sign-cert.asice"
-        SivaRequests.validate(RequestData.validationRequest(fileName))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        Response response = SivaRequests.validate(RequestData.validationRequest(fileName))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signedBy", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_T))

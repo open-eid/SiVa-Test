@@ -25,6 +25,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
@@ -46,9 +47,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("SHA1 algorithms (PAdES Baseline LT)")
     def "documentSignedWithSha1CertificateShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha1.pdf", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha1.pdf", SignaturePolicy.POLICY_3))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -99,9 +102,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("RSA1023 algorithms (PAdES Baseline LT)")
     def "documentSignedWithRsa1023AlgoShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1023.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1023.pdf"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("CRYPTO_CONSTRAINTS_FAILURE_NO_POE"))
                 .body("signatures[0].errors.content", hasItem("The past signature validation is not conclusive!"))

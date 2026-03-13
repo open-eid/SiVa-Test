@@ -24,6 +24,7 @@ import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
@@ -153,9 +154,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
     def "Validating ASiC-S timestamped first with #first.name and then with #second.name"() {
         given:
         String fileName = "2xTst-${first.name}+${second.name}.asics"
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(fileName))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest(fileName))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is(fileName))
                 .body("signaturesCount", is(0))

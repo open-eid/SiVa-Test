@@ -24,6 +24,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.hasItem
@@ -34,9 +35,11 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
     @Description("Data file hash algorithm do not match signature hash algorithm")
     @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
     def "dataFileHashAlgorithmDoesNotMatchWithSignatureDataFileHashAlgorithm"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA512, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA512, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("SIGNED_DATA_NOT_FOUND"))
@@ -52,9 +55,11 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
     @Description("Hashes do not match")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")
     def "dataFileHashDoesNotMatchWithSignatureFile"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "kl2ZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "kl2ZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", is("HASH_FAILURE"))
@@ -67,9 +72,11 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
     @Description("Wrong data file name is used")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")
     def "dataFileFilenameDoesNotMatchWithSignatureFile"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null, "wrongDataFileName.jpg", HashAlgo.SHA256, "Sj/WcgsM57hpCiR5E8OycJ4jioYwdHzz3s4e5LXditA="))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml", null, null, "wrongDataFileName.jpg", HashAlgo.SHA256, "Sj/WcgsM57hpCiR5E8OycJ4jioYwdHzz3s4e5LXditA="))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("SIGNED_DATA_NOT_FOUND"))
@@ -84,9 +91,11 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
     @Description("Invalid signature in XAdES")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")
     def "invalidSignature"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Invalid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Invalid_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", is("SIG_CRYPTO_FAILURE"))
@@ -99,9 +108,11 @@ class XadesHashcodeValidationFailSpec extends GenericSpecification {
     @Description("Invalid signature in XAdES")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface")
     def "invalidBase64Signature"() {
-        expect:
-        SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Invalid_base64_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validateHashcode(RequestData.hashcodeValidationRequest("Invalid_base64_XAdES_LT_TM.xml", null, null, "test.txt", HashAlgo.SHA256, "RnKZobNWVy8u92sDL4S2j1BUzMT5qTgt6hm90TfAGRo="))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", is("SIG_CRYPTO_FAILURE"))

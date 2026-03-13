@@ -181,9 +181,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Asice OCSP response status is revoked")
     def "bdocTsOcspStatusRevoked"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-R-25.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-R-25.asice", null, null))
+
+        then:
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("REVOKED_NO_POE"))
@@ -269,9 +271,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc OCSP response status is revoked")
     def "bdocTmOcspStatusRevoked"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("TM-15_revoked.4.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("TM-15_revoked.4.asice", null, null))
+
+        then:
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("REVOKED_NO_POE"))
@@ -364,9 +368,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc certificate's validity time is not in the period of OCSP producedAt time")
     def "bdocCertificateValidityOutOfOcspRange"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-OK-prodat-NOK-1.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-OK-prodat-NOK-1.bdoc"))
+
+        then:
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].errors.content", contains(
@@ -450,7 +456,7 @@ class BdocValidationFailSpec extends GenericSpecification {
 
         where:
         comment | filename                                        | signatureProfiles
-  //TODO: SIVA-777      "LT"    | "singleValidSignatureTmPolicyExtendedToLt.sce"  | SignatureFormat.XAdES_BASELINE_LT_TM
+        //TODO: SIVA-777      "LT"    | "singleValidSignatureTmPolicyExtendedToLt.sce"  | SignatureFormat.XAdES_BASELINE_LT_TM
         "LTA"   | "singleValidSignatureTmPolicyExtendedToLta.sce" | SignatureFormat.XAdES_BASELINE_LTA
     }
 }

@@ -21,6 +21,7 @@ import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import io.restassured.response.Response
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.getCERT_VALIDATION_NOT_CONCLUSIVE
@@ -120,9 +121,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Verification of values in Validation Report XAdES_BASELINE_LT, QES, FullSignatureScope")
     def "bdocCorrectValuesArePresentValidLtSignatureAdesWarning"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_3))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
@@ -190,9 +193,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("JSON structure has all elements (Bdoc valid multiple signatures)")
     def "bdocAllElementsArePresentValidMultipleSignatures"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc", SignaturePolicy.POLICY_3))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))

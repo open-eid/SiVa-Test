@@ -25,6 +25,7 @@ import ee.openeid.siva.test.model.SignatureLevel
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import io.restassured.response.Response
 import spock.lang.Ignore
 
 import static org.hamcrest.Matchers.*
@@ -95,9 +96,11 @@ class BdocValidationPassSpec extends GenericSpecification {
 
     @Description("Asice One LT signature with certificates from different countries")
     def "bdocDifferentCertificateCountries"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-30.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-30.asice", null, null))
+
+        then:
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", is("PELANIS,MINDAUGAS,37412260478"))
@@ -283,9 +286,11 @@ class BdocValidationPassSpec extends GenericSpecification {
 
     @Description("Asice with wrong slash character ('\\') in data file mime-type value")
     def "bdocInvalidMimeTypeCharsShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-33.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-33.bdoc"))
+
+        then:
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", is("2016-04-13T08:37:52Z"))
@@ -295,9 +300,11 @@ class BdocValidationPassSpec extends GenericSpecification {
 
     @Description("Bdoc with invalid mimetype in manifest")
     def "bdocMalformedBdocWithInvalidMimetypeInManifestShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("23147_weak-warning-sha1-invalid-mimetype-in-manifest.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("23147_weak-warning-sha1-invalid-mimetype-in-manifest.bdoc"))
+
+        then:
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", is("2013-11-13T10:09:49Z"))

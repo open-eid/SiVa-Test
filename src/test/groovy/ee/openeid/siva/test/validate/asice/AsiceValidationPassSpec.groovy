@@ -26,6 +26,7 @@ import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.qameta.allure.Story
+import io.restassured.response.Response
 import spock.lang.Tag
 
 import static ee.openeid.siva.test.TestData.*
@@ -117,9 +118,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
     @Tag("LiveData")
     @Description("Asice files with signature from live certificate chain")
     def "Given ASiC-E with signature from live #CN certificate chain, then successful validation"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(testFile))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest(testFile))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validationWarnings", hasSize(1))
                 .body("validationWarnings.content", hasItem(TEST_ENV_VALIDATION_WARNING))
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
@@ -205,9 +208,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice One LT signature with certificates from different countries")
     def "asiceDifferentCertificateCountries"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-30.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-30.asice"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].signedBy", is("PELANIS,MINDAUGAS,37412260478"))
@@ -265,9 +270,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice file with KLASS3-SK 2010 (EECCRCA) certificate chain")
     def "asiceKlass3Sk2010CertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
@@ -346,9 +353,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice pss signature")
     def "asicePssSignatureShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("PSS-signature.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("PSS-signature.asice"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings", emptyOrNullString())
@@ -412,9 +421,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
     @Story("Only QTST timestamp allowed")
     @Description("Asice LT signature passes without warnings/errors, when timestamp level was during signing QTST")
     def "Asice LT signature with QTST timestamp passes: #description"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(testfile))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest(testfile))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", equalTo(1))
                 .body("signaturesCount", equalTo(1))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].commonName", is(timestamp))

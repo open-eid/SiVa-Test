@@ -27,6 +27,7 @@ import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.qameta.allure.Story
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
@@ -65,9 +66,11 @@ class PdfValidationPassSpec extends GenericSpecification {
 
     @Description("Pdf with single valid signature")
     def "validSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))

@@ -24,6 +24,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
@@ -34,9 +35,11 @@ class DocumentFormatSpec extends GenericSpecification {
 
     @Description("Validation of pdf document acceptance")
     def "PAdESDocumentShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", emptyOrNullString())
@@ -47,9 +50,11 @@ class DocumentFormatSpec extends GenericSpecification {
 
     @Description("Validation of bdoc document acceptance")
     def "BdocDocumentShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -62,9 +67,11 @@ class DocumentFormatSpec extends GenericSpecification {
 
     @Description("Validation of asice document acceptance")
     def "asiceDocumentShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("bdoc21-TS.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("bdoc21-TS.asice"))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
