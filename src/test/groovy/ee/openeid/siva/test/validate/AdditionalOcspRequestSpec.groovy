@@ -14,7 +14,7 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test.validate.asice
+package ee.openeid.siva.test.validate
 
 import ee.openeid.siva.test.DateTimeMatcher
 import ee.openeid.siva.test.GenericSpecification
@@ -32,7 +32,8 @@ import java.time.ZonedDateTime
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 import static org.hamcrest.Matchers.*
 
-class AsiceValidityConfirmationRequestSpec extends GenericSpecification {
+@Epic("Request OCSP during validation")
+class AdditionalOcspRequestSpec extends GenericSpecification {
 
 
     @Description("Requesting OCSP during validation is permitted for all countries but EE.")
