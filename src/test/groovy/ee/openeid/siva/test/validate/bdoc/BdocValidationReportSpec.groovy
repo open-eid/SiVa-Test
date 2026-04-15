@@ -19,16 +19,39 @@ package ee.openeid.siva.test.validate.bdoc
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.TestData
 import ee.openeid.siva.test.model.ContainerFormat
+import ee.openeid.siva.test.model.SignaturePolicy
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
-import io.qameta.allure.Description
+import ee.openeid.siva.test.util.Utils
+import io.qameta.allure.*
+import io.restassured.response.Response
 
+import static ee.openeid.siva.test.TestData.getVALIDATION_CONCLUSION_PREFIX
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
-import static org.hamcrest.Matchers.*
+import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals
+import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.is
 
+@Epic("BDOC")
+@Feature("Validation report verification")
 class BdocValidationReportSpec extends GenericSpecification {
 
-    @Description("Simple report includes timestamp creation time for timestamped signature")
+    @Story("BDOC with XAdES_BASELINE_LT_TM signature report matches JSON structure and has expected values")
+    def "BDOC with one valid LT-TM signature has correct validation report values present"() {
+        when: "report is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTM.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "report matches JSON structure"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
+
+        and: "report matches expectation"
+        String expected = new String(Utils.readFileFromResources("singleValidSignatureTM.bdoc.json"))
+        String actual = response.then().extract().asString()
+        assertJsonEquals(expected, actual)
+    }
+
+    @Story("Simple report includes timestamp creation time for timestamped signature")
     def "Given BDOC with timestamped signature, then validation report includes timestampCreationTime field"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest(file, "bdoc"))
@@ -43,7 +66,7 @@ class BdocValidationReportSpec extends GenericSpecification {
         "TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce" | "2024-09-13T14:14:47Z"
     }
 
-    @Description("Simple report includes timestamp creation time for timestamped signature")
+    @Story("Simple report includes timestamp creation time for timestamped signature")
     def "Given BDOC with multiple timestamped signatures, then validation report includes timestampCreationTime field for each"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce", "bdoc"))
@@ -53,7 +76,7 @@ class BdocValidationReportSpec extends GenericSpecification {
                 .body("signatures[2].info.timestampCreationTime", is("2021-01-29T14:38:11Z"))
     }
 
-    @Description("Simple report includes archive timestamp info")
+    @Story("Simple report includes archive timestamp info")
     def "Given BDOC with archive timestamped signature, then archiveTimeStamps info is reported correctly"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc")).then()

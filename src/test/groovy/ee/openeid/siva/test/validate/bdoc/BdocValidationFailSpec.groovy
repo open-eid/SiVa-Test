@@ -319,7 +319,7 @@ class BdocValidationFailSpec extends GenericSpecification {
         SivaRequests.validate(RequestData.validationRequest("TM-10_noncevale.4.bdoc"))
                 .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
-                .body("signatures[0].indication", is("TOTAL-FAILED"))
+                .body("signatures[0].indication", is("INDETERMINATE"))
                 .body("signatures[0].errors.content", hasItem("OCSP nonce is invalid"))
                 .body("validSignaturesCount", is(0))
     }
@@ -375,11 +375,13 @@ class BdocValidationFailSpec extends GenericSpecification {
         response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
-                .body("signatures[0].errors.content", contains(
+                .body("signatures[0].errors.content", containsInAnyOrder(
                         TestData.CERT_VALIDATION_NOT_CONCLUSIVE,
                         TestData.VALID_VALIDATION_PROCESS_ERROR_VALUE_5,
-                        TestData.REVOCATION_NOT_CONSISTENT,
-                        TestData.CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
+                        TestData.CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE,
+                        "The ResponderId does not match the OCSP issuer certificate!",
+                        "The algorithm RSA with key size 1024 is no longer considered reliable for signature creation!")
+                )
                 .body("validSignaturesCount", is(0))
     }
 

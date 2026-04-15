@@ -120,41 +120,7 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signaturesCount", is(1))
     }
 
-    @Description("Verification of values in Validation Report XAdES_BASELINE_LT, QES, FullSignatureScope")
-    def "bdocCorrectValuesArePresentValidLtSignatureAdesWarning"() {
-        when:
-        Response response = SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc", SignaturePolicy.POLICY_3))
-
-        then:
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].id", is("S0"))
-                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
-                .body("signatures[0].signedBy", is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].subIndication", emptyOrNullString())
-                .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].signatureScopes[0].name", is("build.xml"))
-                .body("signatures[0].signatureScopes[0].scope", is("FullSignatureScope"))
-                .body("signatures[0].signatureScopes[0].content", is("Digest of the document content"))
-                .body("signatures[0].claimedSigningTime", is("2014-07-11T14:10:07Z"))
-                .body("signatures[0].warnings", emptyOrNullString())
-                .body("signatures[0].info.timeAssertionMessageImprint", is("MDEwDQYJYIZIAWUDBAIBBQAEINHGGgGzXqzGfN2J6olA6VaXSeCG1PRBGrmG4wxQYf7A"))
-                .body("signatures[0].info.bestSignatureTime", is("2011-10-15T14:59:35Z"))
-                .body("signatures[0].info.timestampCreationTime", emptyOrNullString())
-                .body("signatures[0].info.ocspResponseCreationTime", is("2011-10-15T14:59:35Z"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", is("TEST of SK OCSP RESPONDER 2011"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", startsWith("MIIEijCCA3KgAwIBAgIQaI8x6BnacYdNdNwlYnn/mzANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", is("SINIVEE,VEIKO,36706020210"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", startsWith("MIID3DCCAsSgAwIBAgIER/idhzANBgkqhkiG9w0BAQUFADBbMQ"))
-                .body("signatureForm", is(ContainerFormat.ASiC_E))
-                .body("validatedDocument.filename", is("23154_test1-old-sig-sigat-NOK-prodat-OK-1.bdoc"))
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
-    }
-
-    @Description("Verification of values in Validation Report XAdES_BASELINE_LT-TM, AdESqc")
+    @Description("Verification of values in Validation Report XAdES_BASELINE_LT, AdESqc")
     def "bdocCorrectValuesArePresentInvalidLtSignatureAdesqc"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("testAdesQCInvalid.asice"))
