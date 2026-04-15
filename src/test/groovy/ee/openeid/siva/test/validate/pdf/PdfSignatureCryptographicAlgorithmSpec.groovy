@@ -109,7 +109,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("CRYPTO_CONSTRAINTS_FAILURE_NO_POE"))
-                .body("signatures[0].errors.content", hasItem("The past signature validation is not conclusive!"))
+                .body("signatures[0].errors.content", hasItem("The algorithm RSA with key size 1023 is too small for signature creation!"))
     }
 
     @Description("RSA2047 algorithms (PAdES Baseline LT)")
