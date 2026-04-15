@@ -21,6 +21,7 @@ import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import io.qameta.allure.Story
 import io.restassured.response.Response
 import spock.lang.Ignore
 
@@ -482,4 +483,45 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("archiveTimeStamps[1].subIndication", is("NO_CERTIFICATE_CHAIN_FOUND"))
                 .body("archiveTimeStamps[1].content", is("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"))
     }
+
+    @Story("Simple report includes info object when signature contains info values")
+    def "Validation report includes info object for #description"() {
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest(filename))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", is(filename))
+                .body("signatures[0].signatureFormat", is(signatureFormat))
+                .body("signatures[0].info", notNullValue())
+                .body("signatures[0].info.bestSignatureTime", is(bestSignatureTime))
+
+        where:
+        description                | filename                               | signatureFormat                      | bestSignatureTime
+        "T-level EE signature"     | "TEST_ESTEID2018_ASiC-E_XAdES_T.sce"   | SignatureFormat.XAdES_BASELINE_T     | "2024-09-13T14:14:24Z"
+        "T-level non-EE signature" | "lv_test_signature_new_card-T.asice"   | SignatureFormat.XAdES_BASELINE_T     | "2024-04-16T07:15:37Z"
+        "LT-level signature"       | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"  | SignatureFormat.XAdES_BASELINE_LT    | "2024-09-13T14:14:36Z"
+        "LTA-level signature"      | "TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce" | SignatureFormat.XAdES_BASELINE_LTA   | "2024-09-13T14:14:47Z"
+        "LT-TM-level signature"    | "TEST_ASiC-E_XAdES_TM+LT.asice"        | SignatureFormat.XAdES_BASELINE_LT_TM | "2021-01-29T14:15:43Z"
+
+    }
+
+    @Story("Simple report includes info object when signature contains info values")
+    def "Validation report does not include info object for #description"() {
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest(filename))
+
+        then:
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", is(filename))
+                .body("signatures[0].signatureFormat", is(signatureFormat))
+                .body("signatures[0]", not(hasKey("info")))
+
+        where:
+        description            | filename                                   | signatureFormat
+        "B-level signature"    | "TEST_ESTEID2018_ASiC-E_XAdES_B.sce"       | SignatureFormat.XAdES_BASELINE_B
+        "BES-level signature"  | "TEST_ESTEID2018_ASiC-E_XAdES_B_BES.bdoc"  | SignatureFormat.XAdES_BASELINE_B_BES
+        "EPES-level signature" | "TEST_ESTEID2018_ASiC-E_XAdES_B_EPES.bdoc" | SignatureFormat.XAdES_BASELINE_B_EPES
+    }
+
 }
