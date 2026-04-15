@@ -194,7 +194,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is(SUB_INDICATION_REVOKED_NO_POE))
                 .body("signatures[0].info.bestSignatureTime", is("2014-11-07T11:43:06Z"))
-                .body("signatures[0].errors.content", hasItems(PAST_SIG_VALIDATION_NOT_CONCLUSIVE))
+                .body("signatures[0].errors.content", hasItems("The certificate is revoked!"))
                 .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", is(0))
     }

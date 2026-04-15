@@ -189,7 +189,7 @@ class BdocValidationFailSpec extends GenericSpecification {
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("REVOKED_NO_POE"))
-                .body("signatures[0].errors.content", hasItems("The past signature validation is not conclusive!"))
+                .body("signatures[0].errors.content", hasItems("The certificate is revoked!"))
                 .body("validSignaturesCount", is(0))
     }
 
