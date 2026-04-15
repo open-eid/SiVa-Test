@@ -1,0 +1,161 @@
+{
+  "validationReport": {
+    "validationConclusion": {
+      "validationTime": "${json-unit.ignore}",
+      "validationWarnings": [
+        {
+          "content": "This is validation service demo. Use it for testing purposes only"
+        }
+      ],
+      "signaturesCount": 3,
+      "validatedDocument": {
+        "filename": "Baltic MoU digital signing_EST_LT_LV.bdoc"
+      },
+      "validSignaturesCount": 3,
+      "signatures": [
+        {
+          "signatureFormat": "XAdES_BASELINE_LT_TM",
+          "subjectDistinguishedName": {
+            "commonName": "MICHAL,KRISTEN,37507120348",
+            "serialNumber": "37507120348",
+            "surname": "MICHAL",
+            "givenName": "KRISTEN"
+          },
+          "certificates": [
+            {
+              "commonName": "SK OCSP RESPONDER 2011",
+              "type": "REVOCATION",
+              "content": "MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhkiG9w0BAQUFADB1MQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEoMCYGA1UEAwwfRUUgQ2VydGlmaWNhdGlvbiBDZW50cmUgUm9vdCBDQTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMB4XDTExMDMxODEwMjE0M1oXDTI0MDMxODEwMjE0M1owgZ0xCzAJBgNVBAYTAkVFMQ4wDAYDVQQIEwVIYXJqdTEQMA4GA1UEBxMHVGFsbGlubjEiMCAGA1UEChMZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czENMAsGA1UECxMET0NTUDEfMB0GA1UEAxMWU0sgT0NTUCBSRVNQT05ERVIgMjAxMTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAihvGyhMVrgReHluKln1za6gvCE/mlSREmWjJFpL9llvuEUZoPFIypYA8g5u1VfgkeW5gDq25jAOq4FyXeDGIa+pJn2h0o2Wc2aeppVG/emfGm/jA8jjeyMrwH8fAJrqVQ7c9X2xSwJEch/P2d8CfMZt5YF6gqLtPvG1b+n6otBZA5wjIFfJ/inJBMUvqHSz3+PLfxO2/T3Wyk/c8M9HIMqTelqyiMGRgWehiU1OsL9armv3dQrHs1wm6vHaxfpfWB9YAFpeo9aYqhPCxVt/zo2NQB6vxyZS0hsOrXL7SxRToOJaqsnvlbf0erPPFtRHUvbojYYgl+fzlz0Jt6QJoNwIDAQABo4IBHTCCARkwEwYDVR0lBAwwCgYIKwYBBQUHAwkwHQYDVR0OBBYEFKWhSGFt537NmJ50nCm7vYrecgxZMIGCBgNVHSAEezB5MHcGCisGAQQBzh8EAQIwaTA+BggrBgEFBQcCAjAyHjAAUwBLACAAdABpAG0AZQAgAHMAdABhAG0AcABpAG4AZwAgAHAAbwBsAGkAYwB5AC4wJwYIKwYBBQUHAgEWG2h0dHBzOi8vd3d3LnNrLmVlL2FqYXRlbXBlbDAfBgNVHSMEGDAWgBQS8lo+6lYcv80GrPHxJcmpS9QUmTA9BgNVHR8ENjA0MDKgMKAuhixodHRwOi8vd3d3LnNrLmVlL3JlcG9zaXRvcnkvY3Jscy9lZWNjcmNhLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAw2sKwvTHtYGtD8Jw9mNUuj/mWiBSBEBeY2LhW8V6tjBPAPp3s6iWOh0FbVR2LUyrqRwgT3fyWiGsiDm/6cIqM+IblLp/8ztfRQjquhW6XCD9SK02OQ9ZSdBwcmoAApZLGXQC34wdgmV/hLTTNxONnDACBKz9U+Dy9a4ZT4tpNkbH8jq/BMne8FzbvRt1bjpXBP7gjLX+zdx8/hp0Wq4tD+f9NVX0+vm9ahEKuzx4QzPnSB7hhWM9OnLZT7noRQa+KWk5c+e5VoR5R2t7MjVl8Cd+2llxiSxqMSbU5/23BzAKgN+NQdrBZAzpZ7lfaAuLFaICP+bAm6uW2JUrM6abOw=="
+            },
+            {
+              "commonName": "MICHAL,KRISTEN,37507120348",
+              "type": "SIGNING",
+              "content": "MIIEoTCCA4mgAwIBAgIQXESH+ckjJK1SC2r9DcQrDzANBgkqhkiG9w0BAQUFADBkMQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEXMBUGA1UEAwwORVNURUlELVNLIDIwMTExGDAWBgkqhkiG9w0BCQEWCXBraUBzay5lZTAeFw0xMzA4MTQxMTMzMTdaFw0xNjAyMTUyMTAwMDBaMIGYMQswCQYDVQQGEwJFRTEPMA0GA1UECgwGRVNURUlEMRowGAYDVQQLDBFkaWdpdGFsIHNpZ25hdHVyZTEjMCEGA1UEAwwaTUlDSEFMLEtSSVNURU4sMzc1MDcxMjAzNDgxDzANBgNVBAQMBk1JQ0hBTDEQMA4GA1UEKgwHS1JJU1RFTjEUMBIGA1UEBRMLMzc1MDcxMjAzNDgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC/HZpSaTxCz56/QA7kyYpA6c0gPv1ZApM9ofdsZ5tH89W6jHjRA6uVkCPgfGj0Ux/KeCSMCODZB/l0gBTaa0gqJbE5Yi/upuUunpNyJl+y1fVsthgIgwTCnfC7zEiC1ubpj4NP4YQ7RD+WtOzwHkwxG8FJzbPfygS9C/NYu36o2y1T5CZg+TUCVmZUSu+KMCHdQY2LMXPyThMU3U5CwKKaORAmLybUCg3tm44aGeVwXOZafiLcI/UNzuV60zrc6M93bRlCCQ1ptkzZv82xQQIknhVOu4PCaSzUSXFTfOOymcaBvsZGbrdcN+KuMKa0md5GLkMVQzaxpaqu0wANTWlHAgMBAAGjggEYMIIBFDAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIGQDBRBgNVHSAESjBIMEYGCysGAQQBzh8BAQMDMDcwEgYIKwYBBQUHAgIwBhoEbm9uZTAhBggrBgEFBQcCARYVaHR0cDovL3d3dy5zay5lZS9jcHMvMB0GA1UdDgQWBBTlr5RpQqf2kvcTm2Xp5wpjooKAwjAiBggrBgEFBQcBAwQWMBQwCAYGBACORgEBMAgGBgQAjkYBBDAfBgNVHSMEGDAWgBR7avJVUFy42XoIh0Gu+qIrPVtXdjBABgNVHR8EOTA3MDWgM6Axhi9odHRwOi8vd3d3LnNrLmVlL3JlcG9zaXRvcnkvY3Jscy9lc3RlaWQyMDExLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAkviz20PociuFI7J+e+8kH69tK+wksIg+1z1p7STWvtw4GRMdyVanrtDocVMLvlXNrZTZhNnAeaTeSNdZzcjK33tyw48V73TbLqzmE61cOig/rhNl6Xs3nVX2YGyJbsEWlPkUbEjIq/qZo48R8rzvgB2jsmrBs3WtAODCoSo4/ljeBLneUKHvJnw93cfRXWVRdU2gaWfhJwldXNHJGetT89nWb2qtyPaGt5o3uXsv2bfA1bY/HTLN2IF0I76xlXgDPWPwE4rc/6DkIqpWDYZ5N5QHgFWdzT5i219PqboawOw1BttRubbfu3zgcqvBbZgP6VLQVPwmYxRBmnxM3wgEsQ=="
+            }
+          ],
+          "signedBy": "MICHAL,KRISTEN,37507120348",
+          "claimedSigningTime": "2015-11-04T10:24:11Z",
+          "signatureLevel": "QESIG",
+          "warnings": [{"content": "The authority info access is not present!"}],
+          "signatureScopes": [
+            {
+              "scope": "FullSignatureScope",
+              "name": "Baltic MoU digital signing_04112015.docx",
+              "content": "Digest of the document content"
+            }
+          ],
+          "signatureMethod": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+          "id": "S0",
+          "indication": "TOTAL-PASSED",
+          "info": {
+            "timeAssertionMessageImprint": "MDEwDQYJYIZIAWUDBAIBBQAEINiaR8aBDIPiXK/fiPb7fe3pWaBaEKzILvjnZVppopPy",
+            "bestSignatureTime": "2015-11-04T10:24:20Z",
+            "ocspResponseCreationTime": "2015-11-04T10:24:20Z"
+          }
+        },
+        {
+          "signatureFormat": "XAdES_BASELINE_LT_TM",
+          "subjectDistinguishedName": {
+            "commonName": "JUOZAS OLEKAS",
+            "serialNumber": "35510300028",
+            "surname": "OLEKAS",
+            "givenName": "JUOZAS"
+          },
+          "certificates": [
+            {
+              "commonName": "SK OCSP RESPONDER 2011",
+              "type": "REVOCATION",
+              "content": "MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhkiG9w0BAQUFADB1MQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEoMCYGA1UEAwwfRUUgQ2VydGlmaWNhdGlvbiBDZW50cmUgUm9vdCBDQTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMB4XDTExMDMxODEwMjE0M1oXDTI0MDMxODEwMjE0M1owgZ0xCzAJBgNVBAYTAkVFMQ4wDAYDVQQIEwVIYXJqdTEQMA4GA1UEBxMHVGFsbGlubjEiMCAGA1UEChMZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czENMAsGA1UECxMET0NTUDEfMB0GA1UEAxMWU0sgT0NTUCBSRVNQT05ERVIgMjAxMTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAihvGyhMVrgReHluKln1za6gvCE/mlSREmWjJFpL9llvuEUZoPFIypYA8g5u1VfgkeW5gDq25jAOq4FyXeDGIa+pJn2h0o2Wc2aeppVG/emfGm/jA8jjeyMrwH8fAJrqVQ7c9X2xSwJEch/P2d8CfMZt5YF6gqLtPvG1b+n6otBZA5wjIFfJ/inJBMUvqHSz3+PLfxO2/T3Wyk/c8M9HIMqTelqyiMGRgWehiU1OsL9armv3dQrHs1wm6vHaxfpfWB9YAFpeo9aYqhPCxVt/zo2NQB6vxyZS0hsOrXL7SxRToOJaqsnvlbf0erPPFtRHUvbojYYgl+fzlz0Jt6QJoNwIDAQABo4IBHTCCARkwEwYDVR0lBAwwCgYIKwYBBQUHAwkwHQYDVR0OBBYEFKWhSGFt537NmJ50nCm7vYrecgxZMIGCBgNVHSAEezB5MHcGCisGAQQBzh8EAQIwaTA+BggrBgEFBQcCAjAyHjAAUwBLACAAdABpAG0AZQAgAHMAdABhAG0AcABpAG4AZwAgAHAAbwBsAGkAYwB5AC4wJwYIKwYBBQUHAgEWG2h0dHBzOi8vd3d3LnNrLmVlL2FqYXRlbXBlbDAfBgNVHSMEGDAWgBQS8lo+6lYcv80GrPHxJcmpS9QUmTA9BgNVHR8ENjA0MDKgMKAuhixodHRwOi8vd3d3LnNrLmVlL3JlcG9zaXRvcnkvY3Jscy9lZWNjcmNhLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAw2sKwvTHtYGtD8Jw9mNUuj/mWiBSBEBeY2LhW8V6tjBPAPp3s6iWOh0FbVR2LUyrqRwgT3fyWiGsiDm/6cIqM+IblLp/8ztfRQjquhW6XCD9SK02OQ9ZSdBwcmoAApZLGXQC34wdgmV/hLTTNxONnDACBKz9U+Dy9a4ZT4tpNkbH8jq/BMne8FzbvRt1bjpXBP7gjLX+zdx8/hp0Wq4tD+f9NVX0+vm9ahEKuzx4QzPnSB7hhWM9OnLZT7noRQa+KWk5c+e5VoR5R2t7MjVl8Cd+2llxiSxqMSbU5/23BzAKgN+NQdrBZAzpZ7lfaAuLFaICP+bAm6uW2JUrM6abOw=="
+            },
+            {
+              "commonName": "JUOZAS OLEKAS",
+              "type": "SIGNING",
+              "content": "MIIKVTCCCT2gAwIBAgIOQNXCrd79knQAAQATzEkwDQYJKoZIhvcNAQEFBQAwgb0xCzAJBgNVBAYTAkxUMUAwPgYDVQQKEzdHeXZlbnRvanUgcmVnaXN0cm8gdGFybnliYSBwcmllIExSIFZSTSAtIGkuay4gMTg4NzU2NzY3MTEwLwYDVQQLEyhOYWNpb25hbGluaXMgc2VydGlmaWthdmltbyBjZW50cmFzIChOU0MpMTkwNwYDVQQDEzBOYWNpb25hbGluaXMgc2VydGlmaWthdmltbyBjZW50cmFzIChJc3N1aW5nQ0EtQikwHhcNMTUxMDEzMTAyODM2WhcNMTgxMDEyMTAyODM2WjBdMQswCQYDVQQGEwJMVDEWMBQGA1UEAxMNSlVPWkFTIE9MRUtBUzEPMA0GA1UEBBMGT0xFS0FTMQ8wDQYDVQQqEwZKVU9aQVMxFDASBgNVBAUTCzM1NTEwMzAwMDI4MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlyumqHVufurwn2iAUiVjdze9Avectz4fUK+8zOM0sJoXoohmCAX8jxMDMv6dhjEMrAUaRxhOFEA3kitEIKmo5GyXcawOlgOzWGm5hdHSaU/F71pHPCKDBtg1FZ+6kR2vrUxmCFHYM0vb+sYQM+Y5ghillOpEBHPA+pLPbF5Bieq2HGOzpff4kHAOG52iPVE7O90Dl8JJ3417WaHnGGmHJtjdd0U7uDPmLfl/GttMBUftNfUvnVn68Y+ITonphTxMpXCpkLykbsvCk9C1t16Ul21Q69TI8rm6EYQizgKR/IEr9LynAjD/SXDdDEp8xJpx0d58a/iqZSvTtdLyX9q6iQIDAQABo4IGsDCCBqwwDgYDVR0PAQH/BAQDAgbAMB0GA1UdDgQWBBSqPCTwYUuyO75IpXRWeN0ZoQtEJjBLBgNVHQkERDBCMA8GCCsGAQUFBwkDMQMTAU0wHQYIKwYBBQUHCQExERgPMTk1NTEwMzAxMjAwMDBaMBAGCCsGAQUFBwkEMQQTAkxUMB8GA1UdIwQYMBaAFPFftccNESL6RkWrftPDxYX3BTXcMDkGA1UdHwQyMDAwLqAsoCqGKGh0dHA6Ly9uc2MudnJtLmx0L2NkcC9Jc3N1aW5nQ0EtQigxKS5jcmwwegYIKwYBBQUHAQEEbjBsMDQGCCsGAQUFBzABhihodHRwOi8vbnNjLnZybS5sdC9PQ1NQL29jc3ByZXNwb25kZXIubnNjMDQGCCsGAQUFBzAChihodHRwOi8vbnNjLnZybS5sdC9haWEvSXNzdWluZ0NBLUIoMSkuY3J0MDwGCSsGAQQBgjcVBwQvMC0GJSsGAQQBgjcVCIHOw3SEvLhBg8GdP8SQT5vla4EigZL6KIPyqCsCAWQCAQQwFQYDVR0lBA4wDAYKKwYBBAGCNwoDDDCCBLwGA1UdIASCBLMwggSvMIIEqwYLKwYBBAGB+SgBAQEwggSaMIIEbAYIKwYBBQUHAgIwggReHoIEWgBUAGgAaQBzACAAcwB0AGEAdABlAG0AZQBuAHQAIABpAHMAIABhACAAcwB0AGEAdABlAG0AZQBuAHQAIABiAHkAIAB0AGgAZQAgAGkAcwBzAHUAZQByACAAdABoAGEAdAAgAHQAaABpAHMAIABjAGUAcgB0AGkAZgBpAGMAYQB0AGUAIABpAHMAIABpAHMAcwB1AGUAZAAgAGEAcwAgAGEAIABRAHUAYQBsAGkAZgBpAGUAZAAgAGMAZQByAHQAaQBmAGkAYwBhAHQAZQAgAGEAYwBjAG8AcgBkAGkAbgBnACAAQQBuAG4AZQB4ACAASQAgAGEAbgBkACAASQBJACAAbwBmACAAdABoAGUAIABEAGkAcgBlAGMAdABpAHYAZQAgADEAOQA5ADkALwA5ADMALwBFAEMAIABvAGYAIAB0AGgAZQAgAEUAdQByAG8AcABlAGEAbgAgAFAAYQByAGwAaQBhAG0AZQBuAHQAIABhAG4AZAAgAG8AZgAgAHQAaABlACAAQwBvAHUAbgBjAGkAbAAgAG8AZgAgADEAMwAgAEQAZQBjAGUAbQBiAGUAcgAgADEAOQA5ADkAIABvAG4AIABhACAAQwBvAG0AbQB1AG4AaQB0AHkAIABmAHIAYQBtAGUAdwBvAHIAawAgAGYAbwByACAAZQBsAGUAYwB0AHIAbwBuAGkAYwAgAHMAaQBnAG4AYQB0AHUAcgBlAHMALAAgAGEAcwAgAGkAbQBwAGwAZQBtAGUAbgB0AGUAZAAgAGkAbgAgAHQAaABlACAAbABhAHcAIABvAGYAIAB0AGgAZQAgAGMAbwB1AG4AdAByAHkAIABzAHAAZQBjAGkAZgBpAGUAZAAgAGkAbgAgAHQAaABlACAAaQBzAHMAdQBlAHIAIABmAGkAZQBsAGQAIABvAGYAIAB0AGgAaQBzACAAYwBlAHIAdABpAGYAaQBjAGEAdABlAC4AIAFgAGkAcwAgAHMAZQByAHQAaQBmAGkAawBhAHQAYQBzACAAeQByAGEAIABrAHYAYQBsAGkAZgBpAGsAdQBvAHQAYQBzACAAcwBlAHIAdABpAGYAaQBrAGEAdABhAHMAIABwAGEAZwBhAGwAIABFAFMAIABkAGkAcgBlAGsAdAB5AHYAbwBzACAAMQA5ADkAOQAvADkAMwAvAEUAQwAgAGQBFwBsACAAQgBlAG4AZAByAGkAagBvAHMAIABlAGwAZQBrAHQAcgBvAG4AaQBuAGkAbwAgAHAAYQByAGEBYQBvACAAcABhAGcAcgBpAG4AZABpAG4AaQFzACAAbgB1AG8AcwB0AGEAdAFzACAASQAgAGkAcgAgAEkASQAgAHAAcgBpAGUAZAB1AHMAIABpAHIAIABMAGkAZQB0AHUAdgBvAHMAIABlAGwAZQBrAHQAcgBvAG4AaQBuAGkAbwAgAHAAYQByAGEBYQBvACABLwBzAHQAYQB0AHkAbQEFAC4wKAYIKwYBBQUHAgEWHGh0dHA6Ly9uc2MudnJtLmx0L3JlcG9zaXRvcnkwHQYJKwYBBAGCNxUKBBAwDjAMBgorBgEEAYI3CgMMMCIGCCsGAQUFBwEDBBYwFDAIBgYEAI5GAQEwCAYGBACORgEEMA0GCSqGSIb3DQEBBQUAA4IBAQBKo2raOR9gZr2xHViVblNB6Lfw39WVwHPblM1QzzaFxVGbaqa2FwDGNG0bjcSoo5bJMqxnA4ZTdI1MGYVQ/kP3gSihLxYiMqTgfpMXCDtwsYHUD1nFATa/SEU8ZCetkoXEeWHiLGL19I1WATh9LMr0yYFk774Rc012MCOUiMeHlqB+8hZxalew64oKvRPrDc+EBEzwKHfDI/HNvmx9qK511BuYlcqK6VPf8vwiUorlsiZE8mXMLHocHQQFU9TD2GS/KbDGhn7WRLYcgCWaurAD+PjwWS+yvy8DTINnwxe7SIVEMpgB9Zzqa3QFo9uk7w9hkCBeAZqYtnVx+7t8MErG"
+            }
+          ],
+          "signedBy": "OLEKAS,JUOZAS,35510300028",
+          "claimedSigningTime": "2015-11-04T11:33:41Z",
+          "signatureLevel": "QESIG",
+          "signatureScopes": [
+            {
+              "scope": "FullSignatureScope",
+              "name": "Baltic MoU digital signing_04112015.docx",
+              "content": "Digest of the document content"
+            }
+          ],
+          "signatureMethod": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+          "id": "S1",
+          "indication": "TOTAL-PASSED",
+          "info": {
+            "timeAssertionMessageImprint": "MDEwDQYJYIZIAWUDBAIBBQAEIDcAfHpT9l/+7Jge/tgqQgmMvtQgxmB+KFHYQUd8eVJg",
+            "signatureProductionPlace": {
+              "city": "Vilnius",
+              "postalCode": "LT-01121",
+              "countryName": "Lithuania"
+            },
+            "bestSignatureTime": "2015-11-04T11:34:02Z",
+            "signerRole": [
+              {
+                "claimedRole": "Minister / "
+              }
+            ],
+            "ocspResponseCreationTime": "2015-11-04T11:34:02Z"
+          }
+        },
+        {
+          "signatureFormat": "XAdES_BASELINE_LT_TM",
+          "subjectDistinguishedName": {
+            "commonName": "RAIMONDS BERGMANIS",
+            "serialNumber": "250766-10106",
+            "surname": "BERGMANIS",
+            "givenName": "RAIMONDS"
+          },
+          "certificates": [
+            {
+              "commonName": "SK OCSP RESPONDER 2011",
+              "type": "REVOCATION",
+              "content": "MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhkiG9w0BAQUFADB1MQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEoMCYGA1UEAwwfRUUgQ2VydGlmaWNhdGlvbiBDZW50cmUgUm9vdCBDQTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMB4XDTExMDMxODEwMjE0M1oXDTI0MDMxODEwMjE0M1owgZ0xCzAJBgNVBAYTAkVFMQ4wDAYDVQQIEwVIYXJqdTEQMA4GA1UEBxMHVGFsbGlubjEiMCAGA1UEChMZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czENMAsGA1UECxMET0NTUDEfMB0GA1UEAxMWU0sgT0NTUCBSRVNQT05ERVIgMjAxMTEYMBYGCSqGSIb3DQEJARYJcGtpQHNrLmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAihvGyhMVrgReHluKln1za6gvCE/mlSREmWjJFpL9llvuEUZoPFIypYA8g5u1VfgkeW5gDq25jAOq4FyXeDGIa+pJn2h0o2Wc2aeppVG/emfGm/jA8jjeyMrwH8fAJrqVQ7c9X2xSwJEch/P2d8CfMZt5YF6gqLtPvG1b+n6otBZA5wjIFfJ/inJBMUvqHSz3+PLfxO2/T3Wyk/c8M9HIMqTelqyiMGRgWehiU1OsL9armv3dQrHs1wm6vHaxfpfWB9YAFpeo9aYqhPCxVt/zo2NQB6vxyZS0hsOrXL7SxRToOJaqsnvlbf0erPPFtRHUvbojYYgl+fzlz0Jt6QJoNwIDAQABo4IBHTCCARkwEwYDVR0lBAwwCgYIKwYBBQUHAwkwHQYDVR0OBBYEFKWhSGFt537NmJ50nCm7vYrecgxZMIGCBgNVHSAEezB5MHcGCisGAQQBzh8EAQIwaTA+BggrBgEFBQcCAjAyHjAAUwBLACAAdABpAG0AZQAgAHMAdABhAG0AcABpAG4AZwAgAHAAbwBsAGkAYwB5AC4wJwYIKwYBBQUHAgEWG2h0dHBzOi8vd3d3LnNrLmVlL2FqYXRlbXBlbDAfBgNVHSMEGDAWgBQS8lo+6lYcv80GrPHxJcmpS9QUmTA9BgNVHR8ENjA0MDKgMKAuhixodHRwOi8vd3d3LnNrLmVlL3JlcG9zaXRvcnkvY3Jscy9lZWNjcmNhLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAw2sKwvTHtYGtD8Jw9mNUuj/mWiBSBEBeY2LhW8V6tjBPAPp3s6iWOh0FbVR2LUyrqRwgT3fyWiGsiDm/6cIqM+IblLp/8ztfRQjquhW6XCD9SK02OQ9ZSdBwcmoAApZLGXQC34wdgmV/hLTTNxONnDACBKz9U+Dy9a4ZT4tpNkbH8jq/BMne8FzbvRt1bjpXBP7gjLX+zdx8/hp0Wq4tD+f9NVX0+vm9ahEKuzx4QzPnSB7hhWM9OnLZT7noRQa+KWk5c+e5VoR5R2t7MjVl8Cd+2llxiSxqMSbU5/23BzAKgN+NQdrBZAzpZ7lfaAuLFaICP+bAm6uW2JUrM6abOw=="
+            },
+            {
+              "commonName": "RAIMONDS BERGMANIS",
+              "type": "SIGNING",
+              "content": "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"
+            }
+          ],
+          "signedBy": "BERGMANIS,RAIMONDS,250766-10106",
+          "claimedSigningTime": "2015-11-04T15:19:16Z",
+          "signatureLevel": "QESIG",
+          "signatureScopes": [
+            {
+              "scope": "FullSignatureScope",
+              "name": "Baltic MoU digital signing_04112015.docx",
+              "content": "Digest of the document content"
+            }
+          ],
+          "signatureMethod": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+          "id": "S2",
+          "indication": "TOTAL-PASSED",
+          "info": {
+            "timeAssertionMessageImprint": "MDEwDQYJYIZIAWUDBAIBBQAEIAcFYBPRgXPJ5+Mi+RnxKDByjeQ6EoknJ7zWeOJdlHmO",
+            "signatureProductionPlace": {
+              "countryName": "Latvia"
+            },
+            "bestSignatureTime": "2015-11-04T15:19:28Z",
+            "signerRole": [
+              {
+                "claimedRole": "Minister of Defence / "
+              }
+            ],
+            "ocspResponseCreationTime": "2015-11-04T15:19:28Z"
+          }
+        }
+      ],
+      "policy": {
+        "policyDescription": "Policy for validating Electronic Signatures and Electronic Seals regardless of the legal type of the signature or seal (according to Regulation (EU) No 910/2014, aka eIDAS), i.e. the fact that the electronic signature or electronic seal is either Advanced electronic Signature (AdES), AdES supported by a Qualified Certificate (AdES/QC) or a Qualified electronic Signature (QES) does not change the total validation result of the signature. Signatures which are not compliant with ETSI standards (referred by Regulation (EU) No 910/2014) may produce unknown or invalid validation result. Validation process is based on eIDAS Article 32, Commission Implementing Decision (EU) 2015/1506 and referred ETSI standards.",
+        "policyUrl": "http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv3",
+        "policyName": "POLv3"
+      },
+      "signatureForm": "ASiC-E"
+    }
+  }
+}

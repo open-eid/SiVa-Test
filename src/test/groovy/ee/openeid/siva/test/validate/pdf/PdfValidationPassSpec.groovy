@@ -69,7 +69,7 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("signatures[0].signedBy", is("NURM,AARE,38211015222"))
                 .body("signatures[0].subjectDistinguishedName.serialNumber", notNullValue())
                 .body("signatures[0].subjectDistinguishedName.commonName", notNullValue())

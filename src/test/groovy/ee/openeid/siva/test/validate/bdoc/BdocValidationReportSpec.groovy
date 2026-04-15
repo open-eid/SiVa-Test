@@ -36,10 +36,11 @@ import static org.hamcrest.Matchers.is
 @Feature("Validation report verification")
 class BdocValidationReportSpec extends GenericSpecification {
 
-    @Story("BDOC with XAdES_BASELINE_LT_TM signature report matches JSON structure and has expected values")
+    @Story("BDOC XAdES_BASELINE_LT_TM validation report matches JSON structure and has expected values")
     def "BDOC with one valid LT-TM signature has correct validation report values present"() {
         when: "report is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTM.bdoc", SignaturePolicy.POLICY_3))
+        Response response = SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTM.bdoc",
+                SignaturePolicy.POLICY_3))
 
         then: "report matches JSON structure"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
@@ -47,6 +48,22 @@ class BdocValidationReportSpec extends GenericSpecification {
 
         and: "report matches expectation"
         String expected = new String(Utils.readFileFromResources("singleValidSignatureTM.bdoc.json"))
+        String actual = response.then().extract().asString()
+        assertJsonEquals(expected, actual)
+    }
+
+    @Story("BDOC XAdES_BASELINE_LT_TM validation report matches JSON structure and has expected values")
+    def "BDOC with multiple valid signatures have correct validation report values present"() {
+        when:
+        Response response = SivaRequests.validate(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc",
+                SignaturePolicy.POLICY_3))
+
+        then: "report matches JSON structure"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
+
+        and: "report matches expectation"
+        String expected = new String(Utils.readFileFromResources("Baltic MoU digital signing_EST_LT_LV.bdoc.json"))
         String actual = response.then().extract().asString()
         assertJsonEquals(expected, actual)
     }

@@ -158,39 +158,6 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signaturesCount", is(1))
     }
 
-    @Description("JSON structure has all elements (Bdoc valid multiple signatures)")
-    def "bdocAllElementsArePresentValidMultipleSignatures"() {
-        when:
-        Response response = SivaRequests.validate(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc", SignaturePolicy.POLICY_3))
-
-        then:
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
-                .body("signatures[0].id", is("S0"))
-                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
-                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
-                .body("signatures[0].signedBy", is("MICHAL,KRISTEN,37507120348"))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].signatureScopes[0].name", is("Baltic MoU digital signing_04112015.docx"))
-                .body("signatures[0].signatureScopes[0].scope", is("FullSignatureScope"))
-                .body("signatures[0].signatureScopes[0].content", is("Digest of the document content"))
-                .body("signatures[0].claimedSigningTime", is("2015-11-04T10:24:11Z"))
-                .body("signatures[0].warnings", emptyOrNullString())
-                .body("signatures[0].info.timeAssertionMessageImprint", is("MDEwDQYJYIZIAWUDBAIBBQAEINiaR8aBDIPiXK/fiPb7fe3pWaBaEKzILvjnZVppopPy"))
-                .body("signatures[0].info.bestSignatureTime", is("2015-11-04T10:24:20Z"))
-                .body("signatures[0].info.timestampCreationTime", emptyOrNullString())
-                .body("signatures[0].info.ocspResponseCreationTime", is("2015-11-04T10:24:20Z"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", is("SK OCSP RESPONDER 2011"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", startsWith("MIIEvDCCA6SgAwIBAgIQcpyVmdruRVxNgzI3N/NZQTANBgkqhk"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", is("MICHAL,KRISTEN,37507120348"))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].content", startsWith("MIIEoTCCA4mgAwIBAgIQXESH+ckjJK1SC2r9DcQrDzANBgkqhk"))
-                .body("signatureForm", is(ContainerFormat.ASiC_E))
-                .body("validatedDocument.filename", is("Baltic MoU digital signing_EST_LT_LV.bdoc"))
-                .body("validSignaturesCount", is(3))
-                .body("signaturesCount", is(3))
-    }
-
     @Ignore
     //TODO: SIVA-869 needs investigation why the signature is determined as XAdES_BASELINE_T not as XAdES_BASELINE_LT_TM
     @Description("JSON structure has all elements (Bdoc indeterminate status)")

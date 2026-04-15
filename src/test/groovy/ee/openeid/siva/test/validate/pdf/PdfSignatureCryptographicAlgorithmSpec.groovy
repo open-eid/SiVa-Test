@@ -56,7 +56,7 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
 

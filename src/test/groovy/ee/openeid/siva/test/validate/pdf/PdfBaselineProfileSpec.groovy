@@ -67,7 +67,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
                 .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].errors.content", hasItems(CERT_VALIDATION_NOT_CONCLUSIVE))
-                .body("signatures[0].warnings", hasSize(1))
+                .body("signatures[0].warnings", hasSize(2))
                 .body("signatures[0].certificates.size()", is(2))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", is("JUHANSON,ALLAN,38608014910"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", is("ESTEID-SK 2015"))
@@ -87,7 +87,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("signatures[0].certificates.size()", is(3))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", is("SINIVEE,VEIKO,36706020210"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", is("ESTEID-SK 2011"))
@@ -108,7 +108,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
     }
@@ -124,7 +124,9 @@ class PdfBaselineProfileSpec extends GenericSpecification {
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", containsInAnyOrder(
+                        "The authority info access is not present!",
+                        "Elements overlap on page(s) [1]"))
                 .body("signatures[0].certificates.size()", is(4))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", is("JUHANSON,ALLAN,38608014910"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", is("ESTEID-SK 2015"))
@@ -146,7 +148,9 @@ class PdfBaselineProfileSpec extends GenericSpecification {
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", containsInAnyOrder(
+                        "The authority info access is not present!",
+                        "Elements overlap on page(s) [1]"))
                 .body("signatures[0].certificates.size()", is(4))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].commonName", is("JUHANSON,ALLAN,38608014910"))
                 .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", is("ESTEID-SK 2015"))

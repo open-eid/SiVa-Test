@@ -360,7 +360,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("signatures[0].signatureMethod", is("http://www.w3.org/2007/05/xmldsig-more#sha256-rsa-MGF1"))
                 .body("signatures[0].signedBy", is("ŽÕRINÜWŠKY,MÄRÜ-LÖÖZ,11404176865"))
                 .body("signatures[0].subjectDistinguishedName.commonName", is("ŽÕRINÜWŠKY,MÄRÜ-LÖÖZ,11404176865"))

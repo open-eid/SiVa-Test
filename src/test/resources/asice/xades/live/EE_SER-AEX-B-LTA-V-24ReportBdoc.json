@@ -24,6 +24,9 @@
           "signedBy": "METSMA,RAUL,38207162766",
           "warnings": [
             {
+              "content": "The authority info access is not present!"
+            },
+            {
               "content": "The signature/seal is an INDETERMINATE AdES digital signature!"
             },
             {

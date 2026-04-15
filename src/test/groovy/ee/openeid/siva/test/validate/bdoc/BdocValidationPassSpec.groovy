@@ -294,7 +294,7 @@ class BdocValidationPassSpec extends GenericSpecification {
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", is("2016-04-13T08:37:52Z"))
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("validSignaturesCount", is(1))
     }
 
@@ -308,7 +308,7 @@ class BdocValidationPassSpec extends GenericSpecification {
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].info.bestSignatureTime", is("2013-11-13T10:09:49Z"))
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("validSignaturesCount", is(1))
     }
 

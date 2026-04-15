@@ -43,7 +43,7 @@ class DocumentFormatSpec extends GenericSpecification {
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
     }
@@ -59,8 +59,9 @@ class DocumentFormatSpec extends GenericSpecification {
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings", hasSize(1))
-                .body("signatures[0].warnings[0].content", is("Data file 'Proov (2).txt' is empty"))
+                .body("signatures[0].warnings.content", containsInAnyOrder(
+                        "Data file 'Proov (2).txt' is empty",
+                        "The authority info access is not present!"))
                 .body("signaturesCount", is(2))
                 .body("validSignaturesCount", is(2))
     }
@@ -76,7 +77,7 @@ class DocumentFormatSpec extends GenericSpecification {
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors", emptyOrNullString())
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", contains("The authority info access is not present!"))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
     }

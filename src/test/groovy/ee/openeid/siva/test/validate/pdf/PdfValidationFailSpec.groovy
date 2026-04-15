@@ -66,7 +66,7 @@ class PdfValidationFailSpec extends GenericSpecification {
                 .body("signatures[0].subIndication", is("REVOKED_NO_POE"))
                 .body("signatures[0].errors.content", hasItem("The past signature validation is not conclusive!"))
                 .body("signatures[0].claimedSigningTime", is("2016-06-29T08:38:31Z"))
-                .body("signatures[0].warnings[0].content", is("The signature/seal is an INDETERMINATE AdES digital signature!"))
+                .body("signatures[0].warnings.content", hasItem("The signature/seal is an INDETERMINATE AdES digital signature!"))
                 .body("validSignaturesCount", is(0))
                 .body("signaturesCount", is(1))
     }
