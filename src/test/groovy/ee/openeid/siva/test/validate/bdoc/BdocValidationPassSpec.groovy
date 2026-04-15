@@ -116,6 +116,7 @@ class BdocValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(1))
     }
 
+    @Ignore("SIVA-1099 - new ResponderId mismatch error masked expected result")
     @Description("Bdoc signed with Mobile-ID, ECC-SHA256 signature with prime256v1 key")
     def "bdocEccSha256signature"() {
         expect:

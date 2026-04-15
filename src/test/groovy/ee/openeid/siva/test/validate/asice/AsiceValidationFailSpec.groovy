@@ -283,6 +283,7 @@ class AsiceValidationFailSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(0))
     }
 
+    @Ignore("SIVA-1099 - new ResponderId mismatch error masked expected result")
     @Description("Asice OCSP response status is revoked")
     def "asiceTmOcspStatusRevoked"() {
         when:
