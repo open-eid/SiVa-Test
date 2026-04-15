@@ -55,7 +55,7 @@ class TsOcspTimeCheckSpec extends GenericSpecification {
         "26h after TS"   | "ASiC-E"      | "EE_SER-AEX-B-LT-V-20.asice"
 
         "15m6s after TS" | "BDOC"        | "EE_LT_sig_OCSP_15m6s_after_TS.asice"
-//        "26h after TS"   | "BDOC"        | "EE_SER-AEX-B-LT-V-20.asice"
+        "26h after TS"   | "BDOC"        | "EE_SER-AEX-B-LT-V-20.asice"
 
         "15m1s after TS" | "PDF"         | "hellopades-lt-sha256-ocsp-15min1s.pdf"
         "28h after TS"   | "PDF"         | "hellopades-lt-sha256-ocsp-28h.pdf"
