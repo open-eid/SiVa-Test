@@ -17,16 +17,10 @@
 package ee.openeid.siva.test.validate.pdf
 
 import ee.openeid.siva.test.GenericSpecification
-import ee.openeid.siva.test.TestData
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignatureIndication
-import ee.openeid.siva.test.model.SignatureLevel
-import ee.openeid.siva.test.model.SignaturePolicy
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
-import io.qameta.allure.Description
-import io.qameta.allure.Link
-import io.qameta.allure.Story
+import io.qameta.allure.*
 import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
@@ -35,8 +29,8 @@ import static org.hamcrest.Matchers.*
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
 class PdfValidationPassSpec extends GenericSpecification {
 
-    @Description("The PDF-file has been signed with certificate that is expired after signing (PAdES Baseline LT)")
-    def "validSignaturesRemainValidAfterSigningCertificateExpires"() {
+    @Story("Signature remains valid when related certificates expire")
+    def "PDF signature remains valid when TS, OCSP, CA and signer certificates expire"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024-not-expired.pdf", SignaturePolicy.POLICY_3, null))
                 .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
