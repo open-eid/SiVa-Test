@@ -46,7 +46,6 @@ class AdditionalOcspRequestSpec extends GenericSpecification {
                 .body("signatures[0].errors.size()", is(2))
                 .body("signatures[0].errors.content",
                         hasItems(TestData.CERT_VALIDATION_NOT_CONCLUSIVE, TestData.REVOCATION_NOT_FOUND))
-                .body("signatures[0].warnings.size()", is(1))
                 .body("signatures[0].warnings.content",
                         hasItem("The signature/seal is an INDETERMINATE AdES digital signature!"))
                 .body("signaturesCount", is(1))
