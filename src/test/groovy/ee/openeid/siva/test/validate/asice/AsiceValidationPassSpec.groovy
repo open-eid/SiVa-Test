@@ -294,7 +294,7 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", is("KLASS3-SK 2010 OCSP RESPONDER"))
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].content", startsWith("MIIELzCCAxegAwIBAgICAMswDQYJKoZIhvcNAQEFBQAwbTELMA"))
                 .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].issuer.commonName", startsWith("KLASS3-SK 2010"))
-                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].issuer.content", startsWith("MIIErDCCA5SgAwIBAgIQAznVp1LayatNgy6bN8f9QjANBgkqhk"))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].issuer.content", startsWith("MIID5TCCAs2gAwIBAgIES7MTKDANBgkqhk"))
                 .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("validSignaturesCount", is(1))
     }
