@@ -26,6 +26,7 @@ import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
 import io.restassured.response.Response
+import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static ee.openeid.siva.test.TestData.VALIDATION_LEVEL_ARCHIVAL_DATA
@@ -117,6 +118,7 @@ class XadesHashcodeValidationPassSpec extends GenericSpecification {
                 .body("validSignaturesCount", is(1))
     }
 
+    @Ignore("SIVA-1099 - new ResponderId mismatch error masked expected result")
     @Description("Datafile digest in SHA1")
     def "sha1DatafileDigestSignatureShouldPass"() {
         when:

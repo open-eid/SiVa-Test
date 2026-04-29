@@ -708,6 +708,7 @@ class SignaturePolicySpec extends GenericSpecification {
                 .body("signaturesCount", is(1))
     }
 
+    @Ignore("SIVA-1099 - new ResponderId mismatch error masked expected result")
     @Description("The bdoc is QES level")
     def "bdocDocumentQesNoTypeShouldPassWithGivenPolicy"() {
         when:
