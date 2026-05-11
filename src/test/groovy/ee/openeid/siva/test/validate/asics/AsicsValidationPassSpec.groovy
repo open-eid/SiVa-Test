@@ -18,12 +18,11 @@ package ee.openeid.siva.test.validate.asics
 
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.TestData
-import ee.openeid.siva.test.model.ContainerFormat
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignatureIndication
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import io.qameta.allure.Story
 import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX

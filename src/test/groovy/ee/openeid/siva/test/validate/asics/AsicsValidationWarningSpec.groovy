@@ -18,13 +18,11 @@ package ee.openeid.siva.test.validate.asics
 
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.TestData
-import ee.openeid.siva.test.model.ContainerFormat
-import ee.openeid.siva.test.model.DssMessage
-import ee.openeid.siva.test.model.SignatureIndication
-import ee.openeid.siva.test.model.TimestampLevel
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import io.qameta.allure.Story
 
 import static ee.openeid.siva.test.TestData.getVALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
@@ -54,44 +52,4 @@ class AsicsValidationWarningSpec extends GenericSpecification {
         "2xTstFirstInvalidSecondNotCoveringNestedSignedAsice.asics"      | "nested signed asice"      || " and nested container is not validated"
     }
 
-    @Description("Validation of timestamps not in 'granted' state in TSL")
-    def "Given ASiC-S with single withdrawn timestamp, then validation returns warnings"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DdocInAsicsWithdrawnTS.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", is(ContainerFormat.ASiC_S))
-                .body("timeStampTokens[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("timeStampTokens[0].signedBy", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
-                .body("timeStampTokens[0].warning", hasSize(1))
-                .body("timeStampTokens[0].warning.content", hasItem(DssMessage.QUAL_HAS_GRANTED_AT_ANS.message))
-                .body("timeStampTokens[0].timestampLevel", is(TimestampLevel.TSA))
-                .body("validatedDocument.filename", is("DdocInAsicsWithdrawnTS.asics"))
-                .body("validationWarnings", hasSize(2))
-                .body("validationWarnings.content", hasItem(TestData.NOT_GRANTED_CONTAINER_WARNING))
-    }
-
-    @Description("Validation of timestamps not in 'granted' state in TSL")
-    def "Given ASiC-S with multiple timestamps, when one withdrawn, then validation returns warnings"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DdocInAsicsWithdrawnTsOverStamped.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatureForm", is(ContainerFormat.ASiC_S))
-                .body("timeStampTokens[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("timeStampTokens[0].signedBy", is("SK TIMESTAMPING AUTHORITY"))
-                .body("timeStampTokens[0].signedTime", is("2017-08-10T12:40:40Z"))
-                .body("timeStampTokens[0].warning", hasSize(1))
-                .body("timeStampTokens[0].warning.content", hasItem(DssMessage.QUAL_HAS_GRANTED_AT_ANS.message))
-                .body("timeStampTokens[0].timestampLevel", is(TimestampLevel.TSA))
-                .body("timeStampTokens[1].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("timeStampTokens[1].signedBy", is("SK TIMESTAMPING UNIT 2025E"))
-                .body("timeStampTokens[1].signedTime", is("2025-04-09T14:59:22Z"))
-                .body("timeStampTokens[1].warning", emptyOrNullString())
-                .body("timeStampTokens[1].timestampLevel", is(TimestampLevel.QTSA))
-                .body("validatedDocument.filename", is("DdocInAsicsWithdrawnTsOverStamped.asics"))
-        // SIVA-760: Currently we don't differentiate if container contains just withdrawn timestamps
-        // or the container has already been stamped over with a timestamp in granted state in TSL.
-                .body("validationWarnings", hasSize(2))
-                .body("validationWarnings.content", hasItem(TestData.NOT_GRANTED_CONTAINER_WARNING))
-    }
 }

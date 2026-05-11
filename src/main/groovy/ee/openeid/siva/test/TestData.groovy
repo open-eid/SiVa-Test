@@ -224,6 +224,8 @@ class TestData {
     static final String REFERENCE_DATA_NOT_FOUND = "The reference data object has not been found!"
     static final String CERTIFICATE_DO_NOT_MATCH_TRUST_SERVICE = "The trusted certificate doesn't match the trust service"
     static final String CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE = "The certificate is not related to a qualified certificate issuing trust service with valid status!"
+    static final String CERT_NOT_RELATED_TO_EXPECTED_IDENTIFIER = "The trust service(s) related to the time-stamp does not have the expected type identifier!"
+    static final String CERT_NOT_RELATED_TO_TSA_QTST = "The certificate is not related to a TSA/QTST!"
     static final String PAST_SIG_VALIDATION_NOT_CONCLUSIVE = "The past signature validation is not conclusive!"
     static final String SIG_CREATED_WITH_EXP_CERT = "Signature has been created with expired certificate"
     static final String SIG_UNEXPECTED_FORMAT = "The signature does not correspond to the expected format(s)!"

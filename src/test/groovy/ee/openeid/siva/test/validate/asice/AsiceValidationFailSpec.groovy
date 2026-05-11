@@ -20,8 +20,7 @@ import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
-import io.qameta.allure.Description
-import io.qameta.allure.Link
+import io.qameta.allure.*
 import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import spock.lang.Ignore
@@ -478,4 +477,5 @@ class AsiceValidationFailSpec extends GenericSpecification {
         "batchsignature" | "xroad-batchsignature.asice"
         "attachment"     | "xroad-attachment.asice"
     }
+
 }

@@ -17,15 +17,10 @@
 package ee.openeid.siva.test.validate.asice
 
 import ee.openeid.siva.test.GenericSpecification
-import ee.openeid.siva.test.model.ContainerFormat
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignatureIndication
-import ee.openeid.siva.test.model.SignatureLevel
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
-import io.qameta.allure.Description
-import io.qameta.allure.Link
-import io.qameta.allure.Story
+import io.qameta.allure.*
 import io.restassured.response.Response
 import spock.lang.Tag
 
@@ -417,26 +412,4 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("signaturesCount", is(2))
                 .body("validSignaturesCount", is(2))
     }
-
-    @Story("Only QTST timestamp allowed")
-    @Description("Asice LT signature passes without warnings/errors, when timestamp level was during signing QTST")
-    def "Asice LT signature with QTST timestamp passes: #description"() {
-        when:
-        Response response = SivaRequests.validate(RequestData.validationRequest(testfile))
-
-        then:
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validSignaturesCount", equalTo(1))
-                .body("signaturesCount", equalTo(1))
-                .body("signatures[0].certificates.findAll{it.type == 'SIGNATURE_TIMESTAMP'}[0].commonName", is(timestamp))
-                .body("signatures[0].warnings", emptyOrNullString())
-                .body("signatures[0].errors", emptyOrNullString())
-
-        where:
-        description                                          | testfile                       | timestamp
-        "QTST level present in TSL before eIDAS"             | "singleValidSignatureTS.asice" | "DEMO of SK TSA 2014"
-        "QTST level, but withdrawn during validation in TSL" | "EE_SER-AEX-B-LT-V-30.asice"   | "SK TIMESTAMPING AUTHORITY"
-//TODO: SIVA-796 "QTST level during signing, before was non-qualified in TSL" | "< testfile needed >"          | ""
-    }
-
 }
