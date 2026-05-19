@@ -17,11 +17,11 @@
 package ee.openeid.siva.test
 
 import ee.openeid.siva.test.request.SivaRequests
-import io.qameta.allure.Description
-import io.qameta.allure.Link
+import io.qameta.allure.*
 import spock.lang.Tag
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
+import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.is
 
 @Tag("Allure")
@@ -61,5 +61,27 @@ class MonitoringSpec extends GenericSpecification {
         SivaRequests.getMonitoringVersion()
                 .then()
                 .body(matchesJsonSchemaInClasspath("MonitorVersionSchema.json"))
+    }
+
+    @Story("Prometheus monitoring")
+    def "Verify prometheus valid response"() {
+        expect: "prometheus response returns valid response"
+        SivaRequests.getMonitoringPrometheus().then()
+                .body(containsString("# HELP"))
+                .body(containsString("jvm_memory_used_bytes"))
+                .body(containsString("http_server_requests_seconds"))
+                .body(containsString("tomcat_"))
+    }
+
+    @Story("Prometheus monitoring")
+    def "Verify non-exposed actuator endpoint #endpoint returns 404"() {
+        expect: "non-exposed actuator endpoint should not be accessible"
+        SivaRequests.get("/monitoring/" + endpoint).then().statusCode(404)
+
+        where:
+        endpoint << [
+                "beans", "caches", "conditions", "configprops", "env", "heapdump", "loggers",
+                "mappings", "metrics", "scheduledtasks", "shutdown", "threaddump", "sbom", "logfile"
+        ]
     }
 }

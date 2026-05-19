@@ -118,4 +118,11 @@ class SivaRequests {
         response.then().statusCode(HttpStatus.SC_OK)
         return response
     }
+
+    @Step("Get Monitoring Prometheus")
+    static Response getMonitoringPrometheus() {
+        Response response = get("/monitoring/prometheus")
+        response.then().statusCode(HttpStatus.SC_OK)
+        return response
+    }
 }
