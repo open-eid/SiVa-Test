@@ -67,7 +67,7 @@ class RequestData {
         return data
     }
 
-    @Step("Data file request data from {file}")
+    @Step("Data file request data from {filename}")
     static Map dataFileRequestFromFile(String filename, String filenameOverride) {
         return dataFileRequest(Base64.encodeBase64String(Utils.readFileFromResources(filename)), filenameOverride)
     }
