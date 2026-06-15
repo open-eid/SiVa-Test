@@ -3,10 +3,12 @@
   "type": "object",
   "properties": {
     "version": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
     }
   },
   "required": [
     "version"
-  ]
+  ],
+  "additionalProperties": false
 }

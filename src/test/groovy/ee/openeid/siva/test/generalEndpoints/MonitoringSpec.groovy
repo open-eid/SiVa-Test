@@ -14,53 +14,48 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test
+package ee.openeid.siva.test.generalEndpoints
 
+import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.*
-import spock.lang.Tag
+import io.restassured.response.Response
+import org.apache.http.HttpStatus
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.is
 
-@Tag("Allure")
+@Epic("General endpoints")
+@Feature("Monitoring endpoint validation")
 class MonitoringSpec extends GenericSpecification {
 
-    @Description("Health monitor response structure")
+    @Story("Health response validation")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#service-health-monitoring")
-    def "Verify health response structure"() {
-        expect: "health response to match structure"
-        SivaRequests.getMonitoringHealth()
-                .then()
-                .body(matchesJsonSchemaInClasspath("MonitorHealthSchema.json"))
-        and: "statuses to be UP"
-        SivaRequests.getMonitoringHealth()
-                .then()
+    def "Health response structure matches schema and status is UP"() {
+        expect: "valid response is returned"
+        SivaRequests.getMonitoringHealth().then()
+                .body(matchesJsonSchemaInClasspath("schemas/MonitorHealthSchema.json"))
                 .body("status", is("UP"))
                 .body("components.health.status", is("UP"))
     }
 
-    @Description("Heartbeat monitor response structure")
+    @Story("Heartbeat response validation")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#simplified-health-monitoring")
-    def "Verify heartbeat response structure"() {
-        expect: "heartbeat response to match structure"
-        SivaRequests.getMonitoringHeartbeat()
-                .then()
-                .body(matchesJsonSchemaInClasspath("MonitorHeartbeatSchema.json"))
-        and: "status to be UP"
-        SivaRequests.getMonitoringHealth()
-                .then()
+    def "Heartbeat response structure matches schema and status is UP"() {
+        expect: "valid response is returned"
+        SivaRequests.getMonitoringHeartbeat().then()
+                .body(matchesJsonSchemaInClasspath("schemas/MonitorHeartbeatSchema.json"))
                 .body("status", is("UP"))
     }
 
-    @Description("Version monitor response structure")
+    @Story("Version response validation")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#version-information")
-    def "Verify version response structure"() {
-        expect: "version response to match structure"
+    def "Version response structure matches schema"() {
+        expect: "valid response is returned"
         SivaRequests.getMonitoringVersion()
                 .then()
-                .body(matchesJsonSchemaInClasspath("MonitorVersionSchema.json"))
+                .body(matchesJsonSchemaInClasspath("schemas/MonitorVersionSchema.json"))
     }
 
     @Story("Prometheus monitoring")
@@ -73,15 +68,16 @@ class MonitoringSpec extends GenericSpecification {
                 .body(containsString("tomcat_"))
     }
 
-    @Story("Prometheus monitoring")
-    def "Verify non-exposed actuator endpoint #endpoint returns 404"() {
-        expect: "non-exposed actuator endpoint should not be accessible"
-        SivaRequests.get("/monitoring/" + endpoint).then().statusCode(404)
+    @Story("Readiness/liveness response validation")
+    @Link("http://open-eid.github.io/SiVa/siva3/interfaces/#simplified-health-monitoring")
+    def "Monitoring #endpoint response structure matches schema and status is UP"() {
+        expect: "valid response is returned"
+        SivaRequests.get("/monitoring/health/" + endpoint).then()
+                .statusCode(HttpStatus.SC_OK)
+                .body(matchesJsonSchemaInClasspath("schemas/MonitorHeartbeatSchema.json"))
+                .body("status", is("UP"))
 
         where:
-        endpoint << [
-                "beans", "caches", "conditions", "configprops", "env", "heapdump", "loggers",
-                "mappings", "metrics", "scheduledtasks", "shutdown", "threaddump", "sbom", "logfile"
-        ]
+        endpoint << ["readiness", "liveness"]
     }
 }

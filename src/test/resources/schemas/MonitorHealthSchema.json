@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "components": {
+      "type": "object",
+      "properties": {
+        "health": {
+          "type": "object",
+          "properties": {
+            "details": {
+              "type": "object",
+              "properties": {
+                "webappName": {
+                  "type": "string",
+                  "enum": [
+                    "siva-webapp"
+                  ]
+                },
+                "version": {
+                  "type": "string",
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                },
+                "buildTime": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "startTime": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "currentTime": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "webappName",
+                "version",
+                "buildTime",
+                "startTime",
+                "currentTime"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "UP",
+                "DOWN"
+              ]
+            }
+          },
+          "required": [
+            "details",
+            "status"
+          ]
+        },
+        "livenessState": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "UP",
+                "DOWN"
+              ]
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "ping": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "UP",
+                "DOWN"
+              ]
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "readinessState": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "UP",
+                "DOWN"
+              ]
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "ssl": {
+          "type": "object",
+          "properties": {
+            "details": {
+              "type": "object",
+              "properties": {
+                "expiringChains": {
+                  "type": "array"
+                },
+                "invalidChains": {
+                  "type": "array"
+                },
+                "validChains": {
+                  "type": "array"
+                }
+              },
+              "required": [
+                "expiringChains",
+                "invalidChains",
+                "validChains"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "UP",
+                "DOWN"
+              ]
+            }
+          },
+          "required": [
+            "details",
+            "status"
+          ]
+        }
+      },
+      "required": [
+        "health",
+        "livenessState",
+        "ping",
+        "readinessState",
+        "ssl"
+      ]
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "liveness",
+          "readiness"
+        ]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "UP",
+        "DOWN"
+      ]
+    }
+  },
+  "required": [
+    "components",
+    "groups",
+    "status"
+  ]
+}
