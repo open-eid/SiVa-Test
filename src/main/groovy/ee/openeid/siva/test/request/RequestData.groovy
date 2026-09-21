@@ -111,7 +111,7 @@ class RequestData {
         return data
     }
 
-    static Map hashcodeValidationRequest(String signatureFile, SignaturePolicy signaturePolicy, ReportType reportType, String dataFile = null, String hashAlgo = null, String hash = null) {
+    static Map hashcodeValidationRequest(String signatureFile, SignaturePolicy signaturePolicy = null, ReportType reportType = null, String dataFile = null, String hashAlgo = null, String hash = null) {
         hashcodeValidationRequestBase([signatureFile], signaturePolicy, reportType, dataFile, hashAlgo, hash)
     }
 
