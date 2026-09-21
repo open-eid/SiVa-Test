@@ -25,6 +25,7 @@ import ee.openeid.siva.test.util.RequestErrorValidator
 import ee.openeid.siva.test.util.Utils
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.qameta.allure.Story
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import io.restassured.http.Method
@@ -184,11 +185,11 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         }
 
         where:
-        value | comment                                                                      | error
+        value | comment                                                                     | error
         "NOT.BASE64.ENCODED.VALUE"
-              | "incorrect signature"                                                        | RequestError.SIGNATURE_FILE_NOT_BASE64
+              | "incorrect signature"                                                       | RequestError.SIGNATURE_FILE_NOT_BASE64
         Base64.encodeBase64String("NOT_XML_FORMATTED_FILE_CONTENT".getBytes(StandardCharsets.UTF_8))
-              | "not correct file type"                                                      | RequestError.SIGNATURE_FILE_MALFORMED
+              | "not correct file type"                                                     | RequestError.SIGNATURE_FILE_MALFORMED
     }
 
     @Description("Input file without signature")
@@ -514,6 +515,29 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
             }
         }
         return files
+    }
+
+    // TODO: Add request error validation, when it is done
+    @Ignore("SIVA-1206")
+    @Story("Disallowed validation level is rejected")
+    def "Given request with #description as validation level , then error is returned"() {
+        given: "Request body with disallowed validation level"
+        Map requestData = validRequestBody()
+        requestData.validationLevel = validationLevel
+
+        when: "Validation request is sent"
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+
+        then: "Request is rejected"
+        response.then().statusCode(HttpStatus.SC_BAD_REQUEST)
+
+        where:
+        description         | validationLevel
+        "Timestamps"        | "Timestamps"
+        "BasicSignatures"   | "BasicSignatures"
+        "empty"             | ""
+        "unknown"           | "NotValid"
+        "incorrectly cased" | "archivaldata"
     }
 
     private void assertSimpleReportWithSignature(ValidatableResponse response, Map request) {
