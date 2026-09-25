@@ -56,7 +56,7 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
         "TS certificate expired"                         | "TEST_XAdES_LTA.xml"                           || "TOTAL-FAILED"
         "TS/OCSP certificates expired"                   | "TEST_XAdES_LTA-AiaOcsp-Expired-202308.xml"    || "TOTAL-FAILED"
         "all certificates expired"                       | "3_signatures_TM_LT_LTA.xml"                   || "TOTAL-FAILED"
-        "OCSP not trusted"                               | "esteid2018signerAiaOcspExpiredLTA.xml"        || "INDETERMINATE"
+        "signed with expired OCSP"                       | "esteid2018signerAiaOcspExpiredLTA.xml"        || "INDETERMINATE"
         "not trusted ATS"                                | "2xLTA-SK+Entrust.xml"                         || "TOTAL-FAILED"
         "multiple ATS"                                   | "TEST_XAdES_LTA-2xArchivetimestamps.xml"       || "TOTAL-FAILED"
         "Qualified TS + Not-qualified ATS"               | "LTA_QTSA_TSA.xml"                             || "TOTAL-FAILED"
@@ -93,7 +93,7 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
         "TS certificate expired"                         | "TEST_XAdES_LTA.xml"                           || "TOTAL-FAILED"
         "TS/OCSP certificates expired"                   | "TEST_XAdES_LTA-AiaOcsp-Expired-202308.xml"    || "TOTAL-FAILED"
         "all certificates expired"                       | "3_signatures_TM_LT_LTA.xml"                   || "TOTAL-FAILED"
-        "OCSP not trusted"                               | "esteid2018signerAiaOcspExpiredLTA.xml"        || "INDETERMINATE"
+        "signed with expired OCSP"                       | "esteid2018signerAiaOcspExpiredLTA.xml"        || "INDETERMINATE"
         "not trusted ATS"                                | "2xLTA-SK+Entrust.xml"                         || "TOTAL-FAILED"
         "multiple ATS"                                   | "TEST_XAdES_LTA-2xArchivetimestamps.xml"       || "TOTAL-FAILED"
         "Qualified TS + Not-qualified ATS"               | "LTA_QTSA_TSA.xml"                             || "TOTAL-FAILED"
@@ -161,7 +161,7 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
 
         where:
         description                        | fileName                                || indication
-        "OCSP not trusted"                 | "esteid2018signerAiaOcspExpiredLTA.xml" || "INDETERMINATE"
+        "signed with expired OCSP"         | "esteid2018signerAiaOcspExpiredLTA.xml" || "INDETERMINATE"
         "Not-qualified TS + Qualified ATS" | "LTA_TSA_QTSA.xml"                      || "TOTAL-FAILED"
         "TS replaced"                      | "TEST_XAdES_LTA-Ts-Replaced.xml"        || "TOTAL-FAILED"
     }
