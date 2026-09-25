@@ -520,7 +520,7 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
     // TODO: Add request error validation, when it is done
     @Ignore("SIVA-1206")
     @Story("Disallowed validation level is rejected")
-    def "Given request with #description as validation level , then error is returned"() {
+    def "Given request with #description as validation level, then error is returned"() {
         given: "Request body with disallowed validation level"
         Map requestData = validRequestBody()
         requestData.validationLevel = validationLevel
