@@ -14,7 +14,7 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 
-package ee.openeid.siva.test.validateHashcode
+package ee.openeid.siva.test.validateHashcode.validationLevel
 
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.model.SignatureFormat
@@ -27,9 +27,9 @@ import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
 
 @Epic("Signature validation (hashcode)")
-@Feature("XAdES LTA hashcode validation")
-@Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
-class XadesHashcodeLtaValidationSpec extends GenericSpecification {
+@Feature("Validation level validation")
+@Link("https://open-eid.github.io/SiVa/siva3/interfaces/#validation-request-interface-for-hashcode")
+class ValidationLevelSpec extends GenericSpecification {
 
     @Story("Validate LTA hashcode with default settings")
     def "Validate LTA hashcode fails without setting validation level: #description"() {
@@ -178,10 +178,10 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
                 .body("signatures[0].warnings.content", not(hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA)))
 
         where:
-        description | fileName                                || signatureFormat
-        "B-level"   | "TEST_ESTEID2018_XAdES_B_detached.xml"  || SignatureFormat.XAdES_BASELINE_B
-        "T-level"   | "TEST_ESTEID2018_XAdES_T_detached.xml"  || SignatureFormat.XAdES_BASELINE_T
-        "LT-level"  | "TEST_ESTEID2018_XAdES_LT_detached.xml" || SignatureFormat.XAdES_BASELINE_LT
+        description | fileName
+        "B-level"   | "TEST_ESTEID2018_XAdES_B_detached.xml"
+        "T-level"   | "TEST_ESTEID2018_XAdES_T_detached.xml"
+        "LT-level"  | "TEST_ESTEID2018_XAdES_LT_detached.xml"
     }
 
     @Story("ATS no effect warning not produced for not-LTA hashcode signature")

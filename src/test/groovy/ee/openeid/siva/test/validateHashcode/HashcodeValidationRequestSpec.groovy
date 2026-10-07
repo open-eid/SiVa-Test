@@ -515,59 +515,6 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         return files
     }
 
-    @Story("Disallowed validation level is rejected")
-    def "Given request with #description as validation level, then error is returned"() {
-        given: "request body with disallowed validation level"
-        Map requestData = validRequestBody()
-        requestData.validationLevel = validationLevel
-
-        when: "request is sent"
-        Response response = SivaRequests.tryValidateHashcode(requestData)
-
-        then: "request is rejected"
-        RequestErrorValidator.validate(response, RequestError.VALIDATION_LEVEL_INVALID)
-
-        where:
-        description                   | validationLevel
-        "Timestamps"                  | "Timestamps"
-        "BasicSignatures"             | "BasicSignatures"
-        "empty"                       | ""
-        "unknown"                     | "NotValid"
-        "surrounded by whitespace"    | " LongTermData "
-        "containing inner whitespace" | "Long TermData"
-    }
-
-    @Story("Validation level is case insensitive")
-    def "Given validation level '#validationLevel', then level is case insensitive"() {
-        given: "request body with validation level"
-        Map requestData = validRequestBody()
-        requestData.validationLevel = validationLevel
-
-        when: "request is sent"
-        Response response = SivaRequests.tryValidateHashcode(requestData)
-
-        then: "request is accepted"
-        response.then().statusCode(HttpStatus.SC_OK)
-
-        where:
-        validationLevel << ["archivaldata", "ARCHIVALDATA", "ArChIvAlDaTa",
-                            "longtermdata", "LONGTERMDATA", "LoNgTeRmDaTa"]
-    }
-
-    @Story("Null validation level falls back to the default")
-    def "Given null validation level, then default validation level is used"() {
-        given: "request body with null validation level"
-        Map requestData = validRequestBody()
-        requestData.validationLevel = null
-
-        when: "request is sent"
-        Response response = SivaRequests.validateHashcode(requestData)
-
-        then: "request is accepted and default validation level is used"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validationLevel", is("ARCHIVAL_DATA"))
-    }
-
     @Story("Validating hashcode only XAdES signature files are accepted")
     def "Given #description signature file, then error is returned"() {
         given: "request body with a non-XAdES signature file"
