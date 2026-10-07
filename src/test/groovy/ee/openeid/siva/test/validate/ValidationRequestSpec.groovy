@@ -22,8 +22,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestErrorValidator
 import ee.openeid.siva.test.util.Utils
-import io.qameta.allure.Description
-import io.qameta.allure.Link
+import io.qameta.allure.*
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import io.restassured.http.Method
@@ -34,6 +33,7 @@ import org.apache.http.HttpStatus
 import spock.lang.Ignore
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.VALIDATION_LEVEL_ARCHIVAL_DATA
 import static io.restassured.RestAssured.given
 import static io.restassured.config.EncoderConfig.encoderConfig
 import static org.hamcrest.Matchers.*
@@ -117,17 +117,24 @@ class ValidationRequestSpec extends GenericSpecification {
         )
     }
 
-    @Description("Extra request parameters are ignored")
-    def "Given extra parameters in validation request, then extra parameters are ignored"() {
-        given:
+    @Story("Extra request parameters are ignored")
+    def "Given #description in validation request, then parameters are ignored"() {
+        given: "request with extra parameters"
         Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
-        requestData.extraOne = "RandomValue"
-        requestData.extraTwo = "AnotherValue"
+        requestData.putAll(extraParameters)
 
-        expect:
-        SivaRequests.validate(requestData)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "request is sent"
+        Response response = SivaRequests.validate(requestData)
+
+        then: "parameters are ignored and default validation level is used"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validatedDocument.filename", equalTo("singleValidSignatureTM.bdoc"))
+                .body("validationLevel", equalTo(VALIDATION_LEVEL_ARCHIVAL_DATA))
+
+        where:
+        description                                    | extraParameters
+        "unknown parameters"                           | [extraOne: "RandomValue", extraTwo: "AnotherValue"]
+        "hashcode endpoint parameter validationLevel " | [validationLevel: "LongTermData"]
     }
 
     @Description("Request has invalid keys (capital letters)")
