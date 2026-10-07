@@ -23,9 +23,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import ee.openeid.siva.test.util.RequestErrorValidator
 import ee.openeid.siva.test.util.Utils
-import io.qameta.allure.Description
-import io.qameta.allure.Link
-import io.qameta.allure.Story
+import io.qameta.allure.*
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import io.restassured.http.Method
@@ -517,27 +515,81 @@ class HashcodeValidationRequestSpec extends GenericSpecification {
         return files
     }
 
-    // TODO: Add request error validation, when it is done
-    @Ignore("SIVA-1206")
     @Story("Disallowed validation level is rejected")
     def "Given request with #description as validation level, then error is returned"() {
-        given: "Request body with disallowed validation level"
+        given: "request body with disallowed validation level"
         Map requestData = validRequestBody()
         requestData.validationLevel = validationLevel
 
-        when: "Validation request is sent"
+        when: "request is sent"
         Response response = SivaRequests.tryValidateHashcode(requestData)
 
-        then: "Request is rejected"
-        response.then().statusCode(HttpStatus.SC_BAD_REQUEST)
+        then: "request is rejected"
+        RequestErrorValidator.validate(response, RequestError.VALIDATION_LEVEL_INVALID)
 
         where:
-        description         | validationLevel
-        "Timestamps"        | "Timestamps"
-        "BasicSignatures"   | "BasicSignatures"
-        "empty"             | ""
-        "unknown"           | "NotValid"
-        "incorrectly cased" | "archivaldata"
+        description                   | validationLevel
+        "Timestamps"                  | "Timestamps"
+        "BasicSignatures"             | "BasicSignatures"
+        "empty"                       | ""
+        "unknown"                     | "NotValid"
+        "surrounded by whitespace"    | " LongTermData "
+        "containing inner whitespace" | "Long TermData"
+    }
+
+    @Story("Validation level is case insensitive")
+    def "Given validation level '#validationLevel', then level is case insensitive"() {
+        given: "request body with validation level"
+        Map requestData = validRequestBody()
+        requestData.validationLevel = validationLevel
+
+        when: "request is sent"
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+
+        then: "request is accepted"
+        response.then().statusCode(HttpStatus.SC_OK)
+
+        where:
+        validationLevel << ["archivaldata", "ARCHIVALDATA", "ArChIvAlDaTa",
+                            "longtermdata", "LONGTERMDATA", "LoNgTeRmDaTa"]
+    }
+
+    @Story("Null validation level falls back to the default")
+    def "Given null validation level, then default validation level is used"() {
+        given: "request body with null validation level"
+        Map requestData = validRequestBody()
+        requestData.validationLevel = null
+
+        when: "request is sent"
+        Response response = SivaRequests.validateHashcode(requestData)
+
+        then: "request is accepted and default validation level is used"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validationLevel", is("ARCHIVAL_DATA"))
+    }
+
+    @Story("Validating hashcode only XAdES signature files are accepted")
+    def "Given #description signature file, then error is returned"() {
+        given: "request body with a non-XAdES signature file"
+        Map requestData = RequestData.hashcodeValidationRequest(fileName)
+
+        when: "request is sent"
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+
+        then: "validation fails with a server error"
+        response.then().statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                .body("requestErrors.key", hasItem(RequestError.DOCUMENT_VALIDATION_ERROR.key))
+                .body("requestErrors.message", hasItem(RequestError.DOCUMENT_VALIDATION_ERROR.message))
+
+        where:
+        description        | fileName
+        "CAdES detached"   | "TEST_ESTEID2018_CAdES_LT_detached.p7s"
+        "CAdES enveloping" | "TEST_ESTEID2018_CAdES_LT_enveloping.p7m"
+        "PAdES"            | "TEST_ESTEID2018_PAdES_LT_enveloped.pdf"
+        "ASiC-E container" | "TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"
+        "ASiC-S container" | "TEST_ESTEID2018_ASiC-S_XAdES_LT.scs"
+        "BDOC container"   | "2_signatures_B_TM.bdoc"
+        "DDOC container"   | "ddoc_1_3.xml.ddoc"
     }
 
     private void assertSimpleReportWithSignature(ValidatableResponse response, Map request) {

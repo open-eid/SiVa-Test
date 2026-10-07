@@ -220,6 +220,7 @@ class TestData {
     static final String TS_PROCESS_NOT_CONCLUSIVE = "The result of the timestamps validation process is not conclusive!"
     static final String TS_MESSAGE_NOT_INTACT = "The time-stamp message imprint is not intact!"
     static final String TS_NOT_TRUSTED = "The certificate chain for time-stamp is not trusted, it does not contain a trust anchor."
+    static final String LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA = "LTA archive timestamps have no effect on the validation result of the signature at the LONG_TERM_DATA validation level."
     static final String REFERENCE_DATA_NOT_INTACT = "The reference data object is not intact!"
     static final String REFERENCE_DATA_NOT_FOUND = "The reference data object has not been found!"
     static final String CERTIFICATE_DO_NOT_MATCH_TRUST_SERVICE = "The trusted certificate doesn't match the trust service"

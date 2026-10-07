@@ -22,10 +22,8 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.*
 import io.restassured.response.Response
-import spock.lang.Ignore
 
-import static ee.openeid.siva.test.TestData.getTS_MESSAGE_NOT_INTACT
-import static ee.openeid.siva.test.TestData.getVALIDATION_CONCLUSION_PREFIX
+import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
 
 @Epic("Signature validation (hashcode)")
@@ -33,7 +31,6 @@ import static org.hamcrest.Matchers.*
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
 class XadesHashcodeLtaValidationSpec extends GenericSpecification {
 
-    @Ignore("SIVA-1206")
     @Story("Validate LTA hashcode with default settings")
     def "Validate LTA hashcode fails without setting validation level: #description"() {
         when: "request is sent without validation level"
@@ -45,6 +42,7 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
                 .body("signatures[0].indication", is(indication))
                 .body("validationLevel", is("ARCHIVAL_DATA"))
                 .body("signatures[0].errors.content", hasItem(TS_MESSAGE_NOT_INTACT))
+                .body("signatures[0].warnings.content", not(hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA)))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(0))
 
@@ -66,7 +64,6 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
         "ATS replaced"                                   | "TEST_XAdES_LTA-Archivetimestamp-Replaced.xml" || "TOTAL-FAILED"
     }
 
-    @Ignore("SIVA-1206")
     @Story("Validate LTA hashcode with validation level set")
     def "Validate LTA hashcode fails with ArchivalData validation level: #description"() {
         given: "validation level is set to ArchivalData"
@@ -82,6 +79,7 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
                 .body("signatures[0].indication", is(indication))
                 .body("validationLevel", is("ARCHIVAL_DATA"))
                 .body("signatures[0].errors.content", hasItem(TS_MESSAGE_NOT_INTACT))
+                .body("signatures[0].warnings.content", not(hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA)))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(0))
 
@@ -103,7 +101,6 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
         "ATS replaced"                                   | "TEST_XAdES_LTA-Archivetimestamp-Replaced.xml" || "TOTAL-FAILED"
     }
 
-    @Ignore("SIVA-1206")
     @Story("Validate LTA hashcode with validation level set")
     def "Validate LTA hashcode succeeds with LongTermData validation level with #description"() {
         given: "validation level is set to LongTermData"
@@ -119,7 +116,7 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("validationLevel", is("LONG_TERM_DATA"))
                 .body("signatures[0].errors[0].content", emptyOrNullString())
-                .body("signatures[0].warnings[0].content", emptyOrNullString())
+                .body("signatures[0].warnings.content", hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
 
@@ -138,7 +135,6 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
         "ATS replaced"                                   | "TEST_XAdES_LTA-Archivetimestamp-Replaced.xml"
     }
 
-    @Ignore("SIVA-1206")
     @Story("Validate LTA hashcode with validation level set")
     def "Validate LTA hashcode fails with LongTermData validation level if #description"() {
         given: "validation level is set to LongTermData"
@@ -153,6 +149,7 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LTA))
                 .body("signatures[0].indication", is(indication))
                 .body("validationLevel", is("LONG_TERM_DATA"))
+                .body("signatures[0].warnings.content", hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(0))
 
@@ -164,6 +161,68 @@ class XadesHashcodeLtaValidationSpec extends GenericSpecification {
         "signed with expired OCSP"         | "esteid2018signerAiaOcspExpiredLTA.xml" || "INDETERMINATE"
         "Not-qualified TS + Qualified ATS" | "LTA_TSA_QTSA.xml"                      || "TOTAL-FAILED"
         "TS replaced"                      | "TEST_XAdES_LTA-Ts-Replaced.xml"        || "TOTAL-FAILED"
+    }
+
+    @Story("ATS no effect warning not produced for not-LTA hashcode signature")
+    def "Validate #description hashcode with LongTermData validation level: LTA warning is not reported"() {
+        given: "not-LTA signatures validation level is set to LongTermData"
+        Map requestBody = RequestData.hashcodeValidationRequest(fileName)
+        requestBody.put("validationLevel", "LongTermData")
+
+        when: "request is sent"
+        Response response = SivaRequests.validateHashcode(requestBody)
+
+        then: "signature has no ATS warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validationLevel", is("LONG_TERM_DATA"))
+                .body("signatures[0].warnings.content", not(hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA)))
+
+        where:
+        description | fileName                                || signatureFormat
+        "B-level"   | "TEST_ESTEID2018_XAdES_B_detached.xml"  || SignatureFormat.XAdES_BASELINE_B
+        "T-level"   | "TEST_ESTEID2018_XAdES_T_detached.xml"  || SignatureFormat.XAdES_BASELINE_T
+        "LT-level"  | "TEST_ESTEID2018_XAdES_LT_detached.xml" || SignatureFormat.XAdES_BASELINE_LT
+    }
+
+    @Story("ATS no effect warning not produced for not-LTA hashcode signature")
+    def "When validating LTA and LT hashcode with LongTermData validation level, then ATS warning added only to LTA"() {
+        given: "request with LTA and LT signature files and LongTermData validation level"
+        Map requestBody = RequestData.hashcodeValidationRequest(["TEST_XAdES_LTA.xml", "Valid_XAdES_LT_TS.xml"], null, null)
+        requestBody.put("validationLevel", "LongTermData")
+
+        when: "request is sent"
+        Response response = SivaRequests.validateHashcode(requestBody)
+
+        then: "ATS warning is reported for the LTA signature only"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validationLevel", is("LONG_TERM_DATA"))
+                .body("signaturesCount", is(2))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LTA))
+                .body("signatures[0].warnings.content", hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA))
+                .body("signatures[1].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[1].warnings.content", not(hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA)))
+    }
+
+    @Story("Validation level has no effect on signature without archive timestamp")
+    def "When validating LT hashcode with #validationLevel validation level the result does not change"() {
+        given: "validation level is set"
+        Map requestBody = RequestData.hashcodeValidationRequest("Valid_XAdES_LT_TS.xml")
+        requestBody.put("validationLevel", validationLevel)
+
+        when: "request is sent"
+        Response response = SivaRequests.validateHashcode(requestBody)
+
+        then: "validation result is the same for both validation levels"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
+                .body("signatures[0].indication", is("TOTAL-PASSED"))
+                .body("validationLevel", is(reportedLevel))
+                .body("signaturesCount", is(1))
+
+        where:
+        validationLevel | reportedLevel
+        "ArchivalData"  | "ARCHIVAL_DATA"
+        "LongTermData"  | "LONG_TERM_DATA"
     }
 
 }
