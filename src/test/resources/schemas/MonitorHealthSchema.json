@@ -19,7 +19,7 @@
                 },
                 "version": {
                   "type": "string",
-                  "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                  "pattern": "^\\d+\\.\\d+\\.\\d+(-SNAPSHOT)?$"
                 },
                 "buildTime": {
                   "type": "string",
