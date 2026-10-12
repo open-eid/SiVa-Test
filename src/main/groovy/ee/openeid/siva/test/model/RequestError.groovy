@@ -56,6 +56,8 @@ enum RequestError {
 
     VALIDATION_LEVEL_INVALID("validationLevel", "Invalid validation level. Only ArchivalData or LongTermData is allowed."),
 
+    REQUEST_BODY_NOT_READABLE("requestBodyNotReadable", "Request body is malformed and cannot be read"),
+
     // TODO: Investigate if these errors are used and should be covered by tests.
     // "Invalid filename extension. Only xml files accepted."
     // "Invalid filename format"

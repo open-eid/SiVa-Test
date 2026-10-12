@@ -54,6 +54,28 @@ class ValidationLevelRequestSpec extends GenericSpecification {
         "unknown"                     | "NotValid"
         "surrounded by whitespace"    | " LongTermData "
         "containing inner whitespace" | "Long TermData"
+        "enum name LONG_TERM_DATA"    | "LONG_TERM_DATA"
+        "enum name ARCHIVAL_DATA"     | "ARCHIVAL_DATA"
+        "number"                      | 123
+        "boolean"                     | true
+    }
+
+    @Story("Disallowed validation level is rejected")
+    def "Given request with #description as validation level, then malformed request error is returned"() {
+        given: "request body with non-scalar validation level"
+        Map requestData = validRequestBody()
+        requestData.validationLevel = validationLevel
+
+        when: "request is sent"
+        Response response = SivaRequests.tryValidateHashcode(requestData)
+
+        then: "request is rejected"
+        RequestErrorValidator.validate(response, RequestError.REQUEST_BODY_NOT_READABLE)
+
+        where:
+        description | validationLevel
+        "object"    | [level: "LongTermData"]
+        "array"     | ["LongTermData"]
     }
 
     @Story("Validation level is case insensitive")

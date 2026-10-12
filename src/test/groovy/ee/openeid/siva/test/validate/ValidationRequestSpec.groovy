@@ -32,6 +32,7 @@ import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpStatus
 import spock.lang.Ignore
 
+import static ee.openeid.siva.test.TestData.LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static ee.openeid.siva.test.TestData.VALIDATION_LEVEL_ARCHIVAL_DATA
 import static io.restassured.RestAssured.given
@@ -120,7 +121,8 @@ class ValidationRequestSpec extends GenericSpecification {
     @Story("Extra request parameters are ignored")
     def "Given #description in validation request, then parameters are ignored"() {
         given: "request with extra parameters"
-        Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
+        // Generic validation flow is needed: time-mark containers do not report validationLevel
+        Map requestData = RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce")
         requestData.putAll(extraParameters)
 
         when: "request is sent"
@@ -128,13 +130,13 @@ class ValidationRequestSpec extends GenericSpecification {
 
         then: "parameters are ignored and default validation level is used"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validatedDocument.filename", equalTo("singleValidSignatureTM.bdoc"))
                 .body("validationLevel", equalTo(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("signatures[0].warnings.content", not(hasItem(LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA)))
 
         where:
-        description                                    | extraParameters
-        "unknown parameters"                           | [extraOne: "RandomValue", extraTwo: "AnotherValue"]
-        "hashcode endpoint parameter validationLevel " | [validationLevel: "LongTermData"]
+        description                                   | extraParameters
+        "unknown parameters"                          | [extraOne: "RandomValue", extraTwo: "AnotherValue"]
+        "hashcode endpoint parameter validationLevel" | [validationLevel: "LongTermData"]
     }
 
     @Description("Request has invalid keys (capital letters)")
