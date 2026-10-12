@@ -223,6 +223,7 @@ class TestData {
     static final String LTA_ATS_NO_EFFECT_AT_LONG_TERM_DATA = "LTA archive timestamps have no effect on the validation result of the signature at the LONG_TERM_DATA validation level."
     static final String REFERENCE_DATA_NOT_INTACT = "The reference data object is not intact!"
     static final String REFERENCE_DATA_NOT_FOUND = "The reference data object has not been found!"
+    static final String REFERENCE_NAME_DOES_NOT_MATCH = "The reference name does not match the name of the document!"
     static final String CERTIFICATE_DO_NOT_MATCH_TRUST_SERVICE = "The trusted certificate doesn't match the trust service"
     static final String CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE = "The certificate is not related to a qualified certificate issuing trust service with valid status!"
     static final String CERT_NOT_RELATED_TO_EXPECTED_IDENTIFIER = "The trust service(s) related to the time-stamp does not have the expected type identifier!"
