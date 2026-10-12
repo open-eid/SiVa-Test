@@ -412,4 +412,22 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("signaturesCount", is(2))
                 .body("validSignaturesCount", is(2))
     }
+
+    @Story("LTA signature created with DigiDoc4 client passes")
+    def "ASiC-E with LTA signature created with DigiDoc4 client passes"() {
+        when: "validate LTA signature created in DigiDoc4 client"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2025_XAdES_LTA_DigiDoc4.asice"))
+
+        then: "signature is validated as valid LTA signature"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatureForm", is(ContainerFormat.ASiC_E))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LTA))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].info.archiveTimeStamps", hasSize(1))
+                .body("signatures[0].info.archiveTimeStamps[0].indication", is(VALID_INDICATION_VALUE_PASSED))
+                .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
+                .body("signaturesCount", is(1))
+                .body("validSignaturesCount", is(1))
+    }
 }
