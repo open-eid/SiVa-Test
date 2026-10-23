@@ -125,6 +125,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].errors", emptyOrNullString())
                 .body("signatures[0].warnings.content", containsInAnyOrder(
+                        "Elements overlap on page(s) [1]",
                         "The authority info access is not present!",
                         "Elements overlap on page(s) [1]"))
                 .body("signatures[0].certificates.size()", is(4))
@@ -149,6 +150,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
                 .body("signatures[0].errors", emptyOrNullString())
                 .body("signatures[0].warnings.content", containsInAnyOrder(
+                        "Elements overlap on page(s) [1]",
                         "The authority info access is not present!",
                         "Elements overlap on page(s) [1]"))
                 .body("signatures[0].certificates.size()", is(4))

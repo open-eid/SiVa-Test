@@ -96,7 +96,7 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
                 .body("signatures[1].signatureScopes[0].scope", is("PARTIAL"))
                 .body("signatures[1].signatureScopes[0].content", is("The document ByteRange : [0, 134940, 153886, 24208]"))
                 .body("signatures[1].claimedSigningTime", is("2016-06-27T09:59:37Z"))
-                .body("signatures[1].warnings.content", contains("The authority info access is not present!"))
+                .body("signatures[1].warnings.content", containsInAnyOrder("The authority info access is not present!", "Elements overlap on page(s) [1]"))
                 .body("signatures[1].info.timeAssertionMessageImprint", is("MDEwDQYJYIZIAWUDBAIBBQAEIOjVGatd9zXaIv/XQ9c81bTjZ4K14Ihcrhwv+sBhM26V"))
                 .body("signatures[1].info.bestSignatureTime", is("2016-06-27T09:59:48Z"))
                 .body("signatures[1].info.ocspResponseCreationTime", is("2016-06-27T09:59:49Z"))
