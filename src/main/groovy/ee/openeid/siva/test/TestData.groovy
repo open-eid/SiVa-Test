@@ -244,6 +244,15 @@ class TestData {
     static final String NOT_EXPECTED_KEY_USAGE = "The signing-certificate of signature does not have an expected key-usage!"
     static final String SIG_QUALIFYING_PROPERTY_MISSING = "The signed qualifying property: neither 'message-digest' nor 'SignedProperties' is present!"
 
+    // PDF modification after signing (DSS format checking: PdfPageDifference, PdfVisualDifference, PdfAnnotationOverlap,
+    // AnnotationChanges, UndefinedChanges, DocMDP). Page-specific messages take the page list appended, e.g. PDF_VISUAL_DIFFERENCE + "[1]"
+    static final String PDF_PAGE_COUNT_MISMATCH = "The number of signed pages does not match the number of pages present in the PDF!"
+    static final String PDF_VISUAL_DIFFERENCE = "Visual difference is detected on page(s) "
+    static final String PDF_ELEMENTS_OVERLAP = "Elements overlap on page(s) "
+    static final String PDF_ANNOTATION_CHANGES = "The document contains annotation creation, modification or deletion changes after the signature revision!"
+    static final String PDF_UNDEFINED_CHANGES = "The document contains undefined object modifications after the signature revision!"
+    static final String PDF_DOCMDP_RESTRICTED_CHANGES = "Document contains changes restricted by /DocMDP dictionary!"
+
     static final String NOT_GRANTED_CONTAINER_WARNING = "Found a timestamp token not related to granted status. If not yet covered with a fresh timestamp token, this container might become invalid in the future."
 
 }
