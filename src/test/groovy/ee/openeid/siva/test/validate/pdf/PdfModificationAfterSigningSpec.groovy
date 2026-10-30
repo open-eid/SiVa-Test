@@ -47,12 +47,14 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
                 .body("signaturesCount", is(1))
 
         where:
-        description                       | file                       | signedBy
-        "invisible signature"             | "00-base-signed-LT.pdf"    | "MÖLDER,HUGO MARTIN,38910239121"
-        "visible signature"               | "50-visible-signature.pdf" | "JÕEORG,JAAK-KRISTJAN,38001085718"
-        "certifying signature DocMDP P=1" | "20-docmdp-P1-signed.pdf"  | "MÖLDER,HUGO MARTIN,38910239121"
-        "certifying signature DocMDP P=2" | "30-docmdp-P2-signed.pdf"  | "MÖLDER,HUGO MARTIN,38910239121"
-        "signature with FieldMDP lock"    | "40-fieldmdp-signed.pdf"   | "MÖLDER,HUGO MARTIN,38910239121"
+        description                         | file                               | signedBy
+        "invisible signature"               | "00-base-signed-LT.pdf"            | "MÖLDER,HUGO MARTIN,38910239121"
+        "visible signature"                 | "50-visible-signature.pdf"         | "JÕEORG,JAAK-KRISTJAN,38001085718"
+        "certifying signature DocMDP P=1"   | "20-docmdp-P1-signed.pdf"          | "MÖLDER,HUGO MARTIN,38910239121"
+        "certifying signature DocMDP P=2"   | "30-docmdp-P2-signed.pdf"          | "MÖLDER,HUGO MARTIN,38910239121"
+        "signature with FieldMDP lock"      | "40-fieldmdp-signed.pdf"           | "MÖLDER,HUGO MARTIN,38910239121"
+        "annotation present before signing" | "60-annotation-before-signing.pdf" | "JÕEORG,JAAK-KRISTJAN,38001085718"
+        "eleven page document"              | "80-eleven-pages-signed-LT.pdf"    | "JÕEORG,JAAK-KRISTJAN,38001085718"
     }
 
     @Story("Page count change after signing produces warning")
@@ -91,6 +93,7 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "content replaced"                        | "02-content-replaced.pdf"             | "[1]"
         "page order changed"                      | "08-page-order-changed.pdf"           | "[1, 2]"
         "locked form field filled under FieldMDP" | "43-fieldmdp-locked-field-filled.pdf" | "[1]"
+        "existing annotation modified in place"   | "61-annotation-modified.pdf"          | "[1]"
     }
 
     @Story("Annotation change after signing produces warning")
@@ -111,6 +114,8 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "annotation over form field"   | "11-annotation-over-form-field.pdf"
         "annotation under DocMDP P=1"  | "22-docmdp-P1-annotation.pdf"
         "annotation under DocMDP P=2"  | "32-docmdp-P2-annotation.pdf"
+        "existing annotation deleted"  | "62-annotation-deleted.pdf"
+        "existing annotation replaced" | "63-annotation-replaced.pdf"
     }
 
     @Story("Annotation overlapping form field produces warning")
@@ -298,5 +303,58 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         description           | file
         "unmodified document" | "00-base-signed-LT.pdf"
         "form field filled"   | "06-form-filled.pdf"
+    }
+
+    @Story("Permitted change after document timestamp keeps signature valid")
+    def "PAdES LTA signature (#description) validates without modification warnings"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "LTA signature passes without warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
+
+        where:
+        description                                  | file
+        "unmodified after document timestamp"        | "70-base-signed-LTA.pdf"
+        "form field filled after document timestamp" | "75-lta-form-filled.pdf"
+    }
+
+    @Story("Modification after document timestamp produces warning")
+    def "Modification after document timestamp (#description) is reported as warning on PAdES LTA signature"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "LTA signature passes with modification warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings.content", hasItem(warning))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
+
+        where:
+        description        | file                          | warning
+        "page added"       | "71-lta-page-added.pdf"       | PDF_PAGE_COUNT_MISMATCH
+        "content overlaid" | "72-lta-content-overlay.pdf"  | PDF_VISUAL_DIFFERENCE + "[1]"
+        "annotation added" | "73-lta-annotation-added.pdf" | PDF_ANNOTATION_CHANGES
+    }
+
+    @Story("Visual comparison is skipped for documents over 10 pages")
+    def "Content change in document over 10 pages is reported as undefined changes warning without visual difference"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("81-eleven-pages-content-overlay.pdf"))
+
+        then: "signature passes with undefined changes warning only"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings.content", hasItem(PDF_UNDEFINED_CHANGES))
+                .body("signatures[0].warnings.content", not(hasItem(startsWith(PDF_VISUAL_DIFFERENCE))))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
     }
 }
