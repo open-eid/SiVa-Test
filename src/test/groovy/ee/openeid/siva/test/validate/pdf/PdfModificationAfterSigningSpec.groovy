@@ -57,6 +57,63 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "eleven page document"              | "80-eleven-pages-signed-LT.pdf"    | "JÕEORG,JAAK-KRISTJAN,38001085718"
     }
 
+    @Story("Permitted change after signing keeps signature valid")
+    def "Permitted change after signing (#description) keeps signature valid without warnings"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "signature passes without warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
+
+        where:
+        description                          | file
+        "form field filled"                  | "06-form-filled.pdf"
+        "metadata changed"                   | "07-metadata-changed.pdf"
+        "bytes appended after EOF"           | "09-bytes-after-eof.pdf"
+        "form field filled under DocMDP P=2" | "31-docmdp-P2-form-filled-allowed.pdf"
+    }
+
+    @Story("Permitted change keeps signature valid under POLv3")
+    def "Permitted change under POLv3 policy (#description) keeps signature valid without warnings"() {
+        when: "validation is requested with POLv3 policy"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file, SignaturePolicy.POLICY_3))
+
+        then: "signature passes without warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
+
+        where:
+        description           | file
+        "unmodified document" | "00-base-signed-LT.pdf"
+        "form field filled"   | "06-form-filled.pdf"
+    }
+
+    @Story("Permitted change after document timestamp keeps signature valid")
+    def "PAdES LTA signature (#description) validates without modification warnings"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "LTA signature passes without warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings", emptyOrNullString())
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
+
+        where:
+        description                                  | file
+        "unmodified after document timestamp"        | "70-base-signed-LTA.pdf"
+        "form field filled after document timestamp" | "75-lta-form-filled.pdf"
+    }
+
     @Story("Page count change after signing produces warning")
     def "Page #description after signing is reported as warning"() {
         when: "validation is requested"
@@ -73,6 +130,21 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         description | file
         "added"     | "03-page-added.pdf"
         "removed"   | "04-page-removed.pdf"
+    }
+
+    @Story("Page count change after signing produces warning")
+    def "Page added after both co-signatures is reported as warning on both signatures"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("K01-cosigned-page-added-after-both.pdf"))
+
+        then: "both signatures pass with page count warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings.content", hasItem(PDF_PAGE_COUNT_MISMATCH))
+                .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[1].warnings.content", hasItem(PDF_PAGE_COUNT_MISMATCH))
+                .body("validSignaturesCount", is(2))
+                .body("signaturesCount", is(2))
     }
 
     @Story("Content change after signing produces warnings")
@@ -116,6 +188,21 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "annotation under DocMDP P=2"  | "32-docmdp-P2-annotation.pdf"
         "existing annotation deleted"  | "62-annotation-deleted.pdf"
         "existing annotation replaced" | "63-annotation-replaced.pdf"
+    }
+
+    @Story("Annotation change after signing produces warning")
+    def "Annotation added after two visible signatures is reported as warning on both signatures"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("53-two-visible-signatures-annotation.pdf"))
+
+        then: "both signatures pass with annotation changes warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings.content", hasItem(PDF_ANNOTATION_CHANGES))
+                .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[1].warnings.content", hasItem(PDF_ANNOTATION_CHANGES))
+                .body("validSignaturesCount", is(2))
+                .body("signaturesCount", is(2))
     }
 
     @Story("Annotation overlapping form field produces warning")
@@ -171,24 +258,44 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "P=2"       | "33-docmdp-P2-content-overlay.pdf"
     }
 
-    @Story("Permitted change after signing keeps signature valid")
-    def "Permitted change after signing (#description) keeps signature valid without warnings"() {
+    @Story("Modification after document timestamp produces warning")
+    def "Modification after document timestamp (#description) is reported as warning on PAdES LTA signature"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "signature passes without warnings"
+        then: "LTA signature passes with modification warning"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings", emptyOrNullString())
+                .body("signatures[0].warnings.content", hasItem(warning))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
 
         where:
-        description                          | file
-        "form field filled"                  | "06-form-filled.pdf"
-        "metadata changed"                   | "07-metadata-changed.pdf"
-        "bytes appended after EOF"           | "09-bytes-after-eof.pdf"
-        "form field filled under DocMDP P=2" | "31-docmdp-P2-form-filled-allowed.pdf"
+        description        | file                          | warning
+        "page added"       | "71-lta-page-added.pdf"       | PDF_PAGE_COUNT_MISMATCH
+        "content overlaid" | "72-lta-content-overlay.pdf"  | PDF_VISUAL_DIFFERENCE + "[1]"
+        "annotation added" | "73-lta-annotation-added.pdf" | PDF_ANNOTATION_CHANGES
+    }
+
+    @Story("Modification after signing is reported as warning under POLv3")
+    def "Modification after signing (#description) is reported as warning under POLv3 policy"() {
+        when: "validation is requested with POLv3 policy"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file, SignaturePolicy.POLICY_3))
+
+        then: "signature passes with modification warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings.content", hasItem(warning))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
+
+        where:
+        description                   | file                          | warning
+        "page added"                  | "03-page-added.pdf"           | PDF_PAGE_COUNT_MISMATCH
+        "content overlaid"            | "01-content-overlay.pdf"      | PDF_VISUAL_DIFFERENCE + "[1]"
+        "annotation added"            | "05-annotation-overlay.pdf"   | PDF_ANNOTATION_CHANGES
+        "annotation under DocMDP P=1" | "22-docmdp-P1-annotation.pdf" | PDF_DOCMDP_RESTRICTED_CHANGES
     }
 
     @Story("Co-signature of unmodified document keeps both signatures valid")
@@ -210,36 +317,6 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "invisible co-signature"          | "F00-cosigned-unmodified.pdf"
         "two visible signatures"          | "51-two-visible-signatures.pdf"
         "visible and invisible signature" | "52-visible-and-invisible-signature.pdf"
-    }
-
-    @Story("Annotation change after signing produces warning")
-    def "Annotation added after two visible signatures is reported as warning on both signatures"() {
-        when: "validation is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest("53-two-visible-signatures-annotation.pdf"))
-
-        then: "both signatures pass with annotation changes warning"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_ANNOTATION_CHANGES))
-                .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[1].warnings.content", hasItem(PDF_ANNOTATION_CHANGES))
-                .body("validSignaturesCount", is(2))
-                .body("signaturesCount", is(2))
-    }
-
-    @Story("Page count change after signing produces warning")
-    def "Page added after both co-signatures is reported as warning on both signatures"() {
-        when: "validation is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest("K01-cosigned-page-added-after-both.pdf"))
-
-        then: "both signatures pass with page count warning"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_PAGE_COUNT_MISMATCH))
-                .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[1].warnings.content", hasItem(PDF_PAGE_COUNT_MISMATCH))
-                .body("validSignaturesCount", is(2))
-                .body("signaturesCount", is(2))
     }
 
     @Story("Modification before co-signature is reported on first signature only")
@@ -265,83 +342,6 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "annotation over content"         | "F05-cosigned-annotation-overlay.pdf" | PDF_ANNOTATION_CHANGES
         "content overlaid by same signer" | "S01-same-signer-content-overlay.pdf" | PDF_VISUAL_DIFFERENCE + "[1]"
         "page added by same signer"       | "S03-same-signer-page-added.pdf"      | PDF_PAGE_COUNT_MISMATCH
-    }
-
-    @Story("Modification after signing is reported as warning under POLv3")
-    def "Modification after signing (#description) is reported as warning under POLv3 policy"() {
-        when: "validation is requested with POLv3 policy"
-        Response response = SivaRequests.validate(RequestData.validationRequest(file, SignaturePolicy.POLICY_3))
-
-        then: "signature passes with modification warning"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(warning))
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
-
-        where:
-        description                   | file                          | warning
-        "page added"                  | "03-page-added.pdf"           | PDF_PAGE_COUNT_MISMATCH
-        "content overlaid"            | "01-content-overlay.pdf"      | PDF_VISUAL_DIFFERENCE + "[1]"
-        "annotation added"            | "05-annotation-overlay.pdf"   | PDF_ANNOTATION_CHANGES
-        "annotation under DocMDP P=1" | "22-docmdp-P1-annotation.pdf" | PDF_DOCMDP_RESTRICTED_CHANGES
-    }
-
-    @Story("Permitted change keeps signature valid under POLv3")
-    def "Permitted change under POLv3 policy (#description) keeps signature valid without warnings"() {
-        when: "validation is requested with POLv3 policy"
-        Response response = SivaRequests.validate(RequestData.validationRequest(file, SignaturePolicy.POLICY_3))
-
-        then: "signature passes without warnings"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings", emptyOrNullString())
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
-
-        where:
-        description           | file
-        "unmodified document" | "00-base-signed-LT.pdf"
-        "form field filled"   | "06-form-filled.pdf"
-    }
-
-    @Story("Permitted change after document timestamp keeps signature valid")
-    def "PAdES LTA signature (#description) validates without modification warnings"() {
-        when: "validation is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest(file))
-
-        then: "LTA signature passes without warnings"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings", emptyOrNullString())
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
-
-        where:
-        description                                  | file
-        "unmodified after document timestamp"        | "70-base-signed-LTA.pdf"
-        "form field filled after document timestamp" | "75-lta-form-filled.pdf"
-    }
-
-    @Story("Modification after document timestamp produces warning")
-    def "Modification after document timestamp (#description) is reported as warning on PAdES LTA signature"() {
-        when: "validation is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest(file))
-
-        then: "LTA signature passes with modification warning"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(warning))
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
-
-        where:
-        description        | file                          | warning
-        "page added"       | "71-lta-page-added.pdf"       | PDF_PAGE_COUNT_MISMATCH
-        "content overlaid" | "72-lta-content-overlay.pdf"  | PDF_VISUAL_DIFFERENCE + "[1]"
-        "annotation added" | "73-lta-annotation-added.pdf" | PDF_ANNOTATION_CHANGES
     }
 
     @Story("Visual comparison is skipped for documents over 10 pages")
