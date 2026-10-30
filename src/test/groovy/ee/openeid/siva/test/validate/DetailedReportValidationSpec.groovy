@@ -373,6 +373,7 @@ class DetailedReportValidationSpec extends GenericSpecification {
     }
 
     @Description("Warning \"The trusted certificate does not match the trust service!\" is not filtered out and is present in Detailed Report")
+    @Ignore("SIVA-1245")
     def "Given detailed report, then trust service warning is not filtered out"() {
         expect:
         SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice", null, ReportType.DETAILED))

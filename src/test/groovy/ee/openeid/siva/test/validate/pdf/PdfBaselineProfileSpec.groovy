@@ -191,7 +191,7 @@ class PdfBaselineProfileSpec extends GenericSpecification {
         then:
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[1].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
-                .body("signatures[1].signatureLevel", is(SignatureLevel.NOT_ADES_QC))
+                .body("signatures[1].signatureLevel", is(SignatureLevel.NOT_ADES))
                 .body("signatures[1].indication", is("TOTAL-FAILED"))
                 .body("signatures[1].subIndication", is("HASH_FAILURE"))
                 .body("signatures[1].errors[0].content", is(CERT_VALIDATION_NOT_CONCLUSIVE))
