@@ -27,6 +27,8 @@ import spock.lang.Tag
 import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
 
+@Epic("Signature validation (datafile)")
+@Feature("ASiC-E validation")
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy")
 class AsiceValidationPassSpec extends GenericSpecification {
 
@@ -429,5 +431,23 @@ class AsiceValidationPassSpec extends GenericSpecification {
                 .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
+    }
+
+    @Story("Signature remains valid when related trust service is withdrawn")
+    def "ASiC-E #description signature passes when OCSP responder is withdrawn in TSL after signing"() {
+        when: "validate signature where OCSP responder in TSL marked withdrawn after production time"
+        Response response = SivaRequests.validate(RequestData.validationRequest(testFile))
+
+        then: "signature is still valid and qualified"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].signatureFormat", is(signatureFormat))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", is("TEST of SK OCSP RESPONDER 2011"))
+
+        where:
+        description | testFile                                         | signatureFormat
+        "LT_TM"     | "TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.asice" | SignatureFormat.XAdES_BASELINE_LT_TM
+        "LT"        | "singleValidSignatureTS.asice"                   | SignatureFormat.XAdES_BASELINE_LT
     }
 }

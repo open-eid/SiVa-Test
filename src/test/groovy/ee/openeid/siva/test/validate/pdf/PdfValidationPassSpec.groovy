@@ -26,6 +26,8 @@ import io.restassured.response.Response
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
 
+@Epic("Signature validation (datafile)")
+@Feature("PDF validation")
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
 class PdfValidationPassSpec extends GenericSpecification {
 
@@ -92,5 +94,18 @@ class PdfValidationPassSpec extends GenericSpecification {
                 .body("signatures[0].subjectDistinguishedName.commonName", notNullValue())
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
+    }
+
+    @Story("Signature remains valid when related trust service is withdrawn")
+    def "PDF signature passes when signer CA is withdrawn in TSL after signing"() {
+        when: "validate signature issued by CA that is withdrawn in TSL after signing time"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec256.pdf"))
+
+        then: "signature is still valid and qualified"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", is("TEST of ESTEID-SK 2011"))
     }
 }

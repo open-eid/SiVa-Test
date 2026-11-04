@@ -28,6 +28,8 @@ import spock.lang.Ignore
 import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
 
+@Epic("Signature validation (datafile)")
+@Feature("ASiC-E validation (fail)")
 @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
 class AsiceValidationFailSpec extends GenericSpecification {
 
@@ -478,4 +480,16 @@ class AsiceValidationFailSpec extends GenericSpecification {
         "attachment"     | "xroad-attachment.asice"
     }
 
+    @Story("Validation after trust service withdrawal returns error")
+    def "ASiC-E signature without POE returns error when signer CA is withdrawn in TSL"() {
+        when: "validate signature without POE, issued by CA that is withdrawn in TSL"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TM-04_kehtivuskinnituset.4.asice"))
+
+        then: "signature is not qualified and withdrawn status is reported"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].signatureLevel", is(SignatureLevel.NOT_ADES))
+                .body("signatures[0].errors.content", hasItem(CERT_NOT_RELATED_TO_QUALIFIED_TRUST_SERVICE))
+                .body("signatures[0].warnings.content", hasItem("The certificate is related to a trust service entry with status 'withdrawn'!"))
+                .body("signatures[0].certificates.findAll{it.type == 'SIGNING'}[0].issuer.commonName", is("TEST of ESTEID-SK 2011"))
+    }
 }

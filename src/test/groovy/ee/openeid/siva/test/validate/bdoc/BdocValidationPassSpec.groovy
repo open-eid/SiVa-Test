@@ -18,18 +18,17 @@ package ee.openeid.siva.test.validate.bdoc
 
 import ee.openeid.siva.test.GenericSpecification
 import ee.openeid.siva.test.TestData
-import ee.openeid.siva.test.model.ContainerFormat
-import ee.openeid.siva.test.model.SignatureFormat
-import ee.openeid.siva.test.model.SignatureIndication
-import ee.openeid.siva.test.model.SignatureLevel
+import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
-import io.qameta.allure.Description
+import io.qameta.allure.*
 import io.restassured.response.Response
 import spock.lang.Ignore
 
 import static org.hamcrest.Matchers.*
 
+@Epic("Signature validation (datafile)")
+@Feature("BDOC validation")
 class BdocValidationPassSpec extends GenericSpecification {
 
     @Description("All signature profiles in container are validated")
@@ -349,5 +348,18 @@ class BdocValidationPassSpec extends GenericSpecification {
                 ))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
+    }
+
+    @Story("Signature remains valid when related trust service is withdrawn")
+    def "BDOC signature passes when OCSP responder is withdrawn in TSL after signing"() {
+        when: "validate signature where OCSP responder in TSL marked withdrawn after production time"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc"))
+
+        then: "signature is still valid and qualified"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
+                .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
+                .body("signatures[0].certificates.findAll{it.type == 'REVOCATION'}[0].commonName", is("TEST of SK OCSP RESPONDER 2011"))
     }
 }
