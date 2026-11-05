@@ -114,37 +114,26 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "form field filled after document timestamp" | "75-lta-form-filled.pdf"
     }
 
-    @Story("Page count change after signing produces warning")
-    def "Page #description after signing is reported as warning"() {
+    @Story("Page count change after signing produces warnings")
+    def "Page #description is reported as warning on every signature"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "signature passes with page count warning"
+        then: "every signature passes with warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_PAGE_COUNT_MISMATCH))
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
+                .body("signatures.indication", everyItem(is(SignatureIndication.TOTAL_PASSED)))
+                .body("signatures.warnings.content", everyItem(containsInAnyOrder(
+                        PDF_PAGE_COUNT_MISMATCH,
+                        PDF_ANNOTATION_CHANGES,
+                        PDF_UNDEFINED_CHANGES)))
+                .body("validSignaturesCount", is(signatures))
+                .body("signaturesCount", is(signatures))
 
         where:
-        description | file
-        "added"     | "03-page-added.pdf"
-        "removed"   | "04-page-removed.pdf"
-    }
-
-    @Story("Page count change after signing produces warning")
-    def "Page added after both co-signatures is reported as warning on both signatures"() {
-        when: "validation is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest("K01-cosigned-page-added-after-both.pdf"))
-
-        then: "both signatures pass with page count warning"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_PAGE_COUNT_MISMATCH))
-                .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[1].warnings.content", hasItem(PDF_PAGE_COUNT_MISMATCH))
-                .body("validSignaturesCount", is(2))
-                .body("signaturesCount", is(2))
+        description                      | file                                     | signatures
+        "added after signing"            | "03-page-added.pdf"                      | 1
+        "removed after signing"          | "04-page-removed.pdf"                    | 1
+        "added after both co-signatures" | "K01-cosigned-page-added-after-both.pdf" | 2
     }
 
     @Story("Content change after signing produces warnings")
@@ -155,17 +144,17 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         then: "signature passes with visual difference and undefined changes warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItems(PDF_VISUAL_DIFFERENCE + pages, PDF_UNDEFINED_CHANGES))
+                .body("signatures[0].warnings.content", containsInAnyOrder(*warnings))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
 
         where:
-        description                               | file                                  | pages
-        "content overlaid"                        | "01-content-overlay.pdf"              | "[1]"
-        "content replaced"                        | "02-content-replaced.pdf"             | "[1]"
-        "page order changed"                      | "08-page-order-changed.pdf"           | "[1, 2]"
-        "locked form field filled under FieldMDP" | "43-fieldmdp-locked-field-filled.pdf" | "[1]"
-        "existing annotation modified in place"   | "61-annotation-modified.pdf"          | "[1]"
+        description                               | file                                  | warnings
+        "content overlaid"                        | "01-content-overlay.pdf"              | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "content replaced"                        | "02-content-replaced.pdf"             | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "page order changed"                      | "08-page-order-changed.pdf"           | [PDF_VISUAL_DIFFERENCE + "[1, 2]", PDF_UNDEFINED_CHANGES, PDF_ANNOTATION_CHANGES]
+        "locked form field filled under FieldMDP" | "43-fieldmdp-locked-field-filled.pdf" | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "existing annotation modified in place"   | "61-annotation-modified.pdf"          | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
     }
 
     @Story("Annotation change after signing produces warning")
@@ -176,18 +165,18 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         then: "signature passes with annotation changes warning"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_ANNOTATION_CHANGES))
+                .body("signatures[0].warnings.content", containsInAnyOrder(*warnings))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
 
         where:
-        description                    | file
-        "annotation over page content" | "05-annotation-overlay.pdf"
-        "annotation over form field"   | "11-annotation-over-form-field.pdf"
-        "annotation under DocMDP P=1"  | "22-docmdp-P1-annotation.pdf"
-        "annotation under DocMDP P=2"  | "32-docmdp-P2-annotation.pdf"
-        "existing annotation deleted"  | "62-annotation-deleted.pdf"
-        "existing annotation replaced" | "63-annotation-replaced.pdf"
+        description                    | file                                | warnings
+        "annotation over page content" | "05-annotation-overlay.pdf"         | [PDF_ANNOTATION_CHANGES]
+        "annotation over form field"   | "11-annotation-over-form-field.pdf" | [PDF_ANNOTATION_CHANGES, PDF_ELEMENTS_OVERLAP + "[1]"]
+        "annotation under DocMDP P=1"  | "22-docmdp-P1-annotation.pdf"       | [PDF_ANNOTATION_CHANGES, PDF_DOCMDP_RESTRICTED_CHANGES]
+        "annotation under DocMDP P=2"  | "32-docmdp-P2-annotation.pdf"       | [PDF_ANNOTATION_CHANGES, PDF_DOCMDP_RESTRICTED_CHANGES]
+        "existing annotation deleted"  | "62-annotation-deleted.pdf"         | [PDF_ANNOTATION_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]"]
+        "existing annotation replaced" | "63-annotation-replaced.pdf"        | [PDF_ANNOTATION_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]"]
     }
 
     @Story("Annotation change after signing produces warning")
@@ -198,9 +187,9 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         then: "both signatures pass with annotation changes warning"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_ANNOTATION_CHANGES))
+                .body("signatures[0].warnings.content", contains(PDF_ANNOTATION_CHANGES))
                 .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[1].warnings.content", hasItem(PDF_ANNOTATION_CHANGES))
+                .body("signatures[1].warnings.content", contains(PDF_ANNOTATION_CHANGES))
                 .body("validSignaturesCount", is(2))
                 .body("signaturesCount", is(2))
     }
@@ -210,10 +199,12 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("11-annotation-over-form-field.pdf"))
 
-        then: "signature passes with element overlap warning"
+        then: "signature passes with element overlap and annotation changes warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_ELEMENTS_OVERLAP + "[1]"))
+                .body("signatures[0].warnings.content", containsInAnyOrder(
+                        PDF_ELEMENTS_OVERLAP + "[1]",
+                        PDF_ANNOTATION_CHANGES))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
     }
@@ -226,15 +217,15 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         then: "signature passes with DocMDP restricted change warning"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_DOCMDP_RESTRICTED_CHANGES))
+                .body("signatures[0].warnings.content", containsInAnyOrder(*warnings))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
 
         where:
-        description                   | file
-        "annotation under P=1"        | "22-docmdp-P1-annotation.pdf"
-        "form field filled under P=1" | "21-docmdp-P1-form-filled.pdf"
-        "annotation under P=2"        | "32-docmdp-P2-annotation.pdf"
+        description                   | file                           | warnings
+        "annotation under P=1"        | "22-docmdp-P1-annotation.pdf"  | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_ANNOTATION_CHANGES]
+        "form field filled under P=1" | "21-docmdp-P1-form-filled.pdf" | [PDF_DOCMDP_RESTRICTED_CHANGES]
+        "annotation under P=2"        | "32-docmdp-P2-annotation.pdf"  | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_ANNOTATION_CHANGES]
     }
 
     @Story("Change restricted by DocMDP produces warning")
@@ -245,7 +236,7 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         then: "signature passes with visual difference, DocMDP restricted change and undefined changes warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItems(
+                .body("signatures[0].warnings.content", containsInAnyOrder(
                         PDF_VISUAL_DIFFERENCE + "[1]",
                         PDF_DOCMDP_RESTRICTED_CHANGES,
                         PDF_UNDEFINED_CHANGES))
@@ -263,19 +254,19 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "LTA signature passes with modification warning"
+        then: "LTA signature passes with modification warnings, each reported twice (once for the signature, once for the document timestamp)"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(warning))
+                .body("signatures[0].warnings.content", containsInAnyOrder(*(warnings + warnings)))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
 
         where:
-        description        | file                          | warning
-        "page added"       | "71-lta-page-added.pdf"       | PDF_PAGE_COUNT_MISMATCH
-        "content overlaid" | "72-lta-content-overlay.pdf"  | PDF_VISUAL_DIFFERENCE + "[1]"
-        "annotation added" | "73-lta-annotation-added.pdf" | PDF_ANNOTATION_CHANGES
+        description        | file                          | warnings
+        "page added"       | "71-lta-page-added.pdf"       | [PDF_PAGE_COUNT_MISMATCH, PDF_ANNOTATION_CHANGES, PDF_UNDEFINED_CHANGES]
+        "content overlaid" | "72-lta-content-overlay.pdf"  | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "annotation added" | "73-lta-annotation-added.pdf" | [PDF_ANNOTATION_CHANGES]
     }
 
     @Story("Modification after signing is reported as warning under POLv3")
@@ -283,19 +274,19 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         when: "validation is requested with POLv3 policy"
         Response response = SivaRequests.validate(RequestData.validationRequest(file, SignaturePolicy.POLICY_3))
 
-        then: "signature passes with modification warning"
+        then: "signature passes with modification warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(warning))
+                .body("signatures[0].warnings.content", containsInAnyOrder(*warnings))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
 
         where:
-        description                   | file                          | warning
-        "page added"                  | "03-page-added.pdf"           | PDF_PAGE_COUNT_MISMATCH
-        "content overlaid"            | "01-content-overlay.pdf"      | PDF_VISUAL_DIFFERENCE + "[1]"
-        "annotation added"            | "05-annotation-overlay.pdf"   | PDF_ANNOTATION_CHANGES
-        "annotation under DocMDP P=1" | "22-docmdp-P1-annotation.pdf" | PDF_DOCMDP_RESTRICTED_CHANGES
+        description                   | file                          | warnings
+        "page added"                  | "03-page-added.pdf"           | [PDF_PAGE_COUNT_MISMATCH, PDF_ANNOTATION_CHANGES, PDF_UNDEFINED_CHANGES]
+        "content overlaid"            | "01-content-overlay.pdf"      | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "annotation added"            | "05-annotation-overlay.pdf"   | [PDF_ANNOTATION_CHANGES]
+        "annotation under DocMDP P=1" | "22-docmdp-P1-annotation.pdf" | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_ANNOTATION_CHANGES]
     }
 
     @Story("Co-signature of unmodified document keeps both signatures valid")
@@ -324,24 +315,24 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "first signature passes with warning, second signature passes without warnings"
+        then: "first signature passes with warnings, second signature passes without warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(warning))
+                .body("signatures[0].warnings.content", containsInAnyOrder(*warnings))
                 .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[1].warnings", emptyOrNullString())
                 .body("validSignaturesCount", is(2))
                 .body("signaturesCount", is(2))
 
         where:
-        description                       | file                                  | warning
-        "content overlaid"                | "F01-cosigned-content-overlay.pdf"    | PDF_VISUAL_DIFFERENCE + "[1]"
-        "content replaced"                | "F02-cosigned-content-replaced.pdf"   | PDF_VISUAL_DIFFERENCE + "[1]"
-        "page added"                      | "F03-cosigned-page-added.pdf"         | PDF_PAGE_COUNT_MISMATCH
-        "page removed"                    | "F04-cosigned-page-removed.pdf"       | PDF_PAGE_COUNT_MISMATCH
-        "annotation over content"         | "F05-cosigned-annotation-overlay.pdf" | PDF_ANNOTATION_CHANGES
-        "content overlaid by same signer" | "S01-same-signer-content-overlay.pdf" | PDF_VISUAL_DIFFERENCE + "[1]"
-        "page added by same signer"       | "S03-same-signer-page-added.pdf"      | PDF_PAGE_COUNT_MISMATCH
+        description                       | file                                  | warnings
+        "content overlaid"                | "F01-cosigned-content-overlay.pdf"    | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "content replaced"                | "F02-cosigned-content-replaced.pdf"   | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "page added"                      | "F03-cosigned-page-added.pdf"         | [PDF_PAGE_COUNT_MISMATCH, PDF_ANNOTATION_CHANGES, PDF_UNDEFINED_CHANGES]
+        "page removed"                    | "F04-cosigned-page-removed.pdf"       | [PDF_PAGE_COUNT_MISMATCH, PDF_ANNOTATION_CHANGES, PDF_UNDEFINED_CHANGES]
+        "annotation over content"         | "F05-cosigned-annotation-overlay.pdf" | [PDF_ANNOTATION_CHANGES]
+        "content overlaid by same signer" | "S01-same-signer-content-overlay.pdf" | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "page added by same signer"       | "S03-same-signer-page-added.pdf"      | [PDF_PAGE_COUNT_MISMATCH, PDF_ANNOTATION_CHANGES, PDF_UNDEFINED_CHANGES]
     }
 
     @Story("Visual comparison is skipped for documents over 10 pages")
@@ -352,8 +343,7 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         then: "signature passes with undefined changes warning only"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", hasItem(PDF_UNDEFINED_CHANGES))
-                .body("signatures[0].warnings.content", not(hasItem(startsWith(PDF_VISUAL_DIFFERENCE))))
+                .body("signatures[0].warnings.content", contains(PDF_UNDEFINED_CHANGES))
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
     }
