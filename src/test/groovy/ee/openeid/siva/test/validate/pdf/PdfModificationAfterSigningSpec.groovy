@@ -57,6 +57,20 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "eleven page document"              | "80-eleven-pages-signed-LT.pdf"    | "JÕEORG,JAAK-KRISTJAN,38001085718"
     }
 
+    @Story("Change in signed byte range invalidates signature")
+    def "Byte modified inside signed byte range fails signature with hash failure"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("10-signed-range-byte-modified.pdf"))
+
+        then: "signature fails with hash failure"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
+                .body("signatures[0].subIndication", is(SUB_INDICATION_HASH_FAILURE))
+                .body("signatures[0].errors.content", contains(REFERENCE_DATA_NOT_INTACT))
+                .body("validSignaturesCount", is(0))
+                .body("signaturesCount", is(1))
+    }
+
     @Story("Permitted change after signing keeps signature valid")
     def "Permitted change after signing (#description) keeps signature valid without warnings"() {
         when: "validation is requested"
@@ -153,6 +167,7 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "content overlaid"                        | "01-content-overlay.pdf"              | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
         "content replaced"                        | "02-content-replaced.pdf"             | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
         "page order changed"                      | "08-page-order-changed.pdf"           | [PDF_VISUAL_DIFFERENCE + "[1, 2]", PDF_UNDEFINED_CHANGES, PDF_ANNOTATION_CHANGES]
+        "content overlaid under FieldMDP"         | "42-fieldmdp-content-overlay.pdf"     | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
         "locked form field filled under FieldMDP" | "43-fieldmdp-locked-field-filled.pdf" | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
         "existing annotation modified in place"   | "61-annotation-modified.pdf"          | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
     }
@@ -295,6 +310,21 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings.content", contains(PDF_UNDEFINED_CHANGES))
+                .body("validSignaturesCount", is(1))
+                .body("signaturesCount", is(1))
+    }
+
+    @Story("Locked field value change under FieldMDP is not detected")
+    def "Locked form field value filled under FieldMDP is not reported"() {
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("41-fieldmdp-locked-field-value-filled.pdf"))
+
+        then: "signature passes without warnings"
+        // Known DSS 6.2 limitation: a /V-only change carries no field name, so the FieldMDP and SigFieldLock
+        // checks find no locked field to compare. If this starts failing, DSS now detects it - update the expectation.
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
+                .body("signatures[0].warnings", emptyOrNullString())
                 .body("validSignaturesCount", is(1))
                 .body("signaturesCount", is(1))
     }
