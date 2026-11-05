@@ -158,55 +158,24 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
     }
 
     @Story("Annotation change after signing produces warning")
-    def "Annotation change after signing (#description) is reported as warning"() {
+    def "Annotation change after signing (#description) is reported as warning on every signature"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "signature passes with annotation changes warning"
+        then: "every signature passes with annotation changes warning"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", containsInAnyOrder(*warnings))
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
+                .body("signatures.indication", everyItem(is(SignatureIndication.TOTAL_PASSED)))
+                .body("signatures.warnings.content", everyItem(containsInAnyOrder(*warnings)))
+                .body("validSignaturesCount", is(signatures))
+                .body("signaturesCount", is(signatures))
 
         where:
-        description                    | file                                | warnings
-        "annotation over page content" | "05-annotation-overlay.pdf"         | [PDF_ANNOTATION_CHANGES]
-        "annotation over form field"   | "11-annotation-over-form-field.pdf" | [PDF_ANNOTATION_CHANGES, PDF_ELEMENTS_OVERLAP + "[1]"]
-        "annotation under DocMDP P=1"  | "22-docmdp-P1-annotation.pdf"       | [PDF_ANNOTATION_CHANGES, PDF_DOCMDP_RESTRICTED_CHANGES]
-        "annotation under DocMDP P=2"  | "32-docmdp-P2-annotation.pdf"       | [PDF_ANNOTATION_CHANGES, PDF_DOCMDP_RESTRICTED_CHANGES]
-        "existing annotation deleted"  | "62-annotation-deleted.pdf"         | [PDF_ANNOTATION_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]"]
-        "existing annotation replaced" | "63-annotation-replaced.pdf"        | [PDF_ANNOTATION_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]"]
-    }
-
-    @Story("Annotation change after signing produces warning")
-    def "Annotation added after two visible signatures is reported as warning on both signatures"() {
-        when: "validation is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest("53-two-visible-signatures-annotation.pdf"))
-
-        then: "both signatures pass with annotation changes warning"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", contains(PDF_ANNOTATION_CHANGES))
-                .body("signatures[1].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[1].warnings.content", contains(PDF_ANNOTATION_CHANGES))
-                .body("validSignaturesCount", is(2))
-                .body("signaturesCount", is(2))
-    }
-
-    @Story("Annotation overlapping form field produces warning")
-    def "Annotation overlapping form field after signing is reported as element overlap warning"() {
-        when: "validation is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest("11-annotation-over-form-field.pdf"))
-
-        then: "signature passes with element overlap and annotation changes warnings"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", containsInAnyOrder(
-                        PDF_ELEMENTS_OVERLAP + "[1]",
-                        PDF_ANNOTATION_CHANGES))
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
+        description                                     | file                                       | signatures | warnings
+        "annotation over page content"                  | "05-annotation-overlay.pdf"                | 1          | [PDF_ANNOTATION_CHANGES]
+        "annotation over form field"                    | "11-annotation-over-form-field.pdf"        | 1          | [PDF_ANNOTATION_CHANGES, PDF_ELEMENTS_OVERLAP + "[1]"]
+        "existing annotation deleted"                   | "62-annotation-deleted.pdf"                | 1          | [PDF_ANNOTATION_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]"]
+        "existing annotation replaced"                  | "63-annotation-replaced.pdf"               | 1          | [PDF_ANNOTATION_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]"]
+        "annotation added after two visible signatures" | "53-two-visible-signatures-annotation.pdf" | 2          | [PDF_ANNOTATION_CHANGES]
     }
 
     @Story("Change restricted by DocMDP produces warning")
@@ -222,31 +191,12 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
                 .body("signaturesCount", is(1))
 
         where:
-        description                   | file                           | warnings
-        "annotation under P=1"        | "22-docmdp-P1-annotation.pdf"  | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_ANNOTATION_CHANGES]
-        "form field filled under P=1" | "21-docmdp-P1-form-filled.pdf" | [PDF_DOCMDP_RESTRICTED_CHANGES]
-        "annotation under P=2"        | "32-docmdp-P2-annotation.pdf"  | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_ANNOTATION_CHANGES]
-    }
-
-    @Story("Change restricted by DocMDP produces warning")
-    def "Content overlay under DocMDP #description is reported as visual difference, restricted change and undefined changes warnings"() {
-        when: "validation is requested"
-        Response response = SivaRequests.validate(RequestData.validationRequest(file))
-
-        then: "signature passes with visual difference, DocMDP restricted change and undefined changes warnings"
-        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
-                .body("signatures[0].warnings.content", containsInAnyOrder(
-                        PDF_VISUAL_DIFFERENCE + "[1]",
-                        PDF_DOCMDP_RESTRICTED_CHANGES,
-                        PDF_UNDEFINED_CHANGES))
-                .body("validSignaturesCount", is(1))
-                .body("signaturesCount", is(1))
-
-        where:
-        description | file
-        "P=1"       | "23-docmdp-P1-content-overlay.pdf"
-        "P=2"       | "33-docmdp-P2-content-overlay.pdf"
+        description                   | file                               | warnings
+        "form field filled under P=1" | "21-docmdp-P1-form-filled.pdf"     | [PDF_DOCMDP_RESTRICTED_CHANGES]
+        "annotation under P=1"        | "22-docmdp-P1-annotation.pdf"      | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_ANNOTATION_CHANGES]
+        "content overlay under P=1"   | "23-docmdp-P1-content-overlay.pdf" | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
+        "annotation under P=2"        | "32-docmdp-P2-annotation.pdf"      | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_ANNOTATION_CHANGES]
+        "content overlay under P=2"   | "33-docmdp-P2-content-overlay.pdf" | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
     }
 
     @Story("Modification after document timestamp produces warning")
