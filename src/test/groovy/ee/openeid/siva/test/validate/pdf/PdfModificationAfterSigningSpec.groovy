@@ -115,7 +115,7 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
     }
 
     @Story("Page count change after signing produces warnings")
-    def "Page #description is reported as warning on every signature"() {
+    def "Page #description is reported as warnings on every signature"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
@@ -137,11 +137,11 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
     }
 
     @Story("Content change after signing produces warnings")
-    def "Content change after signing (#description) is reported as visual difference and undefined changes warnings"() {
+    def "Content change after signing (#description) is reported as warnings"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "signature passes with visual difference and undefined changes warnings"
+        then: "signature passes with content change warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings.content", containsInAnyOrder(*warnings))
@@ -157,12 +157,12 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "existing annotation modified in place"   | "61-annotation-modified.pdf"          | [PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
     }
 
-    @Story("Annotation change after signing produces warning")
-    def "Annotation change after signing (#description) is reported as warning on every signature"() {
+    @Story("Annotation change after signing produces warnings")
+    def "Annotation change after signing (#description) is reported as warnings on every signature"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "every signature passes with annotation changes warning"
+        then: "every signature passes with annotation change warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures.indication", everyItem(is(SignatureIndication.TOTAL_PASSED)))
                 .body("signatures.warnings.content", everyItem(containsInAnyOrder(*warnings)))
@@ -178,12 +178,12 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "annotation added after two visible signatures" | "53-two-visible-signatures-annotation.pdf" | 2          | [PDF_ANNOTATION_CHANGES]
     }
 
-    @Story("Change restricted by DocMDP produces warning")
-    def "Restricted change under DocMDP (#description) is reported as restricted change warning"() {
+    @Story("Change restricted by DocMDP produces warnings")
+    def "Restricted change under DocMDP (#description) is reported as warnings"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "signature passes with DocMDP restricted change warning"
+        then: "signature passes with DocMDP restricted change warnings"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings.content", containsInAnyOrder(*warnings))
@@ -199,12 +199,13 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "content overlay under P=2"   | "33-docmdp-P2-content-overlay.pdf" | [PDF_DOCMDP_RESTRICTED_CHANGES, PDF_VISUAL_DIFFERENCE + "[1]", PDF_UNDEFINED_CHANGES]
     }
 
-    @Story("Modification after document timestamp produces warning")
-    def "Modification after document timestamp (#description) is reported as warning on PAdES LTA signature"() {
+    @Story("Modification after document timestamp produces warnings")
+    def "Modification after document timestamp (#description) is reported as warnings on PAdES LTA signature"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
-        then: "LTA signature passes with modification warnings, each reported twice (once for the signature, once for the document timestamp)"
+        then: "LTA signature passes with each modification warning reported twice"
+        // Each warning appears twice: once from the signature, once from its document timestamp
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LTA))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -219,8 +220,8 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
         "annotation added" | "73-lta-annotation-added.pdf" | [PDF_ANNOTATION_CHANGES]
     }
 
-    @Story("Modification after signing is reported as warning under POLv3")
-    def "Modification after signing (#description) is reported as warning under POLv3 policy"() {
+    @Story("Modification after signing produces warnings under POLv3")
+    def "Modification after signing (#description) is reported as warnings under POLv3 policy"() {
         when: "validation is requested with POLv3 policy"
         Response response = SivaRequests.validate(RequestData.validationRequest(file, SignaturePolicy.POLICY_3))
 
@@ -261,7 +262,7 @@ class PdfModificationAfterSigningSpec extends GenericSpecification {
     }
 
     @Story("Modification before co-signature is reported on first signature only")
-    def "Modification before co-signature (#description) is reported as warning on first signature only"() {
+    def "Modification before co-signature (#description) is reported as warnings on first signature only"() {
         when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(file))
 
