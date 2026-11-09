@@ -36,10 +36,10 @@ class PdfValidationFailSpec extends GenericSpecification {
 
     @Description("The PDF-file has been signed with expired certificate (PAdES Baseline T)")
     def "signaturesMadeWithExpiredSigningCertificatesAreInvalid"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-rsa1024-sha1-expired.pdf"))
 
-        then:
+        then: "signature is not valid"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_T))
@@ -53,10 +53,10 @@ class PdfValidationFailSpec extends GenericSpecification {
 
     @Description("The PDF-file has been signed with revoked certificate (PAdES Baseline LT)")
     def "documentSignedWithRevokedCertificateShouldFail"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("pades_lt_revoked.pdf", SignaturePolicy.POLICY_3, null))
 
-        then:
+        then: "signature is not valid"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
@@ -76,9 +76,11 @@ class PdfValidationFailSpec extends GenericSpecification {
     //TODO SIVA-349 needs investigation why the signature level is determined as INDETERMINATE_ADESIG not as INDETERMINATE_QESIG
     @Description("The PDF-file has been signed with certificate which has no non repudiation key usage attribute (PAdES Baseline LT)")
     def "signingCertificateWithoutNonRepudiationKeyUsageAttributeShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-auth.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-auth.pdf"))
+
+        then: "signature is not valid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
         //.body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))
@@ -129,9 +131,11 @@ class PdfValidationFailSpec extends GenericSpecification {
     @Description("The PDF-file has OCSP almost 24h before TS")
     @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#POLv4")
     def "ocspAlmost24hBeforeTsShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-ocsp-before-ts.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-ocsp-before-ts.pdf"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))

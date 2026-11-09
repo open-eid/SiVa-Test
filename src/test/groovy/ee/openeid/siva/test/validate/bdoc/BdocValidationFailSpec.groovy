@@ -36,9 +36,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc with single invalid signature")
     def "bdocInvalidSingleSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-3960_bdoc2.1_TSA_SignatureValue_altered.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-3960_bdoc2.1_TSA_SignatureValue_altered.bdoc"))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].signedBy", is("MÄNNIK,MARI-LIIS,47101010033"))
@@ -54,9 +56,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc with multiple invalid signatures")
     def "bdocInvalidMultipleSignatures"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("BdocMultipleSignaturesInvalid.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("BdocMultipleSignaturesInvalid.bdoc"))
+
+        then: "signatures fail"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
@@ -70,9 +74,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc with multiple signatures both valid and invalid")
     def "bdocInvalidAndValidMultipleSignatures"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("BdocMultipleSignaturesMixedWithValidAndInvalid.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("BdocMultipleSignaturesMixedWithValidAndInvalid.bdoc"))
+
+        then: "invalid signatures fail and valid signatures pass"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -91,9 +97,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc with no signatures")
     def "bdocNoSignatures"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("BdocContainerNoSignature.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("BdocContainerNoSignature.bdoc"))
+
+        then: "report has no signatures"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("validSignaturesCount", is(0))
                 .body("validationWarnings", hasSize(1))
@@ -102,9 +110,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Wrong signature timestamp")
     def "bdocInvalidTimeStampDontMatchSigValue"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("TS-02_23634_TS_wrong_SignatureValue.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("TS-02_23634_TS_wrong_SignatureValue.asice", null, null))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", is("SIG_CRYPTO_FAILURE"))
@@ -115,9 +125,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Asice No non-repudiation key usage value in the certificate, verification of AdES signature level")
     def "bdocInvalidNonRepudiationKey"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-I-43.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-I-43.asice", null, null))
+
+        then: "signature is not valid"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_UNKNOWN))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
@@ -128,9 +140,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Asice signers certificate does not have non-repudiation value in the certificates key usage field and it does not contain the QC and SSCD compliance information.")
     def "bdocInvalidNonRepudiationKeyNoComplianceInfo"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-I-26.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-I-26.asice", null, null))
+
+        then: "signature is not valid"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("CHAIN_CONSTRAINTS_FAILURE"))
@@ -143,9 +157,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc OCSP certificate is not trusted")
     def "bdocNotTrustedOcspCert"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TM-01_bdoc21-unknown-resp.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TM-01_bdoc21-unknown-resp.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", is("FORMAT_FAILURE"))
@@ -161,9 +177,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Asice TSA certificate is not trusted")
     def "bdocNotTrustedTsaCert"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("TS-05_23634_TS_unknown_TSA.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("TS-05_23634_TS_unknown_TSA.asice", null, null))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_T))
@@ -180,10 +198,10 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Asice OCSP response status is revoked")
     def "bdocTsOcspStatusRevoked"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-R-25.asice", null, null))
 
-        then:
+        then: "signature is not valid"
         response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
@@ -194,9 +212,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc different data file mime-type values in signatures.xml and manifest.xml files")
     def "bdocDifferentDataFileInSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("23613_TM_wrong-manifest-mimetype.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("23613_TM_wrong-manifest-mimetype.bdoc"))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].errors.content", hasItems("Manifest file has an entry for file <test.txt> with mimetype <application/binary> but the signature file for signature S0 indicates the mimetype is <application/octet-stream>"))
@@ -205,9 +225,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc SignatureValue does not correspond to the SignedInfo block")
     def "bdocSignatureValueDoNotCorrespondToSignedInfo"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("REF-19_bdoc21-no-sig-asn1-pref.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("REF-19_bdoc21-no-sig-asn1-pref.bdoc"))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", is("SIG_CRYPTO_FAILURE"))
@@ -217,9 +239,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc Baseline-BES file")
     def "bdocBaselineBesSignatureLevel"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("signWithIdCard_d4j_1.0.4_BES.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("signWithIdCard_d4j_1.0.4_BES.asice", null, null))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_B_BES))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -236,9 +260,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc Baseline-EPES file")
     def "bdocBaselineEpesSignatureLevel"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("TM-04_kehtivuskinnituset.4.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("TM-04_kehtivuskinnituset.4.asice", null, null))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_B_EPES))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -252,9 +278,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc signers certificate is not trusted")
     def "bdocSignersCertNotTrusted"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("SS-4_teadmataCA.4.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("SS-4_teadmataCA.4.asice", null, null))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].info.bestSignatureTime", is("2013-10-11T08:15:47Z"))
@@ -285,9 +313,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc OCSP response status is unknown")
     def "bdocTmOcspStatusUnknown"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("TM-16_unknown.4.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("TM-16_unknown.4.asice", null, null))
+
+        then: "signature is not valid"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].errors.content", hasItems(TestData.CERT_VALIDATION_NOT_CONCLUSIVE, TestData.REVOCATION_UNKNOWN))
@@ -296,28 +326,32 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc signed data file has been removed from the container")
     def "bdocSignedFileRemoved"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequestForDD4J(
                 "KS-21_fileeemaldatud.4.asice", null, null))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Bdoc no files in container")
     def "bdocNoFilesInContainer"() {
-        expect:
-        SivaRequests.tryValidate(RequestData.validationRequest("KS-02_tyhi.bdoc"))
-                .then()
+        when: "validation is requested"
+        Response response = SivaRequests.tryValidate(RequestData.validationRequest("KS-02_tyhi.bdoc"))
+
+        then: "request is rejected"
+        response.then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors", hasSize(2))
     }
 
     @Description("Bdoc wrong nonce")
     def "bdocWrongOcspNonce"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TM-10_noncevale.4.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TM-10_noncevale.4.bdoc"))
+
+        then: "signature is not valid"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("INDETERMINATE"))
                 .body("signatures[0].errors.content", hasItem("OCSP nonce is invalid"))
@@ -326,9 +360,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc signed data file(s) don't match the hash values in reference elements")
     def "bdocDataFilesDontMatchHash"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("REF-14_filesisumuudetud.4.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("REF-14_filesisumuudetud.4.bdoc"))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].subIndication", is("HASH_FAILURE"))
@@ -338,9 +374,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Asice Baseline-T signature")
     def "bdocBaselineTSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("TS-06_23634_TS_missing_OCSP.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("TS-06_23634_TS_missing_OCSP.asice", null, null))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_T))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -356,9 +394,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc OCSP response is not the one expected")
     def "bdocWrongSignersCertInOcspResponse"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("23608-bdoc21-TM-ocsp-bad-nonce.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("23608-bdoc21-TM-ocsp-bad-nonce.bdoc"))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].info.bestSignatureTime", emptyOrNullString())
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -368,10 +408,10 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc certificate's validity time is not in the period of OCSP producedAt time")
     def "bdocCertificateValidityOutOfOcspRange"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("23154_test1-old-sig-sigat-OK-prodat-NOK-1.bdoc"))
 
-        then:
+        then: "signature is not valid"
         response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
@@ -387,18 +427,20 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc BDOC-1.0 version container")
     def "bdocOldNotSupportedVersion"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("BDOC-1.0.bdoc"))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Asice unsigned data files in the container")
     def "asiceUnsignedDataFiles"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-34.asice", null, null))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("EE_SER-AEX-B-LT-V-34.asice", null, null))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
                 .body("signatures[0].errors[0].content", is("Manifest file has an entry for file <unsigned.txt> with mimetype <text/plain> but the signature file for signature S0 does not have an entry for this file"))
@@ -410,9 +452,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc signed properties element missing")
     def "bdocTimemarkSignedPropertiesMissing"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("REF-03_bdoc21-TM-no-signedpropref.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("REF-03_bdoc21-TM-no-signedpropref.bdoc"))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
@@ -422,9 +466,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Bdoc OCSP certificate in both signature and OCSP token")
     def "bdocTimemarkNoOcspCertificate"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("NoOcspCertificateAnywhere.bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("NoOcspCertificateAnywhere.bdoc"))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -434,9 +480,11 @@ class BdocValidationFailSpec extends GenericSpecification {
 
     @Description("Signature with BDOC policy should fail validation when extended to LT or LTA profile")
     def "Signature with BDOC policy extended to #comment profile should fail validation"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(filename))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(filename))
+
+        then: "signature fails"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(signatureProfiles))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))

@@ -40,10 +40,10 @@ class GetDataFileRequestSpec extends GenericSpecification {
 
     @Description("Request with empty body or empty values results in error")
     def "Given #comment, then error is returned"() {
-        when:
+        when: "data files are requested"
         Response response = SivaRequests.tryGetDataFiles(body)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(
                 response,
                 RequestError.DATA_FILE_FILENAME_INVALID,
@@ -59,12 +59,15 @@ class GetDataFileRequestSpec extends GenericSpecification {
 
     @Description("Order of elements is changed in request")
     def "Given different order of request parameters, then request succeeds"() {
-        given:
+        given: "request parameters are in reversed order"
         Map requestData = RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc")
         Map reversedRequestData = requestData.entrySet().toList().reverse().collectEntries()
-        expect:
-        SivaRequests.getDataFiles(reversedRequestData)
-                .then()
+
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(reversedRequestData)
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].filename", is("test.txt"))
                 .body("dataFiles[0].mimeType", is("application/octet-stream"))
                 .body("dataFiles[0].base64", is("VGVzdCBhbmQgc29tZSBvdGhlciB0ZXN0"))
@@ -73,27 +76,30 @@ class GetDataFileRequestSpec extends GenericSpecification {
 
     @Description("Extra request parameters are ignored")
     def "Given extra parameters in request, then extra parameters are ignored"() {
-        given:
+        given: "request has extra parameters"
         Map requestData = RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc")
         requestData.extraOne = "RandomValue"
         requestData.extraTwo = "AnotherValue"
-        expect:
-        SivaRequests.getDataFiles(requestData)
-                .then()
+
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(requestData)
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].size", is(24))
                 .body("dataFiles[0].base64", is("VGVzdCBhbmQgc29tZSBvdGhlciB0ZXN0"))
     }
 
     @Description("Requesting data files with missing mandatory body element results in error")
     def "Given #key parameter missing, then error is returned"() {
-        given:
+        given: "request has a missing parameter"
         Map requestData = RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc")
         requestData.remove(key)
 
-        when:
+        when: "data files are requested"
         Response response = SivaRequests.tryGetDataFiles(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, *errors)
 
         where:
@@ -104,13 +110,13 @@ class GetDataFileRequestSpec extends GenericSpecification {
 
     @Description("Requesting data files from valid or invalid document with invalid (non-ddoc) type in filename returns error for invalid datafile filename")
     def "Given #comment, then data files request returns invalid datafile filename error"() {
-        given:
+        given: "request has invalid datafile filename"
         Map requestData = RequestData.dataFileRequestFromFile(document, filename)
 
-        when:
+        when: "data files are requested"
         Response response = SivaRequests.tryGetDataFiles(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DATA_FILE_FILENAME_INVALID)
 
         where:
@@ -126,13 +132,13 @@ class GetDataFileRequestSpec extends GenericSpecification {
 
     @Description("Requesting data files from non-ddoc document with ddoc type in filename returns error for document malformed or not matching documentType")
     def "Given #comment, then data files request returns 'Document malformed or not matching documentType' error"() {
-        given:
+        given: "request document does not match filename"
         Map requestData = RequestData.dataFileRequestFromFile(document, filename)
 
-        when:
+        when: "data files are requested"
         Response response = SivaRequests.tryGetDataFiles(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
         response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
 
@@ -146,23 +152,27 @@ class GetDataFileRequestSpec extends GenericSpecification {
     @Description("Datafiles request with request body of limit length succeeds")
     @Link("http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters")
     def "Given request with body of limit length, then data files request succeeds"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.requestWithFixedBodyLength(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"), conf.sivaRequestSizeLimit()))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.requestWithFixedBodyLength(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"), conf.sivaRequestSizeLimit()))
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].filename", is("test.txt"))
     }
 
     @Description("Datafile response includes Content-Disposition header")
     def "Given datafile request, then response includes Content-Disposition header"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
+
+        then: "response includes Content-Disposition header"
+        response.then()
                 .header("Content-Disposition", is("attachment; filename=\"api.json\""))
     }
 
     @Description("Datafile endpoint checks")
     def "Datafile request with method #method is #result"() {
-        given:
+        given: "datafiles request specification"
         RequestSpecification request = given()
                 .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
                 .body(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
@@ -170,10 +180,10 @@ class GetDataFileRequestSpec extends GenericSpecification {
                 .baseUri(SivaRequests.sivaServiceUrl)
                 .basePath("/getDataFiles")
 
-        when:
+        when: "request is sent"
         Response response = request.request(method)
 
-        then:
+        then: "expected status is returned"
         response.then().statusCode(httpStatus)
 
         where:
@@ -190,7 +200,7 @@ class GetDataFileRequestSpec extends GenericSpecification {
 
     @Description("Datafile endpoint unsupported content type")
     def "Datafile request with unsupported content type '#type'"() {
-        given:
+        given: "datafiles request with unsupported content type"
         RequestSpecification request = given()
                 .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
                 .body(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
@@ -198,10 +208,10 @@ class GetDataFileRequestSpec extends GenericSpecification {
                 .baseUri(SivaRequests.sivaServiceUrl)
                 .basePath("/getDataFiles")
 
-        when:
+        when: "request is sent"
         Response response = request.post()
 
-        then:
+        then: "error is returned"
         response.then().statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE)
                 .body("requestErrors", hasSize(1))
                 .body("requestErrors.findAll { requestError -> " +

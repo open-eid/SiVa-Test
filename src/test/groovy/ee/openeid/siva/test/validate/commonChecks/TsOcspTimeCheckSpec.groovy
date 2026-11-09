@@ -23,6 +23,7 @@ import ee.openeid.siva.test.model.SignatureIndication
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.*
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.getVALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.emptyOrNullString
@@ -43,9 +44,11 @@ class TsOcspTimeCheckSpec extends GenericSpecification {
             default -> requestBody = RequestData.validationRequest(fileName)
         }
 
-        expect: "Validation report has dedicated warning"
-        SivaRequests.validate(requestBody)
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(requestBody)
+
+        then: "Validation report has dedicated warning"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures.indication", hasItem(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings.content", hasItem(TestData.REVOCATION_NOT_FRESH))
 
@@ -63,18 +66,22 @@ class TsOcspTimeCheckSpec extends GenericSpecification {
 
     @Story("TS and OCSP time difference greater than 15m produces warning")
     def "OCSP freshness warning present if OCSP is taken during validation of T-level signature more than 15m after TS"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("lv_test_signature_new_card-T.asice"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("lv_test_signature_new_card-T.asice"))
+
+        then: "revocation freshness warning is reported"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures.indication", hasItem(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings.content", hasItem(TestData.REVOCATION_NOT_FRESH))
     }
 
     @Story("Fresh OCSP response doesn´t produce warning")
     def "Signature with fresh OCSP (<15m after TS) should not trigger revocation freshness warning"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_LT_sig_OCSP_8m_after_TS.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_LT_sig_OCSP_8m_after_TS.asice"))
+
+        then: "no revocation freshness warning is reported"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures.indication", hasItem(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings", emptyOrNullString())
     }

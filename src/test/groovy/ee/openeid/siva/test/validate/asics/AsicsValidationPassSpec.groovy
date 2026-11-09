@@ -32,9 +32,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of ASICs with DDOC inside")
     def "validDdocInsideValidAsics"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ddocWithRoleAndSigProductionPlace.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ddocWithRoleAndSigProductionPlace.asics"))
+
+        then: "container passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -63,9 +65,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of ASICs with DDOC inside SCS extension")
     def "validDdocInsideValidAsicsScsExtension"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.scs"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.scs"))
+
+        then: "container passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("ValidDDOCinsideAsics.scs"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
@@ -83,9 +87,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of ASICs with BDOC inside")
     def "validBdocInsideValidAsics"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("valid-bdoc-tm-in-asics.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("valid-bdoc-tm-in-asics.asics"))
+
+        then: "container passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("valid-bdoc-tm-in-asics.asics"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
@@ -99,9 +105,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of ASICs with text document inside")
     def "textInsideValidAsics"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidAsics.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidAsics.asics"))
+
+        then: "timestamp passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
                 .body("timeStampTokens[0].signedBy", is("DEMO SK TIMESTAMPING AUTHORITY 2023E"))
@@ -115,9 +123,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of ASICs with ASICs inside")
     def "asicsInsideValidAsics"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidAsiceInAsics.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidAsiceInAsics.asics"))
+
+        then: "timestamp passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("timeStampTokens[0].indication", is("TOTAL-PASSED"))
                 .body("timeStampTokens[0].signedBy", is("DEMO SK TIMESTAMPING AUTHORITY 2023E"))
@@ -129,9 +139,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of ASICs with DDOC inside ZIP extension")
     def "ValidDdocInsideValidAsicsZipExtension"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.zip"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.zip"))
+
+        then: "container passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -151,12 +163,13 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of ASiC-S timestamped with different timestamps")
     def "Validating ASiC-S timestamped first with #first.name and then with #second.name"() {
-        given:
+        given: "ASiC-S file timestamped twice"
         String fileName = "2xTst-${first.name}+${second.name}.asics"
-        when:
+
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(fileName))
 
-        then:
+        then: "timestamps are reported"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is(fileName))
@@ -184,9 +197,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of composite ASiC-S with at least one valid covering timestamp")
     def "Validating composite ASiC-S with one valid covering timestamp, then nested timestamped container is validated"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondCoveringNestedContainer.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondCoveringNestedContainer.asics"))
+
+        then: "timestamps are reported"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("2xTstFirstInvalidSecondCoveringNestedContainer.asics".toString()))
                 .body("signaturesCount", is(0))
@@ -204,9 +219,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of composite ASiC-S with at least one valid covering timestamp")
     def "Validating composite ASiC-S with at least one valid covering timestamp, then nested timestamped container is validated"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2xTstFirstValidSecondNotCoveringNestedContainer.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2xTstFirstValidSecondNotCoveringNestedContainer.asics"))
+
+        then: "timestamps are reported"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("2xTstFirstValidSecondNotCoveringNestedContainer.asics".toString()))
                 .body("signaturesCount", is(0))
@@ -222,9 +239,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of composite ASiC-S with at least one valid covering timestamp")
     def "Validating composite ASiC-S with at least one valid covering timestamp, then nested signed container is validated"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3xTST-valid-bdoc-data-file-1st-tst-invalid-2nd-tst-no-coverage-3rd-tst-valid.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3xTST-valid-bdoc-data-file-1st-tst-invalid-2nd-tst-no-coverage-3rd-tst-valid.asics"))
+
+        then: "timestamps are reported"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("3xTST-valid-bdoc-data-file-1st-tst-invalid-2nd-tst-no-coverage-3rd-tst-valid.asics"))
                 .body("signaturesCount", is(1))
@@ -243,9 +262,11 @@ class AsicsValidationPassSpec extends GenericSpecification {
 
     @Description("All signature profiles in container are validated")
     def "Given validation request with ASiC-S #profile signature, then validation report is returned"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report contains signature profile"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", equalTo(file))
                 .body("signatures[0].signatureFormat", is(profile))

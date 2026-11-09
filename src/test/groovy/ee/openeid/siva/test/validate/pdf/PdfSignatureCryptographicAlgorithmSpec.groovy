@@ -35,9 +35,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("SHA512 algorithms (PAdES Baseline LT)")
     def "documentSignedWithSha512CertificateShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha512.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha512.pdf"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -47,10 +49,10 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("SHA1 algorithms (PAdES Baseline LT)")
     def "documentSignedWithSha1CertificateShouldPass"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha1.pdf", SignaturePolicy.POLICY_3))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
@@ -64,9 +66,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("ECDSA224 algorithms (PAdES Baseline LT)")
     def "documentSignedWithSha256Ec224AlgoShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec224.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec224.pdf"))
+
+        then: "signature is not valid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
@@ -77,9 +81,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("ECDSA256 algorithms (PAdES Baseline LT)")
     def "documentSignedWithSha256Ec256AlgoShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec256.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-ec256.pdf"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -89,9 +95,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("RSA1024 algorithms (PAdES Baseline LT)")
     def "documentSignedWithSha256Rsa1024AlgoShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024.pdf", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024.pdf", SignaturePolicy.POLICY_3))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -102,10 +110,10 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("RSA1023 algorithms (PAdES Baseline LT)")
     def "documentSignedWithRsa1023AlgoShouldFail"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1023.pdf"))
 
-        then:
+        then: "signature is not valid"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("CRYPTO_CONSTRAINTS_FAILURE_NO_POE"))
@@ -114,9 +122,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("RSA2047 algorithms (PAdES Baseline LT)")
     def "documentSignedWithRsa2047AlgoShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2047.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2047.pdf"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -127,9 +137,11 @@ class PdfSignatureCryptographicAlgorithmSpec extends GenericSpecification {
 
     @Description("RSA2048 algorithms (PAdES Baseline LT)")
     def "documentSignedWithRsa2048AlgoShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))

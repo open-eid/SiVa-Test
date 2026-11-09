@@ -54,7 +54,7 @@ class BdocValidationReportSpec extends GenericSpecification {
 
     @Story("BDOC XAdES_BASELINE_LT_TM validation report matches JSON structure and has expected values")
     def "BDOC with multiple valid signatures have correct validation report values present"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("Baltic MoU digital signing_EST_LT_LV.bdoc",
                 SignaturePolicy.POLICY_3))
 
@@ -70,9 +70,11 @@ class BdocValidationReportSpec extends GenericSpecification {
 
     @Story("Simple report includes timestamp creation time for timestamped signature")
     def "Given BDOC with timestamped signature, then validation report includes timestampCreationTime field"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file, "bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file, "bdoc"))
+
+        then: "report includes timestamp creation time"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
                 .body("signatures[0].info.timestampCreationTime", is(timestampCreationTime))
 
@@ -85,9 +87,11 @@ class BdocValidationReportSpec extends GenericSpecification {
 
     @Story("Simple report includes timestamp creation time for timestamped signature")
     def "Given BDOC with multiple timestamped signatures, then validation report includes timestampCreationTime field for each"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce", "bdoc"))
-                .then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce", "bdoc"))
+
+        then: "report includes timestamp creation time for each signature"
+        response.then().rootPath(TestData.VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
                 .body("signatures[1].info.timestampCreationTime", is("2021-01-29T14:31:36Z"))
                 .body("signatures[2].info.timestampCreationTime", is("2021-01-29T14:38:11Z"))
@@ -95,8 +99,11 @@ class BdocValidationReportSpec extends GenericSpecification {
 
     @Story("Simple report includes archive timestamp info")
     def "Given BDOC with archive timestamped signature, then archiveTimeStamps info is reported correctly"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc")).then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc"))
+
+        then: "archive timestamp info is reported correctly"
+        response.then()
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .rootPath(TestData.VALIDATION_CONCLUSION_PREFIX + "signatures[2].info")
                 .body("archiveTimeStamps.size()", is(1))

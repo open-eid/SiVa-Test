@@ -26,6 +26,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
@@ -35,9 +36,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("All signature profiles in container are validated")
     def "Given validation request with #container #profile signature, then validation report is returned"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report contains signature profile"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(container))
                 .body("validatedDocument.filename", equalTo(file))
                 .body("signatures[0].signatureFormat", is(profile))
@@ -52,9 +55,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.0 with valid signatures")
     def "ddocValidMultipleSignaturesV1_0"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("SK-XML1.0.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("SK-XML1.0.ddoc"))
+
+        then: "signatures pass"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_0))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.SK_XML))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -70,9 +75,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.1 with valid signature")
     def "ddocValidSignatureV1_1"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.1.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.1.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -84,9 +91,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.2 with valid signature")
     def "ddocValidSignatureV1_2"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.2.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.2.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_2))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_2))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -98,9 +107,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.3 with valid signature with ESTEID-SK 2011 certificate chain")
     def "ddocValidSignatureV1_3"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -110,9 +121,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.3 with valid signature, signed data file name has special characters and ESTEID-SK certificate chain")
     def "ddocSpecialCharactersInDataFileValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("susisevad1_3.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("susisevad1_3.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -122,9 +135,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.3 KLASS3-SK certificate chain with valid signature")
     def "ddocKlass3SkCertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("KLASS3-SK _ KLASS3-SK OCSP RESPONDER uus.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("KLASS3-SK _ KLASS3-SK OCSP RESPONDER uus.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -138,9 +153,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.3 KLASS3-SK 2010 certificate chain with valid signature")
     def "ddocKlass3Sk2010CertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("KLASS3-SK 2010 _ KLASS3-SK 2010 OCSP RESPONDER.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("KLASS3-SK 2010 _ KLASS3-SK 2010 OCSP RESPONDER.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -152,9 +169,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.1 ESTEID-SK 2007 certificate chain with valid signature")
     def "ddocEsteidSk2007CertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("vaikesed1.1.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("vaikesed1.1.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -168,9 +187,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.1 ESTEID-SK 2015 certificate chain with valid signature")
     def "ddocEsteidSk2015CertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4270_ESTEID-SK 2015  SK OCSP RESPONDER 2011.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4270_ESTEID-SK 2015  SK OCSP RESPONDER 2011.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -182,9 +203,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.1 ESTEID-SK certificate chain with valid signature")
     def "ddocEsteidSkCertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EID-SK _ EID-SK OCSP RESPONDER.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EID-SK _ EID-SK OCSP RESPONDER.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -197,9 +220,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.1 ESTEID-SK 2007 and OCSP 2010 certificate chain with valid signature")
     def "ddocEsteidSk2007Ocsp2010CertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EID-SK 2007 _ EID-SK 2007 OCSP RESPONDER 2010.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EID-SK 2007 _ EID-SK 2007 OCSP RESPONDER 2010.ddoc"))
+
+        then: "signatures pass"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -212,9 +237,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.3 ESTEID-SK 2007 and OCSP 2007 certificate chain with valid signature")
     def "ddocEsteidSk2007Ocsp2007CertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EID-SK 2007 _ EID-SK 2007 OCSP RESPONDER.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EID-SK 2007 _ EID-SK 2007 OCSP RESPONDER.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -225,9 +252,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc v1.3 ESTEID-SK 2011 and OCSP 2011 certificate chain with valid signature")
     def "ddocEsteidSk2011Ocsp2011CertificateChainValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EID-SK 2011 _ SK OCSP RESPONDER 2011.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EID-SK 2011 _ SK OCSP RESPONDER 2011.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -242,9 +271,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc with warning should pass")
     def "ddocWithWarningShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("18912.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("18912.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
@@ -269,9 +300,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Ddoc with no signatures")
     def "ddocNoSignatures"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DdocContainerNoSignature.ddoc", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DdocContainerNoSignature.ddoc", SignaturePolicy.POLICY_4, null))
+
+        then: "report has no signatures"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("validatedDocument.filename", is("DdocContainerNoSignature.ddoc"))
                 .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
@@ -282,9 +315,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of DDOC Hashcode v1.0")
     def "ddocV1_0HashcodeShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("SK-XML1_0_hashcode.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("SK-XML1_0_hashcode.ddoc"))
+
+        then: "signatures pass"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_0_hashcode))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.SK_XML))
@@ -307,9 +342,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of DDOC Hashcode v1.1")
     def "ddocV1_1HashcodeShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.1_hashcode.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.1_hashcode.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_1_hashcode))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(ContainerFormat.DIGIDOC_XML_1_1))
@@ -329,9 +366,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of DDOC Hashcode v1.2")
     def "ddocV1_2HashcodeShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.2_hashcode.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.2_hashcode.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_2_hashcode))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_2))
@@ -353,9 +392,11 @@ class DdocValidationPassSpec extends GenericSpecification {
 
     @Description("Validation of DDOC Hashcode v1.3")
     def "ddocV1_3HashcodeShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3_hashcode.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3_hashcode.ddoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3_hashcode))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))

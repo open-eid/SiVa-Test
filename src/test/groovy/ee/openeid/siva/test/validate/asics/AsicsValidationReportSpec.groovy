@@ -77,9 +77,11 @@ class AsicsValidationReportSpec extends GenericSpecification {
 
     @Description("Invalid timestamped ASiC-S report matches JSON structure and has expected values")
     def "Given invalid timestamped ASiC-S, then simple report has correct values present"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("1xTST-valid-bdoc-data-file-invalid-signature-in-tst.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("1xTST-valid-bdoc-data-file-invalid-signature-in-tst.asics"))
+
+        then: "report has correct values"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("timeStampTokens[0].indication", equalTo(SignatureIndication.TOTAL_FAILED))
                 .body("timeStampTokens[0].subIndication", equalTo(SUB_INDICATION_SIG_CRYPTO_FAILURE))
@@ -90,9 +92,11 @@ class AsicsValidationReportSpec extends GenericSpecification {
 
     @Description("Invalid timestamped ASiC-S report matches JSON structure and has expected values")
     def "Given ivalid timestamped ASiC-S, then simple report has error/errors and warning/warnings values present"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondNotCoveringDatafile.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2xTstFirstInvalidSecondNotCoveringDatafile.asics"))
+
+        then: "report has errors and warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("timeStampTokens[0].error.content[0]", equalTo("The time-stamp message imprint is not intact!"))
                 .body("timeStampTokens[0].errors.content[0]", equalTo("The time-stamp message imprint is not intact!"))
@@ -102,9 +106,11 @@ class AsicsValidationReportSpec extends GenericSpecification {
 
     @Description("Simple report includes timestamp creation time for timestamped signature")
     def "Given ASiC-S with timestamped signature, then validation report includes timestampCreationTime field"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report includes timestamp creation time"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(ContainerFormat.ASiC_S))
                 .body("signatures[0].info.timestampCreationTime", is(timestampCreationTime))
 
@@ -120,8 +126,11 @@ class AsicsValidationReportSpec extends GenericSpecification {
 
     @Description("Simple report includes archive timestamp info")
     def "Given ASiC-S with archive timestamped signature, then validation report includes archiveTimeStamps object"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file)).then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report includes archive timestamps"
+        response.then()
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures.findAll { it.signatureFormat.contains('LTA') }.info",
@@ -137,12 +146,14 @@ class AsicsValidationReportSpec extends GenericSpecification {
 
     @Description("Simple report includes archive timestamp info")
     def "Given ASiC-S with archive timestamped signature, then archiveTimeStamps info is reported correctly"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-S_XAdES_LTA.scs")).then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-S_XAdES_LTA.scs"))
+
+        then: "archive timestamp info is reported correctly"
+        response.then()
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .rootPath(VALIDATION_CONCLUSION_PREFIX + "signatures[0].info")
                 .body("archiveTimeStamps.size()", is(1))
-
                 .body("archiveTimeStamps[0].signedTime", is("2024-09-13T14:12:25Z"))
                 .body("archiveTimeStamps[0].country", is("EE"))
                 .body("archiveTimeStamps[0].signedBy", is("DEMO SK TIMESTAMPING AUTHORITY 2023E"))

@@ -25,6 +25,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.*
 import static org.hamcrest.Matchers.*
@@ -34,9 +35,11 @@ class DocumentValidationSpec extends GenericSpecification {
 
     @Description("Bdoc with two signatures and one unsigned document.")
     def "bdocWithOneUnsignedDocumentShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2s_1f_unsigned.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3f_2s_1f_unsigned.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signatures are invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(2))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -57,9 +60,11 @@ class DocumentValidationSpec extends GenericSpecification {
 
     @Description("Bdoc with two signatures and one document signed by only one signature.")
     def "bdocWithDocumentWithOneSignatureShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2s_1partly_signed.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3f_2s_1partly_signed.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signatures are invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(2))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -73,9 +78,11 @@ class DocumentValidationSpec extends GenericSpecification {
 
     @Description("Bdoc with two signatures and two documents signed by only one signature.")
     def "bdocWithNonOverlapingSignaturesShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2s_2partly_signed.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3f_2s_2partly_signed.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signatures are invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(2))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -90,9 +97,11 @@ class DocumentValidationSpec extends GenericSpecification {
 
     @Description("Bdoc with two signatures, one unsigned and two partly signed documents.")
     def "bdocWithNonOverlapingSignaturesAndOneUnsignedDocumentShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("4f_2s_all_combinations.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("4f_2s_all_combinations.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signatures are invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(2))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -112,9 +121,11 @@ class DocumentValidationSpec extends GenericSpecification {
     //TODO Should be re-evaluated when https://github.com/open-eid/SiVa/issues/18 is fixed
     @Description("Bdoc with three unsigned documents.")
     def "bdocWithThreeUnsignedDocumentShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("6f_2s_3unsigned.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("6f_2s_3unsigned.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signatures are invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(2))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -132,23 +143,27 @@ class DocumentValidationSpec extends GenericSpecification {
 
     @Description("Bdoc with deleted document, named in manifest.")
     def "bdocWithDeletedDocumentNamedInManifestShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2f_2signed_1f_deleted.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2f_2signed_1f_deleted.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signature is invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].indication", is(SignatureIndication.INDETERMINATE))
                 .body("signatures[0].subIndication", is("SIGNED_DATA_NOT_FOUND"))
                 .body("signatures[0].errors.content", hasItems(CERT_VALIDATION_NOT_CONCLUSIVE, REFERENCE_DATA_NOT_FOUND))
                 .body("validationWarnings", hasSize(1))
-                .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", is(TEST_ENV_VALIDATION_WARNING))
     }
 
     @Description("Bdoc with deleted document, also removed from manifest.")
     def "bdocWithRemovedDocumentDeletedFromManifestShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2f_2signed_1f_totally_removed.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2f_2signed_1f_totally_removed.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signature is invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.INDETERMINATE_QESIG))
@@ -162,9 +177,11 @@ class DocumentValidationSpec extends GenericSpecification {
     // TODO Should be re-evaluated when https://github.com/open-eid/SiVa/issues/18 is fixed
     @Description("Bdoc with one unsigned document, named in manifest.")
     def "bdocWithOneUnsignedDocumentNamedInManifestShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2signed_1unsigned_all_in_manifest.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3f_2signed_1unsigned_all_in_manifest.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signature is invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -175,9 +192,11 @@ class DocumentValidationSpec extends GenericSpecification {
     // TODO  Should be re-evaluated when https://github.com/open-eid/SiVa/issues/18 is fixed
     @Description("Bdoc with one unsigned document, NOT named in manifest.")
     def "bdocWithOneUnsignedDocumentNotNamedInManifestShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3f_2signed_1unsigned_2in_manifest.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3f_2signed_1unsigned_2in_manifest.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signature is invalid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(0))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -186,14 +205,16 @@ class DocumentValidationSpec extends GenericSpecification {
 
     @Description("Bdoc with signed documents.")
     def "bdocWithAllSignedDocumentsShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2f_all_signed.bdoc", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2f_all_signed.bdoc", SignaturePolicy.POLICY_3))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("validationWarnings", hasSize(1))
-                .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
+                .body("validationWarnings[0].content", is(TEST_ENV_VALIDATION_WARNING))
 
     }
 }

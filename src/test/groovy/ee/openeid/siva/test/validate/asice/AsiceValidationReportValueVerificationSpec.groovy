@@ -34,9 +34,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Verification of values in Validation Report XAdES_BASELINE_LT_TM, QES, FullSignatureScope")
     def "bdocCorrectValuesArePresentValidLtTmSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TwoValidTmSignaturesWithRolesAndProductionPlace.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TwoValidTmSignaturesWithRolesAndProductionPlace.bdoc"))
+
+        then: "report has correct values"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", is("id-2d1a98a8173d01473aa7e88bc74b361a"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
@@ -76,9 +78,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Verification of values in Validation Report XAdES_BASELINE_LT, QES, FullSignatureScope")
     def "bdocCorrectValuesArePresentValidLtSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice"))
+
+        then: "report has correct values"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", is("id-7022c18f415891f9cb9124927ab14cfb"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
@@ -122,9 +126,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Verification of values in Validation Report XAdES_BASELINE_LT, AdESqc")
     def "bdocCorrectValuesArePresentInvalidLtSignatureAdesqc"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("testAdesQCInvalid.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("testAdesQCInvalid.asice"))
+
+        then: "report has correct values"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", is("S1510667783001"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
@@ -192,9 +198,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Bdoc report with no signatures")
     def "bdocNoSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("BdocContainerNoSignature.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("BdocContainerNoSignature.bdoc"))
+
+        then: "report has no signatures"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures", emptyOrNullString())
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
@@ -205,9 +213,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Bdoc with LT_TM, LT & LTA signature - timeAssertionMessageImprints in mixed container are reported correctly")
     def "bdocMixedSignaturesContainerCorrectTimeAssertionMessageImprint"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc"))
+
+        then: "report has correct time assertion message imprints"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].info.timeAssertionMessageImprint", is("MDEwDQYJYIZIAWUDBAIBBQAEIGzgagluBCVuUgrnT6C5BmSAXBxuuxvlAN7epdGqHP0/"))
@@ -219,9 +229,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Asice with LT_TM, LT & LTA signature - timeAssertionMessageImprints in mixed container are reported correctly")
     def "asiceMixedSignaturesContainerCorrectTimeAssertionMessageImprint"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.asice"))
+
+        then: "report has correct time assertion message imprints"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].info.timeAssertionMessageImprint", is("MDEwDQYJYIZIAWUDBAIBBQAEIGzgagluBCVuUgrnT6C5BmSAXBxuuxvlAN7epdGqHP0/"))
@@ -249,9 +261,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Bdoc with LT_TM, LT & LTA signature, LT & LTA with same certificate - ocspResponseCreationTimes in mixed container are reported correctly")
     def "bdocMixedSignaturesSameCertificateContainerCorrectOcspResponseCreationTime"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.bdoc"))
+
+        then: "report has correct OCSP response creation times"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].info.ocspResponseCreationTime", is("2021-01-29T14:15:43Z"))
@@ -263,9 +277,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Asice with LT & T mixed signatures - ocspResponseCreationTimes in mixed container are reported correctly")
     def "asiceMixedSignaturesContainerCorrectOcspResponseCreationTime"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2_signatures_T_LT.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2_signatures_T_LT.asice"))
+
+        then: "report has correct OCSP response creation times"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_T))
                 .body("signatures[0].info", not(hasKey("ocspResponseCreationTime")))
@@ -275,9 +291,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Bdoc with LT-TM & B mixed signatures - ocspResponseCreationTimes in mixed container are reported correctly")
     def "bdocMixedSignaturesContainerCorrectOcspResponseCreationTime"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2_signatures_B_TM.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2_signatures_B_TM.bdoc"))
+
+        then: "report has correct OCSP response creation times"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
         // TODO: SIVA-866
 //                .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_B_EPES))
@@ -288,9 +306,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Filtering out warning \"The trusted certificate does not match the trust service!\" in Simple Report")
     def "bdocFilterTrustServiceWarningSimpleReport"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("validTsSignatureWithRolesAndProductionPlace.asice"))
+
+        then: "trust service warning is filtered"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings.content", not(hasItem(DssMessage.QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2.message)))
                 .body("signatures[0].warnings.content", emptyOrNullString())
@@ -298,9 +318,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Filtering out warning \"The certificate is not related to a granted status at time-stamp lowest POE time!\" in Simple Report")
     def "bdocFilterLowestPoeTimeErrorSimpleReport"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4183_3.4kaart_RSA2047_TS.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4183_3.4kaart_RSA2047_TS.asice"))
+
+        then: "lowest POE time error is filtered"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].errors.content", not(hasItem(DssMessage.QUAL_HAS_GRANTED_AT_ANS.message)))
                 .body("signatures[0].errors.content", emptyOrNullString())
@@ -308,9 +330,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Simple report includes timestamp creation time for timestamped signature")
     def "Given ASiC-E with timestamped signature, then validation report includes timestampCreationTime field"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report includes timestamp creation time"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
                 .body("signatures[0].info.timestampCreationTime", is(timestampCreationTime))
 
@@ -326,9 +350,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Simple report includes timestamp creation time for timestamped signature")
     def "Given ASiC-E with multiple timestamped signatures, then validation report includes timestampCreationTime field for each"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce"))
+
+        then: "report includes timestamp creation time for each signature"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
                 .body("signatures[1].info.timestampCreationTime", is("2021-01-29T14:31:36Z"))
                 .body("signatures[2].info.timestampCreationTime", is("2021-01-29T14:38:11Z"))
@@ -336,8 +362,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Simple report includes archive timestamp info")
     def "Given ASiC-E with archive timestamped signature, then validation report includes archiveTimeStamps object"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file)).then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report includes archive timestamps"
+        response.then()
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures.findAll { it.signatureFormat.contains('LTA') }.size()",
@@ -357,8 +386,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Simple report includes archive timestamp info")
     def "Given ASiC-E with archive timestamped signature, then archiveTimeStamps info is reported correctly"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce")).then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LTA.sce"))
+
+        then: "archive timestamp info is reported correctly"
+        response.then()
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .rootPath(VALIDATION_CONCLUSION_PREFIX + "signatures[0].info")
                 .body("archiveTimeStamps.size()", is(1))
@@ -372,8 +404,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Simple report includes archive timestamp info")
     def "Given ASiC-E with repeatedly archive timestamped signature, then archiveTimeStamps info is reported correctly"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LTAx2.sce")).then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LTAx2.sce"))
+
+        then: "archive timestamp info is reported correctly"
+        response.then()
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .rootPath(VALIDATION_CONCLUSION_PREFIX + "signatures[0].info")
                 .body("archiveTimeStamps.size()", is(2))
@@ -395,8 +430,11 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Simple report includes archive timestamp info")
     def "Given ASiC-E with signature with invalid archive timestamp, then archiveTimeStamps info is reported correctly"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("2xLTA-SK+Entrust.asice")).then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("2xLTA-SK+Entrust.asice"))
+
+        then: "archive timestamp info is reported correctly"
+        response.then()
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .rootPath(VALIDATION_CONCLUSION_PREFIX + "signatures[0].info")
                 .body("archiveTimeStamps.size()", is(2))
@@ -419,10 +457,10 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Story("Simple report includes info object when signature contains info values")
     def "Validation report includes info object for #description"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(filename))
 
-        then:
+        then: "report includes info object"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validatedDocument.filename", is(filename))
                 .body("signatures[0].signatureFormat", is(signatureFormat))
@@ -441,10 +479,10 @@ class AsiceValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Story("Simple report includes info object when signature contains info values")
     def "Validation report does not include info object for #description"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(filename))
 
-        then:
+        then: "report does not include info object"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validatedDocument.filename", is(filename))
                 .body("signatures[0].signatureFormat", is(signatureFormat))

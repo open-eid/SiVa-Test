@@ -164,9 +164,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The certificate is QC level signature, but do not have SSCD/QSCD compliance")
     def "asiceDocumentAdesQcSigCompliantShouldPassWithWarning"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("testAdesQC.asice", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("testAdesQC.asice", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes with QSCD warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -183,9 +185,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The certificate is QC level signature, but do not have SSCD/QSCD compliance")
     def "bdocDocumentAdesQcSigCompliantShouldPassWithWarning"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("testAdesQC.asice", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("testAdesQC.asice", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes with QSCD warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -201,9 +205,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The certificate is QC level seal, but do not have SSCD/QSCD compliance")
     def "asiceDocumentAdesQCCompliantSealShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_not_qscd_TS.asice", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_not_qscd_TS.asice", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes with QSCD warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -220,9 +226,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The certificate is QC level seal, but do not have SSCD/QSCD compliance")
     def "bdocDocumentAdesQCCompliantSealShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_not_qscd_TM.bdoc", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_not_qscd_TM.bdoc", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes with QSCD warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -281,9 +289,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The bdoc is QES level signature")
     def "bdocDocumentQesigShouldPassWithStrictPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -298,9 +308,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The bdoc is QES level signature")
     def "asiceDocumentQesigShouldPassWithStrictPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -315,9 +327,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The bdoc is QES level seal")
     def "bdocDocumentQesealShouldPassWithStrictPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_qscd_TM.bdoc", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_qscd_TM.bdoc", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -332,9 +346,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The asice is QES level seal")
     def "asiceDocumentQesealShouldPassWithStrictPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_qscd_TS.asice", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_qscd_TS.asice", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -369,10 +385,10 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The asice is QES level")
     def "asiceDocumentQesNoTypeShouldPassWithStrictPolicy"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice", null, null))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
@@ -524,9 +540,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The certificate is QC level signature, but do not have SSCD/QSCD compliance")
     def "asiceDocumentAdesQcSicShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("testAdesQC.asice", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("testAdesQC.asice", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes with QSCD warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -543,9 +561,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The certificate is QC level signature, but do not have SSCD/QSCD compliance")
     def "bdocDocumentAdesQcSigShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequestForDD4J("testAdesQC.asice", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequestForDD4J("testAdesQC.asice", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes with QSCD warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -562,9 +582,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The certificate is QC level seal, but do not have SSCD/QSCD compliance")
     def "asiceDocumentAdesQcCompliantSealShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_not_qscd_TS.asice", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_not_qscd_TS.asice", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes with QSCD warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -581,9 +603,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The certificate is QC level seal, but do not have SSCD/QSCD compliance")
     def "bdocDocumentAdesQCCompliantSealShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_not_qscd_TM.bdoc", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_not_qscd_TM.bdoc", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes with QSCD warnings"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -642,9 +666,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The bdoc is QES level signature")
     def "bdocDocumentQesigShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_TM_OCSP2011.bdoc", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -659,9 +685,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The bdoc is QES level signature")
     def "asiceDocumentQesigShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -676,9 +704,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The bdoc is QES level seal")
     def "bdocDocumentQesealShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_qscd_TM.bdoc", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_qscd_TM.bdoc", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -693,9 +723,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The asice is QES level seal")
     def "asiceDocumentQesealShouldPassWithGivenPolicy"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_qscd_TS.asice", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4828_tempel_qscd_TS.asice", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_3.url))
@@ -730,10 +762,10 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The asice is QES level")
     def "asiceDocumentQesNoTypeShouldPassWithGivenPolicy"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice", SignaturePolicy.POLICY_3, null))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_3.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_3.name))
@@ -757,9 +789,11 @@ class SignaturePolicySpec extends GenericSpecification {
 
     @Description("The PDF-file is missing an OCSP or CRL")
     def "pdfDocumentWithoutRevocationInfoShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("PadesProfileT.pdf", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("PadesProfileT.pdf", SignaturePolicy.POLICY_4, null))
+
+        then: "signature is not valid"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))
@@ -774,9 +808,11 @@ class SignaturePolicySpec extends GenericSpecification {
     //TODO SIVA-349 needs investigation why the signature is determined as PAdES_BASELINE_LTA not as PAdES_BASELINE_LT
     @Description("The PDF-file with included CRL")
     def "pdfDocumentWithCrlAsRevocationInfoShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("PadesProfileLtWithCrl.pdf", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("PadesProfileLtWithCrl.pdf", SignaturePolicy.POLICY_4, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", is(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", is(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", is(SignaturePolicy.POLICY_4.url))

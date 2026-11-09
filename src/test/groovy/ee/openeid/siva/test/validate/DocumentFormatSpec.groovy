@@ -35,10 +35,10 @@ class DocumentFormatSpec extends GenericSpecification {
 
     @Description("Validation of pdf document acceptance")
     def "PAdESDocumentShouldPass"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-pades-lt-sha256-sign.pdf"))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -50,10 +50,10 @@ class DocumentFormatSpec extends GenericSpecification {
 
     @Description("Validation of bdoc document acceptance")
     def "BdocDocumentShouldPass"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("Valid_IDCard_MobID_signatures.bdoc"))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
@@ -68,10 +68,10 @@ class DocumentFormatSpec extends GenericSpecification {
 
     @Description("Validation of asice document acceptance")
     def "asiceDocumentShouldPass"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("bdoc21-TS.asice"))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
@@ -84,9 +84,11 @@ class DocumentFormatSpec extends GenericSpecification {
 
     @Description("Validation of asics document acceptance")
     def "asicsDocumentShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.asics"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -98,9 +100,11 @@ class DocumentFormatSpec extends GenericSpecification {
 
     @Description("Validation of cades acceptance")
     def "cadesDocumentShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_CAdES_LT.sce"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_CAdES_LT.sce"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.CAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))

@@ -34,9 +34,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc with single invalid signature")
     def "ddocInvalidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AndmefailiAtribuudidMuudetud.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AndmefailiAtribuudidMuudetud.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
@@ -46,9 +48,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc with multiple invalid signatures")
     def "ddocInvalidMultipleSignatures"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("multipleInvalidSignatures.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("multipleInvalidSignatures.ddoc"))
+
+        then: "signatures fail"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
@@ -67,9 +71,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc with multiple signatures both valid and invalid")
     def "ddocInvalidAndValidMultipleSignatures"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("multipleValidAndInvalidSignatures.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("multipleValidAndInvalidSignatures.ddoc"))
+
+        then: "invalid signature fails and valid signatures pass"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_1))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
@@ -90,9 +96,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc signature value has been changed (SignatureValue does not correspond to the SignedInfo block)")
     def "ddocSignatureValueChanged"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("test-inv-sig-inf.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("test-inv-sig-inf.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].errors[0].content", containsString("Invalid signature value!"))
                 .body("signatures[0].errors.size()", is(1))
@@ -107,9 +115,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc Data file(s) don't match the hash values in Reference elements")
     def "ddocDataFileHashMismatch"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AndmefailiAtribuudidMuudetud.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AndmefailiAtribuudidMuudetud.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].errors[0].content", containsString("Bad digest for DataFile: D0"))
                 .body("signatures[0].errors.size()", is(1))
@@ -121,9 +131,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc Baseline-BES file, no OCSP response")
     def "ddocNoOCSPResponse"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ilma_kehtivuskinnituseta.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ilma_kehtivuskinnituseta.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_2))
                 .body("signatures[0].errors.content", hasItems("Signature has no OCSP confirmation!"))
                 .body("signatures[0].errors.size()", is(1))
@@ -137,9 +149,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc no non-repudiation key usage value in the certificate")
     def "ddocNoNonRepudiationKey"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("test-non-repu1.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("test-non-repu1.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].errors.content", hasItems("Signers cert does not have non-repudiation bit set!"))
                 .body("signatures[0].errors.size()", is(1))
@@ -151,9 +165,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc Signer's certificate is not trusted")
     def "ddocSignersCertNotTrusted"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("Belgia_kandeavaldus_LIV.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("Belgia_kandeavaldus_LIV.ddoc"))
+
+        then: "untrusted signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[1].errors.content", hasItems("Signers cert not trusted, missing CA cert!", "Signing certificate issuer information does not match"))
                 .body("signatures[1].errors.size()", is(3))
@@ -169,9 +185,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc OCSP certificate is not trusted")
     def "ddocOCSPNotTrusted"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("Tundmatu_OCSP_responder.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("Tundmatu_OCSP_responder.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].errors.content", hasItems("Signers cert not trusted, missing CA cert!", "Signing certificate issuer information does not match"))
                 .body("signatures[0].errors.size()", is(3))
@@ -183,9 +201,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc has unsigned data files in the container")
     def "ddocNonSignedFile"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3_lisatud_andmefail.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3_lisatud_andmefail.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].errors.content", hasItems("Missing Reference for file: testfail2.txt"))
                 .body("signatures[0].errors.size()", is(1))
@@ -195,9 +215,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc signed data file has been removed from the container")
     def "ddocFileRemoved"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("faileemald1.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("faileemald1.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].errors.content", hasItems("Missing DataFile for signature: S0 reference #D0"))
                 .body("signatures[0].errors.size()", is(1))
@@ -207,9 +229,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Ddoc wrong nonce")
     def "ddocWrongOcspNonce"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("OCSP nonce vale.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("OCSP nonce vale.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].errors.content", hasItems("Notarys digest doesn't match!", "OCSP response's nonce doesn't match the requests nonce!"))
                 .body("signatures[0].errors.size()", is(2))
@@ -220,37 +244,39 @@ class DdocValidationFailSpec extends GenericSpecification {
     @Description("Ddoc with XML Entity expansion attack")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/")
     def "ddocWithXMLEntityExpansionAttackShouldFail"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("xml_expansion.ddoc"))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Ddoc with XML server side request forgery attack")
     @Link("http://open-eid.github.io/SiVa/siva3/interfaces/")
     def "ddocWithXMLServerSideRequestForgeryAttackShouldFail"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("xml_entity.ddoc"))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Ddoc no files in container")
     def "ddocNoFilesInContainer"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("KS-02_tyhi.ddoc"))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_INVALID_BASE_64, RequestError.DOCUMENT_BLANK)
     }
 
     @Description("Ddoc with invalid datafile id")
     def "ddocBadDatafileId"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("22915-bad-df-id.ddoc", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("22915-bad-df-id.ddoc", SignaturePolicy.POLICY_4, null))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
@@ -274,9 +300,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Validation of DDOC with revoked certificate status")
     def "ddocWithRevokedCertificateStatusFromOcspShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("cert-revoked.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("cert-revoked.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
@@ -300,9 +328,11 @@ class DdocValidationFailSpec extends GenericSpecification {
 
     @Description("Validation of DDOC with unknown OCSP status")
     def "ddocWithUnknownCertificateStatusFromOcspShouldFail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("cert-unknown.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("cert-unknown.ddoc"))
+
+        then: "signature fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))

@@ -33,9 +33,11 @@ class PdfValidationPassSpec extends GenericSpecification {
 
     @Story("Signature remains valid when related certificates expire")
     def "PDF signature remains valid when TS, OCSP, CA and signer certificates expire"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024-not-expired.pdf", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa1024-not-expired.pdf", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
@@ -48,9 +50,11 @@ class PdfValidationPassSpec extends GenericSpecification {
 
     @Description("The PDF-file has been signed with certificate that will expire in 7 days after signing (PAdES Baseline LT)")
     def "certificateExpired7DaysAfterDocumentSigningShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-7d.pdf", SignaturePolicy.POLICY_3, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-sha256-rsa2048-7d.pdf", SignaturePolicy.POLICY_3, null))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
@@ -62,10 +66,10 @@ class PdfValidationPassSpec extends GenericSpecification {
 
     @Description("Pdf with single valid signature")
     def "validSignature"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("PdfValidSingleSignature.pdf"))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
@@ -83,9 +87,11 @@ class PdfValidationPassSpec extends GenericSpecification {
     @Description("The CRL nextUpdate time is after timestamp time")
     @Link("http://open-eid.github.io/SiVa/siva3/appendix/validation_policy/#common_POLv3_POLv4")
     def "crlTakenDaysAfterTsShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-lt-CRL-taken-days-later.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("pades-lt-CRL-taken-days-later.pdf"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", emptyOrNullString())
         //.body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))

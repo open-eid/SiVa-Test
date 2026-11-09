@@ -38,11 +38,12 @@ class DetailedReportValidationSpec extends GenericSpecification {
 
     @Description("Detailed report includes validationConclusion element and its values")
     def "Given detailed report, then it includes validationConclusion element"() {
-        expect:
+        when: "validation is requested"
         ZonedDateTime testStartDate = ZonedDateTime.now(ZoneId.of("GMT"))
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, ReportType.DETAILED))
 
-        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, ReportType.DETAILED))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        then: "report includes validationConclusion element"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", equalTo(SignaturePolicy.POLICY_4.url))
@@ -65,10 +66,11 @@ class DetailedReportValidationSpec extends GenericSpecification {
 
     @Description("Detailed report includes TLAnalysis element and its values")
     def "Given detailed report, then it includes TLAnalysis element"() {
-        expect:
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
 
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
-                .then().rootPath(VALIDATION_PROCESS_PREFIX)
+        then: "report includes TLAnalysis element"
+        response.then().rootPath(VALIDATION_PROCESS_PREFIX)
                 .body("TLAnalysis", notNullValue())
                 .body("TLAnalysis.constraint", notNullValue())
                 .body("TLAnalysis[0]", notNullValue())
@@ -176,10 +178,10 @@ class DetailedReportValidationSpec extends GenericSpecification {
 
     @Description("Detailed report includes basicBuildingBlocks element and its sub-elements and its values")
     def "Given detailed report, then it includes basicBuildingBlocks element, when type timestamp"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
 
-        then:
+        then: "report includes timestamp basic building blocks"
         response.then().rootPath(VALIDATION_PROCESS_PREFIX)
                 .body("basicBuildingBlocks[1].ISC.constraint[0].name.value", equalTo(VALID_VALIDATION_PROCESS_VALUE_9))
                 .body("basicBuildingBlocks[1].ISC.constraint[0].name.key", equalTo(VALID_VALIDATION_PROCESS_NAMEID_9))
@@ -211,9 +213,11 @@ class DetailedReportValidationSpec extends GenericSpecification {
 
     @Description("Detailed report includes basicBuildingBlocks element and its sub-elements and its values")
     def "Given detailed report, then it includes basicBuildingBlocks element, when type revocation"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
-                .then().rootPath(VALIDATION_PROCESS_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
+
+        then: "report includes revocation basic building blocks"
+        response.then().rootPath(VALIDATION_PROCESS_PREFIX)
                 .body("basicBuildingBlocks[0].ISC.constraint.name.key", hasItem(DssMessage.BBB_ICS_ISCI.key))
                 .body("basicBuildingBlocks[0].ISC.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[0].ISC.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
@@ -244,9 +248,11 @@ class DetailedReportValidationSpec extends GenericSpecification {
     //TODO SIVA-349 needs investigation why the signature source is determined as OTHER not as SIGNATURE
     @Description("Detailed report includes basicBuildingBlocks element and its sub-elements and its values")
     def "Given detailed report, then it includes basicBuildingBlocks element, when type signature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
-                .then().rootPath(VALIDATION_PROCESS_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DETAILED))
+
+        then: "report includes signature basic building blocks"
+        response.then().rootPath(VALIDATION_PROCESS_PREFIX)
                 .body("basicBuildingBlocks[3].ISC.constraint.name.key", hasItem(DssMessage.BBB_ICS_ISCI.key))
                 .body("basicBuildingBlocks[3].ISC.constraint.status", Every.everyItem(equalTo("OK")))
                 .body("basicBuildingBlocks[3].ISC.conclusion.indication", equalTo(VALID_INDICATION_VALUE_PASSED))
@@ -276,10 +282,11 @@ class DetailedReportValidationSpec extends GenericSpecification {
 
     @Description("Detailed report includes wrong signature value")
     def "Given detailed report, then it includes wrong signature value"() {
-        expect:
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice", null, ReportType.DETAILED))
 
-        SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice", null, ReportType.DETAILED))
-                .then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord[0]")
+        then: "report includes wrong signature value error"
+        response.then().rootPath(VALIDATION_PROCESS_PREFIX + "signatureOrTimestampOrEvidenceRecord[0]")
                 .body("validationProcessBasicSignature.constraint.name.key", hasItem(DssMessage.BSV_IFCRC.key))
                 .body("validationProcessBasicSignature.constraint.find { it.name.key == 'BSV_IFCRC' }.status", equalTo("OK"))
                 .body("validationProcessBasicSignature.constraint.find { it.name.key == 'BSV_IFCRC' }.id", notNullValue())
@@ -338,9 +345,11 @@ class DetailedReportValidationSpec extends GenericSpecification {
 
     @Description("Wrong data file in manifest")
     def "Given wrong datafile in manifest, then detailed report"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("WrongDataFileInManifest.asics", null, ReportType.DETAILED))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("WrongDataFileInManifest.asics", null, ReportType.DETAILED))
+
+        then: "detailed report is returned"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", equalTo(SignaturePolicy.POLICY_4.url))
@@ -384,9 +393,11 @@ class DetailedReportValidationSpec extends GenericSpecification {
 
     @Description("Error \"The certificate is not related to a granted status at time-stamp lowest POE time!\" is displayed in Detailed Report and signature is TOTAL-PASSED")
     def "Given detailed report, then lowest POE time error not filtered out"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("IB-4183_3.4kaart_RSA2047_TS.asice", null, ReportType.DETAILED))
-                .then().rootPath("validationReport.")
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("IB-4183_3.4kaart_RSA2047_TS.asice", null, ReportType.DETAILED))
+
+        then: "report includes lowest POE time error"
+        response.then().rootPath("validationReport.")
                 .body(VALIDATION_PROCESS_TS_PREFIX + "conclusion[0][0].indication", equalTo("PASSED"))
                 .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.key[0][0]", hasItem(DssMessage.QUAL_HAS_GRANTED_AT_ANS.key))
                 .body(VALIDATION_PROCESS_TS_PREFIX + "validationTimestampQualification.conclusion.errors.value[0][0]", hasItem(DssMessage.QUAL_HAS_GRANTED_AT_ANS.message))

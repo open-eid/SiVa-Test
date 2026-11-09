@@ -37,9 +37,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("ASICe container with valid mimetype.")
     def "asiceValidMimetype"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsiceContainerValidMimetype.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsiceContainerValidMimetype.asice"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -51,9 +53,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICe container with mimetype as last in cointainer.")
     def "asiceInvalidMimetypeLocationAsLast"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeAsLast.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeAsLast.asice"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -65,9 +69,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICe container with deflated mimetype.")
     def "asiceInvalidMimetypeCompressionAsDeflated"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeIsDeflated.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeIsDeflated.asice"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -79,9 +85,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICe container without mimetype.")
     def "asiceWithNoMimetype"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsiceContainerNoMimetype.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsiceContainerNoMimetype.asice"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -93,9 +101,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICe container mimetype filename with capital letter (Mimetype).")
     def "asiceMimetypeFileNameWithCapitalLetter"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeWithCapitalLetter.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeWithCapitalLetter.asice"))
+
+        then: "signature fails with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
@@ -107,9 +117,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICe container, where mimetype filename is with extra space in the end (\"mimetype \").")
     def "asiceMimetypeFilenameWithExtraSpace"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeFilenameWithExtraSpace.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeFilenameWithExtraSpace.asice"))
+
+        then: "signature fails with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
@@ -121,9 +133,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICe container with extra byte in the beginning of the container.")
     def "asiceContainerWithExtraByteInBeginning"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeWithCapitalLetter.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsiceContainerMimetypeWithCapitalLetter.asice"))
+
+        then: "signature fails with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_FAILED))
@@ -135,9 +149,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("ASICe container with invalid mimetype as \"text/plain\".")
     def "asiceInvalidMimetypeAsText"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsiceInvalidMimetypeAsText.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsiceInvalidMimetypeAsText.asice"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -149,9 +165,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("BDOC container with valid mimetype.")
     def "bdocValidMimetype"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("BdocContainerValidMimetype.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("BdocContainerValidMimetype.bdoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -163,9 +181,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid BDOC container with mimetype as last.")
     def "bdocInvalidMimetypeLocationAsLast"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("BdocContainerMimetypeAsLast.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("BdocContainerMimetypeAsLast.bdoc"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -177,9 +197,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid BDOC container with deflated mimetype.")
     def "bdocInvalidMimetypeCompressionAsDeflated"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("BdocContainerMimetypeIsDeflated.bdoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("BdocContainerMimetypeIsDeflated.bdoc"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT_TM))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -191,36 +213,38 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid BDOC container without mimetype.")
     def "bdocWithNoMimetype"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("BdocContainerNoMimetype.bdoc"))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Invalid BDOC container, where mimetype filename is with extra space in the end (\"mimetype \").")
     def "bdocMimetypeFilenameWithExtraSpace"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("BdocContainerMimetypeFilenameWithExtraSpace.bdoc"))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("BDOC container with invalid mimetype as \"application/zip\".")
     def "bdocInvalidMimetypeAsZip"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("BdocInvalidMimetypeAsZip.bdoc"))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("ASICs container with valid mimetype and Tmp file inside.")
     def "asicsValidMimetypeWithTmpFile"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsicsContainerValidMimetype.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsicsContainerValidMimetype.asics"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -232,9 +256,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("ASICs container with valid mimetype and DDOC inside.")
     def "asicsValidMimetypeWithDdocContainer"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsics.asics"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -246,9 +272,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICs container with mimetype as last and Tmp file inside.")
     def "asicsInvalidMimetypeLocationAsLastWithTmpFile"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeAsLast.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeAsLast.asics"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -260,9 +288,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICs container with mimetype as not first and DDOC inside.")
     def "asicsInvalidMimetypeLocationAsNotFirstWithDdoc"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DdocInAsicsMimetypeNotFirst.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DdocInAsicsMimetypeNotFirst.asics"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -274,9 +304,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICs container with deflated mimetype and Tmp file inside.")
     def "asicsInvalidMimetypeCompressionAsDeflatedWithTmpFile"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeIsDeflated.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeIsDeflated.asics"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -288,9 +320,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICs container with deflated mimetype and DDOC inside.")
     def "asicsInvalidMimetypeCompressionAsDeflatedWithDdoc"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DdocInAsicsMimetypeDeflated.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DdocInAsicsMimetypeDeflated.asics"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -302,9 +336,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICs container without mimetype and Tmp file inside.")
     def "asicsContainingTmpFileWithNoMimetype"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsicsContainerNoMimetype.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsicsContainerNoMimetype.asics"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -316,9 +352,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICs container without mimetype and DDOC inside.")
     def "asicsContainingDdocContainerWithNoMimetype"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DdocInAsicsNoMimetype.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DdocInAsicsNoMimetype.asics"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -330,9 +368,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid ASICs container, where mimetype filename is with extra space in the end (\"mimetype \").")
     def "asicsMimetypeFilenameWithExtraSpace"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeFilenameWithExtraSpace.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsicsContainerMimetypeFilenameWithExtraSpace.asics"))
+
+        then: "signature fails with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is("TOTAL-FAILED"))
@@ -345,9 +385,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("ASICs container with invalid mimetype as \"application/xml\".")
     def "asicsInvalidMimetypeAsXml"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsicsInvalidMimetypeAsXml.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsicsInvalidMimetypeAsXml.asics"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is("TOTAL-PASSED"))
@@ -359,9 +401,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Valid EDOC container with valid.")
     def "edocValidMimetype"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EdocContainerValidMimetype.edoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EdocContainerValidMimetype.edoc"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
@@ -372,9 +416,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid EDOC container with mimetype as last in cointainer.")
     def "edocInvalidMimetypeLocationAsLast"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EdocContainerValidMimetypeAsLast.edoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EdocContainerValidMimetypeAsLast.edoc"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
@@ -385,9 +431,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Invalid EDOC container without mimetype.")
     def "edocWithNoMimetype"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EdocContainerNoMimetype.edoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EdocContainerNoMimetype.edoc"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(1))
@@ -398,9 +446,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Valid ADOC container with mimetype.")
     def "adocMimetypeWithExtraFields"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AdocContainerMimetypeWithExtraFields.adoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AdocContainerMimetypeWithExtraFields.adoc"))
+
+        then: "signature fails with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("signaturesCount", is(1))
                 .body("validSignaturesCount", is(0))
@@ -411,9 +461,11 @@ class MimetypeValidationSpec extends GenericSpecification {
 
     @Description("Validation of ASICs with wrong mimetype with DDOC inside")
     def "ValidDdocInsideValidAsicsWrongMimeType"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsicsWrongMime.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidDDOCinsideAsicsWrongMime.asics"))
+
+        then: "signature passes with mimetype warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("ValidDDOCinsideAsicsWrongMime.asics"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))

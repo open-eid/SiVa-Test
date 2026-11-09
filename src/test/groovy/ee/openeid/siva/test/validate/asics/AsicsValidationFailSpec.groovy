@@ -35,9 +35,11 @@ class AsicsValidationFailSpec extends GenericSpecification {
 
     @Description("TST signature not intact")
     def "Given ASiC-S with timestamp with modified signature, then validation should fail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsicsTSTsignatureModified.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsicsTSTsignatureModified.asics"))
+
+        then: "timestamp fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("AsicsTSTsignatureModified.asics"))
                 .body("timeStampTokens[0].indication", equalTo(SignatureIndication.TOTAL_FAILED))
@@ -49,18 +51,20 @@ class AsicsValidationFailSpec extends GenericSpecification {
 
     @Description("TST has been corrupted")
     def "Given ASiC-S with broken TST, then validation should fail"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest("AsicsTSTsignatureBroken.asics"))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Data file changed")
     def "Given ASiC-S with altered datafile, then validation should fail"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("AsicsWithAlteredDatafile.asics"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("AsicsWithAlteredDatafile.asics"))
+
+        then: "timestamp fails"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is("AsicsWithAlteredDatafile.asics"))
                 .body("timeStampTokens[0].indication", equalTo(SignatureIndication.TOTAL_FAILED))
@@ -69,10 +73,10 @@ class AsicsValidationFailSpec extends GenericSpecification {
 
     @Description("Document does not meet the requirements")
     def "Asics with #description should fail"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest(filename))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_DOES_NOT_MEET_THE_REQUIREMENTS)
         response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
 

@@ -44,12 +44,16 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Supported file extensions")
     def "Given validation request with #extension file, then validation report is returned"() {
-        given:
+        given: "validation request with file extension"
         Map requestData = RequestData.validationRequest(file, extension)
-        expect:
-        SivaRequests.validate(requestData)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
-                .body("validatedDocument.filename", equalTo(requestData.filename))
+        String filename = requestData.filename
+
+        when: "validation is requested"
+        Response response = SivaRequests.validate(requestData)
+
+        then: "report contains validated filename"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+                .body("validatedDocument.filename", equalTo(filename))
 
         where:
         extension | file
@@ -66,9 +70,11 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("All standalone signature profiles are validated")
     def "Given validation request with #profile #packaging signature, then validation report is returned"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report contains signature profile"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validatedDocument.filename", equalTo(file))
                 .body("signatures[0].signatureFormat", is(profile))
 
@@ -105,10 +111,10 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Totally empty request body is sent")
     def "Given validation request with empty body, then error is returned"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate([:])
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(
                 response,
                 RequestError.DOCUMENT_BLANK,
@@ -141,13 +147,14 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Request has invalid keys (capital letters)")
     def "Given request body with invalid key #newKey, then error is returned"() {
-        given:
+        given: "request has invalid key"
         Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
         requestData.put(newKey, requestData.remove(originalKey))
-        when:
+
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, *errors)
 
         where:
@@ -158,14 +165,14 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Invalid input")
     def "Given request with #comment, then error is returned"() {
-        given:
+        given: "request has invalid parameter value"
         Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
         requestData[key] = value
 
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, *errors)
 
         where:
@@ -183,15 +190,17 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Filename valid values")
     def "Validation request filename field #comment"() {
-        given:
+        given: "request has filename value"
         Map requestData = [
                 document: Base64.encodeBase64String(Utils.readFileFromResources("singleValidSignatureTM.bdoc")),
                 filename: value,
         ]
 
-        expect:
-        SivaRequests.validate(requestData)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(requestData)
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", equalTo(1))
 
         where:
@@ -203,12 +212,15 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Correct signature policy usage")
     def "Given signature policy #condition, then #expected"() {
-        given:
+        given: "request has signature policy"
         Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
         requestData.signaturePolicy = policy
-        expect:
-        SivaRequests.validate(requestData)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+
+        when: "validation is requested"
+        Response response = SivaRequests.validate(requestData)
+
+        then: "report contains expected policy"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyName", equalTo(expectedPolicy))
 
         where:
@@ -220,13 +232,13 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Not available signature policy")
     def "Given not available signature policy, then error is returned"() {
-        given:
+        given: "request has not available signature policy"
         Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
         requestData.signaturePolicy = "POLv2"
 
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
-        then:
+        then: "error is returned"
         response.then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("requestErrors", hasSize(1))
@@ -240,14 +252,14 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Invalid signature policy")
     def "Given signature policy #comment, then error is returned"() {
-        given:
+        given: "request has invalid signature policy"
         Map requestData = RequestData.validationRequest("singleValidSignatureTM.bdoc")
         requestData.signaturePolicy = policy
 
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, errors)
 
 
@@ -260,12 +272,15 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("")
     def "Given report type #condition, then #result"() {
-        given:
+        given: "request has report type"
         Map requestData = RequestData.validationRequest("singleValidSignatureTS.asice")
         requestData.reportType = reportType
-        expect:
-        SivaRequests.validate(requestData)
-                .then()
+
+        when: "validation is requested"
+        Response response = SivaRequests.validate(requestData)
+
+        then: "simple report is returned"
+        response.then()
                 .body("validationReport.validationProcess", emptyOrNullString())
                 .body("validationReport.validationConclusion.validSignaturesCount", equalTo(1))
 
@@ -277,9 +292,11 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("ReportType parameter Simple")
     def "Given reportType simple, then simple report is returned"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.SIMPLE))
-                .then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.SIMPLE))
+
+        then: "simple report is returned"
+        response.then()
                 .body("validationReport.validationProcess", emptyOrNullString())
                 .body("validationReport.diagnosticData", emptyOrNullString())
                 .body(VALIDATION_CONCLUSION_PREFIX + "validSignaturesCount", equalTo(1))
@@ -287,9 +304,11 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("ReportType parameter Detailed")
     def "Given reportType detailed, then detailed report is returned"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.DETAILED))
-                .then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.DETAILED))
+
+        then: "detailed report is returned"
+        response.then()
                 .body("validationReport.diagnosticData", emptyOrNullString())
                 .body("validationReport.validationProcess.signatureOrTimestampOrEvidenceRecord[0].validationSignatureQualification.signatureQualification", equalTo(SignatureLevel.QESIG))
                 .body(VALIDATION_CONCLUSION_PREFIX + "validSignaturesCount", equalTo(1))
@@ -297,9 +316,11 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("ReportType parameter Diagnostic")
     def "Given reportType diagnostic, then diagnostic report is returned"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.DIAGNOSTIC))
-                .then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTS.asice", null, ReportType.DIAGNOSTIC))
+
+        then: "diagnostic report is returned"
+        response.then()
                 .body("validationReport.validationProcess", emptyOrNullString())
                 .body("validationReport.diagnosticData.documentName", equalTo("singleValidSignatureTS.asice"))
                 .body(VALIDATION_CONCLUSION_PREFIX + "validSignaturesCount", equalTo(1))
@@ -307,27 +328,27 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("DocumentType parameter is not allowed")
     def "Given documentType parameter, then error is returned"() {
-        given:
+        given: "request has documentType parameter"
         Map requestData = RequestData.validationRequest("xroad-simple.asice")
         requestData.documentType = "xroad"
 
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_TYPE_INVALID)
     }
 
     @Description("Mismatch in stated and actual document resulting in error: 'Document malformed or not matching documentType'")
     def "Given #comment, then 'Document malformed or not matching documentType'"() {
-        given:
+        given: "request document does not match filename"
         Map requestData = RequestData.validationRequest(document)
         requestData.filename = filename
 
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
         response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
 
@@ -359,27 +380,30 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Acceptance of ASICE as BDOC document type")
     def "Given asice document with bdoc extension, then asice files are handled the same as bdoc"() {
-        given:
+        given: "ASiC-E document has bdoc extension"
         Map requestData = RequestData.validationRequest("singleValidSignatureTS.asice")
         requestData.filename = "singleValidSignatureTS.bdoc"
-        expect:
-        SivaRequests.validate(requestData)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+
+        when: "validation is requested"
+        Response response = SivaRequests.validate(requestData)
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validSignaturesCount", is(1))
     }
 
     @Description("Input random base64 string as document")
     def "Given random base64 string as #extension, then 'Document malformed or not matching documentType'"() {
-        given:
+        given: "request has random base64 document"
         Map requestData = [
                 document: "ZCxTgQxDET7/lNizNZ4hrB1Ug8I0kKpVDkHEgWqNjcKFMD89LsIpdCkpUEsFBgAAAAAFAAUAPgIAAEM3AAAAAA==",
                 filename: "some_file." + extension,
         ]
 
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
         response.then().header("Content-Disposition", is("attachment; filename=\"api.json\""))
 
@@ -393,12 +417,14 @@ class ValidationRequestSpec extends GenericSpecification {
     @Description("Validation request with request body of limit length")
     @Link("http://open-eid.github.io/SiVa/siva3/deployment_guide/#configuration-parameters")
     def "Given request body of limit length, then validation report is returned"() {
-        expect:
-        SivaRequests.validate(
+        when: "validation is requested"
+        Response response = SivaRequests.validate(
                 RequestData.requestWithFixedBodyLength(
                         RequestData.validationRequest("singleValidSignatureTS.asice"),
                         conf.sivaRequestSizeLimit()))
-                .then()
+
+        then: "validation report is returned"
+        response.then()
                 .statusCode(200)
                 .rootPath(VALIDATION_CONCLUSION_PREFIX)
     }
@@ -422,15 +448,17 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Validation response includes Content-Disposition header")
     def "Given validate request, then response includes Content-Disposition header"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTM.bdoc"))
-                .then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("singleValidSignatureTM.bdoc"))
+
+        then: "expected header is returned"
+        response.then()
                 .header("Content-Disposition", is("attachment; filename=\"api.json\""))
     }
 
     @Description("Validation endpoint checks")
     def "Validation request with method #method is #result"() {
-        given:
+        given: "validation request specification"
         RequestSpecification request = given()
                 .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
                 .body(RequestData.validationRequest("singleValidSignatureTM.bdoc"))
@@ -438,10 +466,10 @@ class ValidationRequestSpec extends GenericSpecification {
                 .baseUri(SivaRequests.sivaServiceUrl)
                 .basePath("/validate")
 
-        when:
+        when: "request is sent"
         Response response = request.request(method)
 
-        then:
+        then: "expected status is returned"
         response.then().statusCode(httpStatus)
 
         where:
@@ -458,7 +486,7 @@ class ValidationRequestSpec extends GenericSpecification {
 
     @Description("Validation endpoint unsupported content type")
     def "Validation request with unsupported content type '#type'"() {
-        given:
+        given: "validation request with unsupported content type"
         RequestSpecification request = given()
                 .config(RestAssured.config().encoderConfig(encoderConfig().defaultContentCharset("UTF-8")))
                 .body(RequestData.validationRequest("singleValidSignatureTM.bdoc"))
@@ -466,10 +494,10 @@ class ValidationRequestSpec extends GenericSpecification {
                 .baseUri(SivaRequests.sivaServiceUrl)
                 .basePath("/validate")
 
-        when:
+        when: "request is sent"
         Response response = request.post()
 
-        then:
+        then: "error is returned"
         response.then().statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE)
                 .body("requestErrors", hasSize(1))
                 .body("requestErrors.findAll { requestError -> " +

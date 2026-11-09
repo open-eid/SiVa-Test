@@ -36,9 +36,11 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("JSON structure has all elements (Pdf valid single signature). All required elements are present according to SimpleReportSchema.json")
     def "pdfAllElementsArePresentValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("reason_and_location_Test.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("reason_and_location_Test.pdf"))
+
+        then: "report contains all needed elements"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", is("S-4D0D5A83688FC617AA83810ED74E26C5A79063D110B00AD207EAB3EFDC3F5619"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.PAdES_BASELINE_LT))
@@ -77,10 +79,10 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("JSON structure has all elements (Pdf valid Multiple signatures). All required elements are present according to SimpleReportSchema.json")
     def "pdfAllElementsArePresentValidMultipleSignatures"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("pades_lt_two_valid_sig.pdf"))
 
-        then:
+        then: "signatures pass"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[1].id", is("S-E5D6D118C4B604343E1395213075D5C429CD68E9178E4E8252EDB027732EF3F6"))
@@ -154,10 +156,10 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("JSON structure has all elements (Pdf indeterminate status). All required elements are present according to SimpleReportSchema.json")
     def "pdfAllElementsArePresentIndeterminateSignature"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("hellopades-lt-rsa1024-sha1-expired.pdf"))
 
-        then:
+        then: "signature is not valid"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures[0].id", is("S-B2DE2D1E57C3DD8F518A13F027988A4BDBE03DC7A1DF96301351694DCDB88213"))
@@ -189,9 +191,11 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Pdf report with no signatures. Report is returned with required elements")
     def "pdfNoSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("PdfNoSignature.pdf"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("PdfNoSignature.pdf"))
+
+        then: "report has no signatures"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .body("signatures", emptyOrNullString())
                 .body("signatureForm", emptyOrNullString())
@@ -240,9 +244,11 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Simple report includes timestamp creation time for timestamped signature")
     def "Given PDF with timestamped signature, then validation report includes timestampCreationTime field"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report includes timestamp creation time"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].info.timestampCreationTime", is(timestampCreationTime))
 
         where:
@@ -254,12 +260,14 @@ class PdfValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Simple report includes archive timestamp info")
     def "Given PDF with archive timestamped signature, then archiveTimeStamps info is reported correctly"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_PAdES_LTA_enveloped.pdf")).then()
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_PAdES_LTA_enveloped.pdf"))
+
+        then: "report includes archive timestamp info"
+        response.then()
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchema.json"))
                 .rootPath(VALIDATION_CONCLUSION_PREFIX + "signatures[0].info")
                 .body("archiveTimeStamps.size()", is(1))
-
                 .body("archiveTimeStamps[0].signedTime", is("2024-09-13T14:19:20Z"))
                 .body("archiveTimeStamps[0].country", is("EE"))
                 .body("archiveTimeStamps[0].signedBy", is("DEMO SK TIMESTAMPING AUTHORITY 2023E"))

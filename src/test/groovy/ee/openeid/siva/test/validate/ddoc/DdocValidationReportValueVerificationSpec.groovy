@@ -26,6 +26,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.VALIDATION_CONCLUSION_PREFIX
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
@@ -36,9 +37,11 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("JSON structure has all elements (ddoc valid single signature)")
     def "ddocAllElementsArePresentValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DIGIDOC-XML1.3.ddoc"))
+
+        then: "report contains all required elements"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchemaDdoc.json"))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))
@@ -72,9 +75,11 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("JSON structure has all elements (ddoc invalid signature)")
     def "ddocAllElementsArePresentInvalidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("multipleInvalidSignatures.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("multipleInvalidSignatures.ddoc"))
+
+        then: "report contains all required elements"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchemaDdoc.json"))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_1))
@@ -109,18 +114,22 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Check for optional warning element")
     def "ddocOptionalWarningElementIsPresent"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("18912.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("18912.ddoc"))
+
+        then: "report contains validation warning"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
                 .body("validationWarnings[1].content", is("The algorithm SHA1 used in DDOC is no longer considered reliable for signature creation!"))
     }
 
     @Description("Ddoc report with no signatures")
     def "ddocNoSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("DdocContainerNoSignature.ddoc", SignaturePolicy.POLICY_4, null))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("DdocContainerNoSignature.ddoc", SignaturePolicy.POLICY_4, null))
+
+        then: "report has no signatures"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.DIGIDOC_XML_1_3))
                 .body("validatedDocument.filename", is("DdocContainerNoSignature.ddoc"))
                 .body("validationWarnings[0].content", is(TestData.TEST_ENV_VALIDATION_WARNING))
@@ -131,9 +140,11 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Verification of values in Validation Report, xml v1.0, checks for missing info")
     def "ddocCorrectValuesArePresentV1_0"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("SK-XML1.0.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("SK-XML1.0.ddoc"))
+
+        then: "report contains correct values"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchemaDdoc.json"))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is("SK_XML_1.0"))
@@ -166,9 +177,11 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Verification of values in Validation Report, xml v1.1, checks for missing info")
     def "ddocCorrectValuesArePresentV1_1"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("igasugust1.1.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("igasugust1.1.ddoc"))
+
+        then: "report contains correct values"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchemaDdoc.json"))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_1))
@@ -201,9 +214,11 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Verification of values in Validation Report, xml v1.2, checks for missing info")
     def "ddocCorrectValuesArePresentV1_2"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("igasugust1.2.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("igasugust1.2.ddoc"))
+
+        then: "report contains correct values"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchemaDdoc.json"))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_2))
@@ -236,9 +251,11 @@ class DdocValidationReportValueVerificationSpec extends GenericSpecification {
 
     @Description("Verification of values in Validation Report, xml v1.3, checks for missing info")
     def "ddocCorrectValuesArePresentV1_3"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("igasugust1.3.ddoc"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("igasugust1.3.ddoc"))
+
+        then: "report contains correct values"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body(matchesJsonSchemaInClasspath("SimpleReportSchemaDdoc.json"))
                 .body("signatures[0].id", is("S0"))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.DIGIDOC_XML_1_3))

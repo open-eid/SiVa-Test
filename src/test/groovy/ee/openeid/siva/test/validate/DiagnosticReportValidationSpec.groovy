@@ -22,6 +22,7 @@ import ee.openeid.siva.test.model.*
 import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
+import io.restassured.response.Response
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -33,11 +34,14 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
 
     @Description("Diagnostic report includes validationConclusion element")
     def "Given diagnostic report, then it includes validationConclusion element"() {
-        expect:
+        given: "test start time is recorded"
         ZonedDateTime testStartDate = ZonedDateTime.now(ZoneId.of("GMT"))
 
-        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, ReportType.DIAGNOSTIC))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "diagnostic report is requested"
+        Response validationResponse = SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice", null, ReportType.DIAGNOSTIC))
+
+        then: "report includes validationConclusion element"
+        validationResponse.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("policy.policyDescription", equalTo(SignaturePolicy.POLICY_4.description))
                 .body("policy.policyName", equalTo(SignaturePolicy.POLICY_4.name))
                 .body("policy.policyUrl", equalTo(SignaturePolicy.POLICY_4.url))
@@ -60,9 +64,11 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
 
     @Description("Diagnostic report includes tlanalysis element and its values")
     def "Given diagnostic report, then it includes tlanalysis element"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DIAGNOSTIC))
-                .then().rootPath(DIAGNOSTIC_DATA_PREFIX)
+        when: "diagnostic report is requested"
+        Response validationResponse = SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DIAGNOSTIC))
+
+        then: "report includes tlanalysis element"
+        validationResponse.then().rootPath(DIAGNOSTIC_DATA_PREFIX)
                 .body("signatures[0]", notNullValue())
                 .body("signatures[0].signatureFilename", equalTo("pades-baseline-lta-live-aj.pdf"))
                 .body("signatures[0].claimedSigningTime", notNullValue())
@@ -92,9 +98,11 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
 
     @Description("Diagnostic report includes used certificates element and its values")
     def "Given diagnostic report, then it includes certificates element"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DIAGNOSTIC))
-                .then().rootPath(DIAGNOSTIC_DATA_PREFIX)
+        when: "diagnostic report is requested"
+        Response validationResponse = SivaRequests.validate(RequestData.validationRequest("pades-baseline-lta-live-aj.pdf", null, ReportType.DIAGNOSTIC))
+
+        then: "report includes certificates element"
+        validationResponse.then().rootPath(DIAGNOSTIC_DATA_PREFIX)
                 .body("usedCertificates", notNullValue())
                 .body("usedCertificates.serialNumber", notNullValue())
                 .body("usedCertificates[2].subjectDistinguishedName.value", hasItems("1.2.840.113549.1.9.1=#1609706b6940736b2e6565,cn=sk ocsp responder 2011,ou=ocsp,o=as sertifitseerimiskeskus,l=tallinn,st=harju,c=ee", "1.2.840.113549.1.9.1=#1609706b6940736b2e6565,CN=SK OCSP RESPONDER 2011,OU=OCSP,O=AS Sertifitseerimiskeskus,L=Tallinn,ST=Harju,C=EE"))
@@ -109,9 +117,11 @@ class DiagnosticReportValidationSpec extends GenericSpecification {
 
     @Description("Diagnostic report includes wrong signature value")
     def "Given detailed report, then it includes wrong signature value"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice", null, ReportType.DIAGNOSTIC))
-                .then().rootPath(DIAGNOSTIC_DATA_PREFIX)
+        when: "diagnostic report is requested"
+        Response validationResponse = SivaRequests.validate(RequestData.validationRequest("TS-02_23634_TS_wrong_SignatureValue.asice", null, ReportType.DIAGNOSTIC))
+
+        then: "report includes wrong signature value"
+        validationResponse.then().rootPath(DIAGNOSTIC_DATA_PREFIX)
                 .body("signatures[0].basicSignature.encryptionAlgoUsedToSignThisToken", equalTo("RSA"))
                 .body("signatures[0].basicSignature.keyLengthUsedToSignThisToken", equalTo("2048"))
                 .body("signatures[0].basicSignature.digestAlgoUsedToSignThisToken", equalTo(HashAlgo.SHA256))

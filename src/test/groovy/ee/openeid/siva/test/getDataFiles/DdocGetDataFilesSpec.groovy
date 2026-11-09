@@ -21,6 +21,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Link
+import io.restassured.response.Response
 import spock.lang.Ignore
 
 import static org.hamcrest.Matchers.*
@@ -30,9 +31,11 @@ class DdocGetDataFilesSpec extends GenericSpecification {
 
     @Description("Requesting data files from valid DDOC with data file returns data file")
     def "Given valid DDOC, then data files request returns data file"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("18912.ddoc"))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("18912.ddoc"))
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].filename", is("readme"))
                 .body("dataFiles[0].mimeType", is("text/plain"))
                 .body("dataFiles[0].base64", startsWith("RGlnaURvYyBpcyBhIGdlbmVyaWMgbGlicmFyeSBp"))
@@ -41,9 +44,11 @@ class DdocGetDataFilesSpec extends GenericSpecification {
 
     @Description("Requesting data files from invalid DDOC with data file returns data file")
     def "Given invalid DDOC, then data files request returns data file"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("OCSP nonce vale.ddoc"))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("OCSP nonce vale.ddoc"))
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].filename", is("testfail.txt"))
                 .body("dataFiles[0].mimeType", is("text/plain"))
                 .body("dataFiles[0].base64", is("T2xlbiB0ZXN0IGZhaWwu"))
@@ -52,9 +57,11 @@ class DdocGetDataFilesSpec extends GenericSpecification {
 
     @Description("Requesting data files from DDOC with xml v1.0 returns data file")
     def "Given DDOC with xml v1.0, then data files request returns data file"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("SK-XML1.0.ddoc"))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("SK-XML1.0.ddoc"))
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].filename", is("Tartu ja Tallinna koostooleping.doc"))
                 .body("dataFiles[0].mimeType", is("application/msword"))
                 .body("dataFiles[0].base64", startsWith("0M8R4KGxGuEAAAAAAAAAAAAAAAAAAAAAPgADAP7/CQAGAAAAAAAAAAAAAAABAAAAUgAAAAAAAAAA"))
@@ -63,9 +70,11 @@ class DdocGetDataFilesSpec extends GenericSpecification {
 
     @Description("Requesting data files from DDOC with xml v1.1 returns data file")
     def "Given DDOC with xml v1.1, then data files request returns data file"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.1.ddoc"))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.1.ddoc"))
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].filename", is("puhkus_urmo_062006.doc"))
                 .body("dataFiles[0].mimeType", is("application/msword"))
                 .body("dataFiles[0].base64", startsWith("0M8R4KGxGuEAAAAAAAAAAAAAAAAAAAAAPgADAP7/CQAGAAAAAAAAAAAAAAAJAAAA"))
@@ -74,9 +83,11 @@ class DdocGetDataFilesSpec extends GenericSpecification {
 
     @Description("Requesting data files from DDOC with xml v1.2 returns data file")
     def "Given DDOC with xml v1.2, then data files request returns data file"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.2.ddoc"))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("DIGIDOC-XML1.2.ddoc"))
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].filename", is("RO219559508.pdf"))
                 .body("dataFiles[0].mimeType", is("text/text"))
                 .body("dataFiles[0].base64", startsWith("JVBERi0xLjMKJeLjz9MKMSAwIG9iajw8L1Byb2R1Y2VyKGh0bWxkb2MgMS44LjIzIENvcHlyaWdodCAxOTk3LTIwMDI"))
@@ -85,9 +96,11 @@ class DdocGetDataFilesSpec extends GenericSpecification {
 
     @Description("Requesting data files from DDOC with xml v1.3 returns data file")
     def "Given DDOC with xml v1.3, then data files request returns data file"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("valid_XML1_3.ddoc"))
+
+        then: "data file is returned"
+        response.then()
                 .body("dataFiles[0].filename", is("test.txt"))
                 .body("dataFiles[0].mimeType", is("application/octet-stream"))
                 .body("dataFiles[0].base64", startsWith("VGVzdCBhbmQgc29tZSBvdGhlciB0ZXN0"))
@@ -108,9 +121,11 @@ class DdocGetDataFilesSpec extends GenericSpecification {
 
     @Description("Requesting data files from DDOC with 12 different files of different types returns data files")
     def "Given DDOC with multiple different files, then data files request returns data files"() {
-        expect:
-        SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("igasugust1.3.ddoc"))
-                .then()
+        when: "data files are requested"
+        Response response = SivaRequests.getDataFiles(RequestData.dataFileRequestFromFile("igasugust1.3.ddoc"))
+
+        then: "data files are returned"
+        response.then()
                 .body("dataFiles[0].filename", is("DigiDocService_spec_1_110_est.pdf"))
                 .body("dataFiles[0].mimeType", is("application/pdf"))
                 .body("dataFiles[0].base64", startsWith("JVBERi0xLjMKJcfsj6IKOCAwIG9iago8PC9MZW5ndGggOSAwIFIvRmlsdGVyIC9G"))

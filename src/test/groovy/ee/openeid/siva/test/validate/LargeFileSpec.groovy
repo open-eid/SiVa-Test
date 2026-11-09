@@ -35,11 +35,11 @@ class LargeFileSpec extends GenericSpecification {
 
     @Story("Validation large file containers succeeds")
     def "Validating signed 9MB #description container is successful"() {
-        when:
+        when: "validation is requested"
         JsonPath report = SivaRequests
                 .validate(RequestData.validationRequest(fileName, SignaturePolicy.POLICY_3)).jsonPath()
 
-        then:
+        then: "signature passes"
         assertThat(report.getString("${VALIDATION_CONCLUSION_PREFIX}signatures[0].signatureFormat"), equalTo(signatureFormat))
         assertThat(report.getString("${VALIDATION_CONCLUSION_PREFIX}validatedDocument.filename"), equalTo(fileName))
         assertThat(report.getString("${VALIDATION_CONCLUSION_PREFIX}validSignaturesCount"), equalTo("1"))
@@ -54,32 +54,34 @@ class LargeFileSpec extends GenericSpecification {
 
     @Description("Bdoc Zip container with Bomb file")
     def "bdocZipBombsAreNotAccepted"() {
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(RequestData.validationRequest(
                 "zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3))
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Asice Zip container with Bomb file")
     def "asiceZipBombsAreNotAccepted"() {
-        given:
+        given: "ASiC-E zip bomb request"
         Map requestData = RequestData.validationRequest("zip-bomb-package-zip-1gb.bdoc", SignaturePolicy.POLICY_3)
         requestData.filename = "zip-bomb-package-zip-1gb.asice"
 
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 
     @Description("Asice Zip container with Matryoshka Bomb file")
     def "asiceZipBombsWithMatryoshkaAreAccepted"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3))
+
+        then: "zip bomb container is validated"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_B))
                 .body("validatedDocument.filename", equalTo("zip-bomb-packages.asice"))
                 .body("validSignaturesCount", equalTo(0))
@@ -87,13 +89,15 @@ class LargeFileSpec extends GenericSpecification {
 
     @Description("Bdoc Zip container with Matryoshka Bomb file")
     def "bdocZipBombsWithMatryoshkaAreAccepted"() {
-        when:
+        given: "BDOC zip bomb request"
         Map requestData = RequestData.validationRequest("zip-bomb-packages.asice", SignaturePolicy.POLICY_3)
         requestData.filename = "zip-bomb-packages.bdoc"
 
-        then:
-        SivaRequests.validate(requestData)
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(requestData)
+
+        then: "zip bomb container is validated"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatures[0].signatureFormat", equalTo(SignatureFormat.XAdES_BASELINE_B_BES))
                 .body("validatedDocument.filename", equalTo("zip-bomb-packages.bdoc"))
                 .body("validSignaturesCount", equalTo(0))
@@ -101,14 +105,14 @@ class LargeFileSpec extends GenericSpecification {
 
     @Description("Asics Zip container with Bomb file")
     def "asicsZipBombsAreNotAccepted"() {
-        given:
+        given: "ASiC-S zip bomb request"
         Map requestData = RequestData.validationRequest("zip-bomb-package-zip-1gb-asics.asics", SignaturePolicy.POLICY_3)
         requestData.filename = "zip-bomb-package-zip-1gb.asics"
 
-        when:
+        when: "request is sent"
         Response response = SivaRequests.tryValidate(requestData)
 
-        then:
+        then: "error is returned"
         RequestErrorValidator.validate(response, RequestError.DOCUMENT_MALFORMED_OR_NOT_MATCHING_DOCUMENT_TYPE)
     }
 }

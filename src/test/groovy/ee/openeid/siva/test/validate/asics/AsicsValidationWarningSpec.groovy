@@ -23,6 +23,7 @@ import ee.openeid.siva.test.request.RequestData
 import ee.openeid.siva.test.request.SivaRequests
 import io.qameta.allure.Description
 import io.qameta.allure.Story
+import io.restassured.response.Response
 
 import static ee.openeid.siva.test.TestData.getVALIDATION_CONCLUSION_PREFIX
 import static org.hamcrest.Matchers.*
@@ -31,9 +32,11 @@ class AsicsValidationWarningSpec extends GenericSpecification {
 
     @Description("Validation of ASiC-S with timestamp not covering datafile/nested container")
     def "Validating ASiC-S with timestamp not covering #targetFile, then warning is returned#comment"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(fileName))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(fileName))
+
+        then: "warning is returned"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_S))
                 .body("validatedDocument.filename", is(fileName))
                 .body("signaturesCount", is(0))

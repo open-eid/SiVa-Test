@@ -34,9 +34,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("All signature profiles in container are validated")
     def "Given validation request with ASiC-E #profile signature, then validation report is returned"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(file))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(file))
+
+        then: "report contains signature profile"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", equalTo(ContainerFormat.ASiC_E))
                 .body("validatedDocument.filename", equalTo(file))
                 .body("signatures[0].signatureFormat", is(profile))
@@ -55,9 +57,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice with single valid signature")
     def "Given ASiC-E with single valid signature, then successful validation"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("TEST_ESTEID2018_ASiC-E_XAdES_LT.sce"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validationWarnings", hasSize(1))
                 .body("validationWarnings.content", hasItem(TEST_ENV_VALIDATION_WARNING))
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
@@ -82,9 +86,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice files with signature from test certificate chain")
     def "Given ASiC-E with signature from #CN certificate chain, then successful validation"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(testFile))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(testFile))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validationWarnings", hasSize(1))
                 .body("validationWarnings.content", hasItem(TEST_ENV_VALIDATION_WARNING))
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
@@ -115,10 +121,10 @@ class AsiceValidationPassSpec extends GenericSpecification {
     @Tag("LiveData")
     @Description("Asice files with signature from live certificate chain")
     def "Given ASiC-E with signature from live #CN certificate chain, then successful validation"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest(testFile))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validationWarnings", hasSize(1))
                 .body("validationWarnings.content", hasItem(TEST_ENV_VALIDATION_WARNING))
@@ -154,9 +160,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
     @Tag("LiveData")
     @Description("Asice files with MID signature from live ESTEID-SK 2015 certificate chain (ECC)")
     def "Given ASiC-E with MID signature from live ESTEID-SK 2015 certificate chain, then successful validation"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("ValidLiveSignature.asice"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -178,9 +186,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice with multiple valid signatures")
     def "Given ASiC-E with multiple signatures (#comment), then successful validation"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest(filename))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest(filename))
+
+        then: "signatures pass"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("validationWarnings", hasSize(1))
                 .body("validationWarnings.content", hasItem(TEST_ENV_VALIDATION_WARNING))
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
@@ -205,10 +215,10 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice One LT signature with certificates from different countries")
     def "asiceDifferentCertificateCountries"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-30.asice"))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -232,9 +242,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice Baseline-LT file")
     def "asiceBaselineLtProfileValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-49.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-49.asice"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -255,9 +267,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice file signed with Mobile-ID, ECC-SHA256 signature with prime256v1 key")
     def "asiceWithEccSha256ValidSignature"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-2.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-2.asice"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -267,10 +281,10 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice file with KLASS3-SK 2010 (EECCRCA) certificate chain")
     def "asiceKlass3Sk2010CertificateChainValidSignature"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("EE_SER-AEX-B-LT-V-28.asice"))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
@@ -298,9 +312,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("*.sce file with TimeStamp")
     def "asiceWithSceFileExtensionShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("3_signatures_TM_LT_LTA.sce"))
+
+        then: "signatures pass"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("validationLevel", is(VALIDATION_LEVEL_ARCHIVAL_DATA))
                 .body("signatures[2].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LTA))
@@ -317,9 +333,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice-TS with special characters in data file")
     def "asiceWithSpecialCharactersInDataFileShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("Nonconventionalcharacters.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("Nonconventionalcharacters.asice"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].signatureLevel", is(SignatureLevel.QESIG))
@@ -334,9 +352,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("New Estonian ECC signature")
     def "asiceEccSignatureShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("Mac_AS0099904_EsimeneAmetlikSKTestElliptilistega_TS.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("Mac_AS0099904_EsimeneAmetlikSKTestElliptilistega_TS.asice"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
                 .body("signatures[0].warnings", emptyOrNullString())
@@ -350,10 +370,10 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice pss signature")
     def "asicePssSignatureShouldPass"() {
-        when:
+        when: "validation is requested"
         Response response = SivaRequests.validate(RequestData.validationRequest("PSS-signature.asice"))
 
-        then:
+        then: "signature passes"
         response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -369,9 +389,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("Asice with empty datafiles")
     def "asiceWithEmptyDataFilesShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("signed-container-with-empty-datafiles.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("signed-container-with-empty-datafiles.asice"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
@@ -390,9 +412,11 @@ class AsiceValidationPassSpec extends GenericSpecification {
 
     @Description("ASICE with new Smart-ID certificate profile without personal number in CommonName")
     def "validSignatureSignerCertDoNotHavePersonalNumberInCnShouldPass"() {
-        expect:
-        SivaRequests.validate(RequestData.validationRequest("validSidSignatureWithCertWithoutPnoInCn.asice"))
-                .then().rootPath(VALIDATION_CONCLUSION_PREFIX)
+        when: "validation is requested"
+        Response response = SivaRequests.validate(RequestData.validationRequest("validSidSignatureWithCertWithoutPnoInCn.asice"))
+
+        then: "signature passes"
+        response.then().rootPath(VALIDATION_CONCLUSION_PREFIX)
                 .body("signatureForm", is(ContainerFormat.ASiC_E))
                 .body("signatures[0].signatureFormat", is(SignatureFormat.XAdES_BASELINE_LT))
                 .body("signatures[0].indication", is(SignatureIndication.TOTAL_PASSED))
